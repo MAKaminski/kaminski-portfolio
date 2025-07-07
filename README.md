@@ -1,12 +1,18 @@
 # Kaminski Portfolio
 
-Personal portfolio project with a React frontend and Python backend. Uses Neon (Postgres with pgvector) for projects & AI chatbot messaging.
+Personal interactive portfolio:
+- **Frontend:** React (Vite, TS)
+- **Backend:** Python FastAPI + GraphQL
+- **DB:** Neon/Postgres-ready
 
-## Stack
-- Frontend: React
-- Backend: Python (FastAPI recommended or Flask)
-- Database: Neon/Postgres
-- ORM: Prisma (for schema model reference)
-- AI Chatbot: Embeddings stored with pgvector
+## Local Dev
+- `cd backend && pip install -r requirements.txt && uvicorn app.main:app --reload`
+- `cd frontend && npm install && npm run dev`
 
-*This project is auto-generated and is a starting point. Add custom logic, deploy to Vercel, and configure your Neon DB from here.*
+Edit backend/app/api_graphql.py to connect to real data.
+
+## Deploy
+- Vercel: Import `frontend` (custom settings).
+- Backend: Render.com, Fly.io, or Vercel (if using serverless FastAPI).
+
+## Customize and extend freely.
