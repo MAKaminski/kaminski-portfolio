@@ -1,8 +1,2 @@
 name = "kaminski-portfolio"
-compatibility_date = "2025-07-13"
-
-[build]
-command = "npm run build"
-
-[site]
-bucket = "./build" 
+compatibility_date = "2025-07-13" 
