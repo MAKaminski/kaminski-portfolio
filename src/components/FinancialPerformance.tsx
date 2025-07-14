@@ -401,7 +401,7 @@ const companyData: CompanyData[] = [
 // 1. Extend each company's years array to 2010–2025
 companyData.forEach(company => {
   const yearsMap = new Map(company.years.map(y => [y.year, y]));
-  const extendedYears = [];
+  const extendedYears: FinancialYear[] = [];
   let lastKnown: FinancialYear | null = null;
   for (let year = 2010; year <= 2025; year++) {
     if (yearsMap.has(year)) {
@@ -410,8 +410,17 @@ companyData.forEach(company => {
     } else if (lastKnown) {
       extendedYears.push({ ...lastKnown, year });
     }
+    // Do NOT push undefined if no lastKnown
   }
-  company.years = extendedYears;
+  company.years = extendedYears.filter(
+    (y) =>
+      y &&
+      typeof y.revenue === 'number' &&
+      typeof y.grossMargin === 'number' &&
+      typeof y.operatingMargin === 'number' &&
+      typeof y.ebitda === 'number' &&
+      typeof y.marketCap === 'number'
+  );
 });
 
 // 2. Add Michael's Index (blended/average values)
@@ -421,7 +430,14 @@ for (let year = 2010; year <= 2025; year++) {
   let revenue = 0, grossMargin = 0, grossMarginDollars = 0, operatingMargin = 0, operatingMarginDollars = 0, ebitda = 0, ebitdaDollars = 0, marketCap = 0;
   companyData.forEach(company => {
     const y = company.years.find(yy => yy.year === year);
-    if (y) {
+    if (
+      y &&
+      typeof y.revenue === 'number' &&
+      typeof y.grossMargin === 'number' &&
+      typeof y.operatingMargin === 'number' &&
+      typeof y.ebitda === 'number' &&
+      typeof y.marketCap === 'number'
+    ) {
       count++;
       revenue += y.revenue;
       grossMargin += y.grossMargin;
@@ -518,11 +534,22 @@ const FinancialPerformance: React.FC = () => {
 
   const chartData = getChartData();
 
+  // Defensive: filter out undefined or incomplete year objects before rendering
+  const safeChartData = (getChartData() || []).filter(
+    (item) =>
+      item &&
+      typeof item.revenue === 'number' &&
+      typeof item.grossMargin === 'number' &&
+      typeof item.operatingMargin === 'number' &&
+      typeof item.ebitda === 'number' &&
+      typeof item.marketCap === 'number'
+  );
+
   const renderChart = () => {
     if (selectedMetric === 'revenue') {
       return (
         <ResponsiveContainer width="100%" height={400}>
-          <AreaChart data={chartData}>
+          <AreaChart data={safeChartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" />
             <YAxis tickFormatter={formatCurrency} />
@@ -545,7 +572,7 @@ const FinancialPerformance: React.FC = () => {
     } else if (selectedMetric === 'margins') {
       return (
         <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={chartData}>
+          <LineChart data={safeChartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" />
             <YAxis tickFormatter={formatPercentage} />
@@ -563,7 +590,7 @@ const FinancialPerformance: React.FC = () => {
     } else {
       return (
         <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={chartData}>
+          <BarChart data={safeChartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" />
             <YAxis tickFormatter={formatCurrency} />
@@ -580,10 +607,38 @@ const FinancialPerformance: React.FC = () => {
   };
 
   const renderTable = () => {
-    const data = selectedCompany === 'all' ? 
-      companyData.flatMap(company => company.years.map(year => ({ ...year, company: company.name }))) :
-      companyData.find(c => c.id === selectedCompany)?.years || [];
-
+    const data = selectedCompany === 'all'
+      ? companyData.flatMap(company =>
+          (company.years || [])
+            .filter(year =>
+              year &&
+              typeof year.revenue === 'number' &&
+              typeof year.grossMargin === 'number' &&
+              typeof year.operatingMargin === 'number' &&
+              typeof year.ebitda === 'number' &&
+              typeof year.marketCap === 'number'
+            )
+            .map(year => ({ ...year, company: company.name }))
+        )
+      : (companyData.find(c => c.id === selectedCompany)?.years || [])
+          .filter(year =>
+            year &&
+            typeof year.revenue === 'number' &&
+            typeof year.grossMargin === 'number' &&
+            typeof year.operatingMargin === 'number' &&
+            typeof year.ebitda === 'number' &&
+            typeof year.marketCap === 'number'
+          );
+    const safeData = (data || []).filter(
+      (item) =>
+        item &&
+        typeof item.revenue === 'number' &&
+        typeof item.grossMargin === 'number' &&
+        typeof item.operatingMargin === 'number' &&
+        typeof item.ebitda === 'number' &&
+        typeof item.marketCap === 'number'
+    );
+    console.log('Table safeData:', safeData);
     return (
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg">
@@ -610,7 +665,7 @@ const FinancialPerformance: React.FC = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {data.map((item, index) => (
+            {safeData.map((item, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="px-4 py-3 text-sm font-medium text-gray-900">
                   {selectedCompany === 'all'
