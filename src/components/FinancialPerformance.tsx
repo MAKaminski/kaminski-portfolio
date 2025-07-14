@@ -538,7 +538,9 @@ const FinancialPerformance: React.FC = () => {
             {data.map((item, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="px-4 py-3 text-sm font-medium text-gray-900">
-                  {selectedCompany === 'all' ? item.company : item.year}
+                  {selectedCompany === 'all'
+                    ? (item as FinancialYear & { company: string }).company
+                    : (item as FinancialYear).year}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-900">{formatCurrency(item.revenue)}</td>
                 <td className="px-4 py-3 text-sm text-gray-900">{formatPercentage(item.grossMargin)}</td>
