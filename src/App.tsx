@@ -24,6 +24,7 @@ import InteractiveQuiz from './components/InteractiveQuiz';
 import LiveMetrics from './components/LiveMetrics';
 import DownloadableResources from './components/DownloadableResources';
 import SocialSharing from './components/SocialSharing';
+import FinancialPerformance from './components/FinancialPerformance';
 
 type Theme = {
   primary: string;
@@ -117,6 +118,7 @@ function App() {
                       <Hero />
                       <About />
                       <LiveMetrics />
+                      <FinancialPerformance />
                       <InteractiveQuiz />
                       <Experience />
                       <Skills />
