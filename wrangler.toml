@@ -1,0 +1,9 @@
+name = "kaminski-portfolio"
+compatibility_date = "2025-07-13"
+main = "worker.js"
+
+[site]
+bucket = "./build"
+
+[build]
+command = "npm run build" 
