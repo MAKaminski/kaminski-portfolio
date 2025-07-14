@@ -41,6 +41,9 @@ const Footer: React.FC = () => {
             <span className="ml-2">Target Compensation: $225K Base + $50K+ Bonus</span>
           </p>
         </div>
+        <div className="text-center text-gray-500 text-sm mt-4">
+          © 2024 Michael Kaminski. All rights reserved.
+        </div>
       </div>
     </footer>
   );

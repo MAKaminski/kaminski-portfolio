@@ -54,7 +54,7 @@ const CPO: React.FC = () => {
               <ArrowLeft size={20} />
               <span>Back to Portfolio</span>
             </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Chief Product Officer</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Michael Kaminski – Chief Product Officer</h1>
             <div className="flex items-center space-x-4">
               <a 
                 href="/resume-cpo.pdf" 
@@ -93,6 +93,7 @@ const CPO: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
+          <p className="text-lg text-primary-700 font-semibold mb-4">Michael Kaminski is a strategic Chief Product Officer with a proven track record in product leadership, analytics, and market growth.</p>
           <h2 className="text-5xl font-bold text-gray-900 mb-6">Chief Product Officer</h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
             Strategic product leader with proven track record in building and scaling products 

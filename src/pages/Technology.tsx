@@ -54,7 +54,7 @@ const Technology: React.FC = () => {
               <ArrowLeft size={20} />
               <span>Back to Portfolio</span>
             </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Chief Technology Officer</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Michael Kaminski – Chief Technology Officer</h1>
             <div className="flex items-center space-x-4">
               <a 
                 href="/resume-technology.pdf" 
@@ -93,6 +93,7 @@ const Technology: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
+          <p className="text-lg text-primary-700 font-semibold mb-4">Michael Kaminski is an innovative Chief Technology Officer with a passion for digital transformation, cloud architecture, and technology leadership.</p>
           <h2 className="text-5xl font-bold text-gray-900 mb-6">Chief Technology Officer</h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
             Technology leader with proven track record in scaling technology operations, 

@@ -61,6 +61,7 @@ const About: React.FC = () => {
           style={{ color: 'var(--primary)' }}
         >
           <h2 className="text-4xl font-bold mb-4">About Me</h2>
+          <p className="text-xl font-semibold text-primary-700 mb-2">Michael Kaminski is a CXO, CTO, and executive leader based in Atlanta, specializing in fintech, technology, and strategic transformation.</p>
           <p className="text-xl max-w-3xl mx-auto" style={{ color: 'var(--secondary)' }}>
             Background, philosophy, and core competencies
           </p>

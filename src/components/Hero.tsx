@@ -57,13 +57,13 @@ const Hero: React.FC = () => {
             />
             <div className="w-full">
               <h1 className="text-5xl md:text-6xl font-extrabold text-primary-700 mb-2 tracking-tight animate-fade-in">
-                Building Modular Futures
+                Michael Kaminski | Executive Portfolio
               </h1>
               <h2 className="text-2xl md:text-3xl font-semibold gradient-text mb-4">
-                Fintech & Services Executive | Systems Engineer
+                Building Modular Futures
               </h2>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                Modular thinker, systems builder, and strategic executor with 20+ years in financial technology, 
+                Michael Kaminski is a modular thinker, systems builder, and strategic executor with 20+ years in financial technology, 
                 services architecture, and engineering. Specializing in bridging the gap between engineering 
                 and executive leadership—translating complex technical strategies into actionable business value.
               </p>

@@ -41,7 +41,7 @@ const Header: React.FC = () => {
                 className="w-8 h-8 rounded-full object-cover border-2"
                 style={{ borderColor: 'var(--primary)' }}
               />
-              <h1 className="text-xl font-bold" style={{ color: 'var(--primary)' }}>Executive Portfolio</h1>
+              <h1 className="text-xl font-bold" style={{ color: 'var(--primary)' }}>Michael Kaminski | Executive Portfolio</h1>
             </div>
           </div>
           

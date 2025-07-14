@@ -54,7 +54,7 @@ const CFO: React.FC = () => {
               <ArrowLeft size={20} />
               <span>Back to Portfolio</span>
             </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Chief Financial Officer</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Michael Kaminski – Chief Financial Officer</h1>
             <div className="flex items-center space-x-4">
               <a 
                 href="/resume-cfo.pdf" 
@@ -93,6 +93,7 @@ const CFO: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
+          <p className="text-lg text-primary-700 font-semibold mb-4">Michael Kaminski is an accomplished Chief Financial Officer with 20+ years of executive experience in finance, strategy, and technology.</p>
           <h2 className="text-5xl font-bold text-gray-900 mb-6">Chief Financial Officer</h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
             Strategic financial leader with proven track record in complex transactions, 
