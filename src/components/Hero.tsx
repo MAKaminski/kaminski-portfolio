@@ -7,7 +7,7 @@ import { useTheme } from '../App';
 import { Role } from '../App';
 
 const Hero: React.FC = () => {
-  const { setTheme, currentRole, theme } = useTheme();
+  const { setTheme, currentRole } = useTheme();
   const navigate = useNavigate();
 
   const roles: { key: Role; label: string; color: string; hover: string }[] = [

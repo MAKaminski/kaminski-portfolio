@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ExternalLink, Map, Users, Building, Code, TrendingUp, Target, Award, Filter, X, Search, Info } from 'lucide-react';
+import { ChevronLeft, Map, Building, Code, TrendingUp, Target, Award, Filter, X, Search, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface Node {
@@ -18,7 +18,7 @@ interface Node {
   category: string;
 }
 
-interface Link {
+interface GraphLink {
   source: string;
   target: string;
   strength: number;
@@ -34,7 +34,7 @@ const KnowledgeGraph: React.FC = () => {
   const [dragNode, setDragNode] = useState<Node | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [pan] = useState({ x: 0, y: 0 });
 
   // Knowledge graph data
   const nodes: Node[] = [
@@ -71,7 +71,7 @@ const KnowledgeGraph: React.FC = () => {
     { id: 'tableau', label: 'Tableau', type: 'skill', x: 0, y: 0, vx: 0, vy: 0, size: 30, color: '#E97627', description: 'Data visualization and BI platform', connections: ['analytics'], category: 'Technologies' },
   ];
 
-  const links: Link[] = [
+  const links: GraphLink[] = [
     // Core connections
     { source: 'leadership', target: 'strategy', strength: 0.9 },
     { source: 'leadership', target: 'finance', strength: 0.8 },
@@ -125,11 +125,11 @@ const KnowledgeGraph: React.FC = () => {
     return links.filter(link => 
       filteredNodeIds.has(link.source) && filteredNodeIds.has(link.target)
     );
-  }, [getFilteredNodes]);
+  }, [getFilteredNodes, links]);
 
   // Physics simulation
-  const simulatePhysics = useCallback((nodes: Node[], links: Link[]) => {
-    const G = 0.1; // Gravitational constant
+  const simulatePhysics = useCallback((nodes: Node[], links: GraphLink[]) => {
+    // const G = 0.1; // Gravitational constant (unused)
     const repulsion = 1000; // Repulsion force
     const attraction = 0.1; // Link attraction force
     const damping = 0.95; // Velocity damping
@@ -387,7 +387,7 @@ const KnowledgeGraph: React.FC = () => {
       canvas.removeEventListener('wheel', handleWheel);
       cancelAnimationFrame(animationId);
     };
-  }, [handleMouseDown, handleMouseMove, handleMouseUp, handleClick, handleWheel, getFilteredNodes, getFilteredLinks, simulatePhysics, selectedNode, hoveredNode, pan, zoom]);
+  }, [handleMouseDown, handleMouseMove, handleMouseUp, handleClick, handleWheel, getFilteredNodes, getFilteredLinks, simulatePhysics, selectedNode, hoveredNode, pan, zoom, nodes]);
 
   const getNodeIcon = (type: string) => {
     switch (type) {
