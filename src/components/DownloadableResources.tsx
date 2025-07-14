@@ -83,6 +83,7 @@ const resources: Resource[] = [
   }
 ];
 
+// HIDE: Do not render this component in App or anywhere else
 const DownloadableResources: React.FC = () => {
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const [email, setEmail] = useState('');

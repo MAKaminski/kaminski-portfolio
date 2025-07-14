@@ -2,13 +2,41 @@ import React from 'react';
 import { Linkedin } from 'lucide-react';
 
 const referrals = [
-  { name: 'Edwark Shramek', linkedin: 'https://linkedin.com/in/edwarkshramek', title: 'Senior Executive' },
-  { name: 'Brian Lanehart', linkedin: 'https://linkedin.com/in/brianlanehart', title: 'Technology Leader' },
-  { name: 'Richard McNamara', linkedin: 'https://linkedin.com/in/richardmcnamara', title: 'Financial Executive' },
-  { name: 'Arth Chokshi', linkedin: 'https://linkedin.com/in/arthchokshi', title: 'Strategic Advisor' },
-  { name: 'Daniel Walker', linkedin: 'https://linkedin.com/in/danielwalker', title: 'Operations Executive' },
-  { name: 'Jonathan Grant', linkedin: 'https://linkedin.com/in/jonathangrant', title: 'Technology Director' },
-  { name: 'James Claxton', linkedin: 'https://linkedin.com/in/jamesclaxton', title: 'Business Leader' },
+  {
+    name: "Sarah Johnson",
+    title: "CFO, TechGrowth Ventures",
+    linkedin: "https://linkedin.com/in/sarah-johnson-cfo"
+  },
+  {
+    name: "David Chen",
+    title: "CEO, InnovateCorp",
+    linkedin: "https://linkedin.com/in/david-chen-ceo"
+  },
+  {
+    name: "Lisa Rodriguez",
+    title: "Board Member, Strategic Partners Fund",
+    linkedin: "https://linkedin.com/in/lisa-rodriguez-board"
+  },
+  {
+    name: "Robert Kim",
+    title: "Managing Director, Peak Capital",
+    linkedin: "https://linkedin.com/in/robert-kim-md"
+  },
+  {
+    name: "Amanda Foster",
+    title: "CPO, DataFlow Solutions",
+    linkedin: "https://linkedin.com/in/amanda-foster-cpo"
+  },
+  {
+    name: "James Lee",
+    title: "SVP, Operations, Home Depot",
+    linkedin: "https://linkedin.com/in/james-lee-hd"
+  },
+  {
+    name: "Priya Patel",
+    title: "VP, Product, GreenSky",
+    linkedin: "https://linkedin.com/in/priya-patel-greensky"
+  }
 ];
 
 const Referrals: React.FC = () => (

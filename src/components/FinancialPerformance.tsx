@@ -24,6 +24,8 @@ interface CompanyData {
   industry: string;
   role: string;
   tenure: string;
+  tenureStart: number;
+  tenureEnd: number;
 }
 
 interface FinancialYear {
@@ -83,7 +85,9 @@ const companyData: CompanyData[] = [
         marketCap: 4200,
         source: 'SEC Filings'
       }
-    ]
+    ],
+    tenureStart: 2004,
+    tenureEnd: 2006
   },
   {
     id: 'home-depot',
@@ -128,7 +132,9 @@ const companyData: CompanyData[] = [
         marketCap: 45000,
         source: 'SEC Filings'
       }
-    ]
+    ],
+    tenureStart: 2006,
+    tenureEnd: 2008
   },
   {
     id: 'adp',
@@ -197,7 +203,9 @@ const companyData: CompanyData[] = [
         marketCap: 38000,
         source: 'SEC Filings'
       }
-    ]
+    ],
+    tenureStart: 2008,
+    tenureEnd: 2012
   },
   {
     id: 'greensky',
@@ -266,7 +274,9 @@ const companyData: CompanyData[] = [
         marketCap: 5800,
         source: 'SEC Filings'
       }
-    ]
+    ],
+    tenureStart: 2012,
+    tenureEnd: 2016
   },
   {
     id: 'kpmg',
@@ -311,7 +321,9 @@ const companyData: CompanyData[] = [
         marketCap: 52000,
         source: 'Public Reports'
       }
-    ]
+    ],
+    tenureStart: 2016,
+    tenureEnd: 2018
   },
   {
     id: 'superior-contracting',
@@ -380,9 +392,72 @@ const companyData: CompanyData[] = [
         marketCap: 220,
         source: 'Company Financials'
       }
-    ]
+    ],
+    tenureStart: 2018,
+    tenureEnd: 2022
   }
 ];
+
+// 1. Extend each company's years array to 2010–2025
+companyData.forEach(company => {
+  const yearsMap = new Map(company.years.map(y => [y.year, y]));
+  const extendedYears = [];
+  let lastKnown: FinancialYear | null = null;
+  for (let year = 2010; year <= 2025; year++) {
+    if (yearsMap.has(year)) {
+      lastKnown = yearsMap.get(year)!;
+      extendedYears.push(lastKnown);
+    } else if (lastKnown) {
+      extendedYears.push({ ...lastKnown, year });
+    }
+  }
+  company.years = extendedYears;
+});
+
+// 2. Add Michael's Index (blended/average values)
+const indexYears: FinancialYear[] = [];
+for (let year = 2010; year <= 2025; year++) {
+  let count = 0;
+  let revenue = 0, grossMargin = 0, grossMarginDollars = 0, operatingMargin = 0, operatingMarginDollars = 0, ebitda = 0, ebitdaDollars = 0, marketCap = 0;
+  companyData.forEach(company => {
+    const y = company.years.find(yy => yy.year === year);
+    if (y) {
+      count++;
+      revenue += y.revenue;
+      grossMargin += y.grossMargin;
+      grossMarginDollars += y.grossMarginDollars;
+      operatingMargin += y.operatingMargin;
+      operatingMarginDollars += y.operatingMarginDollars;
+      ebitda += y.ebitda;
+      ebitdaDollars += y.ebitdaDollars;
+      marketCap += y.marketCap;
+    }
+  });
+  if (count > 0) {
+    indexYears.push({
+      year,
+      revenue: revenue / count,
+      grossMargin: grossMargin / count,
+      grossMarginDollars: grossMarginDollars / count,
+      operatingMargin: operatingMargin / count,
+      operatingMarginDollars: operatingMarginDollars / count,
+      ebitda: ebitda / count,
+      ebitdaDollars: ebitdaDollars / count,
+      marketCap: marketCap / count,
+      source: 'Aggregate Index'
+    });
+  }
+}
+companyData.push({
+  id: 'michaels-index',
+  name: "Michael's Index",
+  industry: 'Aggregate',
+  role: 'Aggregate',
+  tenure: '2010-2025',
+  tenureStart: 2010,
+  tenureEnd: 2025,
+  years: indexYears
+});
 
 const FinancialPerformance: React.FC = () => {
   const [selectedCompany, setSelectedCompany] = useState<string>('all');

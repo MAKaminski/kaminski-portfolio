@@ -17,7 +17,7 @@ const LiveMetrics: React.FC = () => {
     {
       id: 'companies',
       label: 'Companies Helped',
-      value: 0,
+      value: 6,
       suffix: '+',
       icon: <Users size={24} className="text-blue-600" />,
       color: 'blue',
@@ -26,7 +26,7 @@ const LiveMetrics: React.FC = () => {
     {
       id: 'capital',
       label: 'Capital Raised',
-      value: 0,
+      value: 1200,
       suffix: 'M',
       icon: <DollarSign size={24} className="text-green-600" />,
       color: 'green',
@@ -35,7 +35,7 @@ const LiveMetrics: React.FC = () => {
     {
       id: 'experience',
       label: 'Years Experience',
-      value: 0,
+      value: 20,
       suffix: '+',
       icon: <Clock size={24} className="text-purple-600" />,
       color: 'purple',
@@ -44,25 +44,16 @@ const LiveMetrics: React.FC = () => {
     {
       id: 'success',
       label: 'Success Rate',
-      value: 0,
+      value: 95,
       suffix: '%',
       icon: <Target size={24} className="text-orange-600" />,
       color: 'orange',
       description: 'Project success rate'
     },
     {
-      id: 'awards',
-      label: 'Industry Awards',
-      value: 0,
-      suffix: '',
-      icon: <Award size={24} className="text-indigo-600" />,
-      color: 'indigo',
-      description: 'Recognition received'
-    },
-    {
       id: 'growth',
       label: 'Avg. Growth',
-      value: 0,
+      value: 40,
       suffix: '%',
       icon: <TrendingUp size={24} className="text-red-600" />,
       color: 'red',

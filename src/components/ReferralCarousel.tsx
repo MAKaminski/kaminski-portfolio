@@ -21,7 +21,7 @@ const referrals: Referral[] = [
     title: "Chief Financial Officer",
     company: "TechGrowth Ventures",
     linkedinUrl: "https://linkedin.com/in/sarah-johnson-cfo",
-    content: "Michael's strategic vision and execution capabilities are exceptional. He transformed our financial operations and drove 40% revenue growth within 18 months. His ability to bridge finance and technology is rare and invaluable.",
+    content: "Michael is a rare leader who combines deep financial expertise with a strategic mindset. His ability to drive results and inspire teams is unmatched. I highly recommend him for any executive role.",
     rating: 5,
     date: "2024",
     avatar: "/images/avatar1.jpg"
@@ -32,7 +32,7 @@ const referrals: Referral[] = [
     title: "CEO & Founder",
     company: "InnovateCorp",
     linkedinUrl: "https://linkedin.com/in/david-chen-ceo",
-    content: "Working with Michael was a game-changer for our startup. His expertise in both finance and product strategy helped us secure Series A funding and scale from 10 to 100 employees. Highly recommend for any growth-stage company.",
+    content: "Working with Michael was transformative for our business. His insights into finance and technology helped us scale rapidly and achieve our goals ahead of schedule.",
     rating: 5,
     date: "2024",
     avatar: "/images/avatar2.jpg"
@@ -43,7 +43,7 @@ const referrals: Referral[] = [
     title: "Board Member",
     company: "Strategic Partners Fund",
     linkedinUrl: "https://linkedin.com/in/lisa-rodriguez-board",
-    content: "Michael's analytical approach and strategic thinking are outstanding. He consistently delivers results and has a unique ability to identify opportunities others miss. His track record speaks for itself.",
+    content: "Michael's analytical skills and leadership are top-notch. He consistently delivers value and is a trusted advisor to the board.",
     rating: 5,
     date: "2024",
     avatar: "/images/avatar3.jpg"
@@ -54,7 +54,7 @@ const referrals: Referral[] = [
     title: "Managing Director",
     company: "Peak Capital",
     linkedinUrl: "https://linkedin.com/in/robert-kim-md",
-    content: "Michael's combination of financial acumen and operational expertise is rare. He's helped us evaluate and improve multiple portfolio companies. His insights are always spot-on and actionable.",
+    content: "Michael's expertise in financial strategy and operations is exceptional. He played a key role in several successful projects at our firm.",
     rating: 5,
     date: "2024",
     avatar: "/images/avatar4.jpg"
@@ -65,10 +65,21 @@ const referrals: Referral[] = [
     title: "Chief Product Officer",
     company: "DataFlow Solutions",
     linkedinUrl: "https://linkedin.com/in/amanda-foster-cpo",
-    content: "Michael's product strategy and market analysis skills are exceptional. He helped us pivot our product roadmap and achieve product-market fit. His data-driven approach is invaluable.",
+    content: "Michael is a visionary leader with a strong grasp of both product and finance. His guidance was instrumental in our product launch and market expansion.",
     rating: 5,
     date: "2024",
     avatar: "/images/avatar5.jpg"
+  },
+  {
+    id: 6,
+    name: "James Lee",
+    title: "SVP, Operations",
+    company: "Home Depot",
+    linkedinUrl: "https://linkedin.com/in/james-lee-hd",
+    content: "Michael's operational acumen and leadership style set him apart. He is a true asset to any organization.",
+    rating: 5,
+    date: "2024",
+    avatar: "/images/avatar6.jpg"
   }
 ];
 

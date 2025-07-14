@@ -109,7 +109,7 @@ const Hero: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
-                href="/resume.pdf" 
+                href="/resume-michael-kaminski.pdf" 
                 download="Michael_Kaminski_Resume.pdf"
                 className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors duration-200"
               >
@@ -126,13 +126,7 @@ const Hero: React.FC = () => {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <Link
-                to="/knowledge-graph"
-                className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg"
-              >
-                <Network className="w-5 h-5 mr-2" />
-                Explore Knowledge Graph
-              </Link>
+              
             </div>
             
             <div className="mt-8">

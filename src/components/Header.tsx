@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Calendar } from 'lucide-react';
+import { Menu, X, Calendar, Linkedin, Github } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
@@ -18,12 +18,9 @@ const Header: React.FC = () => {
     { name: 'Contact', href: '#contact' },
   ];
 
-  const additionalNavItems = [
-    { name: 'Knowledge Graph', href: '/knowledge-graph' },
-  ];
+  const additionalNavItems: { name: string; href: string }[] = [];
 
   const handleScheduleCall = () => {
-    // Replace with your actual scheduling link (Calendly, SavvyCal, etc.)
     window.open('https://calendly.com/michael-kaminski/executive-consultation', '_blank');
   };
 
@@ -46,7 +43,7 @@ const Header: React.FC = () => {
                 className="w-8 h-8 rounded-full object-cover border-2"
                 style={{ borderColor: 'var(--primary)' }}
               />
-              <h1 className="text-xl font-bold" style={{ color: 'var(--primary)' }}>Michael Kaminski | Executive Portfolio</h1>
+              <h1 className="text-xl font-bold" style={{ color: 'var(--primary)' }}>Michael Kaminski</h1>
             </div>
           </div>
           

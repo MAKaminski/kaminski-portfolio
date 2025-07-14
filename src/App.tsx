@@ -17,7 +17,6 @@ import Revenue from './pages/Revenue';
 import KnowledgeGraph from './pages/KnowledgeGraph';
 import Referrals from './components/Referrals';
 import About from './components/About';
-import ChatbotLogPanel from './components/ChatbotLogPanel';
 import ReferralCarousel from './components/ReferralCarousel';
 import FeaturedIn from './components/FeaturedIn';
 import InteractiveQuiz from './components/InteractiveQuiz';
@@ -125,13 +124,10 @@ function App() {
                       <Transactions />
                       <Highlights />
                       <ReferralCarousel />
-                      <FeaturedIn />
-                      <DownloadableResources />
                       <Referrals />
                       <Contact />
                     </main>
                     <Footer />
-                    <ChatbotLogPanel />
                   </>
                 } />
                 <Route path="/cfo" element={<CFO />} />
