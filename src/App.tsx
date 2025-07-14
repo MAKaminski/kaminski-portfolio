@@ -18,6 +18,12 @@ import KnowledgeGraph from './pages/KnowledgeGraph';
 import Referrals from './components/Referrals';
 import About from './components/About';
 import ChatbotLogPanel from './components/ChatbotLogPanel';
+import ReferralCarousel from './components/ReferralCarousel';
+import FeaturedIn from './components/FeaturedIn';
+import InteractiveQuiz from './components/InteractiveQuiz';
+import LiveMetrics from './components/LiveMetrics';
+import DownloadableResources from './components/DownloadableResources';
+import SocialSharing from './components/SocialSharing';
 
 type Theme = {
   primary: string;
@@ -110,10 +116,15 @@ function App() {
                     <main>
                       <Hero />
                       <About />
+                      <LiveMetrics />
+                      <InteractiveQuiz />
                       <Experience />
                       <Skills />
                       <Transactions />
                       <Highlights />
+                      <ReferralCarousel />
+                      <FeaturedIn />
+                      <DownloadableResources />
                       <Referrals />
                       <Contact />
                     </main>

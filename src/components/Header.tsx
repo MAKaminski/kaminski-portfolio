@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Calendar } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
@@ -21,6 +21,11 @@ const Header: React.FC = () => {
   const additionalNavItems = [
     { name: 'Knowledge Graph', href: '/knowledge-graph' },
   ];
+
+  const handleScheduleCall = () => {
+    // Replace with your actual scheduling link (Calendly, SavvyCal, etc.)
+    window.open('https://calendly.com/michael-kaminski/executive-consultation', '_blank');
+  };
 
   return (
     <motion.header 
@@ -46,7 +51,7 @@ const Header: React.FC = () => {
           </div>
           
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <a
                 key={item.name}
@@ -67,6 +72,15 @@ const Header: React.FC = () => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* Book a Call Button */}
+            <button
+              onClick={handleScheduleCall}
+              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
+              <Calendar size={16} />
+              <span>Book a Call</span>
+            </button>
           </nav>
 
           {/* Mobile menu button */}
@@ -104,6 +118,18 @@ const Header: React.FC = () => {
                   {item.name}
                 </Link>
               ))}
+              
+              {/* Mobile Book a Call Button */}
+              <button
+                onClick={() => {
+                  handleScheduleCall();
+                  setIsMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg"
+              >
+                <Calendar size={16} />
+                <span>Book a Call</span>
+              </button>
             </div>
           </div>
         )}

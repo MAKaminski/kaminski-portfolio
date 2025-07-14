@@ -1,9 +1,17 @@
 import React from 'react';
+import NewsletterSignup from './NewsletterSignup';
 
 const Footer: React.FC = () => {
   return (
     <footer className="py-12" style={{ background: 'var(--primary)', color: '#fff' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Newsletter Section */}
+        <div className="mb-12">
+          <div className="max-w-2xl mx-auto">
+            <NewsletterSignup />
+          </div>
+        </div>
+        
         <div className="grid md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-xl font-bold mb-4">Executive Portfolio</h3>

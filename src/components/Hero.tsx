@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import CensoredNumber from './CensoredNumber';
 import { useTheme } from '../App';
 import { Role } from '../App';
+import SocialSharing from './SocialSharing';
 
 const Hero: React.FC = () => {
   const { setTheme, currentRole } = useTheme();
@@ -153,7 +154,7 @@ const Hero: React.FC = () => {
               </div>
             </div>
             
-            <div className="flex space-x-4 mt-6">
+            <div className="flex items-center space-x-4 mt-6">
               <a 
                 href="https://linkedin.com/in/michaelxaxkaminski" 
                 target="_blank" 
@@ -170,6 +171,7 @@ const Hero: React.FC = () => {
               >
                 <Github className="w-6 h-6" />
               </a>
+              <SocialSharing />
             </div>
           </motion.div>
 
