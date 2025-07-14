@@ -820,19 +820,25 @@ const FinancialPerformance: React.FC = () => {
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Revenue Growth:</span>
                   <span className="font-medium text-green-600">
-                    +{((company.years[company.years.length - 1].revenue / company.years[0].revenue - 1) * 100).toFixed(1)}%
+                    {company.years && company.years.length > 1
+                      ? `+${((company.years[company.years.length - 1].revenue / company.years[0].revenue - 1) * 100).toFixed(1)}%`
+                      : 'N/A'}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Avg. Gross Margin:</span>
                   <span className="font-medium text-blue-600">
-                    {formatPercentage(company.years.reduce((sum, year) => sum + year.grossMargin, 0) / company.years.length)}
+                    {company.years && company.years.length > 0
+                      ? formatPercentage(company.years.reduce((sum, year) => sum + year.grossMargin, 0) / company.years.length)
+                      : 'N/A'}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Market Cap Growth:</span>
                   <span className="font-medium text-purple-600">
-                    +{((company.years[company.years.length - 1].marketCap / company.years[0].marketCap - 1) * 100).toFixed(1)}%
+                    {company.years && company.years.length > 1
+                      ? `+${((company.years[company.years.length - 1].marketCap / company.years[0].marketCap - 1) * 100).toFixed(1)}%`
+                      : 'N/A'}
                   </span>
                 </div>
               </div>
