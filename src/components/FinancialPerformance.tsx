@@ -861,7 +861,7 @@ const FinancialPerformance: React.FC = () => {
               Let's discuss how Michael Kaminski can drive financial transformation and growth for your organization.
             </p>
             <a
-              href="https://calendly.com/michael-kaminski/executive-consultation"
+              href="https://calendly.com/kaminski1337/15min"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"

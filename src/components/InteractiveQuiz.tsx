@@ -195,7 +195,7 @@ const InteractiveQuiz: React.FC = () => {
                 {result.cta}
               </a>
               <a
-                href="https://calendly.com/michael-kaminski/executive-consultation"
+                href="https://calendly.com/kaminski1337/15min"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium"

@@ -21,7 +21,7 @@ const Header: React.FC = () => {
   const additionalNavItems: { name: string; href: string }[] = [];
 
   const handleScheduleCall = () => {
-    window.open('https://calendly.com/michael-kaminski/executive-consultation', '_blank');
+    window.open('https://calendly.com/kaminski1337/15min', '_blank');
   };
 
   return (

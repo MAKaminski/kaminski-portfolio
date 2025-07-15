@@ -46,7 +46,7 @@ Replace the "Schedule a Call" button with a functional link to a calendar schedu
 ### Implementation
 - Updated Contact component to use Calendly link
 - Added Calendar icon from Lucide React
-- Link: `https://calendly.com/mkaminski1337/executive-consultation`
+- Link: `https://calendly.com/kaminski1337/15min`
 
 ### Files Modified
 - `src/components/Contact.tsx`

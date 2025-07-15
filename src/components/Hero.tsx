@@ -28,7 +28,7 @@ const Hero: React.FC = () => {
     <section className="pt-24 pb-16 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, var(--bg), #fff)' }}>
       {/* Background decoration */}
       <motion.div
-        className="absolute inset-0 opacity-10"
+        className="absolute inset-0 opacity-10 pointer-events-none"
         animate={{
           backgroundPosition: ['0% 0%', '100% 100%'],
         }}
