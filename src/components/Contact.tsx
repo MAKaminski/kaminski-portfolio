@@ -112,17 +112,17 @@ const Contact: React.FC = () => {
             
             <div className="space-y-4">
               <a 
-                href="https://calendly.com/mkaminski1337/executive-consultation" 
+                href="https://calendly.com/kaminski1337/15min" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-full bg-white text-primary-600 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center"
               >
                 <Calendar className="w-5 h-5 mr-2" />
-                Schedule a Call
+                Book Call
               </a>
               
               <a 
-                href="/resume.pdf" 
+                href="/docs/Kaminski Resume.pdf" 
                 download="Michael_Kaminski_Resume.pdf"
                 className="w-full border border-white text-white font-semibold py-3 px-6 rounded-lg hover:bg-white hover:text-primary-600 transition-colors duration-200 flex items-center justify-center"
               >

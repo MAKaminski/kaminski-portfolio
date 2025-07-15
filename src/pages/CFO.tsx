@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, DollarSign, TrendingUp, Shield, Calculator, BarChart3, Download, Linkedin, Github } from 'lucide-react';
+import { ArrowLeft, DollarSign, TrendingUp, Shield, Calculator, BarChart3, Download, Calendar, Linkedin, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const CFO: React.FC = () => {
@@ -57,15 +57,15 @@ const CFO: React.FC = () => {
             <h1 className="text-2xl font-bold text-gray-900">Michael Kaminski – Chief Financial Officer</h1>
             <div className="flex items-center space-x-4">
               <a 
-                href="/resume-cfo.pdf" 
-                download="Michael_Kaminski_CFO_Resume.pdf"
+                href="/docs/Kaminski Resume.pdf" 
+                download="Kaminski_Resume.pdf"
                 className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"
               >
                 <Download size={16} />
                 <span>CFO Resume</span>
               </a>
               <a 
-                href="https://linkedin.com/in/michaelxaxkaminski" 
+                href="https://www.linkedin.com/in/michaelxaxkaminski" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-primary-600 transition-colors duration-200"
@@ -73,7 +73,7 @@ const CFO: React.FC = () => {
                 <Linkedin size={20} />
               </a>
               <a 
-                href="https://github.com/michaelxaxkaminski" 
+                href="https://github.com/MAKaminski" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-primary-600 transition-colors duration-200"
@@ -163,7 +163,7 @@ const CFO: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="https://calendly.com/mkaminski1337/executive-consultation"
+              href="https://calendly.com/kaminski1337/15min"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white text-primary-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors duration-200"
@@ -178,6 +178,23 @@ const CFO: React.FC = () => {
             </a>
           </div>
         </motion.div>
+      </div>
+      <div className="mt-12 flex flex-col items-center space-y-4">
+        <a
+          href="https://calendly.com/kaminski1337/15min"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors duration-200 text-lg shadow-lg"
+        >
+          Schedule a Call
+        </a>
+        <a
+          href="/docs/Kaminski Resume.pdf"
+          download="Kaminski_Resume.pdf"
+          className="inline-flex items-center justify-center px-8 py-4 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-700 transition-colors duration-200 text-lg shadow-lg"
+        >
+          Download Full Resume
+        </a>
       </div>
     </div>
   );

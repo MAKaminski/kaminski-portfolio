@@ -90,7 +90,7 @@ const Hero: React.FC = () => {
             {/* Social Links */}
             <div className="flex space-x-4 mb-6">
               <a 
-                href="https://linkedin.com/in/michaelxaxkaminski" 
+                href="https://www.linkedin.com/in/michaelxaxkaminski/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center w-12 h-12 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"
@@ -98,7 +98,7 @@ const Hero: React.FC = () => {
                 <Linkedin className="w-6 h-6" />
               </a>
               <a 
-                href="https://github.com/michaelxaxkaminski" 
+                href="https://github.com/MAKaminski" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center w-12 h-12 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors duration-200"
@@ -109,8 +109,8 @@ const Hero: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
-                href="/resume-michael-kaminski.pdf" 
-                download="Michael_Kaminski_Resume.pdf"
+                href="/docs/Kaminski Resume.pdf" 
+                download="Kaminski_Resume.pdf"
                 className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors duration-200"
               >
                 <Download className="w-5 h-5 mr-2" />
@@ -122,6 +122,14 @@ const Hero: React.FC = () => {
               >
                 <Mail className="w-5 h-5 mr-2" />
                 Contact Me
+              </a>
+              <a
+                href="https://calendly.com/kaminski1337/15min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
+              >
+                Book Call
               </a>
             </div>
             
@@ -158,7 +166,7 @@ const Hero: React.FC = () => {
                 <Linkedin className="w-6 h-6" />
               </a>
               <a 
-                href="https://github.com/michaelxaxkaminski" 
+                href="https://github.com/makaminski" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center w-12 h-12 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors duration-200"
@@ -210,6 +218,23 @@ const Hero: React.FC = () => {
             </div>
           </motion.div>
         </div>
+      </div>
+      <div className="mt-12 flex flex-col items-center space-y-4">
+        <a
+          href="https://calendly.com/kaminski1337/15min"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors duration-200 text-lg shadow-lg"
+        >
+          Schedule a Call
+        </a>
+        <a
+          href="/docs/Kaminski Resume.pdf"
+          download="Kaminski_Resume.pdf"
+          className="inline-flex items-center justify-center px-8 py-4 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-700 transition-colors duration-200 text-lg shadow-lg"
+        >
+          Download Full Resume
+        </a>
       </div>
     </section>
   );

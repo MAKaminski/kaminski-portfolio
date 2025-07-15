@@ -24,7 +24,7 @@ const Skills: React.FC = () => {
     {
       title: "Product Analytics",
       icon: BarChart3,
-      skills: ["Mixpanel", "Amplitude", "Google Analytics", "Segment", "Hotjar"]
+      skills: ["Mixpanel", "Amplitude", "Google Analytics", "Segment", "Hotjar", "Posthog"]
     },
     {
       title: "Marketing & Growth",
@@ -39,7 +39,7 @@ const Skills: React.FC = () => {
     {
       title: "Backend & Databases",
       icon: Database,
-      skills: ["Node.js", "FastAPI", "PostgreSQL", "Redis", "NeonDB", "Supabase"]
+      skills: ["Node.js", "FastAPI", "PostgreSQL", "Redis", "NeonDB", "Supabase", "GraphQL"]
     },
     {
       title: "Frontend",
@@ -49,7 +49,7 @@ const Skills: React.FC = () => {
     {
       title: "Infrastructure & Cloud",
       icon: Cloud,
-      skills: ["Docker", "AWS", "GCP", "Vercel"]
+      skills: ["Docker", "AWS", "GCP", "Vercel", "K8 (Infra)", "Lambda", "Serverless", "Render"]
     },
     {
       title: "Data & Analytics Platforms",
@@ -64,7 +64,7 @@ const Skills: React.FC = () => {
     {
       title: "AI & ML",
       icon: Code,
-      skills: ["OpenAI", "ElevenLabs", "MCP"]
+      skills: ["OpenAI", "ElevenLabs", "MCP", "Langchain"]
     },
     {
       title: "General Tools",
@@ -140,6 +140,16 @@ const Skills: React.FC = () => {
       title: "CI/CD & DevOps",
       icon: Settings,
       skills: ["YAML", "GitHub Actions"]
+    },
+    {
+      title: "Low-Code/No-Code & Internal Tools",
+      icon: Settings,
+      skills: ["Retool"]
+    },
+    {
+      title: "Compliance & Security",
+      icon: Settings,
+      skills: ["PII Compliance", "HIPPA Compliance"]
     },
   ];
 

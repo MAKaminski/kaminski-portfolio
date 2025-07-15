@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Compass, TrendingUp, Target, Globe, Zap, Download, Linkedin, Github } from 'lucide-react';
+import { ArrowLeft, Compass, TrendingUp, Target, Globe, Zap, Download, Calendar, Linkedin, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Strategy: React.FC = () => {
@@ -57,15 +57,15 @@ const Strategy: React.FC = () => {
             <h1 className="text-2xl font-bold text-gray-900">Michael Kaminski – Chief Strategy Officer</h1>
             <div className="flex items-center space-x-4">
               <a 
-                href="/resume-strategy.pdf" 
-                download="Michael_Kaminski_Strategy_Resume.pdf"
+                href="/docs/Kaminski Resume.pdf" 
+                download="Kaminski_Resume.pdf"
                 className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"
               >
                 <Download size={16} />
-                <span>Strategy Resume</span>
+                <span>Download Full Resume</span>
               </a>
               <a 
-                href="https://linkedin.com/in/michaelxaxkaminski" 
+                href="https://www.linkedin.com/in/michaelxaxkaminski" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-primary-600 transition-colors duration-200"
@@ -73,7 +73,7 @@ const Strategy: React.FC = () => {
                 <Linkedin size={20} />
               </a>
               <a 
-                href="https://github.com/michaelxaxkaminski" 
+                href="https://github.com/MAKaminski" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-primary-600 transition-colors duration-200"
@@ -161,6 +161,25 @@ const Strategy: React.FC = () => {
             Let's discuss how my experience in strategic planning, M&A, and organizational 
             transformation can accelerate your company's growth and market position.
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
+            <a
+              href="https://calendly.com/kaminski1337/15min"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
+            >
+              <Calendar className="w-5 h-5 mr-2" />
+              Book Call
+            </a>
+            <a
+              href="/docs/Kaminski Resume.pdf"
+              download="Kaminski_Resume.pdf"
+              className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors duration-200"
+            >
+              <Download className="w-5 h-5 mr-2" />
+              Download Full Resume
+            </a>
+          </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="https://calendly.com/mkaminski1337/executive-consultation"
@@ -178,6 +197,23 @@ const Strategy: React.FC = () => {
             </a>
           </div>
         </motion.div>
+        <div className="mt-12 flex flex-col items-center space-y-4">
+          <a
+            href="https://calendly.com/kaminski1337/15min"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors duration-200 text-lg shadow-lg"
+          >
+            Schedule a Call
+          </a>
+          <a
+            href="/docs/Kaminski Resume.pdf"
+            download="Kaminski_Resume.pdf"
+            className="inline-flex items-center justify-center px-8 py-4 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-700 transition-colors duration-200 text-lg shadow-lg"
+          >
+            Download Full Resume
+          </a>
+        </div>
       </div>
     </div>
   );
