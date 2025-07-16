@@ -67,7 +67,7 @@ Michael’s expertise, attention to detail, and commitment to excellence make hi
   },
   {
     id: 5,
-    name: "Kyle McDonald,
+    name: "Kyle McDonald",
     title: "Senior Financial Analyst",
     company: "Momnt",
     linkedinUrl: "https://www.linkedin.com/in/mcdonaldkyle/",
