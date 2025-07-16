@@ -3,39 +3,29 @@ import { Linkedin } from 'lucide-react';
 
 const referrals = [
   {
-    name: "Sarah Johnson",
+    name: "Richard McNamara",
     title: "CFO, TechGrowth Ventures",
-    linkedin: "https://linkedin.com/in/sarah-johnson-cfo"
+    linkedin: "https://www.linkedin.com/in/richard-m-8aa36410/"
   },
   {
-    name: "David Chen",
-    title: "CEO, InnovateCorp",
-    linkedin: "https://linkedin.com/in/david-chen-ceo"
+    name: "Chris Johnson",
+    title: "Chief Risk Officer, Co-Founder, Momnt",
+    linkedin: "https://www.linkedin.com/in/cjohnsongt/"
   },
   {
-    name: "Lisa Rodriguez",
-    title: "Board Member, Strategic Partners Fund",
-    linkedin: "https://linkedin.com/in/lisa-rodriguez-board"
+    name: "Lena McDearmid",
+    title: "COO, Co-Founder, Momnt",
+    linkedin: "https://www.linkedin.com/in/lenamcdearmid/"
   },
   {
-    name: "Robert Kim",
-    title: "Managing Director, Peak Capital",
-    linkedin: "https://linkedin.com/in/robert-kim-md"
+    name: "Brian Lanehart",
+    title: "CTO, Momnt",
+    linkedin: "https://www.linkedin.com/in/brianlanehart/"
   },
   {
-    name: "Amanda Foster",
-    title: "CPO, DataFlow Solutions",
-    linkedin: "https://linkedin.com/in/amanda-foster-cpo"
-  },
-  {
-    name: "James Lee",
-    title: "SVP, Operations, Home Depot",
-    linkedin: "https://linkedin.com/in/james-lee-hd"
-  },
-  {
-    name: "Priya Patel",
-    title: "VP, Product, GreenSky",
-    linkedin: "https://linkedin.com/in/priya-patel-greensky"
+    name: "Erik Kaminski",
+    title: "Co-Founder, Superior Contracting & Maintenance",
+    linkedin: "https://www.linkedin.com/in/erik-kaminski-63978822b/"
   }
 ];
 
