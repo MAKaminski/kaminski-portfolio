@@ -56,7 +56,7 @@ const Experience: React.FC = () => {
     {
       company: "Property Walk",
       title: "Founder",
-      period: "October 2022 - July 2023",
+      period: "2022 - 2023",
       description: "Founder of Property Walk, a real estate technology company that provides a platform for property managers to reduce service calls and overbillings of residential home services.",
       exit: "5k MRR, PMF not found"
     },
