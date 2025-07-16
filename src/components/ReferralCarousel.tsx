@@ -14,72 +14,146 @@ interface Referral {
   avatar?: string;
 }
 
+const 
+
 const referrals: Referral[] = [
   {
     id: 1,
-    name: "Sarah Johnson",
-    title: "Chief Financial Officer",
-    company: "TechGrowth Ventures",
-    linkedinUrl: "https://linkedin.com/in/sarah-johnson-cfo",
-    content: "Michael is a rare leader who combines deep financial expertise with a strategic mindset. His ability to drive results and inspire teams is unmatched. I highly recommend him for any executive role.",
+    name: "Dawn Goad",
+    title: "",
+    company: "Momnt",
+    linkedinUrl: "https://www.linkedin.com/in/dawn-jeffries-goad/",
+    content: `I had the pleasure of working with Michael, and I can confidently say he is an outstanding Product Engineer. He has exceptional communication skills and a unique ability to break down complex technical challenges into clear, actionable solutions, making collaboration seamless across teams.
+
+What truly makes Michael stand out is his problem solving mindset. He doesn’t just fix issues; he digs deep to identify root causes and proactively implements long-term solutions that improve both product performance and processes. His understanding of regulatory compliance is particularly impressive. He recognizes its critical role in product development and ensures that every solution aligns with industry standards.
+
+Beyond his technical expertise, Michael is also highly skilled in documenting processes and simplifying complex systems so that both technical and non-technical users can understand them. He has a knack for translating intricate engineering concepts into clear, accessible documentation that enhances efficiency, knowledge sharing, and overall user experience.
+
+Michael’s expertise, attention to detail, and commitment to excellence make him an invaluable asset to any team. I highly recommend him to anyone looking for a skilled and strategic engineer who drives meaningful impact.`,
     rating: 5,
-    date: "2024",
-    avatar: "/images/avatar1.jpg"
+    date: "2025",
+    avatar: ""
   },
   {
     id: 2,
-    name: "David Chen",
-    title: "CEO & Founder",
-    company: "InnovateCorp",
-    linkedinUrl: "https://linkedin.com/in/david-chen-ceo",
+    name: "Brien Mizell",
+    title: "Senior Technical Product Engineer",
+    company: "Momnt",
+    linkedinUrl: "https://www.linkedin.com/in/brienmizell/",
     content: "Working with Michael was transformative for our business. His insights into finance and technology helped us scale rapidly and achieve our goals ahead of schedule.",
     rating: 5,
-    date: "2024",
-    avatar: "/images/avatar2.jpg"
+    date: "2025",
+    avatar: ""
   },
   {
     id: 3,
-    name: "Lisa Rodriguez",
-    title: "Board Member",
-    company: "Strategic Partners Fund",
-    linkedinUrl: "https://linkedin.com/in/lisa-rodriguez-board",
-    content: "Michael's analytical skills and leadership are top-notch. He consistently delivers value and is a trusted advisor to the board.",
+    name: "Abby Martin",
+    title: "Senior Product Manager",
+    company: "Momnt",
+    linkedinUrl: "https://www.linkedin.com/in/martin-abby/",
+    content: "",
     rating: 5,
-    date: "2024",
-    avatar: "/images/avatar3.jpg"
+    date: "2025",
+    avatar: ""
   },
   {
     id: 4,
-    name: "Robert Kim",
-    title: "Managing Director",
-    company: "Peak Capital",
-    linkedinUrl: "https://linkedin.com/in/robert-kim-md",
-    content: "Michael's expertise in financial strategy and operations is exceptional. He played a key role in several successful projects at our firm.",
+    name: "EJ Shramek",
+    title: "Director of Project Management",
+    company: "Superior Contracting & Maintenance",
+    linkedinUrl: "https://www.linkedin.com/in/ejshramek/",
+    content: "",
     rating: 5,
-    date: "2024",
-    avatar: "/images/avatar4.jpg"
+    date: "2025",
+    avatar: ""
   },
   {
     id: 5,
-    name: "Amanda Foster",
-    title: "Chief Product Officer",
-    company: "DataFlow Solutions",
-    linkedinUrl: "https://linkedin.com/in/amanda-foster-cpo",
-    content: "Michael is a visionary leader with a strong grasp of both product and finance. His guidance was instrumental in our product launch and market expansion.",
+    name: "Kyle McDonald,
+    title: "Senior Financial Analyst",
+    company: "Momnt",
+    linkedinUrl: "https://www.linkedin.com/in/mcdonaldkyle/",
+    content: "",
     rating: 5,
-    date: "2024",
-    avatar: "/images/avatar5.jpg"
+    date: "2025",
+    avatar: ""
   },
   {
     id: 6,
-    name: "James Lee",
-    title: "SVP, Operations",
-    company: "Home Depot",
-    linkedinUrl: "https://linkedin.com/in/james-lee-hd",
-    content: "Michael's operational acumen and leadership style set him apart. He is a true asset to any organization.",
+    name: "Daniel Walker",
+    title: "Director of Construction",
+    company: "Superior Contracting & Maintenance",
+    linkedinUrl: "https://www.linkedin.com/in/daniel-walker-479646205/",
+    content: "",
     rating: 5,
-    date: "2024",
-    avatar: "/images/avatar6.jpg"
+    date: "2025",
+    avatar: ""
+  },
+  {
+    id: 7,
+    name: "Peter Doro",
+    title: "Product Manager",
+    company: "Momnt",
+    linkedinUrl: "https://www.linkedin.com/in/peter-doro2000/",
+    content: "",
+    rating: 5,
+    date: "2025",
+    avatar: ""
+  },
+  {
+    id: 8,
+    name: "Jessica Almariri",
+    title: "Compliance Analyst",
+    company: "Momnt",
+    linkedinUrl: "  https://www.linkedin.com/in/jessica-almariri-b3684a10/",
+    content: "",
+    rating: 5,
+    date: "2025",
+    avatar: ""
+  },
+  {
+    id: 9,
+    name: "Vedran Karačić",
+    title: "Software Developer",
+    company: "Momnt",
+    linkedinUrl: "https://www.linkedin.com/in/vedrankaracic/",
+    content: "",
+    rating: 5,
+    date: "2025",
+    avatar: ""
+  },
+  {
+    id: 10,
+    name: "Natalie Uribe",
+    title: "Enterprise Admin, Manager",
+    company: "Momnt",
+    linkedinUrl: "https://www.linkedin.com/in/natalie-uribe-aab000a1/",
+    content: "",
+    rating: 5,
+    date: "2025",
+    avatar: ""
+  },
+  {
+    id: 11,
+    name: "Michael Hill",
+    title: "Manager, GPS EFA",
+    company: "Deloitte",
+    linkedinUrl: "https://www.linkedin.com/in/michael-hill-0391991b/",
+    content: "",
+    rating: 5,
+    date: "2011",
+    avatar: ""
+  },
+  {
+    id: 12,
+    name: "Genna Brown",
+    title: "CIO",
+    company: "Financial Success",
+    linkedinUrl: "https://www.linkedin.com/in/genna-brown-11385ab/",
+    content: "",
+    rating: 5,
+    date: "2011",
+    avatar: ""
   }
 ];
 

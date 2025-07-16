@@ -69,12 +69,12 @@ const Skills: React.FC = () => {
     {
       title: "General Tools",
       icon: Settings,
-      skills: ["Confluence", "JIRA", "Asana", "Trello", "Slack", "Miro", "Notion", "Lucid"]
+      skills: ["Confluence", "JIRA", "Asana", "Trello", "Miro", "Notion", "Lucid"]
     },
     {
       title: "Collaboration & Productivity",
       icon: Settings,
-      skills: ["Slack", "Zoom", "Google Workspace", "Microsoft 365", "Airtable", "Monday.com", "Notion", "GitHub", "Figma", "Zapier"]
+      skills: ["Slack", "Zoom", "Google Workspace", "Microsoft 365", "Monday.com", "GitHub", "Figma", "Zapier"]
     },
     {
       title: "Vector Databases",
@@ -84,7 +84,7 @@ const Skills: React.FC = () => {
     {
       title: "Audio & Video Processing",
       icon: Settings,
-      skills: ["FFmpeg", "OpenCV", "Tesseract", "Audacity", "OBS Studio", "Adobe Premiere", "DaVinci Resolve"]
+      skills: ["FFmpeg", "OpenCV", "Tesseract", "Audacity"]
     },
     {
       title: "Libraries & Tools",
@@ -144,7 +144,7 @@ const Skills: React.FC = () => {
     {
       title: "Low-Code/No-Code & Internal Tools",
       icon: Settings,
-      skills: ["Retool"]
+      skills: ["Retool, Make, AirTable, Lucid"]
     },
     {
       title: "Compliance & Security",
