@@ -163,7 +163,7 @@ const CPO: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <a
-              href="https://calendly.com/kaminski1337/15min"
+              href=""
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
@@ -182,7 +182,7 @@ const CPO: React.FC = () => {
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="https://calendly.com/mkaminski1337/executive-consultation"
+              href="https://calendly.com/kaminski1337/15min"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white text-primary-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors duration-200"
