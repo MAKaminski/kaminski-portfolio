@@ -522,52 +522,58 @@ companyData.forEach(company => {
   );
 });
 
-// 2. Add Michael's Index (blended/average values)
+// 2. Add Michael's Index (blended performance across actual tenure periods)
 const indexYears: FinancialYear[] = [];
 for (let year = 2007; year <= 2025; year++) {
-  let count = 0;
-  let revenue = 0, grossMargin = 0, grossMarginDollars = 0, operatingMargin = 0, operatingMarginDollars = 0, ebitda = 0, ebitdaDollars = 0, marketCap = 0;
+  let activeCompanies = 0;
+  let totalRevenue = 0, totalGrossMargin = 0, totalGrossMarginDollars = 0, totalOperatingMargin = 0, totalOperatingMarginDollars = 0, totalEbitda = 0, totalEbitdaDollars = 0, totalMarketCap = 0;
+  
+  // Only include companies where Michael was actually employed during this year
   companyData.forEach(company => {
-    const y = company.years.find(yy => yy.year === year);
-    if (
-      y &&
-      typeof y.revenue === 'number' && y.revenue >= 0 &&
-      typeof y.grossMargin === 'number' && y.grossMargin >= 0 && y.grossMargin <= 100 &&
-      typeof y.operatingMargin === 'number' && y.operatingMargin >= 0 && y.operatingMargin <= 100 &&
-      typeof y.ebitda === 'number' && y.ebitda >= 0 && y.ebitda <= 100 &&
-      typeof y.marketCap === 'number' && y.marketCap >= 0
-    ) {
-      count++;
-      revenue += y.revenue;
-      grossMargin += y.grossMargin;
-      grossMarginDollars += y.grossMarginDollars;
-      operatingMargin += y.operatingMargin;
-      operatingMarginDollars += y.operatingMarginDollars;
-      ebitda += y.ebitda;
-      ebitdaDollars += y.ebitdaDollars;
-      marketCap += y.marketCap;
+    if (year >= company.tenureStart && year <= company.tenureEnd) {
+      const y = company.years.find(yy => yy.year === year);
+      if (
+        y &&
+        typeof y.revenue === 'number' && y.revenue >= 0 &&
+        typeof y.grossMargin === 'number' && y.grossMargin >= 0 && y.grossMargin <= 100 &&
+        typeof y.operatingMargin === 'number' && y.operatingMargin >= 0 && y.operatingMargin <= 100 &&
+        typeof y.ebitda === 'number' && y.ebitda >= 0 && y.ebitda <= 100 &&
+        typeof y.marketCap === 'number' && y.marketCap >= 0
+      ) {
+        activeCompanies++;
+        totalRevenue += y.revenue;
+        totalGrossMargin += y.grossMargin;
+        totalGrossMarginDollars += y.grossMarginDollars;
+        totalOperatingMargin += y.operatingMargin;
+        totalOperatingMarginDollars += y.operatingMarginDollars;
+        totalEbitda += y.ebitda;
+        totalEbitdaDollars += y.ebitdaDollars;
+        totalMarketCap += y.marketCap;
+      }
     }
   });
-  if (count > 0) {
+  
+  // Only create index entry if Michael was employed at at least one company during this year
+  if (activeCompanies > 0) {
     indexYears.push({
       year,
-      revenue: Math.max(0, revenue / count),
-      grossMargin: Math.max(0, Math.min(100, grossMargin / count)),
-      grossMarginDollars: Math.max(0, grossMarginDollars / count),
-      operatingMargin: Math.max(0, Math.min(100, operatingMargin / count)),
-      operatingMarginDollars: Math.max(0, operatingMarginDollars / count),
-      ebitda: Math.max(0, Math.min(100, ebitda / count)),
-      ebitdaDollars: Math.max(0, ebitdaDollars / count),
-      marketCap: Math.max(0, marketCap / count),
-      source: 'Aggregate Index'
+      revenue: Math.max(0, totalRevenue / activeCompanies),
+      grossMargin: Math.max(0, Math.min(100, totalGrossMargin / activeCompanies)),
+      grossMarginDollars: Math.max(0, totalGrossMarginDollars / activeCompanies),
+      operatingMargin: Math.max(0, Math.min(100, totalOperatingMargin / activeCompanies)),
+      operatingMarginDollars: Math.max(0, totalOperatingMarginDollars / activeCompanies),
+      ebitda: Math.max(0, Math.min(100, totalEbitda / activeCompanies)),
+      ebitdaDollars: Math.max(0, totalEbitdaDollars / activeCompanies),
+      marketCap: Math.max(0, totalMarketCap / activeCompanies),
+      source: 'Michael\'s Performance Index'
     });
   }
 }
 companyData.push({
   id: 'michaels-index',
-  name: "Michael's Index",
-  industry: 'Aggregate',
-  role: 'Aggregate',
+  name: "Michael's Performance Index",
+  industry: 'Performance Blend',
+  role: 'Career Performance',
   tenure: '2007-2025',
   tenureStart: 2007,
   tenureEnd: 2025,
