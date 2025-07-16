@@ -35,7 +35,7 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Target Profile</h4>
             <ul className="space-y-2 text-gray-400">
-              <li>• Revenue: $0 - $50MM</li>
+              <li>• Revenue: $0 - $100MM</li>
               <li>• Headcount: 2 - 200</li>
               <li>• Action-oriented culture</li>
               <li>• Performance-based compensation</li>

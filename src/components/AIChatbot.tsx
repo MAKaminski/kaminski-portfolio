@@ -51,7 +51,7 @@ const AIChatbot: React.FC = () => {
     },
     industries: {
       keywords: ['industries', 'sectors', 'fintech', 'saas', 'ai', 'target'],
-      response: "I'm targeting companies in:\n• Fintech & Financial Services\n• Technology & SaaS\n• AI & Machine Learning\n• PropTech & Real Estate\n• Residential Services\n• Revenue: $0-50MM, Headcount: 2-200"
+      response: "I'm targeting companies in:\n• Fintech & Financial Services\n• Technology & SaaS\n• AI & Machine Learning\n• PropTech & Real Estate\n• Residential Services\n• Revenue: $0100M, Headcount: 2-200"
     },
     contact: {
       keywords: ['contact', 'email', 'phone', 'reach', 'connect'],
