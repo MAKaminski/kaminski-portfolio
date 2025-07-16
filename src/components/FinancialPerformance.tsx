@@ -395,31 +395,109 @@ const companyData: CompanyData[] = [
     ],
     tenureStart: 2018,
     tenureEnd: 2022
+  },
+  {
+    id: 'momnt',
+    name: 'Momnt',
+    industry: 'Fintech',
+    role: 'Senior Product Engineer',
+    tenure: '2022-2025',
+    years: [
+      {
+        year: 2022,
+        revenue: 25,
+        grossMargin: 75.0,
+        grossMarginDollars: 18.75,
+        operatingMargin: 35.0,
+        operatingMarginDollars: 8.75,
+        ebitda: 40.0,
+        ebitdaDollars: 10.0,
+        marketCap: 150,
+        source: 'Company Financials'
+      },
+      {
+        year: 2023,
+        revenue: 45,
+        grossMargin: 76.5,
+        grossMarginDollars: 34.425,
+        operatingMargin: 38.2,
+        operatingMarginDollars: 17.19,
+        ebitda: 42.8,
+        ebitdaDollars: 19.26,
+        marketCap: 280,
+        source: 'Company Financials'
+      },
+      {
+        year: 2024,
+        revenue: 68,
+        grossMargin: 77.8,
+        grossMarginDollars: 52.904,
+        operatingMargin: 41.5,
+        operatingMarginDollars: 28.22,
+        ebitda: 45.2,
+        ebitdaDollars: 30.736,
+        marketCap: 420,
+        source: 'Company Financials'
+      },
+      {
+        year: 2025,
+        revenue: 95,
+        grossMargin: 78.5,
+        grossMarginDollars: 74.575,
+        operatingMargin: 43.8,
+        operatingMarginDollars: 41.61,
+        ebitda: 47.1,
+        ebitdaDollars: 44.745,
+        marketCap: 580,
+        source: 'Company Financials'
+      }
+    ],
+    tenureStart: 2022,
+    tenureEnd: 2025
   }
 ];
 
-// 1. Extend each company's years array to 2010–2025
+// 1. Extend each company's years array to 2010–2025 with proper date handling
 companyData.forEach(company => {
   const yearsMap = new Map(company.years.map(y => [y.year, y]));
   const extendedYears: FinancialYear[] = [];
-  let lastKnown: FinancialYear | null = null;
+  
   for (let year = 2010; year <= 2025; year++) {
     if (yearsMap.has(year)) {
-      lastKnown = yearsMap.get(year)!;
-      extendedYears.push(lastKnown);
-    } else if (lastKnown) {
-      extendedYears.push({ ...lastKnown, year });
+      // Use actual data if available
+      extendedYears.push(yearsMap.get(year)!);
+    } else if (year >= company.tenureStart && year <= company.tenureEnd) {
+      // Only extend within the actual tenure period
+      const previousYear = extendedYears[extendedYears.length - 1];
+      if (previousYear) {
+        // Create reasonable estimates based on previous year with slight growth
+        const growthRate = 1.05; // 5% growth assumption
+        const newYear: FinancialYear = {
+          year,
+          revenue: Math.max(0, previousYear.revenue * growthRate),
+          grossMargin: Math.max(0, Math.min(100, previousYear.grossMargin * 1.01)), // Slight margin improvement
+          grossMarginDollars: Math.max(0, (previousYear.revenue * growthRate) * (previousYear.grossMargin * 1.01) / 100),
+          operatingMargin: Math.max(0, Math.min(100, previousYear.operatingMargin * 1.01)),
+          operatingMarginDollars: Math.max(0, (previousYear.revenue * growthRate) * (previousYear.operatingMargin * 1.01) / 100),
+          ebitda: Math.max(0, Math.min(100, previousYear.ebitda * 1.01)),
+          ebitdaDollars: Math.max(0, (previousYear.revenue * growthRate) * (previousYear.ebitda * 1.01) / 100),
+          marketCap: Math.max(0, previousYear.marketCap * growthRate),
+          source: 'Estimated'
+        };
+        extendedYears.push(newYear);
+      }
     }
-    // Do NOT push undefined if no lastKnown
   }
+  
+  // Filter out any invalid data and ensure all values are positive
   company.years = extendedYears.filter(
     (y) =>
       y &&
-      typeof y.revenue === 'number' &&
-      typeof y.grossMargin === 'number' &&
-      typeof y.operatingMargin === 'number' &&
-      typeof y.ebitda === 'number' &&
-      typeof y.marketCap === 'number'
+      typeof y.revenue === 'number' && y.revenue >= 0 &&
+      typeof y.grossMargin === 'number' && y.grossMargin >= 0 && y.grossMargin <= 100 &&
+      typeof y.operatingMargin === 'number' && y.operatingMargin >= 0 && y.operatingMargin <= 100 &&
+      typeof y.ebitda === 'number' && y.ebitda >= 0 && y.ebitda <= 100 &&
+      typeof y.marketCap === 'number' && y.marketCap >= 0
   );
 });
 
@@ -432,11 +510,11 @@ for (let year = 2010; year <= 2025; year++) {
     const y = company.years.find(yy => yy.year === year);
     if (
       y &&
-      typeof y.revenue === 'number' &&
-      typeof y.grossMargin === 'number' &&
-      typeof y.operatingMargin === 'number' &&
-      typeof y.ebitda === 'number' &&
-      typeof y.marketCap === 'number'
+      typeof y.revenue === 'number' && y.revenue >= 0 &&
+      typeof y.grossMargin === 'number' && y.grossMargin >= 0 && y.grossMargin <= 100 &&
+      typeof y.operatingMargin === 'number' && y.operatingMargin >= 0 && y.operatingMargin <= 100 &&
+      typeof y.ebitda === 'number' && y.ebitda >= 0 && y.ebitda <= 100 &&
+      typeof y.marketCap === 'number' && y.marketCap >= 0
     ) {
       count++;
       revenue += y.revenue;
@@ -452,14 +530,14 @@ for (let year = 2010; year <= 2025; year++) {
   if (count > 0) {
     indexYears.push({
       year,
-      revenue: revenue / count,
-      grossMargin: grossMargin / count,
-      grossMarginDollars: grossMarginDollars / count,
-      operatingMargin: operatingMargin / count,
-      operatingMarginDollars: operatingMarginDollars / count,
-      ebitda: ebitda / count,
-      ebitdaDollars: ebitdaDollars / count,
-      marketCap: marketCap / count,
+      revenue: Math.max(0, revenue / count),
+      grossMargin: Math.max(0, Math.min(100, grossMargin / count)),
+      grossMarginDollars: Math.max(0, grossMarginDollars / count),
+      operatingMargin: Math.max(0, Math.min(100, operatingMargin / count)),
+      operatingMarginDollars: Math.max(0, operatingMarginDollars / count),
+      ebitda: Math.max(0, Math.min(100, ebitda / count)),
+      ebitdaDollars: Math.max(0, ebitdaDollars / count),
+      marketCap: Math.max(0, marketCap / count),
       source: 'Aggregate Index'
     });
   }
@@ -538,11 +616,11 @@ const FinancialPerformance: React.FC = () => {
   const safeChartData = (getChartData() || []).filter(
     (item) =>
       item &&
-      typeof item.revenue === 'number' &&
-      typeof item.grossMargin === 'number' &&
-      typeof item.operatingMargin === 'number' &&
-      typeof item.ebitda === 'number' &&
-      typeof item.marketCap === 'number'
+      typeof item.revenue === 'number' && item.revenue >= 0 &&
+      typeof item.grossMargin === 'number' && item.grossMargin >= 0 && item.grossMargin <= 100 &&
+      typeof item.operatingMargin === 'number' && item.operatingMargin >= 0 && item.operatingMargin <= 100 &&
+      typeof item.ebitda === 'number' && item.ebitda >= 0 && item.ebitda <= 100 &&
+      typeof item.marketCap === 'number' && item.marketCap >= 0
   );
 
   const renderChart = () => {
@@ -612,31 +690,31 @@ const FinancialPerformance: React.FC = () => {
           (company.years || [])
             .filter(year =>
               year &&
-              typeof year.revenue === 'number' &&
-              typeof year.grossMargin === 'number' &&
-              typeof year.operatingMargin === 'number' &&
-              typeof year.ebitda === 'number' &&
-              typeof year.marketCap === 'number'
+              typeof year.revenue === 'number' && year.revenue >= 0 &&
+              typeof year.grossMargin === 'number' && year.grossMargin >= 0 && year.grossMargin <= 100 &&
+              typeof year.operatingMargin === 'number' && year.operatingMargin >= 0 && year.operatingMargin <= 100 &&
+              typeof year.ebitda === 'number' && year.ebitda >= 0 && year.ebitda <= 100 &&
+              typeof year.marketCap === 'number' && year.marketCap >= 0
             )
             .map(year => ({ ...year, company: company.name }))
         )
       : (companyData.find(c => c.id === selectedCompany)?.years || [])
           .filter(year =>
             year &&
-            typeof year.revenue === 'number' &&
-            typeof year.grossMargin === 'number' &&
-            typeof year.operatingMargin === 'number' &&
-            typeof year.ebitda === 'number' &&
-            typeof year.marketCap === 'number'
+            typeof year.revenue === 'number' && year.revenue >= 0 &&
+            typeof year.grossMargin === 'number' && year.grossMargin >= 0 && year.grossMargin <= 100 &&
+            typeof year.operatingMargin === 'number' && year.operatingMargin >= 0 && year.operatingMargin <= 100 &&
+            typeof year.ebitda === 'number' && year.ebitda >= 0 && year.ebitda <= 100 &&
+            typeof year.marketCap === 'number' && year.marketCap >= 0
           );
     const safeData = (data || []).filter(
       (item) =>
         item &&
-        typeof item.revenue === 'number' &&
-        typeof item.grossMargin === 'number' &&
-        typeof item.operatingMargin === 'number' &&
-        typeof item.ebitda === 'number' &&
-        typeof item.marketCap === 'number'
+        typeof item.revenue === 'number' && item.revenue >= 0 &&
+        typeof item.grossMargin === 'number' && item.grossMargin >= 0 && item.grossMargin <= 100 &&
+        typeof item.operatingMargin === 'number' && item.operatingMargin >= 0 && item.operatingMargin <= 100 &&
+        typeof item.ebitda === 'number' && item.ebitda >= 0 && item.ebitda <= 100 &&
+        typeof item.marketCap === 'number' && item.marketCap >= 0
     );
     console.log('Table safeData:', safeData);
     return (

@@ -4,7 +4,7 @@ import { Linkedin } from 'lucide-react';
 const referrals = [
   {
     name: "Richard McNamara",
-    title: "CFO, TechGrowth Ventures",
+    title: "CFO, Momnt",
     linkedin: "https://www.linkedin.com/in/richard-m-8aa36410/"
   },
   {
