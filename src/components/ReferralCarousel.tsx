@@ -14,8 +14,6 @@ interface Referral {
   avatar?: string;
 }
 
-const 
-
 const referrals: Referral[] = [
   {
     id: 1,
