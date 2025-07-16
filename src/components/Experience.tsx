@@ -114,7 +114,7 @@ const Experience: React.FC = () => {
       period: "2009 - 2009",
       description: "Generate social media app, with a focus on user experience and engagement",
       exit: "Internship ended"
-    }
+    },
     {
       company: "Two Brothers Landscaping",
       title: "Founder",
