@@ -149,7 +149,7 @@ const Skills: React.FC = () => {
     {
       title: "Compliance & Security",
       icon: Settings,
-      skills: ["PII Compliance", "HIPPA Compliance"]
+      skills: ["PII Compliance", "HIPPA Compliance", "GDPR", "PCI DSS", "ISO 27001"]
     },
   ];
 

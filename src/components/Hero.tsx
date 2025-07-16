@@ -157,22 +157,6 @@ const Hero: React.FC = () => {
             </div>
             
             <div className="flex items-center space-x-4 mt-6">
-              <a 
-                href="https://linkedin.com/in/michaelxaxkaminski" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center w-12 h-12 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"
-              >
-                <Linkedin className="w-6 h-6" />
-              </a>
-              <a 
-                href="https://github.com/makaminski" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center w-12 h-12 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors duration-200"
-              >
-                <Github className="w-6 h-6" />
-              </a>
               <SocialSharing />
             </div>
           </motion.div>

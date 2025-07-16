@@ -234,7 +234,7 @@ const ReferralCarousel: React.FC = () => {
               Schedule a Consultation
             </a>
             <a
-              href="https://linkedin.com/in/michael-kaminski"
+              href="https://www.linkedin.com/in/michaelxaxkaminski"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium"
