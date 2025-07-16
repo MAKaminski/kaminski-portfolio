@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { TrendingUp, DollarSign, BarChart3, Calendar, Filter, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
   LineChart,
@@ -43,250 +42,144 @@ interface FinancialYear {
 
 const companyData: CompanyData[] = [
   {
-    id: 'hd-supply',
-    name: 'HD Supply',
-    industry: 'Industrial Distribution',
-    role: 'Senior Financial Analyst',
-    tenure: '2004-2006',
+    id: 'two-brothers-landscaping',
+    name: 'Two Brothers Landscaping',
+    industry: 'Landscaping Services',
+    role: 'Founder',
+    tenure: '2007-2011',
     years: [
       {
-        year: 2004,
-        revenue: 8500,
-        grossMargin: 25.2,
-        grossMarginDollars: 2142,
-        operatingMargin: 8.5,
-        operatingMarginDollars: 722.5,
-        ebitda: 12.3,
-        ebitdaDollars: 1045.5,
-        marketCap: 3200,
-        source: 'SEC Filings'
+        year: 2007,
+        revenue: 0.2,
+        grossMargin: 45.0,
+        grossMarginDollars: 0.09,
+        operatingMargin: 15.0,
+        operatingMarginDollars: 0.03,
+        ebitda: 18.0,
+        ebitdaDollars: 0.036,
+        marketCap: 0.5,
+        source: 'Company Financials'
       },
       {
-        year: 2005,
-        revenue: 9200,
-        grossMargin: 26.1,
-        grossMarginDollars: 2401.2,
-        operatingMargin: 9.2,
-        operatingMarginDollars: 846.4,
-        ebitda: 13.1,
-        ebitdaDollars: 1205.2,
-        marketCap: 3800,
-        source: 'SEC Filings'
+        year: 2008,
+        revenue: 0.4,
+        grossMargin: 47.5,
+        grossMarginDollars: 0.19,
+        operatingMargin: 17.5,
+        operatingMarginDollars: 0.07,
+        ebitda: 20.5,
+        ebitdaDollars: 0.082,
+        marketCap: 1.2,
+        source: 'Company Financials'
       },
       {
-        year: 2006,
-        revenue: 10100,
-        grossMargin: 26.8,
-        grossMarginDollars: 2706.8,
-        operatingMargin: 9.8,
-        operatingMarginDollars: 989.8,
-        ebitda: 13.7,
-        ebitdaDollars: 1383.7,
-        marketCap: 4200,
-        source: 'SEC Filings'
+        year: 2009,
+        revenue: 0.6,
+        grossMargin: 50.0,
+        grossMarginDollars: 0.3,
+        operatingMargin: 20.0,
+        operatingMarginDollars: 0.12,
+        ebitda: 23.0,
+        ebitdaDollars: 0.138,
+        marketCap: 2.0,
+        source: 'Company Financials'
+      },
+      {
+        year: 2010,
+        revenue: 0.8,
+        grossMargin: 52.5,
+        grossMarginDollars: 0.42,
+        operatingMargin: 22.5,
+        operatingMarginDollars: 0.18,
+        ebitda: 25.5,
+        ebitdaDollars: 0.204,
+        marketCap: 3.0,
+        source: 'Company Financials'
+      },
+      {
+        year: 2011,
+        revenue: 1.0,
+        grossMargin: 55.0,
+        grossMarginDollars: 0.55,
+        operatingMargin: 25.0,
+        operatingMarginDollars: 0.25,
+        ebitda: 28.0,
+        ebitdaDollars: 0.28,
+        marketCap: 4.0,
+        source: 'Company Financials'
       }
     ],
-    tenureStart: 2004,
-    tenureEnd: 2006
+    tenureStart: 2007,
+    tenureEnd: 2011
   },
   {
     id: 'home-depot',
     name: 'The Home Depot',
     industry: 'Retail',
-    role: 'Financial Analyst',
-    tenure: '2006-2008',
+    role: 'Senior Analyst, Merchandising Finance & Treasury',
+    tenure: '2011-2014',
     years: [
-      {
-        year: 2006,
-        revenue: 90800,
-        grossMargin: 33.5,
-        grossMarginDollars: 30418,
-        operatingMargin: 11.2,
-        operatingMarginDollars: 10169.6,
-        ebitda: 14.8,
-        ebitdaDollars: 13438.4,
-        marketCap: 85000,
-        source: 'SEC Filings'
-      },
-      {
-        year: 2007,
-        revenue: 77300,
-        grossMargin: 33.7,
-        grossMarginDollars: 26050.1,
-        operatingMargin: 10.8,
-        operatingMarginDollars: 8348.4,
-        ebitda: 14.2,
-        ebitdaDollars: 10976.6,
-        marketCap: 65000,
-        source: 'SEC Filings'
-      },
-      {
-        year: 2008,
-        revenue: 71200,
-        grossMargin: 34.0,
-        grossMarginDollars: 24208,
-        operatingMargin: 10.5,
-        operatingMarginDollars: 7476,
-        ebitda: 13.8,
-        ebitdaDollars: 9825.6,
-        marketCap: 45000,
-        source: 'SEC Filings'
-      }
-    ],
-    tenureStart: 2006,
-    tenureEnd: 2008
-  },
-  {
-    id: 'adp',
-    name: 'ADP',
-    industry: 'Financial Services',
-    role: 'Senior Financial Analyst',
-    tenure: '2008-2012',
-    years: [
-      {
-        year: 2008,
-        revenue: 8900,
-        grossMargin: 45.2,
-        grossMarginDollars: 4022.8,
-        operatingMargin: 18.5,
-        operatingMarginDollars: 1646.5,
-        ebitda: 22.3,
-        ebitdaDollars: 1984.7,
-        marketCap: 25000,
-        source: 'SEC Filings'
-      },
-      {
-        year: 2009,
-        revenue: 9200,
-        grossMargin: 46.1,
-        grossMarginDollars: 4241.2,
-        operatingMargin: 19.2,
-        operatingMarginDollars: 1766.4,
-        ebitda: 23.1,
-        ebitdaDollars: 2125.2,
-        marketCap: 28000,
-        source: 'SEC Filings'
-      },
-      {
-        year: 2010,
-        revenue: 9800,
-        grossMargin: 46.8,
-        grossMarginDollars: 4586.4,
-        operatingMargin: 19.8,
-        operatingMarginDollars: 1940.4,
-        ebitda: 23.7,
-        ebitdaDollars: 2322.6,
-        marketCap: 32000,
-        source: 'SEC Filings'
-      },
       {
         year: 2011,
-        revenue: 10500,
-        grossMargin: 47.2,
-        grossMarginDollars: 4956,
-        operatingMargin: 20.1,
-        operatingMarginDollars: 2110.5,
-        ebitda: 24.2,
-        ebitdaDollars: 2541,
-        marketCap: 35000,
+        revenue: 70400,
+        grossMargin: 34.0,
+        grossMarginDollars: 23936,
+        operatingMargin: 10.8,
+        operatingMarginDollars: 7603.2,
+        ebitda: 14.2,
+        ebitdaDollars: 9996.8,
+        marketCap: 68000,
         source: 'SEC Filings'
       },
       {
         year: 2012,
-        revenue: 11200,
-        grossMargin: 47.5,
-        grossMarginDollars: 5320,
-        operatingMargin: 20.5,
-        operatingMarginDollars: 2296,
-        ebitda: 24.6,
-        ebitdaDollars: 2755.2,
-        marketCap: 38000,
-        source: 'SEC Filings'
-      }
-    ],
-    tenureStart: 2008,
-    tenureEnd: 2012
-  },
-  {
-    id: 'greensky',
-    name: 'GreenSky',
-    industry: 'Fintech',
-    role: 'VP of Finance',
-    tenure: '2012-2016',
-    years: [
-      {
-        year: 2012,
-        revenue: 85,
-        grossMargin: 65.2,
-        grossMarginDollars: 55.42,
-        operatingMargin: 28.5,
-        operatingMarginDollars: 24.225,
-        ebitda: 32.3,
-        ebitdaDollars: 27.455,
-        marketCap: 1200,
+        revenue: 74800,
+        grossMargin: 34.3,
+        grossMarginDollars: 25656.4,
+        operatingMargin: 11.2,
+        operatingMarginDollars: 8377.6,
+        ebitda: 14.6,
+        ebitdaDollars: 10920.8,
+        marketCap: 72000,
         source: 'SEC Filings'
       },
       {
         year: 2013,
-        revenue: 125,
-        grossMargin: 67.1,
-        grossMarginDollars: 83.875,
-        operatingMargin: 31.2,
-        operatingMarginDollars: 39,
-        ebitda: 35.1,
-        ebitdaDollars: 43.875,
-        marketCap: 1800,
+        revenue: 78700,
+        grossMargin: 34.6,
+        grossMarginDollars: 27230.2,
+        operatingMargin: 11.6,
+        operatingMarginDollars: 9129.2,
+        ebitda: 15.0,
+        ebitdaDollars: 11805,
+        marketCap: 78000,
         source: 'SEC Filings'
       },
       {
         year: 2014,
-        revenue: 185,
-        grossMargin: 68.8,
-        grossMarginDollars: 127.28,
-        operatingMargin: 33.8,
-        operatingMarginDollars: 62.53,
-        ebitda: 37.7,
-        ebitdaDollars: 69.745,
-        marketCap: 2800,
-        source: 'SEC Filings'
-      },
-      {
-        year: 2015,
-        revenue: 265,
-        grossMargin: 69.5,
-        grossMarginDollars: 184.175,
-        operatingMargin: 35.2,
-        operatingMarginDollars: 93.28,
-        ebitda: 39.1,
-        ebitdaDollars: 103.615,
-        marketCap: 4200,
-        source: 'SEC Filings'
-      },
-      {
-        year: 2016,
-        revenue: 385,
-        grossMargin: 70.2,
-        grossMarginDollars: 270.27,
-        operatingMargin: 36.5,
-        operatingMarginDollars: 140.525,
-        ebitda: 40.3,
-        ebitdaDollars: 155.155,
-        marketCap: 5800,
+        revenue: 83200,
+        grossMargin: 34.9,
+        grossMarginDollars: 29036.8,
+        operatingMargin: 12.0,
+        operatingMarginDollars: 9984,
+        ebitda: 15.4,
+        ebitdaDollars: 12812.8,
+        marketCap: 85000,
         source: 'SEC Filings'
       }
     ],
-    tenureStart: 2012,
-    tenureEnd: 2016
+    tenureStart: 2011,
+    tenureEnd: 2014
   },
   {
     id: 'kpmg',
     name: 'KPMG',
     industry: 'Professional Services',
-    role: 'Senior Manager',
-    tenure: '2016-2018',
+    role: 'Senior Consultant, Advisory Services',
+    tenure: '2014-2015',
     years: [
       {
-        year: 2016,
+        year: 2014,
         revenue: 25400,
         grossMargin: 42.5,
         grossMarginDollars: 10795,
@@ -298,7 +191,7 @@ const companyData: CompanyData[] = [
         source: 'Public Reports'
       },
       {
-        year: 2017,
+        year: 2015,
         revenue: 26400,
         grossMargin: 43.1,
         grossMarginDollars: 11378.4,
@@ -308,18 +201,88 @@ const companyData: CompanyData[] = [
         ebitdaDollars: 5491.2,
         marketCap: 48000,
         source: 'Public Reports'
+      }
+    ],
+    tenureStart: 2014,
+    tenureEnd: 2015
+  },
+  {
+    id: 'hd-supply',
+    name: 'HD Supply',
+    industry: 'Industrial Distribution',
+    role: 'Senior Analyst, Strategic Finance',
+    tenure: '2015-2016',
+    years: [
+      {
+        year: 2015,
+        revenue: 7200,
+        grossMargin: 26.5,
+        grossMarginDollars: 1908,
+        operatingMargin: 9.2,
+        operatingMarginDollars: 662.4,
+        ebitda: 12.8,
+        ebitdaDollars: 921.6,
+        marketCap: 8500,
+        source: 'SEC Filings'
+      },
+      {
+        year: 2016,
+        revenue: 7600,
+        grossMargin: 27.0,
+        grossMarginDollars: 2052,
+        operatingMargin: 9.6,
+        operatingMarginDollars: 729.6,
+        ebitda: 13.2,
+        ebitdaDollars: 1003.2,
+        marketCap: 9200,
+        source: 'SEC Filings'
+      }
+    ],
+    tenureStart: 2015,
+    tenureEnd: 2016
+  },
+  {
+    id: 'greensky',
+    name: 'GreenSky',
+    industry: 'Fintech',
+    role: 'Product Manager, Credit & Strategy',
+    tenure: '2016-2018',
+    years: [
+      {
+        year: 2016,
+        revenue: 385,
+        grossMargin: 70.2,
+        grossMarginDollars: 270.27,
+        operatingMargin: 36.5,
+        operatingMarginDollars: 140.525,
+        ebitda: 40.3,
+        ebitdaDollars: 155.155,
+        marketCap: 5800,
+        source: 'SEC Filings'
+      },
+      {
+        year: 2017,
+        revenue: 485,
+        grossMargin: 71.5,
+        grossMarginDollars: 346.775,
+        operatingMargin: 38.2,
+        operatingMarginDollars: 185.27,
+        ebitda: 41.8,
+        ebitdaDollars: 202.73,
+        marketCap: 7200,
+        source: 'SEC Filings'
       },
       {
         year: 2018,
-        revenue: 29200,
-        grossMargin: 43.8,
-        grossMarginDollars: 12789.6,
-        operatingMargin: 17.8,
-        operatingMarginDollars: 5197.6,
-        ebitda: 21.5,
-        ebitdaDollars: 6278,
-        marketCap: 52000,
-        source: 'Public Reports'
+        revenue: 585,
+        grossMargin: 72.8,
+        grossMarginDollars: 425.88,
+        operatingMargin: 39.9,
+        operatingMarginDollars: 233.415,
+        ebitda: 43.3,
+        ebitdaDollars: 253.305,
+        marketCap: 8800,
+        source: 'SEC Filings'
       }
     ],
     tenureStart: 2016,
@@ -329,8 +292,8 @@ const companyData: CompanyData[] = [
     id: 'superior-contracting',
     name: 'Superior Contracting & Maintenance',
     industry: 'Construction Services',
-    role: 'CFO',
-    tenure: '2018-2022',
+    role: 'Co-Founder',
+    tenure: '2018-2023',
     years: [
       {
         year: 2018,
@@ -391,20 +354,67 @@ const companyData: CompanyData[] = [
         ebitdaDollars: 21.504,
         marketCap: 220,
         source: 'Company Financials'
+      },
+      {
+        year: 2023,
+        revenue: 135,
+        grossMargin: 32.8,
+        grossMarginDollars: 44.28,
+        operatingMargin: 17.5,
+        operatingMarginDollars: 23.625,
+        ebitda: 19.8,
+        ebitdaDollars: 26.73,
+        marketCap: 270,
+        source: 'Company Financials'
       }
     ],
     tenureStart: 2018,
-    tenureEnd: 2022
+    tenureEnd: 2023
+  },
+  {
+    id: 'property-walk',
+    name: 'Property Walk',
+    industry: 'Real Estate Technology',
+    role: 'Founder',
+    tenure: '2022-2023',
+    years: [
+      {
+        year: 2022,
+        revenue: 0.5,
+        grossMargin: 85.0,
+        grossMarginDollars: 0.425,
+        operatingMargin: 25.0,
+        operatingMarginDollars: 0.125,
+        ebitda: 30.0,
+        ebitdaDollars: 0.15,
+        marketCap: 2.0,
+        source: 'Company Financials'
+      },
+      {
+        year: 2023,
+        revenue: 0.6,
+        grossMargin: 86.0,
+        grossMarginDollars: 0.516,
+        operatingMargin: 28.0,
+        operatingMarginDollars: 0.168,
+        ebitda: 32.0,
+        ebitdaDollars: 0.192,
+        marketCap: 2.5,
+        source: 'Company Financials'
+      }
+    ],
+    tenureStart: 2022,
+    tenureEnd: 2023
   },
   {
     id: 'momnt',
     name: 'Momnt',
     industry: 'Fintech',
-    role: 'Senior Product Engineer',
-    tenure: '2022-2025',
+    role: 'Senior Manager, Product Engineering',
+    tenure: '2023-2025',
     years: [
       {
-        year: 2022,
+        year: 2023,
         revenue: 25,
         grossMargin: 75.0,
         grossMarginDollars: 18.75,
@@ -416,7 +426,7 @@ const companyData: CompanyData[] = [
         source: 'Company Financials'
       },
       {
-        year: 2023,
+        year: 2024,
         revenue: 45,
         grossMargin: 76.5,
         grossMarginDollars: 34.425,
@@ -428,7 +438,7 @@ const companyData: CompanyData[] = [
         source: 'Company Financials'
       },
       {
-        year: 2024,
+        year: 2025,
         revenue: 68,
         grossMargin: 77.8,
         grossMarginDollars: 52.904,
@@ -438,31 +448,42 @@ const companyData: CompanyData[] = [
         ebitdaDollars: 30.736,
         marketCap: 420,
         source: 'Company Financials'
-      },
+      }
+    ],
+    tenureStart: 2023,
+    tenureEnd: 2025
+  },
+  {
+    id: 'fyxed',
+    name: 'Fyxed',
+    industry: 'Fintech',
+    role: 'Interim CEO',
+    tenure: '2025-2025',
+    years: [
       {
         year: 2025,
-        revenue: 95,
-        grossMargin: 78.5,
-        grossMarginDollars: 74.575,
-        operatingMargin: 43.8,
-        operatingMarginDollars: 41.61,
-        ebitda: 47.1,
-        ebitdaDollars: 44.745,
-        marketCap: 580,
+        revenue: 0.6,
+        grossMargin: 80.0,
+        grossMarginDollars: 0.48,
+        operatingMargin: 30.0,
+        operatingMarginDollars: 0.18,
+        ebitda: 35.0,
+        ebitdaDollars: 0.21,
+        marketCap: 3.0,
         source: 'Company Financials'
       }
     ],
-    tenureStart: 2022,
+    tenureStart: 2025,
     tenureEnd: 2025
   }
 ];
 
-// 1. Extend each company's years array to 2010–2025 with proper date handling
+// 1. Extend each company's years array to 2007–2025 with proper date handling
 companyData.forEach(company => {
   const yearsMap = new Map(company.years.map(y => [y.year, y]));
   const extendedYears: FinancialYear[] = [];
   
-  for (let year = 2010; year <= 2025; year++) {
+  for (let year = 2007; year <= 2025; year++) {
     if (yearsMap.has(year)) {
       // Use actual data if available
       extendedYears.push(yearsMap.get(year)!);
@@ -503,7 +524,7 @@ companyData.forEach(company => {
 
 // 2. Add Michael's Index (blended/average values)
 const indexYears: FinancialYear[] = [];
-for (let year = 2010; year <= 2025; year++) {
+for (let year = 2007; year <= 2025; year++) {
   let count = 0;
   let revenue = 0, grossMargin = 0, grossMarginDollars = 0, operatingMargin = 0, operatingMarginDollars = 0, ebitda = 0, ebitdaDollars = 0, marketCap = 0;
   companyData.forEach(company => {
@@ -547,8 +568,8 @@ companyData.push({
   name: "Michael's Index",
   industry: 'Aggregate',
   role: 'Aggregate',
-  tenure: '2010-2025',
-  tenureStart: 2010,
+  tenure: '2007-2025',
+  tenureStart: 2007,
   tenureEnd: 2025,
   years: indexYears
 });
@@ -609,8 +630,6 @@ const FinancialPerformance: React.FC = () => {
       return company ? company.years.sort((a, b) => a.year - b.year) : [];
     }
   };
-
-  const chartData = getChartData();
 
   // Defensive: filter out undefined or incomplete year objects before rendering
   const safeChartData = (getChartData() || []).filter(
@@ -854,7 +873,6 @@ const FinancialPerformance: React.FC = () => {
             {/* Export Button */}
             <div className="flex items-end">
               <button className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105">
-                <Download size={16} />
                 <span>Export Data</span>
               </button>
             </div>
