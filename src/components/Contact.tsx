@@ -121,14 +121,6 @@ const Contact: React.FC = () => {
                 Book Call
               </a>
               
-              <a 
-                href="/docs/Kaminski Resume.pdf" 
-                download="Michael_Kaminski_Resume.pdf"
-                className="w-full border border-white text-white font-semibold py-3 px-6 rounded-lg hover:bg-white hover:text-primary-600 transition-colors duration-200 flex items-center justify-center"
-              >
-                <Download className="w-5 h-5 mr-2" />
-                Download Full Resume
-              </a>
             </div>
 
             <div className="mt-8 pt-6 border-t border-primary-500">
