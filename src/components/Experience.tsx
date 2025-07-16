@@ -38,7 +38,7 @@ const Experience: React.FC = () => {
 
   const jobTimeline = [
     {
-      company: "Fyxed",
+      company: "Fyxed""
       title: "Interim CEO",
       period: "2025 - 2025",
       description: "Interim CEO of Fyxed, a fintech company that provides a platform for small businesses to manage their finances.",
