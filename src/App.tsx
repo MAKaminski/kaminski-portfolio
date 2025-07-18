@@ -138,7 +138,7 @@ function App() {
                 <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
               </Routes>
               <AIChatbot />
-              <Analytics />
+              <Analytics debug={true} />
             </div>
           )}
         </ThemeContext.Consumer>
