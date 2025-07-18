@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Experience from './components/Experience';
@@ -18,11 +19,8 @@ import KnowledgeGraph from './pages/KnowledgeGraph';
 import Referrals from './components/Referrals';
 import About from './components/About';
 import ReferralCarousel from './components/ReferralCarousel';
-import FeaturedIn from './components/FeaturedIn';
 import InteractiveQuiz from './components/InteractiveQuiz';
 import LiveMetrics from './components/LiveMetrics';
-import DownloadableResources from './components/DownloadableResources';
-import SocialSharing from './components/SocialSharing';
 import FinancialPerformance from './components/FinancialPerformance';
 import Projects from './components/Projects';
 
@@ -140,6 +138,7 @@ function App() {
                 <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
               </Routes>
               <AIChatbot />
+              <Analytics />
             </div>
           )}
         </ThemeContext.Consumer>
