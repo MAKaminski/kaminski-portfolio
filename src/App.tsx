@@ -24,6 +24,7 @@ import LiveMetrics from './components/LiveMetrics';
 import DownloadableResources from './components/DownloadableResources';
 import SocialSharing from './components/SocialSharing';
 import FinancialPerformance from './components/FinancialPerformance';
+import Projects from './components/Projects';
 
 type Theme = {
   primary: string;
@@ -115,6 +116,7 @@ function App() {
                     <Header />
                     <main>
                       <Hero />
+                      <Projects />
                       <About />
                       <LiveMetrics />
                       <FinancialPerformance />
