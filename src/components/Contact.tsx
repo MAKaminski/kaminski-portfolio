@@ -1,9 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Linkedin, Download, Calendar } from 'lucide-react';
+import { Mail, Phone, MapPin, Download, Send, Linkedin, Calendar } from 'lucide-react';
+import { track } from '@vercel/analytics';
 import CensoredNumber from './CensoredNumber';
 
 const Contact: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
+    track('Contact Form Submission', {
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+    });
+    alert('Thank you for your message! I will get back to you soon.');
+    setFormData({ name: '', email: '', message: '' });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   return (
     <section id="contact" className="section-padding" style={{ background: 'var(--bg)' }}>
       <div className="max-w-7xl mx-auto">
@@ -115,12 +142,20 @@ const Contact: React.FC = () => {
                 href="https://calendly.com/kaminski1337/15min" 
                 target="_blank" 
                 rel="noopener noreferrer"
+                onClick={() => track('Calendar Link Clicked', { source: 'Contact Section' })}
                 className="w-full bg-white text-primary-600 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center"
               >
                 <Calendar className="w-5 h-5 mr-2" />
                 Book Call
               </a>
               
+              <button
+                onClick={() => track('Contact Form Opened', { source: 'Contact Section' })}
+                className="w-full bg-transparent border-2 border-white text-white font-semibold py-3 px-6 rounded-lg hover:bg-white hover:text-primary-600 transition-colors duration-200 flex items-center justify-center"
+              >
+                <Send className="w-5 h-5 mr-2" />
+                Send Message
+              </button>
             </div>
 
             <div className="mt-8 pt-6 border-t border-primary-500">

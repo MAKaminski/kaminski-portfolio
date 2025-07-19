@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
+import { initGA } from './utils/analytics';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Experience from './components/Experience';
@@ -23,6 +24,7 @@ import InteractiveQuiz from './components/InteractiveQuiz';
 import LiveMetrics from './components/LiveMetrics';
 import FinancialPerformance from './components/FinancialPerformance';
 import Projects from './components/Projects';
+import AnalyticsDashboard from './components/AnalyticsDashboard';
 
 type Theme = {
   primary: string;
@@ -102,6 +104,12 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 };
 
 function App() {
+  // Initialize Google Analytics
+  useEffect(() => {
+    // Replace 'G-XXXXXXXXXX' with your actual Google Analytics Measurement ID
+    initGA('G-XXXXXXXXXX');
+  }, []);
+
   return (
     <ThemeProvider>
       <Router>
@@ -136,6 +144,7 @@ function App() {
                 <Route path="/technology" element={<Technology />} />
                 <Route path="/revenue" element={<Revenue />} />
                 <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
+                <Route path="/analytics" element={<AnalyticsDashboard />} />
               </Routes>
               <AIChatbot />
               <Analytics debug={true} />

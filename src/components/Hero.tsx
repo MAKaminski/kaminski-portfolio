@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Download, Mail, Linkedin, Github, Network } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Download, Mail, Linkedin, Github } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { track } from '@vercel/analytics';
 import CensoredNumber from './CensoredNumber';
 import { useTheme } from '../App';
 import { Role } from '../App';
@@ -22,6 +23,7 @@ const Hero: React.FC = () => {
   const handleRoleClick = (role: Role, path: string) => {
     setTheme(role);
     navigate(path);
+    track('Role Page Visited', { role: role, path: path });
   };
 
   return (
@@ -111,6 +113,7 @@ const Hero: React.FC = () => {
               <a 
                 href="/docs/Kaminski Resume.pdf" 
                 download="Kaminski_Resume.pdf"
+                onClick={() => track('Resume Downloaded', { source: 'Hero Section' })}
                 className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors duration-200"
               >
                 <Download className="w-5 h-5 mr-2" />
@@ -118,6 +121,7 @@ const Hero: React.FC = () => {
               </a>
               <a 
                 href="#contact"
+                onClick={() => track('Contact Section Clicked', { source: 'Hero Section' })}
                 className="inline-flex items-center justify-center px-6 py-3 border border-primary-600 text-primary-600 font-semibold rounded-lg hover:bg-primary-50 transition-colors duration-200"
               >
                 <Mail className="w-5 h-5 mr-2" />
@@ -127,6 +131,7 @@ const Hero: React.FC = () => {
                 href="https://calendly.com/kaminski1337/15min"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => track('Calendar Link Clicked', { source: 'Hero Section' })}
                 className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
               >
                 Book Call
