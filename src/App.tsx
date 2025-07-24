@@ -17,6 +17,7 @@ import Strategy from './pages/Strategy';
 import Technology from './pages/Technology';
 import Revenue from './pages/Revenue';
 import KnowledgeGraph from './pages/KnowledgeGraph';
+import ClientOutcomes from './pages/ClientOutcomes';
 import Referrals from './components/Referrals';
 import About from './components/About';
 import ReferralCarousel from './components/ReferralCarousel';
@@ -144,6 +145,7 @@ function App() {
                 <Route path="/technology" element={<Technology />} />
                 <Route path="/revenue" element={<Revenue />} />
                 <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
+                <Route path="/client-outcomes" element={<ClientOutcomes />} />
                 <Route path="/analytics" element={<AnalyticsDashboard />} />
               </Routes>
               <AIChatbot />
