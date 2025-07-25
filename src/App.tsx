@@ -25,6 +25,7 @@ import LiveMetrics from './components/LiveMetrics';
 import FinancialPerformance from './components/FinancialPerformance';
 import Projects from './components/Projects';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
+import FavoritePieces from './components/FavoritePieces';
 
 type Theme = {
   primary: string;
@@ -124,6 +125,7 @@ function App() {
                       <Hero />
                       <Projects />
                       <About />
+                      <FavoritePieces />
                       <LiveMetrics />
                       <FinancialPerformance />
                       <InteractiveQuiz />

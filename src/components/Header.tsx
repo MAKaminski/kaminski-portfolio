@@ -11,6 +11,7 @@ const Header: React.FC = () => {
 
   const navItems = [
     // Remove Projects from navItems
+    { name: 'Favorite Pieces', href: '#favorite-pieces' },
     { name: 'Experience', href: '#experience' },
     { name: 'Skills', href: '#skills' },
     { name: 'Transactions', href: '#transactions' },
