@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { PineconeClient } = require('@pinecone-database/pinecone');
+const Anthropic = require('@anthropic-ai/sdk');
 require('dotenv').config();
 
 const app = express();
@@ -112,6 +113,67 @@ app.get('/api/sample-data', (req, res) => {
   ];
   
   res.json(sampleData);
+});
+
+app.post('/api/generate-prd', async (req, res) => {
+  const { featureName, problem, targetUsers, goals, userStories, constraints, timeline } = req.body;
+
+  if (!featureName || !problem || !targetUsers || !goals) {
+    return res.status(400).json({ error: 'Missing required fields: featureName, problem, targetUsers, goals' });
+  }
+
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return res.status(500).json({ error: 'ANTHROPIC_API_KEY is not configured on the server.' });
+  }
+
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+  const userContent = `Generate a detailed Jira-compatible PRD for the following:
+
+Feature Name: ${featureName}
+Problem Statement: ${problem}
+Target Users / Personas: ${targetUsers}
+Goals & Success Metrics: ${goals}
+${userStories ? `Initial User Stories: ${userStories}` : ''}
+${constraints ? `Technical Constraints: ${constraints}` : ''}
+${timeline ? `Timeline: ${timeline}` : ''}
+
+Return ONLY a JSON object with this exact structure (no markdown, no extra text):
+{
+  "title": "string",
+  "overview": "string (2-3 sentences)",
+  "problemStatement": "string (detailed)",
+  "goals": ["string", ...],
+  "userStories": [{"as": "string", "iWant": "string", "soThat": "string"}, ...],
+  "acceptanceCriteria": ["string", ...],
+  "technicalRequirements": ["string", ...],
+  "successMetrics": [{"metric": "string", "target": "string"}, ...],
+  "timeline": [{"phase": "string", "duration": "string", "deliverables": ["string", ...]}, ...],
+  "openQuestions": ["string", ...]
+}`;
+
+  try {
+    const message = await anthropic.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 2048,
+      system: 'You are a senior product manager. Generate structured, actionable Jira PRDs. Always respond with valid JSON only — no markdown fences, no preamble.',
+      messages: [{ role: 'user', content: userContent }],
+    });
+
+    const raw = message.content[0].text.trim();
+    let prd;
+    try {
+      prd = JSON.parse(raw);
+    } catch {
+      // Claude returned non-JSON; surface the text so the frontend can display it
+      return res.json({ rawText: raw });
+    }
+
+    res.json({ prd });
+  } catch (error) {
+    console.error('PRD generation error:', error);
+    res.status(500).json({ error: error.message || 'Failed to generate PRD' });
+  }
 });
 
 app.listen(PORT, () => {
