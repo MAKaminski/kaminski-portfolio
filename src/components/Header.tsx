@@ -29,7 +29,8 @@ const Header: React.FC = () => {
   ];
 
   const additionalNavItems: { name: string; href: string }[] = [
-    { name: 'Client Outcomes', href: '/client-outcomes' }
+    { name: 'Client Outcomes', href: '/client-outcomes' },
+    { name: 'Jira PRD Generator', href: '/jira-prd' },
   ];
 
   const handleScheduleCall = () => {

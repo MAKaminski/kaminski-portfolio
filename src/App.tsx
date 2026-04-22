@@ -27,6 +27,7 @@ import FinancialPerformance from './components/FinancialPerformance';
 import Projects from './components/Projects';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 import FavoritePieces from './components/FavoritePieces';
+import JiraPRD from './pages/JiraPRD';
 
 type Theme = {
   primary: string;
@@ -149,6 +150,7 @@ function App() {
                 <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
                 <Route path="/client-outcomes" element={<ClientOutcomes />} />
                 <Route path="/analytics" element={<AnalyticsDashboard />} />
+                <Route path="/jira-prd" element={<JiraPRD />} />
               </Routes>
               <AIChatbot />
               <Analytics debug={true} />
