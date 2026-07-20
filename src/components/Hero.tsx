@@ -1,9 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Download, Mail, Linkedin, Github, MapPin, Clock, Trophy, TrendingUp } from 'lucide-react';
+import { Download, Mail, Linkedin, Github, Clock, Trophy, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { track } from '@vercel/analytics';
-import CensoredNumber from './CensoredNumber';
 import { useTheme } from '../App';
 import { Role } from '../App';
 import SocialSharing from './SocialSharing';
@@ -56,7 +55,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen pt-24 pb-16 overflow-hidden">
+    <section className="relative pt-28 pb-16 overflow-hidden">
       {/* Enhanced Background with Multiple Gradients */}
       <div className="absolute inset-0">
         <motion.div
@@ -119,10 +118,10 @@ const Hero: React.FC = () => {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid lg:grid-cols-2 gap-16 items-center"
+          className="max-w-3xl mx-auto"
         >
-          {/* Left Column - Main Content */}
-          <div className="flex flex-col items-center lg:items-start space-y-8">
+          {/* Main Content */}
+          <div className="flex flex-col items-center space-y-7">
             {/* Profile Image with Enhanced Styling */}
             <motion.div
               variants={itemVariants}
@@ -156,7 +155,7 @@ const Hero: React.FC = () => {
             </motion.div>
 
             {/* Enhanced Typography */}
-            <motion.div variants={itemVariants} className="text-center lg:text-left space-y-4">
+            <motion.div variants={itemVariants} className="text-center space-y-4">
               <h1 className="text-5xl md:text-7xl font-black tracking-tight">
                 <span className="bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
                   Michael
@@ -228,39 +227,18 @@ const Hero: React.FC = () => {
               <span className="font-semibold text-green-700"> measurable business value</span>.
             </motion.p>
 
-            {/* Key Highlights */}
-            <motion.div variants={itemVariants} className="space-y-3 w-full max-w-2xl">
-              {[
-                { icon: MapPin, label: "Target Compensation:", value: ["$225K Base", "+ $50K Bonus"] },
-                { icon: TrendingUp, label: "Focus:", value: ["Performance-based Compensation & Equity"] },
-                { icon: Trophy, label: "Specialty:", value: ["Turnarounds & Problem-Solving"] },
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  className="flex items-start space-x-4 p-4 bg-white/60 backdrop-blur-sm rounded-lg border border-gray-100"
-                  whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-2 rounded-lg">
-                    <item.icon className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <span className="font-semibold text-gray-900">{item.label}</span>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      {item.value.map((val, i) => (
-                        <span key={i} className="text-blue-700 font-medium">
-                          {typeof val === 'string' && val.includes('$') ? (
-                            <CensoredNumber value={val} className="text-blue-700" />
-                          ) : (
-                            val
-                          )}
-                          {i < item.value.length - 1 && ' '}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+            {/* Credibility strip — where the proof comes from */}
+            <motion.div variants={itemVariants} className="w-full max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3 text-center">
+                Experience across
+              </p>
+              <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center">
+                {['GreenSky', 'Home Depot', 'HD Supply', 'KPMG', 'Momnt', 'Property Walk'].map((company) => (
+                  <span key={company} className="text-base font-bold text-gray-700">
+                    {company}
+                  </span>
+                ))}
+              </div>
             </motion.div>
 
             {/* Enhanced Social Links */}
@@ -340,7 +318,7 @@ const Hero: React.FC = () => {
 
             {/* Enhanced Role Selector */}
             <motion.div variants={itemVariants} className="w-full max-w-2xl">
-              <h4 className="text-xl font-bold text-gray-900 mb-6 text-center lg:text-left">
+              <h4 className="text-xl font-bold text-gray-900 mb-6 text-center">
                 View My Experience By Role:
               </h4>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
@@ -382,89 +360,6 @@ const Hero: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* Right Column - Enhanced Target Profile */}
-          <motion.div
-            variants={itemVariants}
-            className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-gray-100"
-          >
-            <div className="flex items-center space-x-3 mb-8">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl">
-                <Trophy className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent">
-                Target Profile
-              </h3>
-            </div>
-            
-            <div className="space-y-8">
-              {[
-                {
-                  title: "Company Size",
-                  content: "Revenue: $0MM - $100MM | Headcount: 2 - 100",
-                  icon: TrendingUp
-                },
-                {
-                  title: "Target Industries",
-                  content: ['Fintech', 'Financial Services', 'Payments', 'Digital Banking', 'Technology', 'SaaS', 'Enterprise Platforms', 'AI/ML', 'Retail', 'Industrial Distribution'],
-                  icon: Trophy
-                },
-                {
-                  title: "Location Preferences",
-                  content: [
-                    { tier: "Tier 1", locations: "Atlanta" },
-                    { tier: "Tier 2", locations: "NYC, SF, Seattle, Austin, Miami, Salt Lake City, Denver" },
-                    { tier: "Tier 3", locations: "Metropolitan Cities" }
-                  ],
-                  icon: MapPin
-                },
-                {
-                  title: "Work Style",
-                  content: "In Office, Hybrid, or Remote | Full Time",
-                  icon: Clock
-                }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  className="space-y-3"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.8 + index * 0.1, duration: 0.6 }}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg">
-                      <item.icon className="w-5 h-5 text-white" />
-                    </div>
-                    <h4 className="font-bold text-gray-900 text-lg">{item.title}</h4>
-                  </div>
-                  
-                  {typeof item.content === 'string' ? (
-                    <p className="text-gray-700 ml-11">{item.content}</p>
-                  ) : Array.isArray(item.content) && typeof item.content[0] === 'string' ? (
-                    <div className="flex flex-wrap gap-2 ml-11">
-                      {(item.content as string[]).map((tag, i) => (
-                        <motion.span
-                          key={i}
-                          className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 rounded-full text-sm font-medium border border-blue-200"
-                          whileHover={{ scale: 1.05 }}
-                          transition={{ type: "spring", stiffness: 300 }}
-                        >
-                          {tag}
-                        </motion.span>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="space-y-2 ml-11">
-                      {(item.content as { tier: string; locations: string }[]).map((loc, i) => (
-                        <p key={i} className="text-gray-700">
-                          <span className="font-bold text-blue-700">{loc.tier}:</span> {loc.locations}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
         </motion.div>
       </div>
     </section>

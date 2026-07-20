@@ -270,7 +270,7 @@ const Skills: React.FC = () => {
   };
 
   return (
-    <section id="skills" className="relative py-24 overflow-hidden">
+    <section id="skills" className="relative py-14 overflow-hidden scroll-mt-20">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <motion.div
@@ -305,7 +305,7 @@ const Skills: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="text-center mb-12"
         >
           <motion.div
             className="inline-flex items-center space-x-3 mb-6"
@@ -341,13 +341,13 @@ const Skills: React.FC = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-14"
         >
           {skillCategories.map((category, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
-              className={`relative bg-gradient-to-br ${category.bgGradient} rounded-3xl p-8 border border-white/50 shadow-xl backdrop-blur-sm overflow-hidden group`}
+              className={`relative bg-gradient-to-br ${category.bgGradient} rounded-2xl p-6 border border-white/50 shadow-lg backdrop-blur-sm overflow-hidden group`}
               whileHover={{ 
                 scale: 1.02,
                 y: -5,
@@ -371,7 +371,7 @@ const Skills: React.FC = () => {
               
               <div className="relative z-10">
                 <motion.div 
-                  className={`inline-flex items-center justify-center w-14 h-14 bg-gradient-to-r ${category.gradient} rounded-2xl shadow-lg mb-6`}
+                  className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r ${category.gradient} rounded-2xl shadow-lg mb-4`}
                   whileHover={{ 
                     rotate: 15,
                     scale: 1.1
@@ -381,8 +381,8 @@ const Skills: React.FC = () => {
                   <category.icon className="w-7 h-7 text-white" />
                 </motion.div>
                 
-                <h3 className="text-xl font-bold text-gray-900 mb-6">{category.title}</h3>
-                
+                <h3 className="text-lg font-bold text-gray-900 mb-3">{category.title}</h3>
+
                 <div className="flex flex-wrap gap-2">
                   {category.skills.map((skill, skillIndex) => (
                     <motion.div

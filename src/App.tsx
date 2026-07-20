@@ -13,14 +13,7 @@ import Highlights from './components/Highlights';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import AIChatbot from './components/AIChatbot';
-import Referrals from './components/Referrals';
-import About from './components/About';
 import ReferralCarousel from './components/ReferralCarousel';
-import InteractiveQuiz from './components/InteractiveQuiz';
-import LiveMetrics from './components/LiveMetrics';
-import FinancialPerformance from './components/FinancialPerformance';
-import Projects from './components/Projects';
-import FavoritePieces from './components/FavoritePieces';
 
 // Secondary routes are code-split so they don't ship in the main bundle.
 const CFO = lazy(() => import('./pages/CFO'));
@@ -143,19 +136,13 @@ function App() {
                     <Seo title={HOME_TITLE} description={HOME_DESCRIPTION} canonicalPath="/" />
                     <Header />
                     <main>
+                      {/* Recruiter-first order: lead with proof, close with fit/contact */}
                       <Hero />
-                      <Projects />
-                      <About />
-                      <FavoritePieces />
-                      <LiveMetrics />
-                      <FinancialPerformance />
-                      <InteractiveQuiz />
-                      <Experience />
-                      <Skills />
                       <Transactions />
                       <Highlights />
+                      <Experience />
+                      <Skills />
                       <ReferralCarousel />
-                      <Referrals />
                       <Contact />
                     </main>
                     <Footer />
