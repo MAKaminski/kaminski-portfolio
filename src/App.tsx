@@ -28,6 +28,7 @@ import Projects from './components/Projects';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 import FavoritePieces from './components/FavoritePieces';
 import JiraPRD from './pages/JiraPRD';
+import BuildLog from './pages/BuildLog';
 
 type Theme = {
   primary: string;
@@ -151,6 +152,7 @@ function App() {
                 <Route path="/client-outcomes" element={<ClientOutcomes />} />
                 <Route path="/analytics" element={<AnalyticsDashboard />} />
                 <Route path="/jira-prd" element={<JiraPRD />} />
+                <Route path="/build-log" element={<BuildLog />} />
               </Routes>
               <AIChatbot />
               <Analytics debug={true} />
