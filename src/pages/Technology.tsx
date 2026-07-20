@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Code, Cloud, Database, Shield, Zap, Download, Calendar, Linkedin, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 const Technology: React.FC = () => {
   const techHighlights = [
@@ -46,6 +47,12 @@ const Technology: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50">
+      <Seo
+        title="Fintech CTO & Engineering Leader in Atlanta | Michael Kaminski"
+        description="Atlanta-based fractional & full-time CTO for fintech and payments. Cloud architecture, product engineering (React/TypeScript, Node/FastAPI), data platforms and SOC/PCI security — led by an engineer who also speaks PE-grade finance."
+        canonicalPath="/technology"
+        breadcrumbName="Fintech CTO & Engineering Leader"
+      />
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,12 +100,13 @@ const Technology: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-lg text-primary-700 font-semibold mb-4">Michael Kaminski is an innovative Chief Technology Officer with a passion for digital transformation, cloud architecture, and technology leadership.</p>
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">Chief Technology Officer</h2>
+          <p className="text-lg text-primary-700 font-semibold mb-4">Michael Kaminski is an Atlanta-based technology leader who ships production software and understands the P&amp;L behind it — a rare engineering-plus-finance combination in fintech.</p>
+          <h2 className="text-5xl font-bold text-gray-900 mb-6">Fintech CTO &amp; Engineering Leader</h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Technology leader with proven track record in scaling technology operations, 
-            driving digital transformation, and building innovative solutions. Expert in 
-            cloud architecture, data platforms, and modern development practices.
+            Technology leadership for fintech, payments and SaaS teams — cloud architecture,
+            product engineering, data platforms and security. Hands-on with React/TypeScript
+            and Node/FastAPI, and fluent in the financial reporting that keeps a fintech
+            board and its regulators satisfied.
           </p>
         </motion.div>
 

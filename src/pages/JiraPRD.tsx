@@ -5,6 +5,7 @@ import {
   ChevronDown, ChevronUp, Zap
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -310,6 +311,12 @@ const JiraPRD: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <Seo
+        title="AI PRD Generator | Michael Kaminski, Fintech Product & Engineering"
+        description="A Claude-powered PRD generator built by Michael Kaminski — a working demo of fintech product and engineering thinking, turning a Jira-style prompt into a structured product requirements document."
+        canonicalPath="/jira-prd"
+        breadcrumbName="AI PRD Generator"
+      />
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

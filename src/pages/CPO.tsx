@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Target, Users, BarChart3, Zap, Globe, Download, Calendar, Linkedin, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 const CPO: React.FC = () => {
   const cpoHighlights = [
@@ -46,6 +47,12 @@ const CPO: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
+      <Seo
+        title="Fintech Product Leader (CPO) in Atlanta | Michael Kaminski"
+        description="Fintech and payments product leadership from an Atlanta operator who is bilingual in product, engineering and finance — GTM 0→1, product analytics and roadmap execution backed by real technical and P&L depth."
+        canonicalPath="/cpo"
+        breadcrumbName="Fintech Product Leader"
+      />
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

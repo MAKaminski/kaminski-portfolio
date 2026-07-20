@@ -1,0 +1,27 @@
+{
+  "short_name": "M. Kaminski",
+  "name": "Michael Kaminski — Fintech Finance & Engineering Leader",
+  "description": "Atlanta-based fintech leader fluent in both PE-grade finance and hands-on software engineering.",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0b1220",
+  "background_color": "#0b1220"
+}

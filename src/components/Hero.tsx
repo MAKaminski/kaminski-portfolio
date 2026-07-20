@@ -166,13 +166,13 @@ const Hero: React.FC = () => {
                   Kaminski
                 </span>
               </h1>
-              <motion.h2 
+              <motion.h2
                 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
               >
-                Executive Portfolio
+                Fintech Finance &amp; Engineering Leader
               </motion.h2>
               <motion.p
                 className="text-xl font-semibold text-gray-700"
@@ -180,7 +180,7 @@ const Hero: React.FC = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7, duration: 0.6 }}
               >
-                Building Modular Futures
+                Atlanta · Fluent in both the boardroom and the codebase
               </motion.p>
             </motion.div>
 
@@ -218,12 +218,14 @@ const Hero: React.FC = () => {
               variants={itemVariants}
               className="text-lg text-gray-700 leading-relaxed max-w-2xl"
             >
-              Michael Kaminski is a <span className="font-semibold text-blue-700">modular thinker</span>, 
-              <span className="font-semibold text-purple-700"> systems builder</span>, and 
-              <span className="font-semibold text-indigo-700"> strategic executor</span> with 20+ years in 
-              financial technology, services architecture, and engineering. Specializing in bridging the gap 
-              between engineering and executive leadership—translating complex technical strategies into 
-              <span className="font-semibold text-green-700"> actionable business value</span>.
+              Michael Kaminski is an Atlanta-based fintech leader who is fluent in
+              <span className="font-semibold text-blue-700"> PE-grade finance</span> and
+              <span className="font-semibold text-purple-700"> hands-on software engineering</span> — a
+              rare combination. Across 20+ years at
+              <span className="font-semibold text-indigo-700"> GreenSky, Home Depot, HD Supply, KPMG</span> and
+              fintech startups, he builds the financial models a private-equity board expects and ships the
+              software that runs the product, turning complexity into
+              <span className="font-semibold text-green-700"> measurable business value</span>.
             </motion.p>
 
             {/* Key Highlights */}

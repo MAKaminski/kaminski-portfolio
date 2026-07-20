@@ -11,16 +11,33 @@ const Contact: React.FC = () => {
     message: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const CONTACT_ENDPOINT = process.env.REACT_APP_CONTACT_ENDPOINT;
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    track('Contact Form Submission', {
-      name: formData.name,
-      email: formData.email,
-      message: formData.message,
-    });
-    alert('Thank you for your message! I will get back to you soon.');
-    setFormData({ name: '', email: '', message: '' });
+    track('Contact Form Submission', { email: formData.email });
+
+    // When a form endpoint is configured (e.g. Formspree/Resend), POST to it.
+    // Otherwise fall back to opening the visitor's email client.
+    if (CONTACT_ENDPOINT) {
+      try {
+        const res = await fetch(CONTACT_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(formData),
+        });
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+        alert('Thank you for your message! I will get back to you soon.');
+        setFormData({ name: '', email: '', message: '' });
+        return;
+      } catch (err) {
+        // fall through to mailto on failure
+      }
+    }
+
+    const subject = encodeURIComponent(`Portfolio inquiry from ${formData.name || 'a visitor'}`);
+    const body = encodeURIComponent(`${formData.message}\n\nFrom: ${formData.name} (${formData.email})`);
+    window.location.href = `mailto:mkaminski1337@gmail.com?subject=${subject}&body=${body}`;
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -43,7 +60,7 @@ const Contact: React.FC = () => {
         >
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Ready to discuss executive opportunities? Let's connect and explore how we can drive transformational growth together.
+            Building something in fintech, payments, or financial services? Let's talk about fractional CFO/CTO work, product &amp; engineering leadership, or a full-time executive role.
           </p>
         </motion.div>
 
@@ -68,7 +85,7 @@ const Contact: React.FC = () => {
               />
               <div>
                 <h4 className="text-lg font-semibold text-gray-900">Michael Kaminski</h4>
-                <p className="text-gray-600">Executive Leader & Technology Strategist</p>
+                <p className="text-gray-600">Fintech Finance &amp; Engineering Leader · Atlanta</p>
               </div>
             </div>
             
@@ -149,13 +166,14 @@ const Contact: React.FC = () => {
                 Book Call
               </a>
               
-              <button
-                onClick={() => track('Contact Form Opened', { source: 'Contact Section' })}
+              <a
+                href="mailto:mkaminski1337@gmail.com?subject=Portfolio%20inquiry"
+                onClick={() => track('Contact Email Clicked', { source: 'Contact Section' })}
                 className="w-full bg-transparent border-2 border-white text-white font-semibold py-3 px-6 rounded-lg hover:bg-white hover:text-primary-600 transition-colors duration-200 flex items-center justify-center"
               >
                 <Send className="w-5 h-5 mr-2" />
                 Send Message
-              </button>
+              </a>
             </div>
 
             <div className="mt-8 pt-6 border-t border-primary-500">

@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, DollarSign, TrendingUp, Shield, Calculator, BarChart3, Download, Calendar, Linkedin, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 const CFO: React.FC = () => {
   const cfoHighlights = [
@@ -46,6 +47,12 @@ const CFO: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+      <Seo
+        title="Fractional CFO for Fintech & PE-Backed Startups | Michael Kaminski, Atlanta"
+        description="Atlanta-based fractional & full-time CFO for fintech, payments and PE-backed startups. PE-grade FP&A, treasury, quality of earnings, ASC/SOC/SOX compliance and $10.8B+ in transactions — from a leader who also ships software."
+        canonicalPath="/cfo"
+        breadcrumbName="Fractional CFO for Fintech"
+      />
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,12 +100,13 @@ const CFO: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-lg text-primary-700 font-semibold mb-4">Michael Kaminski is an accomplished Chief Financial Officer with 20+ years of executive experience in finance, strategy, and technology.</p>
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">Chief Financial Officer</h2>
+          <p className="text-lg text-primary-700 font-semibold mb-4">Michael Kaminski is an Atlanta-based finance leader who pairs 20+ years of PE-grade financial expertise with hands-on software engineering — an uncommon combination for fintech.</p>
+          <h2 className="text-5xl font-bold text-gray-900 mb-6">Fractional &amp; Full-Time CFO for Fintech</h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Strategic financial leader with proven track record in complex transactions, 
-            operational transformation, and value creation. Expert in scaling financial 
-            operations, managing risk, and driving strategic growth initiatives.
+            Financial leadership for founders and private-equity-backed fintech, payments and
+            SaaS companies — from FP&amp;A, treasury and quality of earnings to board and sponsor
+            reporting. A CFO who can build the model the board expects and understand the code
+            that ships the product.
           </p>
         </motion.div>
 

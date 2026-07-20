@@ -149,8 +149,8 @@ const About: React.FC = () => {
               viewport={{ once: true }}
             >
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Michael Kaminski is a CXO, CTO, and executive leader based in Atlanta,<br />
-                specializing in fintech, technology, and strategic transformation.
+                Michael Kaminski is an Atlanta-based fintech leader — fluent in both<br />
+                PE-grade finance and hands-on software engineering.
               </span>
             </motion.p>
             <motion.p 
