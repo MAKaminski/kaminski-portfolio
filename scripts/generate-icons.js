@@ -39,7 +39,7 @@ const ogSvg = `
   <text x="80" y="300" font-family="Helvetica, Arial, sans-serif" font-size="92" font-weight="800" fill="#ffffff">Michael Kaminski</text>
   <text x="80" y="390" font-family="Helvetica, Arial, sans-serif" font-size="46" font-weight="600" fill="#cbd5e1">Fintech Finance &amp; Engineering Leader</text>
   <text x="80" y="470" font-family="Helvetica, Arial, sans-serif" font-size="34" font-weight="400" fill="#94a3b8">Fluent in both PE-grade finance and hands-on engineering.</text>
-  <text x="80" y="560" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="600" fill="#64748b">michaelkaminski.com</text>
+  <text x="80" y="560" font-family="Helvetica, Arial, sans-serif" font-size="28" font-weight="600" fill="#64748b">www.michael-kaminski.io</text>
 </svg>`;
 
 async function main() {

@@ -27,4 +27,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://michaelkaminski.com/sitemap.xml
+Sitemap: https://www.michael-kaminski.io/sitemap.xml
