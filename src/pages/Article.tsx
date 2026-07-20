@@ -59,6 +59,11 @@ const Article: React.FC = () => {
 
       <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+          {article.series && (
+            <span className="inline-block px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-semibold text-xs uppercase tracking-wide">
+              {article.series}
+            </span>
+          )}
           <span className="inline-flex items-center gap-1">
             <Calendar size={14} />
             <time dateTime={article.date}>

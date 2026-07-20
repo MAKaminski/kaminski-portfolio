@@ -4,11 +4,59 @@ export interface Article {
   description: string;
   date: string; // ISO
   readMinutes: number;
+  /** Optional series label, e.g. "Shipping Log", for grouping recurring posts. */
+  series?: string;
   /** Author-controlled HTML body (rendered via dangerouslySetInnerHTML). */
   body: string;
 }
 
 export const articles: Article[] = [
+  {
+    slug: 'shipping-log-teaching-a-portfolio-to-talk-to-robots',
+    title: 'Shipping Log: Teaching My Portfolio to Talk to Robots',
+    description:
+      "Dev notes from today's build: an SEO/AEO overhaul, a recruiter-first redesign, a WebP diet, and the ghost config file that had been haunting the repo for months.",
+    date: '2026-07-20',
+    readMinutes: 4,
+    series: 'Shipping Log',
+    body: `
+<p>Welcome to the first entry in <strong>Shipping Log</strong> — an ongoing, occasionally unhinged
+series where I write up whatever I shipped that day on this site, in something closer to my actual
+voice than the rest of this portfolio. Today's entry: I spent the day optimizing this website for an
+audience that doesn't have eyes.</p>
+
+<h2>Optimizing for robots, not just recruiters</h2>
+<p>Turns out "SEO" has a needy younger sibling now: <strong>AEO</strong>, Answer Engine Optimization —
+making sure an LLM can correctly summarize who you are when someone asks it "who should I talk to about
+fintech finance engineering in Atlanta?" instead of confidently hallucinating that you run a taco truck.
+So today's build added structured data (JSON-LD) describing me as a <code>Person</code>, this site as a
+<code>ProfilePage</code>, and — very on the nose — this article as a <code>BlogPosting</code>. I also
+shipped an <code>llms.txt</code> file, which is basically a cheat sheet I'm leaving out for AI crawlers
+so they don't have to guess. Somewhere out there, a language model is about to have a much easier
+Tuesday.</p>
+
+<h2>Marie Kondo'ing the nav bar</h2>
+<p>The site used to have 14 sections. Fourteen. That's not a portfolio, that's a syllabus. Today it got
+cut down to 6, on the theory that a recruiter who has 45 seconds and a stack of other tabs open
+deserves a site that respects their time more than it respects my ego. The public target-comp section
+also got quietly retired — some numbers are more fun to talk about on a call than to leave sitting in a
+public repo forever.</p>
+
+<h2>The ghost in the config</h2>
+<p>Best part of the day: deleting a stale <code>wrangler.toml</code> file — leftover config for a
+Cloudflare deployment path this project abandoned a while back. It wasn't doing anything except quietly
+lying to anyone who opened the repo and assumed it meant something. Rule I keep relearning: dead config
+is worse than no config, because it looks like a decision someone made on purpose.</p>
+
+<h2>Also: images went on a diet</h2>
+<p>Every image on the site got converted to WebP and the routes got code-split, so the page you're
+reading this on loads faster than the old one did — and, unlike me, doesn't get slower every time it
+adds more content.</p>
+
+<p>That's the log for today. If future-me is reading this while debugging why some crawler still can't
+find the site: check the sitemap first, it's always the sitemap.</p>
+`,
+  },
   {
     slug: 'fractional-cfo-vs-cto-early-fintech',
     title: 'Fractional CFO vs. Fractional CTO: Which Does Your Early Fintech Need First?',

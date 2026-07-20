@@ -43,6 +43,14 @@ const Writing: React.FC = () => {
               className="block bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow p-8 border border-gray-100"
             >
               <div className="flex items-center gap-3 text-sm text-gray-500 mb-2">
+                {a.series && (
+                  <>
+                    <span className="inline-block px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-semibold text-xs uppercase tracking-wide">
+                      {a.series}
+                    </span>
+                    <span aria-hidden>·</span>
+                  </>
+                )}
                 <time dateTime={a.date}>
                   {new Date(a.date + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                 </time>
