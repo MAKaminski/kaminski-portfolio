@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Download, Send, Linkedin, Calendar } from 'lucide-react';
 import { track } from '@vercel/analytics';
-import CensoredNumber from './CensoredNumber';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -187,28 +186,6 @@ const Contact: React.FC = () => {
             </div>
           </motion.div>
         </div>
-
-        {/* Quick Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
-          className="mt-16 grid md:grid-cols-3 gap-6"
-        >
-          <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-            <CensoredNumber value="$225K" className="text-2xl text-primary-600" />
-            <p className="text-gray-600">Target Base Salary</p>
-          </div>
-          <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-            <CensoredNumber value="$50K+" className="text-2xl text-primary-600" />
-            <p className="text-gray-600">Performance Bonus</p>
-          </div>
-          <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-            <h4 className="text-2xl font-bold text-primary-600 mb-2">Equity</h4>
-            <p className="text-gray-600">Performance-based</p>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
