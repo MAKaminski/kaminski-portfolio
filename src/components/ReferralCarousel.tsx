@@ -217,7 +217,7 @@ const ReferralCarousel: React.FC = () => {
   };
 
   return (
-    <div className="py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+    <div id="testimonials" className="py-16 bg-gradient-to-br from-gray-50 to-blue-50 scroll-mt-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -263,6 +263,8 @@ const ReferralCarousel: React.FC = () => {
                           <img
                             src={referrals[currentIndex].avatar}
                             alt={referrals[currentIndex].name}
+                            loading="lazy"
+                            decoding="async"
                             className="w-16 h-16 rounded-full object-cover shadow-lg"
                             onError={(e) => {
                               // Fallback to initials if image fails to load

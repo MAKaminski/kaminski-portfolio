@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Map, Building, Code, TrendingUp, Target, Award, Filter, X, Search, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 interface Node {
   id: string;
@@ -410,6 +411,12 @@ const KnowledgeGraph: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      <Seo
+        title="Career Knowledge Graph | Michael Kaminski, Atlanta Fintech Leader"
+        description="An interactive knowledge graph of Michael Kaminski's fintech, finance and engineering career — companies, roles, skills and outcomes across GreenSky, Home Depot, HD Supply, KPMG and fintech startups."
+        canonicalPath="/knowledge-graph"
+        breadcrumbName="Knowledge Graph"
+      />
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 z-10 p-6">
         <div className="flex items-center justify-between">

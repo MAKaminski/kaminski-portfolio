@@ -6,8 +6,13 @@ declare global {
   }
 }
 
+// Holds the configured Measurement ID once initGA runs, so other helpers
+// don't reference a hardcoded placeholder.
+let gaMeasurementId: string | null = null;
+
 // Initialize Google Analytics
 export const initGA = (measurementId: string) => {
+  gaMeasurementId = measurementId;
   if (typeof window !== 'undefined' && !window.gtag) {
     // Load Google Analytics script
     const script = document.createElement('script');
@@ -30,8 +35,8 @@ export const initGA = (measurementId: string) => {
 
 // Track page views
 export const trackPageView = (page: string, title?: string) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('config', 'G-XXXXXXXXXX', {
+  if (typeof window !== 'undefined' && window.gtag && gaMeasurementId) {
+    window.gtag('config', gaMeasurementId, {
       page_title: title || document.title,
       page_location: window.location.href,
       custom_map: {

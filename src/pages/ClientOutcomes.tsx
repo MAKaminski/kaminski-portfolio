@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Target, Search, TrendingUp, MessageCircle, CheckCircle, ChevronDown, ChevronUp, Calendar, Download, Linkedin, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 const ClientOutcomes: React.FC = () => {
   const [openAccordion, setOpenAccordion] = React.useState<number | null>(null);
@@ -75,6 +76,12 @@ const ClientOutcomes: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+      <Seo
+        title="Client Outcomes & Fintech Case Studies | Michael Kaminski"
+        description="Measurable client outcomes from Michael Kaminski's fintech finance-and-engineering work — turnarounds, transformations and growth for founders and PE-backed companies in Atlanta and beyond."
+        canonicalPath="/client-outcomes"
+        breadcrumbName="Client Outcomes"
+      />
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, TrendingUp, Target, Users, BarChart3, Globe, Download, Calendar, Linkedin, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 const Revenue: React.FC = () => {
   const revenueHighlights = [
@@ -46,6 +47,12 @@ const Revenue: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50">
+      <Seo
+        title="Fintech Revenue & Growth Leader in Atlanta | Michael Kaminski"
+        description="Revenue and go-to-market leadership for fintech and SaaS — GTM 0→1, revenue operations, retention and analytics — from an Atlanta operator who understands the unit economics and can build the systems behind the growth."
+        canonicalPath="/revenue"
+        breadcrumbName="Fintech Revenue & Growth"
+      />
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

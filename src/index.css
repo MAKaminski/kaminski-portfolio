@@ -17,6 +17,26 @@
   .gradient-text {
     @apply bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent;
   }
+
+  /* Article prose (no typography plugin installed) */
+  .article-body {
+    @apply text-gray-800 text-lg leading-relaxed;
+  }
+  .article-body h2 {
+    @apply text-2xl font-bold text-gray-900 mt-10 mb-4;
+  }
+  .article-body p {
+    @apply mb-5;
+  }
+  .article-body ul {
+    @apply list-disc pl-6 mb-5 space-y-2;
+  }
+  .article-body a {
+    @apply text-blue-600 font-medium underline;
+  }
+  .article-body strong {
+    @apply font-semibold text-gray-900;
+  }
   
   .card-hover {
     @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;

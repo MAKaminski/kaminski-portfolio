@@ -1,7 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import { Analytics } from '@vercel/analytics/react';
 import { initGA } from './utils/analytics';
+import Seo from './components/Seo';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Experience from './components/Experience';
@@ -11,23 +13,28 @@ import Highlights from './components/Highlights';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import AIChatbot from './components/AIChatbot';
-import CFO from './pages/CFO';
-import CPO from './pages/CPO';
-import Strategy from './pages/Strategy';
-import Technology from './pages/Technology';
-import Revenue from './pages/Revenue';
-import KnowledgeGraph from './pages/KnowledgeGraph';
-import ClientOutcomes from './pages/ClientOutcomes';
-import Referrals from './components/Referrals';
-import About from './components/About';
 import ReferralCarousel from './components/ReferralCarousel';
-import InteractiveQuiz from './components/InteractiveQuiz';
-import LiveMetrics from './components/LiveMetrics';
-import FinancialPerformance from './components/FinancialPerformance';
-import Projects from './components/Projects';
-import AnalyticsDashboard from './components/AnalyticsDashboard';
-import FavoritePieces from './components/FavoritePieces';
-import JiraPRD from './pages/JiraPRD';
+
+// Secondary routes are code-split so they don't ship in the main bundle.
+const CFO = lazy(() => import('./pages/CFO'));
+const CPO = lazy(() => import('./pages/CPO'));
+const Strategy = lazy(() => import('./pages/Strategy'));
+const Technology = lazy(() => import('./pages/Technology'));
+const Revenue = lazy(() => import('./pages/Revenue'));
+const KnowledgeGraph = lazy(() => import('./pages/KnowledgeGraph'));
+const ClientOutcomes = lazy(() => import('./pages/ClientOutcomes'));
+const AnalyticsDashboard = lazy(() => import('./components/AnalyticsDashboard'));
+const JiraPRD = lazy(() => import('./pages/JiraPRD'));
+const Writing = lazy(() => import('./pages/Writing'));
+const Article = lazy(() => import('./pages/Article'));
+
+const HOME_TITLE = 'Michael Kaminski | Fintech Finance & Engineering Leader in Atlanta';
+const HOME_DESCRIPTION =
+  'Michael Kaminski is an Atlanta-based fintech leader fluent in both PE-grade finance and hands-on software engineering — 20+ years across GreenSky, Home Depot, HD Supply, KPMG and fintech startups. Fractional CFO/CTO, product & payments leadership.';
+
+const RouteFallback: React.FC = () => (
+  <div className="min-h-screen flex items-center justify-center text-gray-500">Loading…</div>
+);
 
 type Theme = {
   primary: string;
@@ -107,36 +114,37 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 };
 
 function App() {
-  // Initialize Google Analytics
+  // Initialize Google Analytics only when a real Measurement ID is configured
+  // (set REACT_APP_GA_MEASUREMENT_ID in the environment). Avoids firing the
+  // old placeholder 'G-XXXXXXXXXX' in production.
   useEffect(() => {
-    // Replace 'G-XXXXXXXXXX' with your actual Google Analytics Measurement ID
-    initGA('G-XXXXXXXXXX');
+    const gaId = process.env.REACT_APP_GA_MEASUREMENT_ID;
+    if (gaId) {
+      initGA(gaId);
+    }
   }, []);
 
   return (
     <ThemeProvider>
+      <MotionConfig reducedMotion="user">
       <Router>
         <ThemeContext.Consumer>
           {({ theme }) => (
             <div className="min-h-screen" style={{ background: theme.bg }}>
+              <Suspense fallback={<RouteFallback />}>
               <Routes>
                 <Route path="/" element={
                   <>
+                    <Seo title={HOME_TITLE} description={HOME_DESCRIPTION} canonicalPath="/" />
                     <Header />
                     <main>
+                      {/* Recruiter-first order: lead with proof, close with fit/contact */}
                       <Hero />
-                      <Projects />
-                      <About />
-                      <FavoritePieces />
-                      <LiveMetrics />
-                      <FinancialPerformance />
-                      <InteractiveQuiz />
-                      <Experience />
-                      <Skills />
                       <Transactions />
                       <Highlights />
+                      <Experience />
+                      <Skills />
                       <ReferralCarousel />
-                      <Referrals />
                       <Contact />
                     </main>
                     <Footer />
@@ -151,13 +159,17 @@ function App() {
                 <Route path="/client-outcomes" element={<ClientOutcomes />} />
                 <Route path="/analytics" element={<AnalyticsDashboard />} />
                 <Route path="/jira-prd" element={<JiraPRD />} />
+                <Route path="/writing" element={<Writing />} />
+                <Route path="/writing/:slug" element={<Article />} />
               </Routes>
+              </Suspense>
               <AIChatbot />
-              <Analytics debug={true} />
+              <Analytics />
             </div>
           )}
         </ThemeContext.Consumer>
       </Router>
+      </MotionConfig>
     </ThemeProvider>
   );
 }

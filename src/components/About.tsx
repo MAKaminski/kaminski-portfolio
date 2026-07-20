@@ -149,8 +149,8 @@ const About: React.FC = () => {
               viewport={{ once: true }}
             >
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Michael Kaminski is a CXO, CTO, and executive leader based in Atlanta,<br />
-                specializing in fintech, technology, and strategic transformation.
+                Michael Kaminski is an Atlanta-based fintech leader — fluent in both<br />
+                PE-grade finance and hands-on software engineering.
               </span>
             </motion.p>
             <motion.p 
@@ -246,11 +246,16 @@ const About: React.FC = () => {
                       repeatType: 'reverse',
                     }}
                   />
-                  <img
-                    src="/images/EC43565C-9160-4DC8-98F9-2B362A4F6778_1_105_c.jpeg"
-                    alt="Michael Kaminski - Executive Leader"
-                    className="relative w-full max-w-sm mx-auto rounded-3xl object-cover shadow-2xl border-4 border-white ring-4 ring-blue-500/20"
-                  />
+                  <picture>
+                    <source srcSet="/images/EC43565C-9160-4DC8-98F9-2B362A4F6778_1_105_c.webp" type="image/webp" />
+                    <img
+                      src="/images/EC43565C-9160-4DC8-98F9-2B362A4F6778_1_105_c.jpeg"
+                      alt="Michael Kaminski - Executive Leader"
+                      loading="lazy"
+                      decoding="async"
+                      className="relative w-full max-w-sm mx-auto rounded-3xl object-cover shadow-2xl border-4 border-white ring-4 ring-blue-500/20"
+                    />
+                  </picture>
                   <motion.div
                     className="absolute -bottom-4 -right-4 bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 rounded-2xl shadow-lg"
                     initial={{ scale: 0, rotate: -15 }}

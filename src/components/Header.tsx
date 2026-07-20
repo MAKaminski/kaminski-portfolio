@@ -19,18 +19,16 @@ const Header: React.FC = () => {
   const headerBlur = useTransform(scrollY, [0, 100], ['blur(0px)', 'blur(20px)']);
 
   const navItems = [
-    { name: 'About', href: '#about' },
-    { name: 'Favorite Pieces', href: '#favorite-pieces' },
+    { name: 'Impact', href: '#transactions' },
     { name: 'Experience', href: '#experience' },
     { name: 'Skills', href: '#skills' },
-    { name: 'Transactions', href: '#transactions' },
-    { name: 'Highlights', href: '#highlights' },
+    { name: 'Testimonials', href: '#testimonials' },
     { name: 'Contact', href: '#contact' },
   ];
 
   const additionalNavItems: { name: string; href: string }[] = [
+    { name: 'Writing', href: '/writing' },
     { name: 'Client Outcomes', href: '/client-outcomes' },
-    { name: 'Jira PRD Generator', href: '/jira-prd' },
   ];
 
   const handleScheduleCall = () => {
@@ -58,8 +56,8 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo Section */}
-          <motion.div 
-            className="flex-shrink-0"
+          <motion.div
+            className="flex-shrink-0 mr-6"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
@@ -101,19 +99,19 @@ const Header: React.FC = () => {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
                 >
-                  Executive Portfolio
+                  Fintech · Finance · Engineering
                 </motion.p>
               </div>
             </div>
           </motion.div>
           
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-5 lg:space-x-6">
             {navItems.map((item, index) => (
               <motion.a
                 key={item.name}
                 href={item.href}
-                className="relative text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium group"
+                className="relative whitespace-nowrap text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium group"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 * index }}
@@ -134,7 +132,7 @@ const Header: React.FC = () => {
               >
                 <Link
                   to={item.href}
-                  className="relative text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium group"
+                  className="relative whitespace-nowrap text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium group"
                 >
                   {item.name}
                   <motion.div
@@ -147,7 +145,7 @@ const Header: React.FC = () => {
             {/* Enhanced Book a Call Button */}
             <motion.button
               onClick={handleScheduleCall}
-              className="relative flex items-center space-x-2 px-6 py-2.5 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
+              className="relative flex flex-shrink-0 items-center whitespace-nowrap space-x-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
               style={{ backgroundSize: '200% 100%' }}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}

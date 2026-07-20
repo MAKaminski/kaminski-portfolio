@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Download, Send, Linkedin, Calendar } from 'lucide-react';
 import { track } from '@vercel/analytics';
-import CensoredNumber from './CensoredNumber';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -11,16 +10,33 @@ const Contact: React.FC = () => {
     message: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const CONTACT_ENDPOINT = process.env.REACT_APP_CONTACT_ENDPOINT;
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    track('Contact Form Submission', {
-      name: formData.name,
-      email: formData.email,
-      message: formData.message,
-    });
-    alert('Thank you for your message! I will get back to you soon.');
-    setFormData({ name: '', email: '', message: '' });
+    track('Contact Form Submission', { email: formData.email });
+
+    // When a form endpoint is configured (e.g. Formspree/Resend), POST to it.
+    // Otherwise fall back to opening the visitor's email client.
+    if (CONTACT_ENDPOINT) {
+      try {
+        const res = await fetch(CONTACT_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(formData),
+        });
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+        alert('Thank you for your message! I will get back to you soon.');
+        setFormData({ name: '', email: '', message: '' });
+        return;
+      } catch (err) {
+        // fall through to mailto on failure
+      }
+    }
+
+    const subject = encodeURIComponent(`Portfolio inquiry from ${formData.name || 'a visitor'}`);
+    const body = encodeURIComponent(`${formData.message}\n\nFrom: ${formData.name} (${formData.email})`);
+    window.location.href = `mailto:mkaminski1337@gmail.com?subject=${subject}&body=${body}`;
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -43,7 +59,7 @@ const Contact: React.FC = () => {
         >
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Ready to discuss executive opportunities? Let's connect and explore how we can drive transformational growth together.
+            Building something in fintech, payments, or financial services? Let's talk about fractional CFO/CTO work, product &amp; engineering leadership, or a full-time executive role.
           </p>
         </motion.div>
 
@@ -60,15 +76,20 @@ const Contact: React.FC = () => {
             
             {/* Professional Headshot */}
             <div className="flex items-center mb-6">
-              <img
-                src="/images/FA82E2EA-5B88-4FF0-AFBA-2FDFA2FEEDFE_1_105_c.jpeg"
-                alt="Michael Kaminski - Contact"
-                className="w-20 h-20 rounded-full object-cover shadow-lg border-2 mr-4"
-                style={{ borderColor: 'var(--primary)' }}
-              />
+              <picture>
+                <source srcSet="/images/FA82E2EA-5B88-4FF0-AFBA-2FDFA2FEEDFE_1_105_c.webp" type="image/webp" />
+                <img
+                  src="/images/FA82E2EA-5B88-4FF0-AFBA-2FDFA2FEEDFE_1_105_c.jpeg"
+                  alt="Michael Kaminski - Contact"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-20 h-20 rounded-full object-cover shadow-lg border-2 mr-4"
+                  style={{ borderColor: 'var(--primary)' }}
+                />
+              </picture>
               <div>
                 <h4 className="text-lg font-semibold text-gray-900">Michael Kaminski</h4>
-                <p className="text-gray-600">Executive Leader & Technology Strategist</p>
+                <p className="text-gray-600">Fintech Finance &amp; Engineering Leader · Atlanta</p>
               </div>
             </div>
             
@@ -149,13 +170,14 @@ const Contact: React.FC = () => {
                 Book Call
               </a>
               
-              <button
-                onClick={() => track('Contact Form Opened', { source: 'Contact Section' })}
+              <a
+                href="mailto:mkaminski1337@gmail.com?subject=Portfolio%20inquiry"
+                onClick={() => track('Contact Email Clicked', { source: 'Contact Section' })}
                 className="w-full bg-transparent border-2 border-white text-white font-semibold py-3 px-6 rounded-lg hover:bg-white hover:text-primary-600 transition-colors duration-200 flex items-center justify-center"
               >
                 <Send className="w-5 h-5 mr-2" />
                 Send Message
-              </button>
+              </a>
             </div>
 
             <div className="mt-8 pt-6 border-t border-primary-500">
@@ -170,27 +192,57 @@ const Contact: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Quick Stats */}
-        <motion.div
+        {/* Message form — POSTs to REACT_APP_CONTACT_ENDPOINT if set, else opens email */}
+        <motion.form
+          id="contact-form"
+          onSubmit={handleSubmit}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="mt-16 grid md:grid-cols-3 gap-6"
+          className="mt-12 max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8"
         >
-          <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-            <CensoredNumber value="$225K" className="text-2xl text-primary-600" />
-            <p className="text-gray-600">Target Base Salary</p>
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Send a Message</h3>
+          <div className="grid sm:grid-cols-2 gap-4 mb-4">
+            <input
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+              placeholder="Your name"
+              aria-label="Your name"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            />
+            <input
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+              placeholder="Your email"
+              aria-label="Your email"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            />
           </div>
-          <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-            <CensoredNumber value="$50K+" className="text-2xl text-primary-600" />
-            <p className="text-gray-600">Performance Bonus</p>
-          </div>
-          <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-            <h4 className="text-2xl font-bold text-primary-600 mb-2">Equity</h4>
-            <p className="text-gray-600">Performance-based</p>
-          </div>
-        </motion.div>
+          <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleInputChange}
+            required
+            rows={5}
+            placeholder="How can I help?"
+            aria-label="Message"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none mb-4"
+          />
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
+          >
+            <Send className="w-5 h-5 mr-2" />
+            Send Message
+          </button>
+          <p className="text-xs text-gray-400 text-center mt-3">Goes straight to my inbox.</p>
+        </motion.form>
       </div>
     </section>
   );

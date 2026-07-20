@@ -35,7 +35,7 @@ const AIChatbot: React.FC = () => {
   const knowledgeBase = {
     experience: {
       keywords: ['experience', 'background', 'career', 'work history', 'jobs'],
-      response: "I have over 13 years of executive experience, including:\n• CXO roles in fintech and technology companies\n• Led $10.8B+ in transactions across equity, debt, and M&A\n• Successfully scaled operations from 0→1→10\n• IPO experience with GreenSky\n• Turnaround and transformation expertise"
+      response: "I have 20+ years of experience spanning both finance and engineering, including:\n• Fintech leadership fluent in PE-grade finance and hands-on software engineering\n• Led $10.8B+ in transactions across equity, debt, and M&A\n• Successfully scaled operations from 0→1→10\n• IPO experience with GreenSky\n• Turnaround and transformation expertise"
     },
     skills: {
       keywords: ['skills', 'technologies', 'software', 'tools', 'expertise'],

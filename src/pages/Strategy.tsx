@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Compass, TrendingUp, Target, Globe, Zap, Download, Calendar, Linkedin, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 const Strategy: React.FC = () => {
   const strategyHighlights = [
@@ -46,6 +47,12 @@ const Strategy: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
+      <Seo
+        title="Fintech Strategy & M&A Advisor in Atlanta | Michael Kaminski"
+        description="Fintech strategy, corporate development and M&A advisory from an Atlanta operator who has led $10.8B+ in transactions across IPOs, divestitures and share repurchases — and can execute the finance and the technology behind the plan."
+        canonicalPath="/strategy"
+        breadcrumbName="Fintech Strategy & M&A"
+      />
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,12 +100,13 @@ const Strategy: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-lg text-primary-700 font-semibold mb-4">Michael Kaminski is a visionary Chief Strategy Officer with deep expertise in strategic planning, M&A, and organizational transformation.</p>
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">Chief Strategy Officer</h2>
+          <p className="text-lg text-primary-700 font-semibold mb-4">Michael Kaminski is an Atlanta-based strategy and M&amp;A advisor for fintech — pairing 20+ years of corporate development with the finance and engineering depth to actually execute the plan.</p>
+          <h2 className="text-5xl font-bold text-gray-900 mb-6">Fintech Strategy &amp; M&amp;A Advisor</h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Strategic leader with proven track record in developing and executing transformative 
-            strategies that drive growth, create value, and establish market leadership. 
-            Expert in strategic planning, M&A, and organizational transformation.
+            Strategy, corporate development and M&amp;A for fintech, payments and PE-backed
+            companies. Proven across $10.8B+ in transactions — IPOs, divestitures and
+            capital-return programs — with a rare ability to carry a plan from the boardroom
+            through the financial model and into the product.
           </p>
         </motion.div>
 
