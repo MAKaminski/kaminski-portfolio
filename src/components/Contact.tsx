@@ -191,6 +191,58 @@ const Contact: React.FC = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Message form — POSTs to REACT_APP_CONTACT_ENDPOINT if set, else opens email */}
+        <motion.form
+          id="contact-form"
+          onSubmit={handleSubmit}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mt-12 max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8"
+        >
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Send a Message</h3>
+          <div className="grid sm:grid-cols-2 gap-4 mb-4">
+            <input
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+              placeholder="Your name"
+              aria-label="Your name"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            />
+            <input
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+              placeholder="Your email"
+              aria-label="Your email"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+            />
+          </div>
+          <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleInputChange}
+            required
+            rows={5}
+            placeholder="How can I help?"
+            aria-label="Message"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none mb-4"
+          />
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
+          >
+            <Send className="w-5 h-5 mr-2" />
+            Send Message
+          </button>
+          <p className="text-xs text-gray-400 text-center mt-3">Goes straight to my inbox.</p>
+        </motion.form>
       </div>
     </section>
   );

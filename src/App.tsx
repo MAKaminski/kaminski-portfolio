@@ -25,6 +25,8 @@ const KnowledgeGraph = lazy(() => import('./pages/KnowledgeGraph'));
 const ClientOutcomes = lazy(() => import('./pages/ClientOutcomes'));
 const AnalyticsDashboard = lazy(() => import('./components/AnalyticsDashboard'));
 const JiraPRD = lazy(() => import('./pages/JiraPRD'));
+const Writing = lazy(() => import('./pages/Writing'));
+const Article = lazy(() => import('./pages/Article'));
 
 const HOME_TITLE = 'Michael Kaminski | Fintech Finance & Engineering Leader in Atlanta';
 const HOME_DESCRIPTION =
@@ -157,6 +159,8 @@ function App() {
                 <Route path="/client-outcomes" element={<ClientOutcomes />} />
                 <Route path="/analytics" element={<AnalyticsDashboard />} />
                 <Route path="/jira-prd" element={<JiraPRD />} />
+                <Route path="/writing" element={<Writing />} />
+                <Route path="/writing/:slug" element={<Article />} />
               </Routes>
               </Suspense>
               <AIChatbot />

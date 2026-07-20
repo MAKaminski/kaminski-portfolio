@@ -43,6 +43,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.michael-kaminski.io/writing</loc>
+    <lastmod>2026-07-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/fractional-cfo-vs-cto-early-fintech</loc>
+    <lastmod>2026-07-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/quality-of-earnings-for-fintech-founders</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/why-your-fintech-cfo-should-read-the-codebase</loc>
+    <lastmod>2026-07-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.michael-kaminski.io/knowledge-graph</loc>
     <lastmod>2026-07-20</lastmod>
     <changefreq>monthly</changefreq>
