@@ -107,29 +107,7 @@ const Experience: React.FC = () => {
       description: "Share repurchase programs and financial strategy",
       link: "https://www.modularequity.com/",
       exit: "Departed to obtian diversified experiences within other companies/industries"
-    },
-    {
-      company: "Chorus",
-      title: "Full Stack Intern",
-      period: "2009 - 2009",
-      description: "Generate social media app, with a focus on user experience and engagement",
-      exit: "Internship ended"
-    },
-    {
-      company: "Two Brothers Landscaping",
-      title: "Founder",
-      period: "2007 - 2011",
-      description: "Co-founder of Two Brothers Landscaping, a landscaping company that provides services to the residential and commercial sectors.",
-      exit: "Exited for $50k to focus on asset management"
-    },
-    {
-      company: "Hi-Rez Studios",
-      title: "Software Development Intern",
-      period: "2007 - 2008",
-      description: "Supported QA and development teams with automation and testing for Global Agenda",
-      exit: "Exited to fully commit to Two Brothers Landscaping"
     }
-
   ];
 
   return (

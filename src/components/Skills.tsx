@@ -6,53 +6,20 @@ import TechLogo from './TechLogos';
 const Skills: React.FC = () => {
   const [openAccordion, setOpenAccordion] = React.useState<number | null>(0); // Open first by default
   
+  // Editorial cut: consolidated to the highest-signal categories for a
+  // fintech finance + engineering hire (was 29 exhaustive lists).
   const skillCategories = [
     {
-      title: "ERP Systems",
-      icon: Settings,
-      skills: ["NetSuite", "SAP", "SAP/4HANA", "Automatica", "Microsoft Dynamics", "Great Plains", "Oracle Hyperion"],
-      gradient: "from-blue-500 to-cyan-500",
-      bgGradient: "from-blue-50 to-cyan-50"
-    },
-    {
-      title: "Analytics & BI",
-      icon: BarChart3,
-      skills: ["QlikView", "Tableau", "PowerBI", "Looker", "Metabase", "ClickHouse"],
-      gradient: "from-purple-500 to-pink-500",
-      bgGradient: "from-purple-50 to-pink-50"
-    },
-    {
-      title: "Accounting & Finance",
-      icon: BarChart3,
-      skills: ["QuickBooks", "Ramp", "Brex"],
-      gradient: "from-green-500 to-emerald-500",
-      bgGradient: "from-green-50 to-emerald-50"
-    },
-    {
-      title: "Product Analytics",
-      icon: BarChart3,
-      skills: ["Mixpanel", "Amplitude", "Google Analytics", "Segment", "Hotjar", "Posthog"],
-      gradient: "from-orange-500 to-red-500",
-      bgGradient: "from-orange-50 to-red-50"
-    },
-    {
-      title: "Marketing & Growth",
-      icon: Globe,
-      skills: ["HubSpot", "Salesforce", "Marketo", "Ahrefs", "SEMrush", "Mailchimp"],
-      gradient: "from-indigo-500 to-blue-500",
-      bgGradient: "from-indigo-50 to-blue-50"
-    },
-    {
-      title: "Programming Languages",
+      title: "Languages",
       icon: Code,
-      skills: ["SQL", "Python", "R", "VBA", "HTML", "CSS", "PHP", "Java", "C#", "Rust"],
+      skills: ["SQL", "Python", "TypeScript", "Java", "C#", "R", "Rust"],
       gradient: "from-pink-500 to-rose-500",
       bgGradient: "from-pink-50 to-rose-50"
     },
     {
       title: "Backend & Databases",
       icon: Database,
-      skills: ["Node.js", "FastAPI", "PostgreSQL", "Redis", "NeonDB", "Supabase", "GraphQL"],
+      skills: ["Node.js", "FastAPI", "PostgreSQL", "Redis", "GraphQL", "Supabase", "MongoDB"],
       gradient: "from-teal-500 to-cyan-500",
       bgGradient: "from-teal-50 to-cyan-50"
     },
@@ -64,151 +31,39 @@ const Skills: React.FC = () => {
       bgGradient: "from-violet-50 to-purple-50"
     },
     {
-      title: "Infrastructure & Cloud",
+      title: "Cloud & DevOps",
       icon: Cloud,
-      skills: ["Docker", "AWS", "GCP", "Vercel", "K8 (Infra)", "Lambda", "Serverless", "Render"],
+      skills: ["AWS", "GCP", "Docker", "Kubernetes", "Serverless", "Vercel", "GitHub Actions"],
       gradient: "from-sky-500 to-blue-500",
       bgGradient: "from-sky-50 to-blue-50"
     },
     {
-      title: "Data & Analytics Platforms",
-      icon: Database,
-      skills: ["Snowflake", "Redshift", "BigQuery"],
-      gradient: "from-emerald-500 to-green-500",
-      bgGradient: "from-emerald-50 to-green-50"
-    },
-    {
-      title: "Observability",
-      icon: Settings,
-      skills: ["DataDog"],
-      gradient: "from-amber-500 to-orange-500",
-      bgGradient: "from-amber-50 to-orange-50"
+      title: "Data & Analytics",
+      icon: BarChart3,
+      skills: ["Snowflake", "BigQuery", "Redshift", "Airflow", "dbt", "Fivetran", "Tableau", "Power BI", "Looker"],
+      gradient: "from-purple-500 to-pink-500",
+      bgGradient: "from-purple-50 to-pink-50"
     },
     {
       title: "AI & ML",
       icon: Code,
-      skills: ["OpenAI", "ElevenLabs", "MCP", "Langchain"],
+      skills: ["OpenAI", "LangChain", "MCP", "LLMs", "Transformers", "Hugging Face", "TensorFlow", "PyTorch"],
       gradient: "from-fuchsia-500 to-pink-500",
       bgGradient: "from-fuchsia-50 to-pink-50"
     },
     {
-      title: "General Tools",
+      title: "ERP & Financial Systems",
       icon: Settings,
-      skills: ["Confluence", "JIRA", "Asana", "Trello", "Miro", "Notion", "Lucid"],
-      gradient: "from-slate-500 to-gray-500",
-      bgGradient: "from-slate-50 to-gray-50"
-    },
-    {
-      title: "Collaboration & Productivity",
-      icon: Settings,
-      skills: ["Slack", "Zoom", "Google Workspace", "Microsoft 365", "Monday.com", "GitHub", "Figma", "Zapier"],
-      gradient: "from-rose-500 to-pink-500",
-      bgGradient: "from-rose-50 to-pink-50"
-    },
-    {
-      title: "Vector Databases",
-      icon: Database,
-      skills: ["Milvus", "Pinecone", "Weaviate", "pgvector"],
-      gradient: "from-cyan-500 to-teal-500",
-      bgGradient: "from-cyan-50 to-teal-50"
-    },
-    {
-      title: "Audio & Video Processing",
-      icon: Settings,
-      skills: ["FFmpeg", "OpenCV", "Tesseract", "Audacity"],
-      gradient: "from-lime-500 to-green-500",
-      bgGradient: "from-lime-50 to-green-50"
-    },
-    {
-      title: "Libraries & Tools",
-      icon: Code,
-      skills: ["SciPy", "Matplotlib", "Seaborn", "Scikit-learn", "TensorFlow", "Jupyter", "Plotly", "FastAPI", "Axios", "PySpark", "Hugging Face", "Streamlit"],
-      gradient: "from-blue-500 to-indigo-500",
-      bgGradient: "from-blue-50 to-indigo-50"
-    },
-    {
-      title: "ML Concepts",
-      icon: Code,
-      skills: ["Self-Supervised Learning", "Transfer Learning", "Reinforcement Learning", "Transformers", "LLMs", "Text Embeddings", "GPT"],
-      gradient: "from-purple-500 to-violet-500",
-      bgGradient: "from-purple-50 to-violet-50"
-    },
-    {
-      title: "ETL & Pipeline Tools",
-      icon: Settings,
-      skills: ["Apache Airflow", "Apache NiFi", "Fivetran", "DBT", "Foreign Data Wrappers", "Encryption (PGP/GPG)", "System Profiling"],
-      gradient: "from-indigo-500 to-purple-500",
-      bgGradient: "from-indigo-50 to-purple-50"
-    },
-    {
-      title: "Orchestration & Containerization",
-      icon: Cloud,
-      skills: ["Kubernetes", "Docker"],
-      gradient: "from-gray-500 to-slate-500",
-      bgGradient: "from-gray-50 to-slate-50"
-    },
-    {
-      title: "Testing & Validation",
-      icon: Settings,
-      skills: ["Pydantic", "Jest", "Pytest"],
-      gradient: "from-green-500 to-teal-500",
-      bgGradient: "from-green-50 to-teal-50"
-    },
-    {
-      title: "Relational Databases",
-      icon: Database,
-      skills: ["PostgreSQL", "MySQL", "SQLite", "MariaDB", "Oracle", "Microsoft SQL Server", "Amazon Redshift", "Snowflake", "BigQuery"],
+      skills: ["NetSuite", "SAP S/4HANA", "Oracle Hyperion", "QuickBooks", "Ramp", "Brex"],
       gradient: "from-blue-500 to-cyan-500",
       bgGradient: "from-blue-50 to-cyan-50"
     },
     {
-      title: "Non-Relational Databases",
-      icon: Database,
-      skills: ["MongoDB", "Redis", "Cassandra", "Neo4j", "Elasticsearch", "Firebase"],
-      gradient: "from-red-500 to-pink-500",
-      bgGradient: "from-red-50 to-pink-50"
-    },
-    {
-      title: "File Formats",
-      icon: Settings,
-      skills: ["Excel", "CSV", "Parquet", "JSON", "XML"],
-      gradient: "from-yellow-500 to-orange-500",
-      bgGradient: "from-yellow-50 to-orange-50"
-    },
-    {
-      title: "File Transfer",
-      icon: Settings,
-      skills: ["SFTP", "FTP", "FTPS"],
-      gradient: "from-teal-500 to-green-500",
-      bgGradient: "from-teal-50 to-green-50"
-    },
-    {
-      title: "Data Processing & Parsing",
-      icon: Code,
-      skills: ["FFmpeg", "OpenCV", "Tesseract", "NLTK", "PyTorch", "Dask"],
-      gradient: "from-violet-500 to-fuchsia-500",
-      bgGradient: "from-violet-50 to-fuchsia-50"
-    },
-    {
-      title: "CI/CD & DevOps",
-      icon: Settings,
-      skills: ["YAML", "GitHub Actions"],
-      gradient: "from-slate-500 to-zinc-500",
-      bgGradient: "from-slate-50 to-zinc-50"
-    },
-    {
-      title: "Low-Code/No-Code & Internal Tools",
-      icon: Settings,
-      skills: ["Retool, Make, AirTable, Lucid"],
-      gradient: "from-pink-500 to-rose-500",
-      bgGradient: "from-pink-50 to-rose-50"
-    },
-    {
-      title: "Compliance & Security",
-      icon: Settings,
-      skills: ["PII Compliance", "HIPPA Compliance", "GDPR", "PCI DSS", "ISO 27001"],
-      gradient: "from-red-500 to-orange-500",
-      bgGradient: "from-red-50 to-orange-50"
+      title: "Product & Growth Analytics",
+      icon: BarChart3,
+      skills: ["Mixpanel", "Amplitude", "Segment", "PostHog", "Google Analytics", "HubSpot", "Salesforce"],
+      gradient: "from-orange-500 to-red-500",
+      bgGradient: "from-orange-50 to-red-50"
     },
   ];
 
