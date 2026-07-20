@@ -76,12 +76,17 @@ const Contact: React.FC = () => {
             
             {/* Professional Headshot */}
             <div className="flex items-center mb-6">
-              <img
-                src="/images/FA82E2EA-5B88-4FF0-AFBA-2FDFA2FEEDFE_1_105_c.jpeg"
-                alt="Michael Kaminski - Contact"
-                className="w-20 h-20 rounded-full object-cover shadow-lg border-2 mr-4"
-                style={{ borderColor: 'var(--primary)' }}
-              />
+              <picture>
+                <source srcSet="/images/FA82E2EA-5B88-4FF0-AFBA-2FDFA2FEEDFE_1_105_c.webp" type="image/webp" />
+                <img
+                  src="/images/FA82E2EA-5B88-4FF0-AFBA-2FDFA2FEEDFE_1_105_c.jpeg"
+                  alt="Michael Kaminski - Contact"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-20 h-20 rounded-full object-cover shadow-lg border-2 mr-4"
+                  style={{ borderColor: 'var(--primary)' }}
+                />
+              </picture>
               <div>
                 <h4 className="text-lg font-semibold text-gray-900">Michael Kaminski</h4>
                 <p className="text-gray-600">Fintech Finance &amp; Engineering Leader · Atlanta</p>

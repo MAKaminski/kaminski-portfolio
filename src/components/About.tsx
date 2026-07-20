@@ -246,11 +246,16 @@ const About: React.FC = () => {
                       repeatType: 'reverse',
                     }}
                   />
-                  <img
-                    src="/images/EC43565C-9160-4DC8-98F9-2B362A4F6778_1_105_c.jpeg"
-                    alt="Michael Kaminski - Executive Leader"
-                    className="relative w-full max-w-sm mx-auto rounded-3xl object-cover shadow-2xl border-4 border-white ring-4 ring-blue-500/20"
-                  />
+                  <picture>
+                    <source srcSet="/images/EC43565C-9160-4DC8-98F9-2B362A4F6778_1_105_c.webp" type="image/webp" />
+                    <img
+                      src="/images/EC43565C-9160-4DC8-98F9-2B362A4F6778_1_105_c.jpeg"
+                      alt="Michael Kaminski - Executive Leader"
+                      loading="lazy"
+                      decoding="async"
+                      className="relative w-full max-w-sm mx-auto rounded-3xl object-cover shadow-2xl border-4 border-white ring-4 ring-blue-500/20"
+                    />
+                  </picture>
                   <motion.div
                     className="absolute -bottom-4 -right-4 bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 rounded-2xl shadow-lg"
                     initial={{ scale: 0, rotate: -15 }}

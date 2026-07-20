@@ -139,11 +139,17 @@ const Hero: React.FC = () => {
                   repeatType: 'reverse',
                 }}
               />
-              <img
-                src="/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c.jpeg"
-                alt="Michael Kaminski"
-                className="relative w-48 h-48 rounded-full object-cover shadow-2xl border-4 border-white ring-4 ring-blue-500/20"
-              />
+              <picture>
+                <source srcSet="/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c-960.webp" type="image/webp" />
+                <img
+                  src="/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c.jpeg"
+                  alt="Michael Kaminski"
+                  width={192}
+                  height={192}
+                  decoding="async"
+                  className="relative w-48 h-48 rounded-full object-cover shadow-2xl border-4 border-white ring-4 ring-blue-500/20"
+                />
+              </picture>
               <motion.div
                 className="absolute -bottom-2 -right-2 bg-gradient-to-r from-green-400 to-blue-500 text-white p-3 rounded-full shadow-lg"
                 initial={{ scale: 0 }}

@@ -263,6 +263,8 @@ const ReferralCarousel: React.FC = () => {
                           <img
                             src={referrals[currentIndex].avatar}
                             alt={referrals[currentIndex].name}
+                            loading="lazy"
+                            decoding="async"
                             className="w-16 h-16 rounded-full object-cover shadow-lg"
                             onError={(e) => {
                               // Fallback to initials if image fails to load
