@@ -48,6 +48,14 @@ const Writing: React.FC = () => {
                 </time>
                 <span aria-hidden>·</span>
                 <span className="inline-flex items-center gap-1"><Clock size={14} /> {a.readMinutes} min read</span>
+                {a.series && (
+                  <>
+                    <span aria-hidden>·</span>
+                    <span className="px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-purple-700 bg-purple-100 rounded-full">
+                      {a.series}{a.seriesPart ? ` #${a.seriesPart}` : ''}
+                    </span>
+                  </>
+                )}
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">{a.title}</h3>
               <p className="text-gray-600">{a.description}</p>

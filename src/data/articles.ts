@@ -4,11 +4,58 @@ export interface Article {
   description: string;
   date: string; // ISO
   readMinutes: number;
+  /** Optional ongoing series this post belongs to, e.g. "Shipping Log". */
+  series?: string;
+  /** 1-indexed position within the series. */
+  seriesPart?: number;
   /** Author-controlled HTML body (rendered via dangerouslySetInnerHTML). */
   body: string;
 }
 
 export const articles: Article[] = [
+  {
+    slug: 'shipping-log-1-the-great-seo-exorcism',
+    title: 'The Great SEO Exorcism: Teaching My Own Portfolio to Talk to Robots',
+    description:
+      "Shipping Log #1: a behind-the-scenes, mostly-true account of overhauling this site's SEO/AEO, JSON-LD, and image pipeline in one sitting — and what it taught me about arguing with search engines.",
+    date: '2026-07-21',
+    readMinutes: 4,
+    series: 'Shipping Log',
+    seriesPart: 1,
+    body: `
+<p>Welcome to the first entry in <strong>Shipping Log</strong> — a running, unglamorous diary of whatever
+I actually shipped recently, written in the spirit of "here's the mess, here's what I learned," rather than
+a polished case study. First victim: this very website.</p>
+
+<h2>The problem: a portfolio that whispered instead of talked</h2>
+<p>The site looked fine to humans. To search engines and AI crawlers, it was basically mumbling. No
+structured data, no canonical domain story, a robots.txt that hadn't heard of an AI crawler in its life,
+and a 14-section homepage that made recruiters do more scrolling than a doom-scroll session. Something had
+to give, and it was going to be me, at a keyboard, for most of a day.</p>
+
+<h2>What actually happened</h2>
+<p>I went full plumber-under-the-sink on the internals: per-route SEO metadata, a stack of JSON-LD schemas
+(<code>ProfilePage</code>, <code>Person</code>, <code>FAQPage</code>, <code>BreadcrumbList</code>,
+<code>BlogPosting</code> — yes, all of them, yes, at once), an <code>llms.txt</code> file so AI assistants
+reading the site get the elevator pitch instead of guessing, and a robots.txt update so crawlers that didn't
+exist three years ago now get explicit instructions instead of silence.</p>
+<p>Then came the less glamorous half: converting a folder of photos into WebP (small, invisible, and the
+kind of task that feels like flossing — nobody notices you did it, everyone notices if you didn't),
+splitting routes so the bundle stops shipping code nobody asked for, consolidating everything onto one
+canonical domain with proper 301s, and cutting the homepage from fourteen sections down to six. Turns out
+"recruiter-first" mostly means "fewer places for a recruiter to get bored and close the tab."</p>
+
+<h2>The lesson</h2>
+<p>The unglamorous 80% of a "content" overhaul is plumbing — redirects, schema, image formats, crawl
+directives — and it's exactly the part that's easy to skip and expensive to skip. Nobody opens a portfolio
+site and thinks "I bet the <code>BreadcrumbList</code> schema here is *chef's kiss*." But they also never
+think about airplane engines until one doesn't work, and I'd rather my site be the boring, well-maintained
+engine than the flashy one that quietly can't be found.</p>
+
+<p>Also, and I cannot stress this enough: naming your favicon file correctly on the first try is a myth
+told to junior developers to keep morale up.</p>
+`,
+  },
   {
     slug: 'fractional-cfo-vs-cto-early-fintech',
     title: 'Fractional CFO vs. Fractional CTO: Which Does Your Early Fintech Need First?',
