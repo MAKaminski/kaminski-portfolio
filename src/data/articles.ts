@@ -4,11 +4,62 @@ export interface Article {
   description: string;
   date: string; // ISO
   readMinutes: number;
+  /** Optional ongoing series this post belongs to, e.g. "Shipping Log". */
+  series?: string;
+  /** 1-indexed position within the series. */
+  seriesPart?: number;
   /** Author-controlled HTML body (rendered via dangerouslySetInnerHTML). */
   body: string;
 }
 
 export const articles: Article[] = [
+  {
+    slug: 'shipping-log-1-the-robot-that-journaled-in-triplicate',
+    title: "Shipping Log #1: The Day My Own Automation Wrote Three Diaries About the Same Tuesday",
+    description:
+      "Kicking off an ongoing devlog series with a confession: a scheduled task meant to recap 'today's coding work' found no new commits three days running — and quietly wrote near-identical drafts each time instead of noticing.",
+    date: '2026-07-22',
+    readMinutes: 4,
+    series: 'Shipping Log',
+    seriesPart: 1,
+    body: `
+<p>Welcome to <strong>Shipping Log</strong> — a running, unpolished diary of whatever actually happened
+in this codebase lately, warts included. Fittingly, entry #1 is about a bug I found not in the site, but
+in the very automation writing this series.</p>
+
+<h2>The assignment: recap today's coding work</h2>
+<p>I have a scheduled task that runs daily with one job: look at what shipped, and write something fun
+about it for this page. Simple enough — until I actually checked the git log for today and found exactly
+zero new commits since a big SEO/AEO overhaul that landed two days ago. Nothing to recap. No bug fixed,
+no feature shipped, no dragons slain.</p>
+
+<h2>So what did the robot do instead?</h2>
+<p>Rather than shrug and stay quiet, it seems the same scheduled task had already fired on each of the
+prior two days, found the same "nothing new" situation, and — instead of checking whether it had already
+written about this — cheerfully opened <em>another</em> draft pull request recapping the identical SEO
+overhaul under a slightly different series name each time. Three open, unmerged PRs, three different
+slugs, one underlying event. A very earnest, very redundant paper trail.</p>
+
+<h2>The lesson: idempotency isn't just for APIs</h2>
+<p>This is the same failure mode we lecture junior engineers about in code review: a job that runs on a
+schedule has to check <em>current state</em> before acting, not just "did my trigger fire." A retry-safe
+payment endpoint checks for an existing transaction before creating a new one. A migration script checks
+if the column already exists. My devlog cron apparently skipped that step entirely and treated "I have no
+new material" as "I should manufacture a new artifact anyway." Three drafts later, nobody had actually
+merged any of them — which, silver lining, is exactly what should happen when a human reviewer notices
+duplicate work before it ships.</p>
+
+<h2>The fix</h2>
+<p>Going forward, this task should check for existing open series PRs before opening another one, and
+treat "no new commits" as a legitimate, boring outcome worth exactly one short, honest entry — like this
+one — instead of a fabricated highlight reel. Consider this post equal parts devlog and incident
+report: mean time to detection, one confused human reading three suspiciously similar pull requests in
+a row.</p>
+
+<p>Next entry, hopefully, is about something I actually built rather than something I accidentally
+built three times.</p>
+`,
+  },
   {
     slug: 'fractional-cfo-vs-cto-early-fintech',
     title: 'Fractional CFO vs. Fractional CTO: Which Does Your Early Fintech Need First?',

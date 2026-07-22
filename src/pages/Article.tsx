@@ -67,6 +67,11 @@ const Article: React.FC = () => {
           </span>
           <span className="inline-flex items-center gap-1"><Clock size={14} /> {article.readMinutes} min read</span>
         </div>
+        {article.series && (
+          <span className="inline-block mb-3 px-3 py-1 text-xs font-bold uppercase tracking-wide text-purple-700 bg-purple-100 rounded-full">
+            {article.series}{article.seriesPart ? ` · Part ${article.seriesPart}` : ''}
+          </span>
+        )}
         <h1 className="text-4xl font-black text-gray-900 leading-tight mb-8">{article.title}</h1>
 
         <div className="article-body" dangerouslySetInnerHTML={{ __html: article.body }} />
