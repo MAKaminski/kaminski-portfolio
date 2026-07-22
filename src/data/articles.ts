@@ -14,50 +14,141 @@ export interface Article {
 
 export const articles: Article[] = [
   {
-    slug: 'shipping-log-1-the-robot-that-journaled-in-triplicate',
-    title: "Shipping Log #1: The Day My Own Automation Wrote Three Diaries About the Same Tuesday",
+    slug: 'shipping-log-3-the-robot-that-journaled-in-triplicate',
+    title: 'Shipping Log #3: Cleaning Up After a Diary That Got a Little Too Enthusiastic',
     description:
-      "Kicking off an ongoing devlog series with a confession: a scheduled task meant to recap 'today's coding work' found no new commits three days running — and quietly wrote near-identical drafts each time instead of noticing.",
+      'Shipping Log #3: turns out the devlog automation from Part 2 wrote about the same day three separate times without checking its own homework. Here is the cleanup, and the fix.',
     date: '2026-07-22',
     readMinutes: 4,
     series: 'Shipping Log',
+    seriesPart: 3,
+    body: `
+<p>When we left off in <a href="/writing/shipping-log-2-a-diary-that-repeated-itself">Part 2</a>, I'd just
+given this site a devlog and immediately watched it write the same first entry twice in one afternoon.
+Today's episode is the sequel nobody wanted: it turns out that wasn't a one-time glitch, it was a habit.</p>
+
+<h2>The audit</h2>
+<p>Checking today's git log for material turned up nothing new — no commits since the SEO/AEO overhaul
+that shipped on the 20th. Totally normal; not every day ships a feature. But digging into <em>why</em> the
+devlog task kept finding "nothing new" so interesting, I found three separate open draft pull requests,
+each proposing its own version of a "Shipping Log" / "Build Log" series, each recapping the identical SEO
+overhaul, each blind to the other two. Three engineers' worth of near-identical scaffolding — a
+<code>series</code> field here, a <code>seriesPart</code> there, an entire standalone page in one of
+them — and not one of them checked whether the work had already been done.</p>
+
+<h2>Why this happens</h2>
+<p>It's the most boring bug in distributed systems, just wearing a content-writing costume: a job that
+fires on a schedule assumed "I ran" meant "I should produce something," instead of first asking "does this
+already exist?" Same failure mode as a retry that doesn't check for an existing transaction, or a
+migration that doesn't check if the column's already there. The fix is never clever — it's just adding
+the check nobody remembered to add.</p>
+
+<h2>The cleanup</h2>
+<p>So today's actual work was less "write a fun devlog" and more "reconcile three copies of the same
+idea into one continuous story." That meant:</p>
+<ul>
+<li>Picking the cleanest schema (a simple <code>series</code> / <code>seriesPart</code> field) and
+discarding the competing implementations.</li>
+<li>Backfilling the missing chapters — Part 1 for the real work that started this whole story, Part 2 for
+the day the diary was born (and immediately tripped over itself) — so the series reads in order instead
+of starting mid-sentence.</li>
+<li>Closing the redundant draft pull requests as superseded, so there's exactly one place this story
+lives going forward.</li>
+</ul>
+
+<h2>The actual fix</h2>
+<p>Before this task opens another pull request, it now has one job first: check whether an open,
+unmerged "Shipping Log" PR already exists, and add to it instead of starting a new one. Boring, obvious,
+and exactly the kind of guardrail that's invisible right up until the day it saves you from explaining
+to your own reader why chapter one happened three times.</p>
+`,
+  },
+  {
+    slug: 'shipping-log-2-a-diary-that-repeated-itself',
+    title: "Shipping Log #2: I Gave My Portfolio a Diary, and It Immediately Repeated Itself",
+    description:
+      "Shipping Log #2: the day after the big SEO overhaul, I built a devlog feature to write about it — and, without realizing it, built it again a few hours later.",
+    date: '2026-07-21',
+    readMinutes: 4,
+    series: 'Shipping Log',
+    seriesPart: 2,
+    body: `
+<p>Part 1 of this series covered the actual substance: an SEO/AEO overhaul that took this site from a D+
+to something a search engine might actually respect. Today's entry is smaller and, in hindsight, funnier —
+it's the day this site got a devlog feature, so it could write about days like that one.</p>
+
+<h2>The idea</h2>
+<p>Simple enough: add an optional <code>series</code> and <code>seriesPart</code> field to the
+<code>Article</code> type, render a small badge on the Writing list and article header when a post
+belongs to one, and start publishing short, honest recaps of whatever actually happened in this codebase
+— including the boring days. Call it "Shipping Log." A handful of lines in a TypeScript interface, a
+purple pill of a badge, done in an afternoon.</p>
+
+<h2>The twist I didn't notice yet</h2>
+<p>What I didn't clock at the time is that this exact idea — same series name, same badge concept, same
+target files — had <em>already</em> been built once earlier that same day, in a separate branch, by the
+same scheduled task, recapping the same SEO overhaul. Two implementations of one idea, running in
+parallel, each with no visibility into the other. At the time it looked like a clean, self-contained
+feature shipped end to end. It was actually round two of something that hadn't been checked in yet.</p>
+
+<h2>Why this is worth writing down</h2>
+<p>It's a small, harmless version of a mistake that gets very expensive at larger scale: build the thing
+before checking if it already exists, or already got built by someone (or something) else working off the
+same trigger. No harm done here — draft pull requests don't hurt anyone sitting unmerged — but it's the
+same root cause that turns into duplicate database migrations, double-charged customers, or two teams
+shipping the same integration in the same sprint.</p>
+
+<p>I didn't catch this one myself, actually — it took a very reasonable "wait, did you just repost the
+same article?" from the person actually reading this site to notice the pattern. Which is its own lesson:
+automation can be diligent and still be wrong in a way only a human skimming the output will catch. More
+on the cleanup in <a href="/writing/shipping-log-3-the-robot-that-journaled-in-triplicate">Part 3</a>.</p>
+`,
+  },
+  {
+    slug: 'shipping-log-1-my-portfolio-scored-a-d-plus',
+    title: 'Shipping Log #1: My Portfolio Scored a D+, So I Rebuilt Its Whole Personality Before Lunch',
+    description:
+      'Shipping Log #1: the real work that kicked off this series — an SEO/AEO overhaul that took this site from an undifferentiated D+ to a focused, technically sound profile, in one sitting.',
+    date: '2026-07-20',
+    readMinutes: 5,
+    series: 'Shipping Log',
     seriesPart: 1,
     body: `
-<p>Welcome to <strong>Shipping Log</strong> — a running, unpolished diary of whatever actually happened
-in this codebase lately, warts included. Fittingly, entry #1 is about a bug I found not in the site, but
-in the very automation writing this series.</p>
+<p>Every ongoing series needs an origin story, and this one starts with a report card nobody wants:
+graded holistically against a nine-dimension rubric, this site scored a <strong>47 out of 100</strong>.
+A D+. On a domain with a search-authority score of essentially zero. Time to do something about it.</p>
 
-<h2>The assignment: recap today's coding work</h2>
-<p>I have a scheduled task that runs daily with one job: look at what shipped, and write something fun
-about it for this page. Simple enough — until I actually checked the git log for today and found exactly
-zero new commits since a big SEO/AEO overhaul that landed two days ago. Nothing to recap. No bug fixed,
-no feature shipped, no dragons slain.</p>
+<h2>The diagnosis</h2>
+<p>The content itself wasn't bad — it just wasn't differentiated, and the technical foundation
+underneath it was quietly working against it. No structured data for search engines or AI crawlers to
+latch onto, a robots.txt that predated the existence of AI crawlers, a homepage with fourteen competing
+sections asking a recruiter to make fourteen decisions before deciding to stay, and a domain story split
+across more than one canonical home.</p>
 
-<h2>So what did the robot do instead?</h2>
-<p>Rather than shrug and stay quiet, it seems the same scheduled task had already fired on each of the
-prior two days, found the same "nothing new" situation, and — instead of checking whether it had already
-written about this — cheerfully opened <em>another</em> draft pull request recapping the identical SEO
-overhaul under a slightly different series name each time. Three open, unmerged PRs, three different
-slugs, one underlying event. A very earnest, very redundant paper trail.</p>
+<h2>The fix, in one sitting</h2>
+<p>The plumbing came first: per-route SEO metadata through a reusable <code>Seo</code> component, a stack
+of JSON-LD schemas (<code>ProfilePage</code>, <code>Person</code>, <code>FAQPage</code>,
+<code>BreadcrumbList</code>) so both search engines and AI assistants have something concrete to parse, an
+<code>llms.txt</code> file as a plain-language elevator pitch for AI crawlers, and an updated robots.txt
+that actually acknowledges the crawlers of this decade exist.</p>
+<p>Then the less glamorous half: converting the image folder to WebP, splitting routes so the bundle
+stops shipping code nobody asked for, consolidating everything onto one canonical domain with proper
+redirects, and cutting the homepage from fourteen sections down to six. "Recruiter-first," it turns out,
+mostly means giving a recruiter fewer places to get bored and close the tab.</p>
 
-<h2>The lesson: idempotency isn't just for APIs</h2>
-<p>This is the same failure mode we lecture junior engineers about in code review: a job that runs on a
-schedule has to check <em>current state</em> before acting, not just "did my trigger fire." A retry-safe
-payment endpoint checks for an existing transaction before creating a new one. A migration script checks
-if the column already exists. My devlog cron apparently skipped that step entirely and treated "I have no
-new material" as "I should manufacture a new artifact anyway." Three drafts later, nobody had actually
-merged any of them — which, silver lining, is exactly what should happen when a human reviewer notices
-duplicate work before it ships.</p>
+<h2>The repositioning</h2>
+<p>Underneath the technical work was a sharper positioning decision: instead of trying to be
+everything to everyone, the site now leads with one specific, under-saturated niche — a leader fluent in
+both PE-grade finance and hands-on engineering. That's the actual story the SEO work exists to help
+people find.</p>
 
-<h2>The fix</h2>
-<p>Going forward, this task should check for existing open series PRs before opening another one, and
-treat "no new commits" as a legitimate, boring outcome worth exactly one short, honest entry — like this
-one — instead of a fabricated highlight reel. Consider this post equal parts devlog and incident
-report: mean time to detection, one confused human reading three suspiciously similar pull requests in
-a row.</p>
-
-<p>Next entry, hopefully, is about something I actually built rather than something I accidentally
-built three times.</p>
+<h2>The lesson</h2>
+<p>The unglamorous 80% of a "content" overhaul is plumbing — redirects, schema, image formats, crawl
+directives — and it's exactly the part that's easy to skip and expensive to skip. Nobody visits a
+portfolio and marvels at a <code>BreadcrumbList</code> schema, but nobody thinks about an airplane engine
+either, until it doesn't work. This series exists to keep a running account of days like this one — and,
+as it turns out, the occasional day that wasn't quite like this one at all. More in
+<a href="/writing/shipping-log-2-a-diary-that-repeated-itself">Part 2</a>.</p>
 `,
   },
   {
