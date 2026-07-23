@@ -203,5 +203,16 @@ the gap in your team, <a href="https://calendly.com/kaminski1337/15min">let's ta
   },
 ];
 
+const seenDates = new Map<string, string>();
+for (const a of articles) {
+  const priorSlug = seenDates.get(a.date);
+  if (priorSlug) {
+    throw new Error(
+      `articles.ts: only one article per day is allowed, but "${priorSlug}" and "${a.slug}" are both dated ${a.date}.`
+    );
+  }
+  seenDates.set(a.date, a.slug);
+}
+
 export const getArticle = (slug: string): Article | undefined =>
   articles.find((a) => a.slug === slug);
