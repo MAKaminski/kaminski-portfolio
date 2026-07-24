@@ -52,9 +52,9 @@ type ThemeContextType = {
 
 const themePresets: Record<Role, Theme> = {
   default: {
-    primary: '#0ea5e9', // bright blue
-    secondary: '#64748b',
-    bg: '#fff',
+    primary: '#fff500', // Rilla electric yellow
+    secondary: '#a3a3a3',
+    bg: '#060606',
   },
   cfo: {
     primary: '#1d4ed8', // deep blue - high contrast

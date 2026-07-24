@@ -121,7 +121,7 @@ const Experience: React.FC = () => {
           className="text-center mb-16"
           style={{ color: 'var(--primary)' }}
         >
-          <h2 className="text-4xl font-bold mb-4">Experience & Leadership</h2>
+          <h2 className="display text-4xl md:text-5xl mb-4 text-white">Experience &amp; <span className="accent">Leadership</span></h2>
           <p className="text-xl max-w-3xl mx-auto" style={{ color: 'var(--secondary)' }}>
             Proven track record in executive leadership, strategic decision-making, and organizational transformation with 20+ years of experience
           </p>

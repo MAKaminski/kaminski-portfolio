@@ -29,10 +29,28 @@ module.exports = {
           700: '#334155',
           800: '#1e293b',
           900: '#0f172a',
-        }
+        },
+        // Rilla-inspired palette
+        ink: {
+          DEFAULT: '#0a0a0a',
+          900: '#060606',
+          800: '#121212',
+          700: '#1e1e1e',
+          600: '#2d2d2d',
+        },
+        accent: {
+          DEFAULT: '#fff500', // Rilla electric yellow
+          400: '#fff84d',
+          500: '#fff500',
+          600: '#e6dc00',
+        },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['"Space Grotesk"', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['Anton', '"Archivo Black"', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        rilla: '18px',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

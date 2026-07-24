@@ -217,13 +217,13 @@ const ReferralCarousel: React.FC = () => {
   };
 
   return (
-    <div id="testimonials" className="py-16 bg-gradient-to-br from-gray-50 to-blue-50 scroll-mt-20">
+    <div id="testimonials" className="py-16 bg-ink-800 scroll-mt-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            What Colleagues Say About Michael Kaminski
+          <h2 className="display text-4xl md:text-5xl text-white mb-4">
+            What Colleagues <span className="accent">Say</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-white/60 max-w-3xl mx-auto">
             Trusted by executives and board members across finance, technology, and strategic consulting.
           </p>
         </div>

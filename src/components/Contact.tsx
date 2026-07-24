@@ -57,8 +57,8 @@ const Contact: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <h2 className="display text-4xl md:text-5xl text-white mb-4">Get In <span className="accent">Touch</span></h2>
+          <p className="text-xl text-white/60 max-w-3xl mx-auto">
             Building something in fintech, payments, or financial services? Let's talk about fractional CFO/CTO work, product &amp; engineering leadership, or a full-time executive role.
           </p>
         </motion.div>
