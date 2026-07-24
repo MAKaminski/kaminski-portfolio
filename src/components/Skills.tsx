@@ -19,7 +19,7 @@ const Skills: React.FC = () => {
     {
       title: "Backend & Databases",
       icon: Database,
-      skills: ["Node.js", "FastAPI", "PostgreSQL", "Redis", "GraphQL", "Supabase", "MongoDB"],
+      skills: ["Node.js", "FastAPI", "PostgreSQL", "Redis", "GraphQL", "Supabase", "NeonDB", "Prisma", "MongoDB", "Pinecone", "pgvector"],
       gradient: "from-teal-500 to-cyan-500",
       bgGradient: "from-teal-50 to-cyan-50"
     },
@@ -33,7 +33,7 @@ const Skills: React.FC = () => {
     {
       title: "Cloud & DevOps",
       icon: Cloud,
-      skills: ["AWS", "GCP", "Docker", "Kubernetes", "Serverless", "Vercel", "GitHub Actions"],
+      skills: ["AWS", "GCP", "Docker", "Kubernetes", "Serverless", "Vercel", "GitHub", "GitHub Actions"],
       gradient: "from-sky-500 to-blue-500",
       bgGradient: "from-sky-50 to-blue-50"
     },
@@ -47,23 +47,30 @@ const Skills: React.FC = () => {
     {
       title: "AI & ML",
       icon: Code,
-      skills: ["OpenAI", "LangChain", "MCP", "LLMs", "Transformers", "Hugging Face", "TensorFlow", "PyTorch"],
+      skills: ["OpenAI", "Claude", "Claude Code", "Cursor", "DeepSeek", "Kimi", "LangChain", "MCP", "Hugging Face", "TensorFlow", "PyTorch"],
       gradient: "from-fuchsia-500 to-pink-500",
       bgGradient: "from-fuchsia-50 to-pink-50"
     },
     {
       title: "ERP & Financial Systems",
       icon: Settings,
-      skills: ["NetSuite", "SAP S/4HANA", "Oracle Hyperion", "QuickBooks", "Ramp", "Brex"],
+      skills: ["NetSuite", "SAP S/4HANA", "Oracle Hyperion", "QuickBooks", "Ramp", "Brex", "Plaid", "Stripe", "Interactive Brokers"],
       gradient: "from-blue-500 to-cyan-500",
       bgGradient: "from-blue-50 to-cyan-50"
     },
     {
-      title: "Product & Growth Analytics",
+      title: "SEO & Growth Analytics",
       icon: BarChart3,
-      skills: ["Mixpanel", "Amplitude", "Segment", "PostHog", "Google Analytics", "HubSpot", "Salesforce"],
+      skills: ["Ahrefs", "Google Search Console", "Google Analytics", "PostHog", "Mixpanel", "Amplitude", "Segment", "HubSpot", "Salesforce"],
       gradient: "from-orange-500 to-red-500",
       bgGradient: "from-orange-50 to-red-50"
+    },
+    {
+      title: "Product & Collaboration",
+      icon: Settings,
+      skills: ["Jira", "Confluence", "Linear", "Notion", "Monday.com", "Airtable", "Figma", "Lucid", "Canva", "Gamma", "Resend", "Shopify"],
+      gradient: "from-indigo-500 to-violet-500",
+      bgGradient: "from-indigo-50 to-violet-50"
     },
   ];
 
@@ -172,19 +179,19 @@ const Skills: React.FC = () => {
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-2xl">
               <Sparkles className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-5xl md:text-6xl font-black bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
-              Skills & Expertise
+            <h2 className="display text-5xl md:text-6xl text-white">
+              Skills &amp; <span className="accent">Expertise</span>
             </h2>
           </motion.div>
-          <motion.p 
-            className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
+          <motion.p
+            className="text-xl text-white/60 max-w-4xl mx-auto leading-relaxed"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.6 }}
             viewport={{ once: true }}
           >
             Comprehensive expertise across enterprise systems, analytics, development, and specialized financial technologies.
-            <span className="block mt-2 font-semibold text-blue-700">
+            <span className="block mt-2 font-semibold accent">
               20+ years of hands-on experience with cutting-edge technologies.
             </span>
           </motion.p>
@@ -202,11 +209,11 @@ const Skills: React.FC = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              className={`relative bg-gradient-to-br ${category.bgGradient} rounded-2xl p-6 border border-white/50 shadow-lg backdrop-blur-sm overflow-hidden group`}
-              whileHover={{ 
+              className={`relative rilla-card p-6 overflow-hidden group`}
+              whileHover={{
                 scale: 1.02,
                 y: -5,
-                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.15)"
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
               }}
               transition={{ type: "spring", stiffness: 300 }}
             >
@@ -236,14 +243,14 @@ const Skills: React.FC = () => {
                   <category.icon className="w-7 h-7 text-white" />
                 </motion.div>
                 
-                <h3 className="text-lg font-bold text-gray-900 mb-3">{category.title}</h3>
+                <h3 className="display text-lg text-white mb-3">{category.title}</h3>
 
                 <div className="flex flex-wrap gap-2">
                   {category.skills.map((skill, skillIndex) => (
                     <motion.div
                       key={skill}
-                      className="flex items-center space-x-2 px-3 py-2 bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl hover:bg-white hover:shadow-md transition-all duration-200 group/skill"
-                      whileHover={{ 
+                      className="flex items-center space-x-2 px-3 py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-200 group/skill"
+                      whileHover={{
                         scale: 1.05,
                         y: -2
                       }}
@@ -253,7 +260,7 @@ const Skills: React.FC = () => {
                       transition={{ delay: 0.1 + skillIndex * 0.02, duration: 0.3 }}
                     >
                       <TechLogo name={skill} className="w-4 h-4 transition-transform group-hover/skill:scale-110" />
-                      <span className="text-sm font-medium text-gray-700 group-hover/skill:text-gray-900">
+                      <span className="text-sm font-medium text-white/80 group-hover/skill:text-white">
                         {skill}
                       </span>
                     </motion.div>
@@ -273,25 +280,25 @@ const Skills: React.FC = () => {
           className="relative"
         >
           <div className="text-center mb-16">
-            <motion.h3 
-              className="text-4xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent"
+            <motion.h3
+              className="display text-4xl mb-4 text-white"
               initial={{ scale: 0.9 }}
               whileInView={{ scale: 1 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              Specialized Expertise
+              Specialized <span className="accent">Expertise</span>
             </motion.h3>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-white/60">
               Deep domain knowledge in financial services, compliance, and enterprise systems
             </p>
           </div>
 
           <div className="space-y-6">
             {specializedAreas.map((area, index) => (
-              <motion.div 
-                key={index} 
-                className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-100 overflow-hidden"
+              <motion.div
+                key={index}
+                className="rilla-card overflow-hidden"
                 initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
@@ -301,7 +308,7 @@ const Skills: React.FC = () => {
                 <motion.button
                   className="w-full flex items-center justify-between p-8 focus:outline-none text-left transition-all duration-200"
                   onClick={() => setOpenAccordion(openAccordion === index ? null : index)}
-                  whileHover={{ backgroundColor: "rgba(59, 130, 246, 0.05)" }}
+                  whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}
                 >
                   <div className="flex items-center space-x-6">
                     <motion.div 
@@ -315,20 +322,20 @@ const Skills: React.FC = () => {
                       <area.icon className="w-8 h-8 text-white" />
                     </motion.div>
                     <div>
-                      <h4 className="text-2xl font-bold text-gray-900">{area.title}</h4>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <h4 className="display text-2xl text-white">{area.title}</h4>
+                      <p className="text-sm text-white/50 mt-1">
                         {area.items.length} areas of expertise
                       </p>
                     </div>
                   </div>
-                  
+
                   <motion.div
                     animate={{ rotate: openAccordion === index ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
                     className="flex-shrink-0"
                   >
-                    <div className="bg-blue-100 p-3 rounded-xl">
-                      <ChevronDown className="w-6 h-6 text-blue-600" />
+                    <div className="bg-accent/15 p-3 rounded-xl">
+                      <ChevronDown className="w-6 h-6 text-accent" />
                     </div>
                   </motion.div>
                 </motion.button>
@@ -347,20 +354,20 @@ const Skills: React.FC = () => {
                       {area.items.map((item, itemIndex) => (
                         <motion.div
                           key={item}
-                          className="flex items-center space-x-3 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100"
+                          className="flex items-center space-x-3 p-4 bg-white/5 rounded-xl border border-white/10"
                           initial={{ opacity: 0, y: 10 }}
-                          animate={{ 
+                          animate={{
                             opacity: openAccordion === index ? 1 : 0,
                             y: openAccordion === index ? 0 : 10
                           }}
                           transition={{ delay: itemIndex * 0.05, duration: 0.3 }}
-                          whileHover={{ 
+                          whileHover={{
                             scale: 1.02,
-                            backgroundColor: "rgba(59, 130, 246, 0.1)"
+                            backgroundColor: "rgba(255, 255, 255, 0.08)"
                           }}
                         >
-                          <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex-shrink-0" />
-                          <span className="text-gray-700 font-medium text-sm">{item}</span>
+                          <div className="w-3 h-3 bg-accent rounded-full flex-shrink-0" />
+                          <span className="text-white/80 font-medium text-sm">{item}</span>
                         </motion.div>
                       ))}
                     </div>

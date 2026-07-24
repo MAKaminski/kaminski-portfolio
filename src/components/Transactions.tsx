@@ -107,7 +107,7 @@ const Transactions: React.FC = () => {
           className="text-center mb-16"
           style={{ color: 'var(--primary)' }}
         >
-          <h2 className="text-4xl font-bold mb-4">Transaction Experience</h2>
+          <h2 className="display text-4xl md:text-5xl mb-4 text-white">Transaction <span className="accent">Experience</span></h2>
           <p className="text-xl max-w-3xl mx-auto" style={{ color: 'var(--secondary)' }}>
             Proven track record in complex financial transactions across multiple industries and deal types
           </p>

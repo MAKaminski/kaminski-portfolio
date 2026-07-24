@@ -12,6 +12,59 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'why-fintech-belongs-in-atlanta',
+    title: 'Why Fintech Belongs in Atlanta — and Why That Matters for Your Cap Table',
+    description:
+      "Atlanta quietly processes a huge share of the world's card transactions and has produced a run of fintech exits. Here's what that ecosystem means for founders building here — and the finance-plus-engineering talent it creates.",
+    date: '2026-07-24',
+    readMinutes: 6,
+    body: `
+<p>Ask most people to name a fintech hub and they'll say New York or San Francisco. Ask anyone who
+actually moves money for a living and Atlanta comes up fast. A large share of the country's card
+transactions are processed by systems with deep Atlanta roots — the city didn't stumble into the
+nickname "Transaction Alley," it earned it over decades.</p>
+
+<h2>The ecosystem is real, not aspirational</h2>
+<p>Atlanta's payments lineage runs through the giants — the processing infrastructure, the networks,
+the acquirers — and it has thrown off a steady stream of operators, exits, and second-time founders.
+GreenSky went public from here. A generation of fintechs — payments, lending, and infrastructure
+companies — have been built by people who cut their teeth inside that ecosystem. When the incumbents
+are down the street, the talent pool understands interchange, settlement, chargebacks, and card-network
+rules as a matter of course. That's not something you can hire your way into quickly in a market that
+has never had to think about it.</p>
+
+<h2>What that means for a founder building here</h2>
+<ul>
+<li><strong>Talent that speaks payments natively.</strong> Engineers and finance people who've worked
+inside processors and lenders don't need a six-month ramp to understand your domain.</li>
+<li><strong>Lower burn for the same caliber.</strong> Atlanta's cost of living and salary bands stretch
+a seed round meaningfully further than the coasts — you get more runway per dollar of dilution.</li>
+<li><strong>Proximity to the rails.</strong> Partnerships, sponsor banks, and processing relationships
+are easier when the people who run them are in your metro, not three time zones away.</li>
+<li><strong>A maturing capital base.</strong> Local and regional investors increasingly understand
+fintech unit economics — you spend less time explaining why a loan book seasons.</li>
+</ul>
+
+<h2>The talent edge is specifically finance-plus-engineering</h2>
+<p>Here's the part that matters for how you build. Because Atlanta grew up on payments and lending, the
+market produces an unusual concentration of people who are bilingual — fluent in both the accounting and
+the systems. In a fintech, that combination is worth a premium: your ledger <em>is</em> your product, so
+the people who can reason about revenue recognition, loss reserves, and the data model at the same time
+are the ones who keep finance and engineering from drifting apart. That profile is rarer than it should
+be everywhere else; here, it's a natural byproduct of the ecosystem.</p>
+
+<h2>Building here is a cap-table decision, not just a lifestyle one</h2>
+<p>Choosing where to build a fintech isn't only about weather and commutes. Domain-native talent, lower
+burn, and proximity to the rails compound directly into your cap table — more months of runway, fewer
+mishires, faster partnerships. Atlanta gives founders a structural advantage on exactly the dimensions
+that decide whether an early fintech survives the gap between seed and a real revenue engine.</p>
+
+<p>I've spent my career at the finance-and-engineering intersection this city is unusually good at
+producing — from the big processors and lenders to hands-on fintech product work. If you're building in
+Atlanta and want a sounding board, <a href="https://calendly.com/kaminski1337/15min">grab 15 minutes</a>.</p>
+`,
+  },
+  {
     slug: 'behind-the-build-vol-1-teaching-robots-to-read-my-resume',
     title: 'I Spent a Day Teaching Robots How to Read My Résumé (So You Don\'t Have To)',
     description:

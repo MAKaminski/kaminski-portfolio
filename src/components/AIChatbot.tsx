@@ -43,7 +43,7 @@ const AIChatbot: React.FC = () => {
     },
     compensation: {
       keywords: ['salary', 'compensation', 'pay', 'bonus', 'target'],
-      response: "I'm targeting a base salary of $225K with $50K+ performance bonus and equity. I prioritize performance-based compensation and am open to discussing the full package based on the opportunity and impact potential."
+      response: "Compensation is best discussed directly, based on the role, scope, and impact. I'm open to fractional or full-time arrangements and lean toward performance-based upside — happy to talk specifics on a call."
     },
     location: {
       keywords: ['location', 'remote', 'atlanta', 'relocation', 'where'],
@@ -141,7 +141,7 @@ const AIChatbot: React.FC = () => {
       {/* Chat Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-colors duration-200 z-50 flex items-center justify-center"
+        className="fixed bottom-6 right-6 w-14 h-14 bg-accent text-ink-900 rounded-full shadow-lg hover:brightness-90 transition-all duration-200 z-50 flex items-center justify-center"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
@@ -162,34 +162,34 @@ const AIChatbot: React.FC = () => {
               initial={{ scale: 0.8, y: 100 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.8, y: 100 }}
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl h-[32rem] flex flex-col"
+              className="bg-ink-900 border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl h-[32rem] flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between p-4 border-b border-white/10">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
-                    <Bot size={16} className="text-white" />
+                  <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                    <Bot size={16} className="text-ink-900" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Michael's AI Assistant</h3>
-                    <p className="text-sm text-gray-500">Ask me anything!</p>
+                    <h3 className="font-semibold text-white">Michael's AI Assistant</h3>
+                    <p className="text-sm text-white/50">Ask me anything!</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                  className="text-white/50 hover:text-white transition-colors duration-200"
                 >
                   <X size={20} />
                 </button>
               </div>
 
               {/* Prompt Suggestions */}
-              <div className="flex flex-wrap gap-2 px-4 py-2 border-b border-gray-100 bg-gray-50">
+              <div className="flex flex-wrap gap-2 px-4 py-2 border-b border-white/10 bg-white/5">
                 {promptSuggestions.map((prompt, idx) => (
                   <button
                     key={idx}
-                    className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium hover:bg-primary-200 transition-colors duration-200"
+                    className="px-3 py-1 bg-accent/15 text-accent rounded-full text-xs font-medium hover:bg-accent/25 transition-colors duration-200"
                     style={{ cursor: isTyping ? 'not-allowed' : 'pointer' }}
                     disabled={isTyping}
                     onClick={() => {
@@ -214,17 +214,17 @@ const AIChatbot: React.FC = () => {
                     <div
                       className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
                         message.isUser
-                          ? 'bg-primary-600 text-white'
-                          : 'bg-gray-100 text-gray-900'
+                          ? 'bg-accent text-ink-900'
+                          : 'bg-white/10 text-white'
                       }`}
                     >
                       <div className="flex items-start space-x-2">
                         {!message.isUser && (
-                          <Bot size={16} className="text-primary-600 mt-1 flex-shrink-0" />
+                          <Bot size={16} className="text-accent mt-1 flex-shrink-0" />
                         )}
                         <div className="whitespace-pre-line">{message.text}</div>
                         {message.isUser && (
-                          <User size={16} className="text-white mt-1 flex-shrink-0" />
+                          <User size={16} className="text-ink-900 mt-1 flex-shrink-0" />
                         )}
                       </div>
                     </div>
@@ -237,9 +237,9 @@ const AIChatbot: React.FC = () => {
                     animate={{ opacity: 1 }}
                     className="flex justify-start"
                   >
-                    <div className="bg-gray-100 text-gray-900 px-4 py-2 rounded-2xl">
+                    <div className="bg-white/10 text-white px-4 py-2 rounded-2xl">
                       <div className="flex items-center space-x-1">
-                        <Bot size={16} className="text-primary-600" />
+                        <Bot size={16} className="text-accent" />
                         <span>Typing...</span>
                       </div>
                     </div>
@@ -249,7 +249,7 @@ const AIChatbot: React.FC = () => {
               </div>
 
               {/* Input */}
-              <div className="p-4 border-t border-gray-200">
+              <div className="p-4 border-t border-white/10">
                 <div className="flex space-x-2">
                   <input
                     type="text"
@@ -257,13 +257,13 @@ const AIChatbot: React.FC = () => {
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Ask me about Michael's experience..."
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="flex-1 px-4 py-2 bg-white/5 border border-white/15 text-white placeholder-white/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
                     disabled={isTyping}
                   />
                   <button
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim() || isTyping}
-                    className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                    className="px-4 py-2 bg-accent text-ink-900 rounded-lg hover:brightness-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                   >
                     <Send size={16} />
                   </button>

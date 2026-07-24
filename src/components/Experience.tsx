@@ -38,6 +38,14 @@ const Experience: React.FC = () => {
 
   const jobTimeline = [
     {
+      company: "Stellantis Financial Services",
+      title: "Senior Product Owner",
+      period: "2025 - Present",
+      description: "Product ownership for consumer auto-finance platforms — servicing, payments, and lending systems at Stellantis' captive finance arm.",
+      link: "https://www.stellantis-fs.com/",
+      exit: "Current role"
+    },
+    {
       company: "Fyxed",
       title: "Interim CEO",
       period: "2025 - 2025",
@@ -105,7 +113,7 @@ const Experience: React.FC = () => {
       title: "Senior Analyst, Merchandising Finance & Treasury",
       period: "2011 - 2014",
       description: "Share repurchase programs and financial strategy",
-      link: "https://www.modularequity.com/",
+      link: "https://www.homedepot.com/",
       exit: "Departed to obtian diversified experiences within other companies/industries"
     }
   ];
@@ -121,7 +129,7 @@ const Experience: React.FC = () => {
           className="text-center mb-16"
           style={{ color: 'var(--primary)' }}
         >
-          <h2 className="text-4xl font-bold mb-4">Experience & Leadership</h2>
+          <h2 className="display text-4xl md:text-5xl mb-4 text-white">Experience &amp; <span className="accent">Leadership</span></h2>
           <p className="text-xl max-w-3xl mx-auto" style={{ color: 'var(--secondary)' }}>
             Proven track record in executive leadership, strategic decision-making, and organizational transformation with 20+ years of experience
           </p>
@@ -133,9 +141,9 @@ const Experience: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           viewport={{ once: true }}
-          className="bg-white rounded-2xl shadow-lg p-8 mb-12"
+          className="rilla-card p-8 mb-12"
         >
-          <h3 className="text-2xl font-bold mb-6" style={{ color: 'var(--primary)' }}>Professional Timeline</h3>
+          <h3 className="display text-2xl mb-6 text-white">Professional <span className="accent">Timeline</span></h3>
           <div className="space-y-4">
             {jobTimeline.map((job, index) => (
               <motion.div
@@ -144,13 +152,24 @@ const Experience: React.FC = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                className="flex items-start space-x-4 p-4 rounded-lg hover:bg-white/5 transition-colors duration-200"
               >
-                <div className="flex-shrink-0 w-24 text-sm font-medium text-gray-500">{job.period}</div>
+                <div className="flex-shrink-0 w-24 text-sm font-medium text-white/50">{job.period}</div>
                 <div className="flex-1">
-                  <h4 className="font-semibold text-gray-900">{job.title}</h4>
-                  <p className="text-primary-600 font-medium">{job.company}</p>
-                  <p className="text-gray-600 text-sm mt-1">{job.description}</p>
+                  <h4 className="font-semibold text-white">{job.title}</h4>
+                  {job.link ? (
+                    <a
+                      href={job.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block font-medium text-accent underline-offset-2 hover:underline"
+                    >
+                      {job.company}
+                    </a>
+                  ) : (
+                    <p className="font-medium text-accent">{job.company}</p>
+                  )}
+                  <p className="text-white/60 text-sm mt-1">{job.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -163,22 +182,22 @@ const Experience: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           viewport={{ once: true }}
-          className="bg-white rounded-2xl shadow-lg p-8 mb-12"
+          className="rilla-card p-8 mb-12"
         >
           <div className="flex items-center mb-6">
-            <GraduationCap className="w-8 h-8 mr-3" style={{ color: 'var(--primary)' }} />
-            <h3 className="text-2xl font-bold text-gray-900">Education</h3>
+            <GraduationCap className="w-8 h-8 mr-3 text-accent" />
+            <h3 className="display text-2xl text-white">Education</h3>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="border-l-4 pl-6" style={{ borderColor: 'var(--primary)' }}>
-              <h4 className="text-lg font-semibold text-gray-900">Masters of Business Administration</h4>
-              <p className="text-gray-600">Georgia State University</p>
-              <p className="text-gray-500">2011</p>
+            <div className="border-l-4 border-accent pl-6">
+              <h4 className="text-lg font-semibold text-white">Masters of Business Administration</h4>
+              <p className="text-white/60">Georgia State University</p>
+              <p className="text-white/50">2011</p>
             </div>
-            <div className="border-l-4 pl-6" style={{ borderColor: 'var(--primary)' }}>
-              <h4 className="text-lg font-semibold text-gray-900">Bachelors of Computer Science</h4>
-              <p className="text-gray-600">DeVry University</p>
-              <p className="text-gray-500">2008</p>
+            <div className="border-l-4 border-accent pl-6">
+              <h4 className="text-lg font-semibold text-white">Bachelors of Computer Science</h4>
+              <p className="text-white/60">DeVry University</p>
+              <p className="text-white/50">2008</p>
             </div>
           </div>
         </motion.div>
@@ -193,14 +212,14 @@ const Experience: React.FC = () => {
               transition={{ duration: 0.8, delay: index * 0.15, type: "spring", stiffness: 100 }}
               viewport={{ once: true, margin: "-100px" }}
               whileHover={{ y: -5, scale: 1.02 }}
-              className="bg-white rounded-2xl shadow-lg p-8 card-hover"
+              className="rilla-card p-8 card-hover"
             >
               <div className="flex items-start mb-4">
-                <Award className="w-6 h-6 mr-3 mt-1 flex-shrink-0" style={{ color: 'var(--primary)' }} />
+                <Award className="w-6 h-6 mr-3 mt-1 flex-shrink-0 text-accent" />
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                  <p className="text-gray-600 mb-4 italic">"{item.question}"</p>
-                  <p className="text-gray-700 leading-relaxed">{item.answer}</p>
+                  <h3 className="display text-xl text-white mb-2">{item.title}</h3>
+                  <p className="text-white/60 mb-4 italic">"{item.question}"</p>
+                  <p className="text-white/80 leading-relaxed">{item.answer}</p>
                 </div>
               </div>
             </motion.div>

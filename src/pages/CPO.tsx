@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Target, Users, BarChart3, Zap, Globe, Download, Calendar, Linkedin, Github } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Target, Users, BarChart3, Zap, Globe, Download, Calendar } from 'lucide-react';
 import Seo from '../components/Seo';
+import Header from '../components/Header';
 
 const CPO: React.FC = () => {
   const cpoHighlights = [
@@ -46,53 +46,16 @@ const CPO: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
+    <div className="min-h-screen bg-ink-900 text-white">
       <Seo
         title="Fintech Product Leader (CPO) in Atlanta | Michael Kaminski"
         description="Fintech and payments product leadership from an Atlanta operator who is bilingual in product, engineering and finance — GTM 0→1, product analytics and roadmap execution backed by real technical and P&L depth."
         canonicalPath="/cpo"
         breadcrumbName="Fintech Product Leader"
       />
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center space-x-2 text-gray-600 hover:text-primary-600 transition-colors duration-200">
-              <ArrowLeft size={20} />
-              <span>Back to Portfolio</span>
-            </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Michael Kaminski – Chief Product Officer</h1>
-            <div className="flex items-center space-x-4">
-              <a 
-                href="/docs/Kaminski Resume.pdf" 
-                download="Kaminski_Resume.pdf"
-                className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200"
-              >
-                <Download size={16} />
-                <span>CPO Resume</span>
-              </a>
-              <a 
-                href="https://www.linkedin.com/in/michaelxaxkaminski/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-primary-600 transition-colors duration-200"
-              >
-                <Linkedin size={20} />
-              </a>
-              <a 
-                href="https://github.com/MAKaminski" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-primary-600 transition-colors duration-200"
-              >
-                <Github size={20} />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Header />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -100,9 +63,9 @@ const CPO: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-lg text-primary-700 font-semibold mb-4">Michael Kaminski is a strategic Chief Product Officer with a proven track record in product leadership, analytics, and market growth.</p>
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">Chief Product Officer</h2>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg text-accent font-semibold mb-4">Michael Kaminski is a strategic Chief Product Officer with a proven track record in product leadership, analytics, and market growth.</p>
+          <h2 className="display text-5xl text-white mb-6">Chief Product Officer</h2>
+          <p className="text-xl text-white/60 max-w-4xl mx-auto leading-relaxed">
             Strategic product leader with proven track record in building and scaling products 
             from concept to market leadership. Expert in product strategy, user experience, 
             analytics, and driving product-led growth.
@@ -117,10 +80,10 @@ const CPO: React.FC = () => {
           className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
         >
           {keyMetrics.map((metric, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-lg text-center">
-              <h3 className="text-3xl font-bold text-primary-600 mb-2">{metric.value}</h3>
-              <p className="text-lg font-semibold text-gray-900 mb-1">{metric.label}</p>
-              <p className="text-gray-600">{metric.description}</p>
+            <div key={index} className="rilla-card p-6 text-center">
+              <h3 className="text-3xl font-bold text-accent mb-2">{metric.value}</h3>
+              <p className="text-lg font-semibold text-white mb-1">{metric.label}</p>
+              <p className="text-white/60">{metric.description}</p>
             </div>
           ))}
         </motion.div>
@@ -133,20 +96,20 @@ const CPO: React.FC = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="bg-white rounded-2xl shadow-lg p-8"
+              className="rilla-card p-8"
             >
               <div className="flex items-start space-x-6">
-                <div className="bg-primary-100 rounded-xl p-4 flex-shrink-0">
-                  <highlight.icon className="w-8 h-8 text-primary-600" />
+                <div className="bg-accent/15 rounded-xl p-4 flex-shrink-0">
+                  <highlight.icon className="w-8 h-8 text-accent" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3">{highlight.title}</h3>
-                  <p className="text-gray-600 mb-4 leading-relaxed">{highlight.description}</p>
+                  <h3 className="text-2xl font-bold text-white mb-3">{highlight.title}</h3>
+                  <p className="text-white/60 mb-4 leading-relaxed">{highlight.description}</p>
                   <div className="grid md:grid-cols-2 gap-3">
                     {highlight.details.map((detail, detailIndex) => (
                       <div key={detailIndex} className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-primary-500 rounded-full"></div>
-                        <span className="text-gray-700">{detail}</span>
+                        <div className="w-2 h-2 bg-accent rounded-full"></div>
+                        <span className="text-white/80">{detail}</span>
                       </div>
                     ))}
                   </div>
@@ -161,19 +124,19 @@ const CPO: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-16 bg-gradient-to-r from-primary-600 to-primary-700 rounded-2xl p-8 text-center text-white"
+          className="mt-16 rilla-card p-8 text-center"
         >
           <h3 className="text-2xl font-bold mb-4">Ready to Build Your Next Great Product?</h3>
-          <p className="text-primary-100 mb-6 max-w-2xl mx-auto">
-            Let's discuss how my experience in product strategy, user experience, and 
+          <p className="text-white/70 mb-6 max-w-2xl mx-auto">
+            Let's discuss how my experience in product strategy, user experience, and
             data-driven product development can accelerate your product's success.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center">
             <a
               href=""
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200"
+              className="btn-pill-accent"
             >
               <Calendar className="w-5 h-5 mr-2" />
               Book Call
@@ -181,7 +144,7 @@ const CPO: React.FC = () => {
             <a
               href="/docs/Kaminski Resume.pdf"
               download="Kaminski_Resume.pdf"
-              className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors duration-200"
+              className="btn-pill-ghost"
             >
               <Download className="w-5 h-5 mr-2" />
               Download Full Resume
@@ -192,13 +155,13 @@ const CPO: React.FC = () => {
               href="https://calendly.com/kaminski1337/15min"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white text-primary-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+              className="btn-pill-accent"
             >
               Schedule a Call
             </a>
             <a
               href="mailto:mkaminski1337@gmail.com"
-              className="border border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-primary-600 transition-colors duration-200"
+              className="btn-pill-ghost"
             >
               Send Email
             </a>
@@ -209,14 +172,14 @@ const CPO: React.FC = () => {
             href="https://calendly.com/kaminski1337/15min"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors duration-200 text-lg shadow-lg"
+            className="btn-pill-accent"
           >
             Schedule a Call
           </a>
           <a
             href="/docs/Kaminski Resume.pdf"
             download="Kaminski_Resume.pdf"
-            className="inline-flex items-center justify-center px-8 py-4 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-700 transition-colors duration-200 text-lg shadow-lg"
+            className="btn-pill-ghost"
           >
             Download Full Resume
           </a>

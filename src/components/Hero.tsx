@@ -1,375 +1,236 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Download, Mail, Linkedin, Github, Clock, Trophy, TrendingUp } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { Download, Clock, ArrowUpRight, Linkedin, Github } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import { useTheme } from '../App';
 import { Role } from '../App';
-import SocialSharing from './SocialSharing';
+import Marquee from './Marquee';
+import CountUp from './CountUp';
+import SplitReveal from './SplitReveal';
+import Magnetic from './Magnetic';
+
+const RILLA_EASE = [0.445, 0.05, 0.55, 0.95] as const;
 
 const Hero: React.FC = () => {
   const { setTheme, currentRole } = useTheme();
   const navigate = useNavigate();
+  const { scrollY } = useScroll();
+  const yGlow = useTransform(scrollY, [0, 700], [0, 160]);
+  const yPortrait = useTransform(scrollY, [0, 700], [0, -70]);
+  const yGrid = useTransform(scrollY, [0, 700], [0, 80]);
 
-  const roles: { key: Role; label: string; color: string; hover: string }[] = [
-    { key: 'cfo', label: 'CFO', color: 'bg-blue-100 text-blue-700', hover: 'hover:bg-blue-200' },
-    { key: 'cpo', label: 'CPO', color: 'bg-purple-100 text-purple-700', hover: 'hover:bg-purple-200' },
-    { key: 'strategy', label: 'Strategy', color: 'bg-green-100 text-green-700', hover: 'hover:bg-green-200' },
-    { key: 'technology', label: 'Technology', color: 'bg-indigo-100 text-indigo-700', hover: 'hover:bg-indigo-200' },
-    { key: 'revenue', label: 'Revenue', color: 'bg-orange-100 text-orange-700', hover: 'hover:bg-orange-200' },
+  const roles: { key: Role; label: string }[] = [
+    { key: 'cfo', label: 'CFO' },
+    { key: 'cpo', label: 'CPO' },
+    { key: 'strategy', label: 'Strategy' },
+    { key: 'technology', label: 'Technology' },
+    { key: 'revenue', label: 'Revenue' },
   ];
 
   const stats = [
-    { icon: Clock, label: 'Years Experience', value: '20+' },
-    { icon: Trophy, label: 'Successful Exits', value: '3' },
-    { icon: TrendingUp, label: 'Revenue Impact', value: '$50M+' },
+    { to: 20, suffix: '+', label: 'Years across finance & engineering' },
+    { to: 3, suffix: '', label: 'Successful exits' },
+    { prefix: '$', to: 10.8, decimals: 1, suffix: 'B+', label: 'Transactions led' },
   ];
 
   const handleRoleClick = (role: Role, path: string) => {
     setTheme(role);
     navigate(path);
-    track('Role Page Visited', { role: role, path: path });
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
+    track('Role Page Visited', { role, path });
   };
 
   return (
-    <section className="relative pt-28 pb-16 overflow-hidden">
-      {/* Enhanced Background with Multiple Gradients */}
-      <div className="absolute inset-0">
+    <section className="relative overflow-hidden bg-ink-900 text-white pt-28 pb-16">
+      {/* Spotlight + grid backdrop (parallax) */}
+      <div className="pointer-events-none absolute inset-0">
         <motion.div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
-              linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%)
-            `,
-          }}
-          animate={{
-            background: [
-              `radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-               radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
-               linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%)`,
-              `radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-               radial-gradient(circle at 30% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
-               linear-gradient(135deg, rgba(236, 72, 153, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%)`,
-              `radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-               radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
-               linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%)`,
-            ],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            repeatType: 'reverse',
-          }}
-        />
-        {/* Floating Geometric Shapes */}
+          style={{ y: yGrid }}
+          className="absolute inset-0 opacity-[0.15]"
+        >
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                'linear-gradient(to right, rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.6) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+              maskImage: 'radial-gradient(ellipse at 50% 0%, black 30%, transparent 75%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at 50% 0%, black 30%, transparent 75%)',
+            }}
+          />
+        </motion.div>
         <motion.div
-          className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-xl"
-          animate={{
-            x: [0, 30, 0],
-            y: [0, -20, 0],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            repeatType: 'reverse',
-          }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-20 w-24 h-24 bg-gradient-to-br from-pink-400/20 to-indigo-400/20 rounded-full blur-xl"
-          animate={{
-            x: [0, -25, 0],
-            y: [0, 15, 0],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            repeatType: 'reverse',
-          }}
+          style={{ y: yGlow }}
+          className="absolute -top-40 left-1/2 h-[520px] w-[720px] -translate-x-1/2 rounded-full bg-accent/20 blur-[140px]"
         />
       </div>
 
       <div className="relative max-w-7xl mx-auto section-padding">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-3xl mx-auto"
-        >
-          {/* Main Content */}
-          <div className="flex flex-col items-center space-y-7">
-            {/* Profile Image with Enhanced Styling */}
-            <motion.div
-              variants={itemVariants}
-              className="relative"
-            >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-2xl opacity-20"
-                animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.2, 0.3, 0.2],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  repeatType: 'reverse',
-                }}
-              />
-              <picture>
-                <source srcSet="/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c-960.webp" type="image/webp" />
-                <img
-                  src="/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c.jpeg"
-                  alt="Michael Kaminski"
-                  width={192}
-                  height={192}
-                  decoding="async"
-                  className="relative w-48 h-48 rounded-full object-cover shadow-2xl border-4 border-white ring-4 ring-blue-500/20"
-                />
-              </picture>
-              <motion.div
-                className="absolute -bottom-2 -right-2 bg-gradient-to-r from-green-400 to-blue-500 text-white p-3 rounded-full shadow-lg"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-              >
-                <Trophy className="w-6 h-6" />
-              </motion.div>
-            </motion.div>
-
-            {/* Enhanced Typography */}
-            <motion.div variants={itemVariants} className="text-center space-y-4">
-              <h1 className="text-5xl md:text-7xl font-black tracking-tight">
-                <span className="bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
-                  Michael
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  Kaminski
-                </span>
-              </h1>
-              <motion.h2
-                className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5, duration: 0.6 }}
-              >
-                Fintech Finance &amp; Engineering Leader
-              </motion.h2>
-              <motion.p
-                className="text-xl font-semibold text-gray-700"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.7, duration: 0.6 }}
-              >
-                Atlanta · Fluent in both the boardroom and the codebase
-              </motion.p>
-            </motion.div>
-
-            {/* Stats Section */}
-            <motion.div 
-              variants={itemVariants}
-              className="grid grid-cols-3 gap-6 w-full max-w-md"
-            >
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={index}
-                  className="text-center p-4 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-100"
-                  whileHover={{ 
-                    scale: 1.05,
-                    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
-                  }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <stat.icon className="w-8 h-8 mx-auto mb-2 text-blue-600" />
-                  <motion.div 
-                    className="text-2xl font-bold text-gray-900"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.5 + index * 0.1, type: "spring", stiffness: 200 }}
-                  >
-                    {stat.value}
-                  </motion.div>
-                  <p className="text-sm text-gray-600 font-medium">{stat.label}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Enhanced Description */}
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+          {/* Left — the statement */}
+          <div className="lg:col-span-7">
             <motion.p
-              variants={itemVariants}
-              className="text-lg text-gray-700 leading-relaxed max-w-2xl"
+              className="mb-5 flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-white/60 uppercase"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: RILLA_EASE }}
             >
-              Michael Kaminski is an Atlanta-based fintech leader who is fluent in
-              <span className="font-semibold text-blue-700"> PE-grade finance</span> and
-              <span className="font-semibold text-purple-700"> hands-on software engineering</span> — a
-              rare combination. Across 20+ years at
-              <span className="font-semibold text-indigo-700"> GreenSky, Home Depot, HD Supply, KPMG</span> and
-              fintech startups, he builds the financial models a private-equity board expects and ships the
-              software that runs the product, turning complexity into
-              <span className="font-semibold text-green-700"> measurable business value</span>.
+              <span className="h-2 w-2 rounded-full bg-accent" />
+              Michael Kaminski · Atlanta
             </motion.p>
 
-            {/* Credibility strip — where the proof comes from */}
-            <motion.div variants={itemVariants} className="w-full max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3 text-center">
-                Experience across
-              </p>
-              <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center">
-                {['GreenSky', 'Home Depot', 'HD Supply', 'KPMG', 'Momnt', 'Property Walk'].map((company) => (
-                  <span key={company} className="text-base font-bold text-gray-700">
-                    {company}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
+            <h1 className="display text-[15vw] leading-[0.86] sm:text-7xl lg:text-8xl xl:text-[6.4rem]">
+              <SplitReveal
+                immediate
+                delay={0.15}
+                lines={[
+                  'Fintech',
+                  <>Finance <span className="accent">+</span> Engineering</>,
+                  'Leader',
+                ]}
+              />
+            </h1>
 
-            {/* Enhanced Social Links */}
-            <motion.div variants={itemVariants} className="flex space-x-4">
-              {[
-                { icon: Linkedin, href: "https://www.linkedin.com/in/michaelxaxkaminski/", color: "from-blue-600 to-blue-700" },
-                { icon: Github, href: "https://github.com/MAKaminski", color: "from-gray-700 to-gray-900" },
-              ].map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.href}
+            <motion.p
+              className="mt-7 max-w-xl text-lg text-white/70"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, ease: RILLA_EASE, delay: 0.5 }}
+            >
+              Fluent in both the boardroom and the codebase. I build the financial model a
+              private-equity board expects — and ship the software that runs the product.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              className="mt-9 flex flex-wrap items-center gap-4"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: RILLA_EASE, delay: 0.6 }}
+            >
+              <Magnetic>
+                <a
+                  href="https://calendly.com/kaminski1337/15min"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center justify-center w-14 h-14 bg-gradient-to-r ${social.color} text-white rounded-xl shadow-lg`}
-                  whileHover={{ 
-                    scale: 1.1, 
-                    rotate: 5,
-                    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 300 }}
+                  onClick={() => track('Calendar Link Clicked', { source: 'Hero' })}
+                  className="btn-pill-accent text-base"
                 >
-                  <social.icon className="w-7 h-7" />
-                </motion.a>
-              ))}
-            </motion.div>
-
-            {/* Enhanced CTAs */}
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 w-full max-w-lg">
-              {[
-                {
-                  href: "/docs/Kaminski Resume.pdf",
-                  download: "Kaminski_Resume.pdf",
-                  icon: Download,
-                  text: "Download Resume",
-                  primary: true,
-                  gradient: "from-blue-600 to-purple-600",
-                  onClick: () => track('Resume Downloaded', { source: 'Hero Section' })
-                },
-                {
-                  href: "#contact",
-                  icon: Mail,
-                  text: "Contact Me",
-                  primary: false,
-                  onClick: () => track('Contact Section Clicked', { source: 'Hero Section' })
-                },
-                {
-                  href: "https://calendly.com/kaminski1337/15min",
-                  target: "_blank",
-                  icon: Clock,
-                  text: "Book Call",
-                  primary: true,
-                  gradient: "from-green-600 to-emerald-600",
-                  onClick: () => track('Calendar Link Clicked', { source: 'Hero Section' })
-                },
-              ].map((cta, index) => (
-                <motion.a
-                  key={index}
-                  {...cta}
-                  className={`inline-flex items-center justify-center px-6 py-4 font-bold rounded-xl transition-all duration-200 text-center flex-1 ${
-                    cta.primary
-                      ? `bg-gradient-to-r ${cta.gradient} text-white shadow-lg hover:shadow-xl`
-                      : "border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
-                  }`}
-                  whileHover={{ 
-                    scale: 1.02,
-                    y: -2,
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={cta.onClick}
+                  <Clock className="w-5 h-5" /> Book a Call
+                </a>
+              </Magnetic>
+              <Magnetic>
+                <a
+                  href="/docs/Kaminski Resume.pdf"
+                  download="Kaminski_Resume.pdf"
+                  onClick={() => track('Resume Downloaded', { source: 'Hero' })}
+                  className="btn-pill-ghost text-base"
                 >
-                  <cta.icon className="w-5 h-5 mr-2" />
-                  {cta.text}
-                </motion.a>
-              ))}
-            </motion.div>
-
-            {/* Enhanced Role Selector */}
-            <motion.div variants={itemVariants} className="w-full max-w-2xl">
-              <h4 className="text-xl font-bold text-gray-900 mb-6 text-center">
-                View My Experience By Role:
-              </h4>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                {roles.map((role, index) => (
-                  <motion.button
-                    key={role.key}
-                    onClick={() => handleRoleClick(role.key, `/${role.key}`)}
-                    className={`px-4 py-3 rounded-xl transition-all duration-200 text-center text-sm font-bold focus:outline-none relative overflow-hidden ${
-                      currentRole === role.key ? 'ring-2 ring-offset-2 ring-blue-500' : ''
-                    }`}
-                    style={currentRole === role.key
-                      ? { background: 'linear-gradient(135deg, var(--primary), var(--secondary))', color: '#fff' }
-                      : { background: 'rgba(255, 255, 255, 0.8)', color: '#374151', border: '2px solid #e5e7eb' }}
-                    whileHover={{ 
-                      scale: 1.05,
-                      boxShadow: "0 10px 20px -5px rgba(0, 0, 0, 0.1)"
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 + index * 0.1, type: "spring", stiffness: 200 }}
-                  >
-                    {currentRole === role.key && (
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-90"
-                        layoutId="activeRole"
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      />
-                    )}
-                    <span className="relative z-10">{role.label}</span>
-                  </motion.button>
-                ))}
+                  <Download className="w-5 h-5" /> Resume
+                </a>
+              </Magnetic>
+              <div className="flex items-center gap-2 pl-1">
+                <Magnetic strength={0.5}>
+                  <a href="https://www.linkedin.com/in/michaelxaxkaminski/" target="_blank" rel="noopener noreferrer"
+                     className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-accent hover:text-accent" aria-label="LinkedIn">
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                </Magnetic>
+                <Magnetic strength={0.5}>
+                  <a href="https://github.com/MAKaminski" target="_blank" rel="noopener noreferrer"
+                     className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-accent hover:text-accent" aria-label="GitHub">
+                    <Github className="w-5 h-5" />
+                  </a>
+                </Magnetic>
               </div>
             </motion.div>
 
-            {/* Social Sharing */}
-            <motion.div variants={itemVariants}>
-              <SocialSharing />
+            {/* Stats */}
+            <motion.div
+              className="mt-12 grid grid-cols-3 gap-6 max-w-xl"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: RILLA_EASE, delay: 0.7 }}
+            >
+              {stats.map((s, i) => (
+                <div key={i}>
+                  <div className="display accent text-4xl sm:text-5xl">
+                    <CountUp to={s.to} prefix={s.prefix} suffix={s.suffix} decimals={s.decimals} />
+                  </div>
+                  <div className="mt-2 text-xs sm:text-sm text-white/65 leading-snug">{s.label}</div>
+                </div>
+              ))}
             </motion.div>
           </div>
 
-        </motion.div>
+          {/* Right — portrait (clip-path reveal + parallax) */}
+          <div className="lg:col-span-5">
+            <motion.div className="relative mx-auto max-w-sm" style={{ y: yPortrait }}>
+              <div className="absolute -inset-3 rounded-[26px] bg-accent/20 blur-2xl" />
+              <motion.div
+                initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
+                animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+                transition={{ duration: 1, ease: RILLA_EASE, delay: 0.35 }}
+                className="relative"
+              >
+                <picture>
+                  <source srcSet="/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c.webp" type="image/webp" />
+                  <img
+                    src="/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c.jpeg"
+                    alt="Michael Kaminski"
+                    width={440}
+                    height={520}
+                    decoding="async"
+                    className="w-full rounded-[22px] object-cover border-4 border-accent shadow-2xl"
+                  />
+                </picture>
+              </motion.div>
+              <motion.div
+                className="absolute -bottom-4 -left-4 rounded-full bg-accent px-5 py-2 text-sm font-bold text-ink-900 shadow-lg"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, ease: RILLA_EASE, delay: 1 }}
+              >
+                Open to fractional & full-time
+              </motion.div>
+            </motion.div>
+
+            {/* Role selector */}
+            <motion.div
+              className="mt-10"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: RILLA_EASE, delay: 0.8 }}
+            >
+              <p className="mb-3 text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
+                View by role
+              </p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {roles.map((role) => (
+                  <button
+                    key={role.key}
+                    onClick={() => handleRoleClick(role.key, `/${role.key}`)}
+                    className={`inline-flex items-center gap-1 rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                      currentRole === role.key
+                        ? 'border-accent bg-accent text-ink-900'
+                        : 'border-white/15 text-white/80 hover:border-accent hover:text-accent'
+                    }`}
+                  >
+                    {role.label} <ArrowUpRight className="w-3.5 h-3.5" />
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* Company marquee (scroll-velocity skew) */}
+      <div className="relative mt-16 border-y border-white/10 py-6">
+        <Marquee items={['GreenSky', 'Home Depot', 'HD Supply', 'KPMG', 'Momnt', 'Property Walk']} />
       </div>
     </section>
   );
 };
 
-export default Hero; 
+export default Hero;
