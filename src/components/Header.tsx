@@ -18,12 +18,13 @@ const Header: React.FC = () => {
   );
   const headerBlur = useTransform(scrollY, [0, 100], ['blur(0px)', 'blur(20px)']);
 
+  // Absolute /#… anchors so nav works from any route (not just the home page).
   const navItems = [
-    { name: 'Impact', href: '#transactions' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Testimonials', href: '#testimonials' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Impact', href: '/#transactions' },
+    { name: 'Experience', href: '/#experience' },
+    { name: 'Skills', href: '/#skills' },
+    { name: 'Testimonials', href: '/#testimonials' },
+    { name: 'Contact', href: '/#contact' },
   ];
 
   const additionalNavItems: { name: string; href: string }[] = [
@@ -55,54 +56,19 @@ const Header: React.FC = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo Section */}
+          {/* Wordmark — links home from any page */}
           <motion.div
             className="flex-shrink-0 mr-6"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="flex items-center space-x-3">
-              <motion.div
-                className="relative"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 0.6 }}
-              >
-                <img
-                  src="/images/4C877C83-2066-4555-9EBC-977D482075DC_4_5005_c.jpeg"
-                  alt="Michael Kaminski"
-                  className="w-10 h-10 rounded-full object-cover border-2 border-accent shadow-lg"
-                />
-                <motion.div
-                  className="absolute -top-1 -right-1 w-4 h-4 bg-accent rounded-full"
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [1, 0.7, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                />
-              </motion.div>
-              <div>
-                <motion.h1
-                  className="text-xl font-bold text-white"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                >
-                  Michael Kaminski
-                </motion.h1>
-                <motion.p
-                  className="text-xs text-white/50 font-medium"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                >
-                  Fintech · Finance · Engineering
-                </motion.p>
-              </div>
-            </div>
+            <Link to="/" className="group flex items-center gap-2.5" aria-label="Michael Kaminski — home">
+              <span className="h-2.5 w-2.5 rounded-full bg-accent transition-transform duration-200 group-hover:scale-125" />
+              <span className="text-xl font-bold tracking-tight text-white transition-colors duration-200 group-hover:text-accent">
+                Michael Kaminski
+              </span>
+            </Link>
           </motion.div>
           
           {/* Desktop Navigation */}
@@ -119,7 +85,7 @@ const Header: React.FC = () => {
               >
                 {item.name}
                 <motion.div
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
                 />
               </motion.a>
             ))}
