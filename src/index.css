@@ -19,6 +19,13 @@
     background: #fff500;
     color: #060606;
   }
+
+  /* Hide native cursor only when the custom cursor is mounted (fine pointers) */
+  body.has-custom-cursor,
+  body.has-custom-cursor a,
+  body.has-custom-cursor button {
+    cursor: none;
+  }
 }
 
 @layer components {

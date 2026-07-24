@@ -4,6 +4,8 @@ import { MotionConfig } from 'framer-motion';
 import { Analytics } from '@vercel/analytics/react';
 import { initGA } from './utils/analytics';
 import Seo from './components/Seo';
+import SmoothScroll from './components/SmoothScroll';
+import Cursor from './components/Cursor';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Experience from './components/Experience';
@@ -127,6 +129,8 @@ function App() {
   return (
     <ThemeProvider>
       <MotionConfig reducedMotion="user">
+      <SmoothScroll>
+      <Cursor />
       <Router>
         <ThemeContext.Consumer>
           {({ theme }) => (
@@ -169,6 +173,7 @@ function App() {
           )}
         </ThemeContext.Consumer>
       </Router>
+      </SmoothScroll>
       </MotionConfig>
     </ThemeProvider>
   );
