@@ -4,6 +4,8 @@ import { MotionConfig } from 'framer-motion';
 import { Analytics } from '@vercel/analytics/react';
 import { initGA } from './utils/analytics';
 import Seo from './components/Seo';
+import SmoothScroll from './components/SmoothScroll';
+import Cursor from './components/Cursor';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Experience from './components/Experience';
@@ -50,37 +52,23 @@ type ThemeContextType = {
   currentRole: Role;
 };
 
+// The whole site is on one dark editorial theme now, so every role shares the
+// same dark palette. (Previously each role had a light background, which leaked
+// onto the home page whenever a role was selected/persisted — turning sections
+// pastel on back/reload. Keeping all presets dark makes that impossible.)
+const DARK_THEME: Theme = {
+  primary: '#fff500', // Rilla electric yellow
+  secondary: '#a3a3a3',
+  bg: '#060606',
+};
+
 const themePresets: Record<Role, Theme> = {
-  default: {
-    primary: '#fff500', // Rilla electric yellow
-    secondary: '#a3a3a3',
-    bg: '#060606',
-  },
-  cfo: {
-    primary: '#1d4ed8', // deep blue - high contrast
-    secondary: '#f59e0b', // amber - high visibility
-    bg: '#f0f9ff',
-  },
-  cpo: {
-    primary: '#7c3aed', // vibrant purple - high contrast
-    secondary: '#ec4899', // pink - high visibility
-    bg: '#faf5ff',
-  },
-  strategy: {
-    primary: '#059669', // emerald green - high contrast
-    secondary: '#fbbf24', // yellow - high visibility
-    bg: '#f0fdf4',
-  },
-  technology: {
-    primary: '#4f46e5', // indigo - high contrast
-    secondary: '#06b6d4', // cyan - high visibility
-    bg: '#f5f3ff',
-  },
-  revenue: {
-    primary: '#dc2626', // red - high contrast
-    secondary: '#f59e0b', // amber - high visibility
-    bg: '#fef2f2',
-  },
+  default: DARK_THEME,
+  cfo: DARK_THEME,
+  cpo: DARK_THEME,
+  strategy: DARK_THEME,
+  technology: DARK_THEME,
+  revenue: DARK_THEME,
 };
 
 const ThemeContext = createContext<ThemeContextType>({
@@ -127,6 +115,8 @@ function App() {
   return (
     <ThemeProvider>
       <MotionConfig reducedMotion="user">
+      <SmoothScroll>
+      <Cursor />
       <Router>
         <ThemeContext.Consumer>
           {({ theme }) => (
@@ -169,6 +159,7 @@ function App() {
           )}
         </ThemeContext.Consumer>
       </Router>
+      </SmoothScroll>
       </MotionConfig>
     </ThemeProvider>
   );

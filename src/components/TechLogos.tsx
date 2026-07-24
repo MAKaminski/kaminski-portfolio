@@ -172,6 +172,41 @@ const TechLogo: React.FC<TechLogoProps> = ({ name, className = "w-8 h-8" }) => {
     // CI/CD & DevOps
     'YAML': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/yaml/yaml-original.svg',
     'GitHub Actions': 'https://avatars.githubusercontent.com/u/44036562?s=200&v=4',
+    'Kubernetes': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg',
+    'Serverless': 'https://cdn.worldvectorlogo.com/logos/serverless.svg',
+
+    // Backend / data extras (exact skill-string keys)
+    'GraphQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg',
+    'MongoDB': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+    'Prisma': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg',
+    'Airflow': 'https://airflow.apache.org/images/airflow_logo.png',
+    'dbt': 'https://www.getdbt.com/favicon.ico',
+    'Power BI': 'https://cdn.worldvectorlogo.com/logos/power-bi-2.svg',
+
+    // AI tooling
+    'Claude': 'https://claude.ai/favicon.ico',
+    'Claude Code': 'https://claude.ai/favicon.ico',
+    'Cursor': 'https://www.cursor.com/favicon.ico',
+    'DeepSeek': 'https://www.deepseek.com/favicon.ico',
+    'Kimi': 'https://statics.moonshot.cn/kimi-web/favicon.ico',
+    'LangChain': 'https://avatars.githubusercontent.com/u/126733545?s=200&v=4',
+
+    // Finance & payments
+    'Plaid': 'https://plaid.com/favicon.ico',
+    'Stripe': 'https://cdn.worldvectorlogo.com/logos/stripe-4.svg',
+    'Interactive Brokers': 'https://www.interactivebrokers.com/images/web/logos/ib-logo-stacked.svg',
+
+    // SEO / growth
+    'Google Search Console': 'https://www.gstatic.com/search-console/scfe/search_console-64.png',
+
+    // Product & collaboration
+    'Jira': 'https://cdn.worldvectorlogo.com/logos/jira-1.svg',
+    'Linear': 'https://asset.brandfetch.io/idZAyF9rlg/idYYbGOZ3W.png',
+    'Canva': 'https://cdn.worldvectorlogo.com/logos/canva-1.svg',
+    'Gamma': 'https://gamma.app/favicon.ico',
+    'Resend': 'https://resend.com/favicon.ico',
+    'Shopify': 'https://cdn.worldvectorlogo.com/logos/shopify.svg',
+    'PostHog': 'https://posthog.com/favicon.ico',
   };
 
   const logoUrl = logos[name];
@@ -188,7 +223,7 @@ const TechLogo: React.FC<TechLogoProps> = ({ name, className = "w-8 h-8" }) => {
           target.style.display = 'none';
           const parent = target.parentElement;
           if (parent) {
-            parent.innerHTML = `<span class="text-sm font-medium text-gray-700">${name}</span>`;
+            parent.innerHTML = `<span class="text-xs font-medium text-white/70">${name}</span>`;
           }
         }}
       />
