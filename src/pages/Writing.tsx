@@ -32,6 +32,11 @@ const Writing: React.FC = () => {
               to={`/writing/${a.slug}`}
               className="block rilla-card hover:border-white/25 transition-colors p-8"
             >
+              {a.series && (
+                <span className="inline-block mb-2 text-xs font-bold uppercase tracking-wide text-accent bg-white/10 rounded-full px-3 py-1">
+                  {a.series}
+                </span>
+              )}
               <div className="flex items-center gap-3 text-sm text-white/50 mb-2">
                 <time dateTime={a.date}>
                   {new Date(a.date + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}

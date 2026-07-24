@@ -4,6 +4,8 @@ export interface Article {
   description: string;
   date: string; // ISO
   readMinutes: number;
+  /** Optional series label, e.g. "Behind the Build, Vol. 3" */
+  series?: string;
   /** Author-controlled HTML body (rendered via dangerouslySetInnerHTML). */
   body: string;
 }
@@ -60,6 +62,56 @@ that decide whether an early fintech survives the gap between seed and a real re
 <p>I've spent my career at the finance-and-engineering intersection this city is unusually good at
 producing — from the big processors and lenders to hands-on fintech product work. If you're building in
 Atlanta and want a sounding board, <a href="https://calendly.com/kaminski1337/15min">grab 15 minutes</a>.</p>
+`,
+  },
+  {
+    slug: 'behind-the-build-vol-1-teaching-robots-to-read-my-resume',
+    title: 'I Spent a Day Teaching Robots How to Read My Résumé (So You Don\'t Have To)',
+    description:
+      'Behind the Build, Vol. 1: a lighthearted look at the SEO/AEO overhaul of this very site — JSON-LD schema soup, an llms.txt for AI crawlers, and the great WebP-ification of my own face.',
+    date: '2026-07-23',
+    readMinutes: 4,
+    series: 'Behind the Build, Vol. 1',
+    body: `
+<p>Welcome to <strong>Behind the Build</strong>, a new (and hopefully ongoing) series where I write up
+whatever I actually shipped on this site recently — bugs, refactors, questionable decisions, all of it.
+No commits landed today, which in software is its own kind of milestone: the code sat still long enough
+for me to admire it. So Vol. 1 goes to the project still fresh in memory — the weekend I decided this
+portfolio needed to be legible to robots, not just recruiters.</p>
+
+<h2>The problem: humans could read my site, but the bots were squinting</h2>
+<p>Search engines have always crawled pages. The newer wrinkle is that <em>AI</em> crawlers — the ones
+summarizing your site into a chatbot's answer — want something closer to a structured briefing than a
+web page. So I went down the rabbit hole of "answer engine optimization" (AEO), which is SEO's younger
+cousin who reads faster and asks more questions.</p>
+
+<h2>What actually happened</h2>
+<ul>
+<li><strong>JSON-LD schema soup:</strong> I bolted <code>ProfilePage</code>, <code>Person</code>,
+<code>FAQPage</code>, and <code>BreadcrumbList</code> structured data onto every route. Nothing visually
+changes for a human visitor — it's a love letter written entirely for parsers.</li>
+<li><strong>An llms.txt file:</strong> yes, that's a real thing now — a plain-text cheat sheet for AI
+crawlers, sitting right next to robots.txt like a considerate roommate.</li>
+<li><strong>Domain consolidation:</strong> I collapsed a handful of near-duplicate canonical URLs into one,
+which sounds boring until you realize duplicate content is basically the site telling search engines
+"pick a favorite, I don't care," and they take you up on it in the worst way.</li>
+<li><strong>Recruiter-first restructure:</strong> cut the page from 14 sections down to 6. Turns out
+"more sections" was never the same thing as "more compelling," a lesson every founder relearns at least
+once a quarter.</li>
+<li><strong>The Great WebP-ification:</strong> every headshot and referral photo got converted to WebP,
+including several pictures of my own face, which is a strange thing to watch a build pipeline compress
+and re-encode at 2am.</li>
+<li><strong>Deleted a stale wrangler.toml:</strong> a Cloudflare config file nobody had touched in ages,
+quietly doing nothing, like a gym membership I keep meaning to cancel.</li>
+</ul>
+
+<h2>The lesson</h2>
+<p>The unglamorous work — canonical URLs, crawler manifests, deleting dead config — is the stuff that
+actually compounds. Nobody screenshots a robots.txt file for LinkedIn, but it's the difference between an
+AI answer engine describing your work accurately and it just making something up because your site gave
+it nothing to work with. Sometimes the best commit really is the boring one.</p>
+
+<p>Next time in Behind the Build: whatever breaks next. Stay tuned.</p>
 `,
   },
   {
@@ -203,6 +255,17 @@ the gap in your team, <a href="https://calendly.com/kaminski1337/15min">let's ta
 `,
   },
 ];
+
+const seenDates = new Map<string, string>();
+for (const a of articles) {
+  const priorSlug = seenDates.get(a.date);
+  if (priorSlug) {
+    throw new Error(
+      `articles.ts: only one article per day is allowed, but "${priorSlug}" and "${a.slug}" are both dated ${a.date}.`
+    );
+  }
+  seenDates.set(a.date, a.slug);
+}
 
 export const getArticle = (slug: string): Article | undefined =>
   articles.find((a) => a.slug === slug);
