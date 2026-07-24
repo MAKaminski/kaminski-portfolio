@@ -6,14 +6,46 @@
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: linear-gradient(to bottom right, #fafbff, #f0f9ff);
+    font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    background: #060606;
+    color: #f4f4f5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: #fff500;
+    color: #060606;
   }
 }
 
 @layer components {
+  /* ---- Rilla-inspired system ---- */
+  .display {
+    font-family: 'Anton', 'Archivo Black', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.005em;
+    line-height: 0.9;
+    font-weight: 400;
+  }
+  .accent {
+    color: #fff500;
+  }
+  .btn-pill-accent {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-bold px-7 py-3.5 bg-accent text-ink-900 transition-all duration-200 hover:brightness-90 hover:-translate-y-0.5;
+  }
+  .btn-pill-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-bold px-7 py-3.5 border-2 border-white/25 text-white transition-all duration-200 hover:bg-white hover:text-ink-900 hover:-translate-y-0.5;
+  }
+  .rilla-card {
+    @apply rounded-rilla border border-white/10 bg-white/[0.04];
+  }
+  .rilla-chip {
+    @apply inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm text-zinc-200;
+  }
+
   .gradient-text {
     @apply bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent;
   }
@@ -143,6 +175,14 @@
     100% {
       transform: translateX(100%);
     }
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee 32s linear infinite;
   }
 
   @keyframes glow {

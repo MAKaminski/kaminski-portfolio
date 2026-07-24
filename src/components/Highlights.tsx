@@ -48,7 +48,7 @@ const Highlights: React.FC = () => {
           className="text-center mb-16"
           style={{ color: 'var(--primary)' }}
         >
-          <h2 className="text-4xl font-bold mb-4">Career Highlights</h2>
+          <h2 className="display text-4xl md:text-5xl mb-4 text-white">Career <span className="accent">Highlights</span></h2>
           <p className="text-xl max-w-3xl mx-auto" style={{ color: 'var(--secondary)' }}>
             Key achievements and milestones from my executive and technical career
           </p>

@@ -7,9 +7,9 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { scrollY } = useScroll();
   const headerBackground = useTransform(
-    scrollY, 
-    [0, 100], 
-    ['rgba(255, 255, 255, 0.80)', 'rgba(255, 255, 255, 0.95)']
+    scrollY,
+    [0, 100],
+    ['rgba(6, 6, 6, 0.55)', 'rgba(6, 6, 6, 0.9)']
   );
   const headerShadow = useTransform(
     scrollY, 
@@ -42,12 +42,12 @@ const Header: React.FC = () => {
         backgroundColor: headerBackground,
         boxShadow: headerShadow,
         backdropFilter: headerBlur,
-        borderColor: 'rgba(59, 130, 246, 0.2)',
+        borderColor: 'rgba(255, 255, 255, 0.1)',
       }}
     >
-      {/* Decorative gradient line */}
+      {/* Decorative accent line */}
       <motion.div
-        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
+        className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ duration: 1, delay: 0.5 }}
@@ -70,10 +70,10 @@ const Header: React.FC = () => {
                 <img
                   src="/images/4C877C83-2066-4555-9EBC-977D482075DC_4_5005_c.jpeg"
                   alt="Michael Kaminski"
-                  className="w-10 h-10 rounded-full object-cover border-2 border-blue-500 shadow-lg"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-accent shadow-lg"
                 />
                 <motion.div
-                  className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-400 to-blue-500 rounded-full"
+                  className="absolute -top-1 -right-1 w-4 h-4 bg-accent rounded-full"
                   animate={{
                     scale: [1, 1.2, 1],
                     opacity: [1, 0.7, 1],
@@ -85,8 +85,8 @@ const Header: React.FC = () => {
                 />
               </motion.div>
               <div>
-                <motion.h1 
-                  className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+                <motion.h1
+                  className="text-xl font-bold text-white"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
@@ -94,7 +94,7 @@ const Header: React.FC = () => {
                   Michael Kaminski
                 </motion.h1>
                 <motion.p
-                  className="text-xs text-gray-500 font-medium"
+                  className="text-xs text-white/50 font-medium"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
@@ -111,7 +111,7 @@ const Header: React.FC = () => {
               <motion.a
                 key={item.name}
                 href={item.href}
-                className="relative whitespace-nowrap text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium group"
+                className="relative whitespace-nowrap text-white/75 hover:text-accent transition-colors duration-200 font-medium group"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 * index }}
@@ -132,11 +132,11 @@ const Header: React.FC = () => {
               >
                 <Link
                   to={item.href}
-                  className="relative whitespace-nowrap text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium group"
+                  className="relative whitespace-nowrap text-white/75 hover:text-accent transition-colors duration-200 font-medium group"
                 >
                   {item.name}
                   <motion.div
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
                   />
                 </Link>
               </motion.div>
@@ -145,8 +145,7 @@ const Header: React.FC = () => {
             {/* Enhanced Book a Call Button */}
             <motion.button
               onClick={handleScheduleCall}
-              className="relative flex flex-shrink-0 items-center whitespace-nowrap space-x-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
-              style={{ backgroundSize: '200% 100%' }}
+              className="relative flex flex-shrink-0 items-center whitespace-nowrap space-x-2 px-5 py-2.5 bg-accent text-ink-900 rounded-full font-bold shadow-lg hover:brightness-90 transition-all duration-200 overflow-hidden group"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.8 }}
@@ -188,7 +187,7 @@ const Header: React.FC = () => {
           >
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="relative p-2 text-gray-700 hover:text-blue-600 transition-colors duration-200 rounded-lg hover:bg-blue-50"
+              className="relative p-2 text-white hover:text-accent transition-colors duration-200 rounded-lg hover:bg-white/10"
             >
               <motion.div
                 animate={{ rotate: isMenuOpen ? 180 : 0 }}
@@ -211,7 +210,7 @@ const Header: React.FC = () => {
           className="md:hidden overflow-hidden"
         >
           <motion.div
-            className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/80 backdrop-blur-lg border-t border-gray-200/50 rounded-b-2xl shadow-lg"
+            className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-ink-900/95 backdrop-blur-lg border-t border-white/10 rounded-b-2xl shadow-lg"
             initial={{ y: -20 }}
             animate={{ y: isMenuOpen ? 0 : -20 }}
             transition={{ duration: 0.3, delay: 0.1 }}
@@ -220,7 +219,7 @@ const Header: React.FC = () => {
               <motion.a
                 key={item.name}
                 href={item.href}
-                className="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium rounded-lg"
+                className="block px-4 py-3 text-white/80 hover:text-accent hover:bg-white/5 transition-all duration-200 font-medium rounded-lg"
                 onClick={() => setIsMenuOpen(false)}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: isMenuOpen ? 1 : 0, x: isMenuOpen ? 0 : -20 }}
@@ -239,7 +238,7 @@ const Header: React.FC = () => {
               >
                 <Link
                   to={item.href}
-                  className="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium rounded-lg"
+                  className="block px-4 py-3 text-white/80 hover:text-accent hover:bg-white/5 transition-all duration-200 font-medium rounded-lg"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
@@ -253,7 +252,7 @@ const Header: React.FC = () => {
                 handleScheduleCall();
                 setIsMenuOpen(false);
               }}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-bold shadow-lg mt-4"
+              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-accent text-ink-900 rounded-full hover:brightness-90 transition-all duration-200 font-bold shadow-lg mt-4"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ 
                 opacity: isMenuOpen ? 1 : 0, 

@@ -172,19 +172,19 @@ const Skills: React.FC = () => {
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-2xl">
               <Sparkles className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-5xl md:text-6xl font-black bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
-              Skills & Expertise
+            <h2 className="display text-5xl md:text-6xl text-white">
+              Skills &amp; <span className="accent">Expertise</span>
             </h2>
           </motion.div>
-          <motion.p 
-            className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
+          <motion.p
+            className="text-xl text-white/60 max-w-4xl mx-auto leading-relaxed"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.6 }}
             viewport={{ once: true }}
           >
             Comprehensive expertise across enterprise systems, analytics, development, and specialized financial technologies.
-            <span className="block mt-2 font-semibold text-blue-700">
+            <span className="block mt-2 font-semibold accent">
               20+ years of hands-on experience with cutting-edge technologies.
             </span>
           </motion.p>
