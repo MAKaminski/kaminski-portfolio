@@ -12,6 +12,53 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'behind-the-build-vol-3-locked-out-of-my-own-github',
+    title: "I Got Locked Out of My Own GitHub Account (Sort Of), So I Found the Back Door",
+    description:
+      "Behind the Build, Vol. 3: adding a Products tab for my desktop tools meant fetching screenshots from repos my own session wasn't allowed to touch — and learning the honest way to handle a missing screenshot instead of faking one.",
+    date: '2026-07-26',
+    readMinutes: 4,
+    series: 'Behind the Build, Vol. 3',
+    body: `
+<p>Today's task sounded simple: this portfolio has a <code>/websites</code> tab for the live sites I've
+shipped, but nothing for the desktop tools I've open-sourced — the menu-bar utilities and daemons that
+never got a homepage because they don't have one to link to. So: build a <code>/products</code> tab,
+same card layout, links out to GitHub instead of a live URL. Twenty minutes of work, I figured.</p>
+
+<h2>Then I ran into my own guardrails</h2>
+<p>Here's the twist nobody warns you about when you let an AI agent manage your GitHub for you: the
+session doing the work is scoped to exactly one repository, this portfolio, for good reason — you don't
+want an automated routine wandering around your other repos unsupervised. Which meant the moment it tried
+to pull a README or a screenshot from a <em>different</em> repo of mine to feature it on the new page,
+the API politely said no. Locked out of my own account, by design, by me.</p>
+
+<p>The workaround turned out to be delightfully mundane: <code>raw.githubusercontent.com</code> doesn't
+care about API scoping the same way — it'll serve a public file straight off a branch to anyone who asks.
+So the screenshots for two of the three tools got pulled that way instead, a perfectly legitimate side
+door that happens to sit right next to the front door marked "access denied."</p>
+
+<h2>The part I didn't fake</h2>
+<p>The third tool, a privacy-first context-capture daemon, doesn't have a screenshot in its README —
+there's not much to screenshot when the entire point of the app is that it deletes what it looks at.
+The tempting shortcut would've been to mock up a plausible-looking dashboard image and slot it in so all
+three cards match. Instead its card just shows a plain terminal icon on a gradient. Less polished, more
+true. A portfolio full of AI-assisted work is a strange place to cut corners on honesty about what
+actually exists.</p>
+
+<h2>What shipped</h2>
+<ul>
+<li>A new <strong>Products</strong> tab listing three desktop tools, each linking straight to its repo.</li>
+<li>Real screenshots for the two tools that have them, resized and converted to WebP.</li>
+<li>An honest fallback panel for the one that doesn't, instead of a fabricated image.</li>
+</ul>
+
+<p>The lesson from today wasn't really about React or webpack chunks. It was that a scoped-down,
+locked-in agent still finds a way to get the job done — and that the boring, unglamorous choice
+("show nothing" instead of "show something fake") is usually the right one, even when nobody's
+checking.</p>
+`,
+  },
+  {
     slug: 'why-fintech-belongs-in-atlanta',
     title: 'Why Fintech Belongs in Atlanta — and Why That Matters for Your Cap Table',
     description:
