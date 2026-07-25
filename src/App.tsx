@@ -30,6 +30,7 @@ const JiraPRD = lazy(() => import('./pages/JiraPRD'));
 const Writing = lazy(() => import('./pages/Writing'));
 const Article = lazy(() => import('./pages/Article'));
 const Websites = lazy(() => import('./pages/Websites'));
+const Products = lazy(() => import('./pages/Products'));
 
 const HOME_TITLE = 'Michael Kaminski | Fintech Finance & Engineering Leader in Atlanta';
 const HOME_DESCRIPTION =
@@ -153,6 +154,7 @@ function App() {
                 <Route path="/writing" element={<Writing />} />
                 <Route path="/writing/:slug" element={<Article />} />
                 <Route path="/websites" element={<Websites />} />
+                <Route path="/products" element={<Products />} />
               </Routes>
               </Suspense>
               <AIChatbot />
