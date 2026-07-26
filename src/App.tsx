@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { Analytics } from '@vercel/analytics/react';
 import { initGA } from './utils/analytics';
-import { initPostHog } from './utils/posthog';
 import PostHogPageview from './components/PostHogPageview';
 import Seo from './components/Seo';
 import SmoothScroll from './components/SmoothScroll';
@@ -114,12 +113,6 @@ function App() {
     if (gaId) {
       initGA(gaId);
     }
-  }, []);
-
-  // PostHog is the analytics source of record: referrers, geography, per-route
-  // traffic, drop-off, and session replay.
-  useEffect(() => {
-    initPostHog();
   }, []);
 
   return (

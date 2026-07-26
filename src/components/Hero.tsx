@@ -235,7 +235,19 @@ const Hero: React.FC = () => {
 
       {/* Company marquee (scroll-velocity skew) */}
       <div className="relative mt-16 border-y border-white/10 py-6">
-        <Marquee items={['GreenSky', 'Home Depot', 'HD Supply', 'KPMG', 'Momnt', 'Property Walk']} />
+        <Marquee
+          items={[
+            { label: 'GreenSky', href: 'https://www.greensky.com/' },
+            { label: 'Home Depot', href: 'https://www.homedepot.com/' },
+            { label: 'HD Supply', href: 'https://www.hdsupply.com/' },
+            { label: 'KPMG', href: 'https://www.kpmg.com/' },
+            { label: 'Momnt', href: 'https://www.momnt.com/' },
+            {
+              label: 'Stellantis Financial Services',
+              href: 'https://www.stellantisfinancialservices.com/',
+            },
+          ]}
+        />
       </div>
     </section>
   );
