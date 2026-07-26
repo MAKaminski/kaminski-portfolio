@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { Analytics } from '@vercel/analytics/react';
 import { initGA } from './utils/analytics';
+import PostHogPageview from './components/PostHogPageview';
 import Seo from './components/Seo';
+import { personJsonLd, homeFaqJsonLd } from './data/person';
 import SmoothScroll from './components/SmoothScroll';
 import Cursor from './components/Cursor';
 import Header from './components/Header';
@@ -31,10 +33,11 @@ const Writing = lazy(() => import('./pages/Writing'));
 const Article = lazy(() => import('./pages/Article'));
 const Websites = lazy(() => import('./pages/Websites'));
 const Products = lazy(() => import('./pages/Products'));
+const SkillsPage = lazy(() => import('./pages/SkillsPage'));
 
 const HOME_TITLE = 'Michael Kaminski | Fintech Finance & Engineering Leader in Atlanta';
 const HOME_DESCRIPTION =
-  'Michael Kaminski is an Atlanta-based fintech leader fluent in both PE-grade finance and hands-on software engineering — 20+ years across GreenSky, Home Depot, HD Supply, KPMG and fintech startups. Fractional CFO/CTO, product & payments leadership.';
+  'Fintech leader fluent in both PE-grade finance and hands-on engineering. Fractional CFO/CTO for payments, lending and PE-backed companies — Atlanta or remote US.';
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-screen flex items-center justify-center text-gray-500">Loading…</div>
@@ -120,6 +123,7 @@ function App() {
       <SmoothScroll>
       <Cursor />
       <Router>
+        <PostHogPageview />
         <ThemeContext.Consumer>
           {({ theme }) => (
             <div className="min-h-screen" style={{ background: theme.bg }}>
@@ -127,7 +131,12 @@ function App() {
               <Routes>
                 <Route path="/" element={
                   <>
-                    <Seo title={HOME_TITLE} description={HOME_DESCRIPTION} canonicalPath="/" />
+                    <Seo
+                      title={HOME_TITLE}
+                      description={HOME_DESCRIPTION}
+                      canonicalPath="/"
+                      jsonLd={[personJsonLd, homeFaqJsonLd]}
+                    />
                     <Header />
                     <main>
                       {/* Recruiter-first order: lead with proof, close with fit/contact */}
@@ -155,6 +164,7 @@ function App() {
                 <Route path="/writing/:slug" element={<Article />} />
                 <Route path="/websites" element={<Websites />} />
                 <Route path="/products" element={<Products />} />
+                <Route path="/skills" element={<SkillsPage />} />
               </Routes>
               </Suspense>
               <AIChatbot />

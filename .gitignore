@@ -1,6 +1,14 @@
 # dependencies
 node_modules/
+
+# local environment / credentials
+# ".env" alone did not cover ".env.local", which is where CRA and the scripts
+# in scripts/ expect local secrets (e.g. the LinkedIn access token) to live —
+# so a token put there would previously have been committable.
 .env
+.env.*
+!.env.example
+
 **/__pycache__/
 **/*.pyc
 frontend/build/

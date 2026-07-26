@@ -1,8 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { GraduationCap, Award } from 'lucide-react';
+import ExperienceTimeline from './ExperienceTimeline';
+import { jobTimeline } from '../data/experience';
 
 const Experience: React.FC = () => {
+  // Shared hover state links the Gantt rail and the role list in both directions.
+  const [activeCompany, setActiveCompany] = React.useState<string | null>(null);
+
   const experienceQuestions = [
     {
       title: "Leadership + Culture",
@@ -36,88 +41,6 @@ const Experience: React.FC = () => {
     }
   ];
 
-  const jobTimeline = [
-    {
-      company: "Stellantis Financial Services",
-      title: "Senior Product Owner",
-      period: "2025 - Present",
-      description: "Product ownership for consumer auto-finance platforms — servicing, payments, and lending systems at Stellantis' captive finance arm.",
-      link: "https://www.stellantis-fs.com/",
-      exit: "Current role"
-    },
-    {
-      company: "Fyxed",
-      title: "Interim CEO",
-      period: "2025 - 2025",
-      description: "Interim CEO of Fyxed, a fintech company that provides a platform for small businesses to manage their finances.",
-      link: "https://www.fyxed.com/",
-      exit: "Established GTM strategy, built product, hired team, and scaled to $50k MRR"
-    },
-    {
-      company: "Momnt",
-      title: "Senior Manager, Product Engineering",
-      period: "2023 - 2025",
-      description: "Fintech platform development and credit reporting systems",
-      link: "https://www.momnt.com/",
-      exit: "Launched credit reporting, accounting engine product owner, departed after founders left - culture change"
-    },
-    {
-      company: "Property Walk",
-      title: "Founder",
-      period: "2022 - 2023",
-      description: "Founder of Property Walk, a real estate technology company that provides a platform for property managers to reduce service calls and overbillings of residential home services.",
-      exit: "5k MRR, PMF not found"
-    },
-    {
-      company: "Superior Contracting & Maintenance",
-      title: "Co-Founder",
-      period: "2018 - 2023",
-      description: "Co-founder of Superior Contracting & Maintenance, a construction company that provides services to the residential and commercial sectors.",
-      link: "https://www.superior-maintenance.com",
-      exit: "Installed CEO & NetSuite ERP, left to focus on high-growth fintech"
-    },
-    {
-      company: "GreenSky",
-      title: "Product Manager, Credit & Strategy",
-      period: "2016 - 2018",
-      description: "Product management and strategy for the GreenSky credit platform",
-      link: "https://www.greensky.com/",
-      exit: "Post IPO, left to found Residential Services company with brother"
-    },
-    {
-      company: "HD Supply",
-      title: "Senior Analyst, Strategic Finance",
-      period: "2015 - 2016",
-      description: "Divestiture transactions and operational transformation",
-      link: "https://www.hdsupply.com/",
-      exit: "Post 2,500 FTE restructuring, changed focus to grow revenue, rather than enhance margins through OpEx cost out"
-    },
-    {
-      company: "KPMG",
-      title: "Senior Consultant, Advisory Services",
-      period: "2014 - 2015",
-      description: "Dispute advisory services, tax structuring, & data analytics",
-      link: "https://www.kpmg.com/",
-      exit: "Found wife in consulting, left for M&A work @ HD Supply"
-    },
-    {
-      company: "ModularEquity / MEK Capital",
-      title: "Founder, Managing Partner",
-      period: "2011 - 2025",
-      description: "Long-Only diversified investments across PE, Real Estate, Equities, & Debt, managing $3mm in capital",
-      link: "https://www.modularequity.com/",
-      exit: "Active Management"
-    },
-    {
-      company: "Home Depot",
-      title: "Senior Analyst, Merchandising Finance & Treasury",
-      period: "2011 - 2014",
-      description: "Share repurchase programs and financial strategy",
-      link: "https://www.homedepot.com/",
-      exit: "Departed to obtian diversified experiences within other companies/industries"
-    }
-  ];
-
   return (
     <section id="experience" className="section-padding" style={{ background: 'var(--bg)' }}>
       <div className="max-w-7xl mx-auto">
@@ -144,35 +67,56 @@ const Experience: React.FC = () => {
           className="rilla-card p-8 mb-12"
         >
           <h3 className="display text-2xl mb-6 text-white">Professional <span className="accent">Timeline</span></h3>
-          <div className="space-y-4">
-            {jobTimeline.map((job, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="flex items-start space-x-4 p-4 rounded-lg hover:bg-white/5 transition-colors duration-200"
-              >
-                <div className="flex-shrink-0 w-24 text-sm font-medium text-white/50">{job.period}</div>
-                <div className="flex-1">
-                  <h4 className="font-semibold text-white">{job.title}</h4>
-                  {job.link ? (
-                    <a
-                      href={job.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block font-medium text-accent underline-offset-2 hover:underline"
-                    >
-                      {job.company}
-                    </a>
-                  ) : (
-                    <p className="font-medium text-accent">{job.company}</p>
-                  )}
-                  <p className="text-white/60 text-sm mt-1">{job.description}</p>
-                </div>
-              </motion.div>
-            ))}
+
+          <div className="flex items-stretch gap-6">
+            {/* Gantt rail. Hidden below md, where there isn't room for it to be
+                legible — the dated list alone carries the information there. */}
+            <ExperienceTimeline
+              className="hidden md:block w-[150px] flex-shrink-0 lg:w-[190px]"
+              activeCompany={activeCompany}
+              onHover={setActiveCompany}
+            />
+
+            <div className="min-w-0 flex-1 space-y-3">
+              {jobTimeline.map((job, index) => {
+                const isActive = activeCompany === job.company;
+                return (
+                  <motion.div
+                    key={job.company}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.06 }}
+                    viewport={{ once: true }}
+                    onMouseEnter={() => setActiveCompany(job.company)}
+                    onMouseLeave={() => setActiveCompany(null)}
+                    className={`flex items-start space-x-4 rounded-lg border-l-2 p-4 transition-colors duration-200 ${
+                      isActive ? 'bg-white/5' : 'hover:bg-white/5'
+                    }`}
+                    style={{ borderLeftColor: job.color }}
+                  >
+                    <div className="w-24 flex-shrink-0 text-sm font-medium tabular-nums text-white/50">
+                      {job.period}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-white">{job.title}</h4>
+                      {job.link ? (
+                        <a
+                          href={job.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block font-medium text-accent underline-offset-2 hover:underline"
+                        >
+                          {job.company}
+                        </a>
+                      ) : (
+                        <p className="font-medium text-accent">{job.company}</p>
+                      )}
+                      <p className="text-white/60 text-sm mt-1">{job.description}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </motion.div>
 
