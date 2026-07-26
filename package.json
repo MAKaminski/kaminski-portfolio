@@ -26,7 +26,9 @@
     "start": "react-scripts start",
     "build": "DISABLE_ESLINT_PLUGIN=true GENERATE_SOURCEMAP=false CI=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "linkedin:preview": "node scripts/linkedin-autopost",
+    "linkedin:post": "node scripts/linkedin-autopost --publish"
   },
   "eslintConfig": {
     "extends": [

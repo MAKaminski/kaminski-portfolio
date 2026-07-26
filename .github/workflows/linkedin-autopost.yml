@@ -1,0 +1,84 @@
+name: LinkedIn auto-post
+
+on:
+  schedule:
+    # 14:00 UTC — mid-morning US Eastern, a reasonable posting slot.
+    - cron: '0 14 * * *'
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Actually post to LinkedIn (otherwise dry run)'
+        type: boolean
+        default: false
+
+# Least privilege by default; the publish job raises it to commit posted.json.
+permissions:
+  contents: read
+
+jobs:
+  autopost:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to commit posted.json after a successful post
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - run: npm ci
+
+      # Decide once whether this run is allowed to publish. The scheduled run
+      # only publishes when the repo variable is explicitly set; a manual run
+      # publishes when the dispatch input says so. Anything else is a dry run.
+      - name: Resolve publish mode
+        id: mode
+        env:
+          ENABLED: ${{ vars.LINKEDIN_AUTOPOST_ENABLED }}
+          DISPATCH_PUBLISH: ${{ inputs.publish }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          publish=false
+          if [ "$EVENT" = "workflow_dispatch" ] && [ "$DISPATCH_PUBLISH" = "true" ]; then
+            publish=true
+          elif [ "$EVENT" = "schedule" ] && [ "$ENABLED" = "true" ]; then
+            publish=true
+          fi
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+          echo "Publish mode: $publish"
+
+      - name: Dry run
+        if: steps.mode.outputs.publish != 'true'
+        run: node scripts/linkedin-autopost
+
+      - name: Publish
+        if: steps.mode.outputs.publish == 'true'
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_AUTHOR_URN: ${{ secrets.LINKEDIN_AUTHOR_URN }}
+        run: node scripts/linkedin-autopost --publish
+
+      - name: Upload rendered post
+        uses: actions/upload-artifact@v4
+        with:
+          name: linkedin-post
+          path: scripts/linkedin-autopost/out/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      # Only meaningful after a real post — posted.json is what stops the next
+      # run re-posting the same article.
+      - name: Commit posted.json
+        if: steps.mode.outputs.publish == 'true'
+        run: |
+          if git diff --quiet -- scripts/linkedin-autopost/posted.json; then
+            echo "posted.json unchanged; nothing to commit."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/linkedin-autopost/posted.json
+          git commit -m "Record LinkedIn post [skip ci]"
+          git push

@@ -17,6 +17,15 @@ type Product = {
 // Desktop tools and open-source utilities built by Michael Kaminski, hosted on GitHub.
 const products: Product[] = [
   {
+    name: 'LinkedIn Auto-Poster',
+    repoUrl: 'https://github.com/MAKaminski/kaminski-portfolio/tree/main/scripts/linkedin-autopost',
+    image: '/images/products/linkedin-autopost.webp',
+    category: 'Automation · Content',
+    description:
+      'Publishing engine for the writing series. Picks the newest unposted article, renders a branded 1200×627 card, composes the commentary from the article’s own words, and posts it to LinkedIn on a schedule. Dry-run by default — it never posts without an explicit opt-in — and keeps committed state so it can’t post the same piece twice.',
+    tags: ['Node.js', 'sharp', 'LinkedIn API', 'GitHub Actions'],
+  },
+  {
     name: 'MacMonitor',
     repoUrl: 'https://github.com/MAKaminski/MacMonitor',
     image: '/images/products/macmonitor.webp',
