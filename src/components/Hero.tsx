@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Download, Clock, ArrowUpRight, Linkedin, Github } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { track } from '@vercel/analytics';
+import { captureEvent } from '../utils/posthog';
 import { useTheme } from '../App';
 import { Role } from '../App';
 import Marquee from './Marquee';
@@ -38,6 +39,7 @@ const Hero: React.FC = () => {
     setTheme(role);
     navigate(path);
     track('Role Page Visited', { role, path });
+    captureEvent('role_page_visited', { role, path });
   };
 
   return (
@@ -113,7 +115,10 @@ const Hero: React.FC = () => {
                   href="https://calendly.com/kaminski1337/15min"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => track('Calendar Link Clicked', { source: 'Hero' })}
+                  onClick={() => {
+                    track('Calendar Link Clicked', { source: 'Hero' });
+                    captureEvent('calendar_link_clicked', { source: 'Hero' });
+                  }}
                   className="btn-pill-accent text-base"
                 >
                   <Clock className="w-5 h-5" /> Book a Call
@@ -123,7 +128,10 @@ const Hero: React.FC = () => {
                 <a
                   href="/docs/Kaminski Resume.pdf"
                   download="Kaminski_Resume.pdf"
-                  onClick={() => track('Resume Downloaded', { source: 'Hero' })}
+                  onClick={() => {
+                    track('Resume Downloaded', { source: 'Hero' });
+                    captureEvent('resume_downloaded', { source: 'Hero' });
+                  }}
                   className="btn-pill-ghost text-base"
                 >
                   <Download className="w-5 h-5" /> Resume

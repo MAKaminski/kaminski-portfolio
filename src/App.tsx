@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { Analytics } from '@vercel/analytics/react';
 import { initGA } from './utils/analytics';
+import { initPostHog } from './utils/posthog';
+import PostHogPageview from './components/PostHogPageview';
 import Seo from './components/Seo';
 import SmoothScroll from './components/SmoothScroll';
 import Cursor from './components/Cursor';
@@ -114,12 +116,19 @@ function App() {
     }
   }, []);
 
+  // PostHog is the analytics source of record: referrers, geography, per-route
+  // traffic, drop-off, and session replay.
+  useEffect(() => {
+    initPostHog();
+  }, []);
+
   return (
     <ThemeProvider>
       <MotionConfig reducedMotion="user">
       <SmoothScroll>
       <Cursor />
       <Router>
+        <PostHogPageview />
         <ThemeContext.Consumer>
           {({ theme }) => (
             <div className="min-h-screen" style={{ background: theme.bg }}>

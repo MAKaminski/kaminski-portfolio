@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Download, Send, Linkedin, Calendar } from 'lucide-react';
 import { track } from '@vercel/analytics';
+import { captureEvent, identifyContact } from '../utils/posthog';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,10 @@ const Contact: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     track('Contact Form Submission', { email: formData.email });
+    // Bind this email to the visitor's existing anonymous profile, so every
+    // page they viewed before reaching out is retroactively attributed to them.
+    identifyContact(formData.email, formData.name);
+    captureEvent('contact_form_submitted', { has_message: Boolean(formData.message) });
 
     // When a form endpoint is configured (e.g. Formspree/Resend), POST to it.
     // Otherwise fall back to opening the visitor's email client.
@@ -163,7 +168,10 @@ const Contact: React.FC = () => {
                 href="https://calendly.com/kaminski1337/15min" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                onClick={() => track('Calendar Link Clicked', { source: 'Contact Section' })}
+                onClick={() => {
+                  track('Calendar Link Clicked', { source: 'Contact Section' });
+                  captureEvent('calendar_link_clicked', { source: 'Contact Section' });
+                }}
                 className="w-full bg-white text-primary-600 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center"
               >
                 <Calendar className="w-5 h-5 mr-2" />
@@ -172,7 +180,10 @@ const Contact: React.FC = () => {
               
               <a
                 href="mailto:mkaminski1337@gmail.com?subject=Portfolio%20inquiry"
-                onClick={() => track('Contact Email Clicked', { source: 'Contact Section' })}
+                onClick={() => {
+                  track('Contact Email Clicked', { source: 'Contact Section' });
+                  captureEvent('contact_email_clicked', { source: 'Contact Section' });
+                }}
                 className="w-full bg-transparent border-2 border-white text-white font-semibold py-3 px-6 rounded-lg hover:bg-white hover:text-primary-600 transition-colors duration-200 flex items-center justify-center"
               >
                 <Send className="w-5 h-5 mr-2" />
