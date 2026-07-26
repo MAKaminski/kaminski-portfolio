@@ -61,6 +61,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-2-the-analytics-that-watched-nothing</loc>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.michael-kaminski.io/writing/why-fintech-belongs-in-atlanta</loc>
     <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>

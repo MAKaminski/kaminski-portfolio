@@ -12,6 +12,50 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'behind-the-build-vol-2-the-analytics-that-watched-nothing',
+    title: 'I Built Analytics to Watch My Site, and Discovered It Was Watching Nothing',
+    description:
+      'Behind the Build, Vol. 2: wiring up real product analytics turned up a silent reverse proxy eating every POST request, a dropped entry pageview, and a Gantt chart bug where two bars collided despite their dates never touching.',
+    date: '2026-07-26',
+    readMinutes: 4,
+    series: 'Behind the Build, Vol. 2',
+    body: `
+<p>Funny thing about analytics: you install them expecting to learn about your visitors, and instead you
+learn about your own code. This week I finally wired up real product analytics on this site — and every
+interesting discovery was a bug I'd introduced, not an insight about traffic.</p>
+
+<h2>The proxy that looked wired up and did nothing</h2>
+<p>The plan was simple: route analytics events through a same-origin <code>/ingest</code> path so ad
+blockers wouldn't eat them. I tested it against a live preview before trusting it. GETs sailed through.
+Every single POST came back with a <strong>405</strong> — the static hosting had no serverless runtime
+behind that route, so it would have looked perfectly configured while quietly recording zero events
+forever. That's the worst kind of bug: the dashboard would have shown "0 visitors," and I'd have believed
+it. Ripped it out, events go direct now.</p>
+
+<h2>The pageview that vanished on arrival</h2>
+<p>Second bug was sneakier. The very first pageview of every visit — the one carrying the referrer, the
+whole reason you install analytics in the first place — was getting dropped. Turns out React fires a
+child component's effects before its parent's. My tracking component was capturing its pageview before
+the top-level app had finished initializing, and it tripped an "already initialized" guard meant to stop
+duplicate events. The fix was one line moved from a component to the entry file. The bug it fixed was
+invisible in every way except the metric that mattered most.</p>
+
+<h2>A Gantt chart that failed geometry</h2>
+<p>Smaller, weirder bug: I added a colored timeline rail next to my work history. Two roles whose dates
+never actually overlapped were rendering as colliding bars. The cause was a rule I'd added on purpose — a
+minimum bar length so a one-year role wouldn't render as an invisible sliver — and that floor pushed a
+short stint into a neighboring lane it had no business touching. Fixed by partitioning lanes on the
+rendered span instead of the raw dates, which is a sentence I never expected to write about my own résumé.</p>
+
+<h2>The lesson</h2>
+<p>Every one of these bugs would have shipped looking correct. A 405 on a route nobody calls by hand. An
+effect order nobody diagnoses without staring at DevTools. A floor value added for a good reason that
+broke a different invariant. Instrumentation doesn't just measure your product — it interrogates it, and
+this week it found three things about my own site that I didn't know were broken until I built something
+to watch them.</p>
+`,
+  },
+  {
     slug: 'why-fintech-belongs-in-atlanta',
     title: 'Why Fintech Belongs in Atlanta — and Why That Matters for Your Cap Table',
     description:
