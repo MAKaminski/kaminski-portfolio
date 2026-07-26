@@ -61,8 +61,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-2-the-analytics-that-watched-nothing</loc>
-    <lastmod>2026-07-26</lastmod>
+    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-4-the-analytics-that-watched-nothing</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-2-two-robots-one-diary</loc>
+    <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
