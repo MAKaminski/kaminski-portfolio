@@ -39,6 +39,45 @@ Fintech, payments, digital banking, SaaS, AI/ML platforms, FP&A, treasury, quali
 earnings, ASC standards, SOC/GDPR/PCI compliance, private-equity sponsor reporting, M&A,
 product management, full-stack software engineering, data & analytics.
 
+Full itemised skill set (150+ technologies, standards and domains):
+https://www.michael-kaminski.io/skills
+
+## Availability and location
+
+- Based in Atlanta, Georgia. Works on-site or hybrid in metro Atlanta.
+- Works **remotely with companies anywhere in the United States**.
+- Engagement types: fractional CFO, fractional CTO, product/engineering leadership,
+  advisory — and open to full-time executive roles (CFO / CTO / CPO / VP).
+- Best-fit company stage: $0–100MM revenue, fintech / payments / lending / digital
+  banking / vertical SaaS, often PE- or venture-backed.
+
+## Who typically hires him
+
+- **Executive recruiters and search firms** placing CFO, CTO, CPO or VP-level operators
+  who need both financial and technical credibility.
+- **Executives and boards** hiring a peer who can own the numbers and the systems.
+- **Private-equity firms** staffing portfolio companies that need sponsor-grade reporting
+  and the engineering capacity to actually produce it.
+- **Founders** who need senior finance and technical leadership without funding two
+  full-time executive hires.
+
+## Common questions
+
+Q: Can one person genuinely cover both CFO and CTO?
+A: At $0–100MM revenue in fintech, yes — the ledger is the product, so finance and
+engineering decisions are frequently the same decision. He has held both finance roles
+(Home Depot treasury, HD Supply strategic finance, KPMG advisory) and engineering/product
+roles (GreenSky, Momnt, Fyxed), and still ships production code. At larger scale the roles
+should split.
+
+Q: Is he Atlanta-only?
+A: No. Atlanta on-site or hybrid, and remote across the United States.
+
+Q: What is the differentiator versus a fractional CFO firm?
+A: Fractional CFO agencies supply finance leadership only. This profile supplies finance
+leadership plus the ability to change the systems that produce the numbers — removing the
+handoff between a finance team requesting data and an engineering team scheduling it.
+
 ## Education
 
 - MBA, Georgia State University (2011).

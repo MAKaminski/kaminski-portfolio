@@ -21,6 +21,7 @@ import {
   totalSkillCount,
   SkillCategory,
 } from '../data/skills';
+import { personJsonLd, faqJsonLd, hiringFaqs } from '../data/person';
 
 const ICONS: Record<SkillCategory['icon'], React.ComponentType<{ className?: string }>> = {
   code: Code,
@@ -36,31 +37,38 @@ const ICONS: Record<SkillCategory['icon'], React.ComponentType<{ className?: str
 const SkillsPage: React.FC = () => {
   const [openAccordion, setOpenAccordion] = React.useState<number | null>(0);
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'Skills & expertise — Michael Kaminski',
-    itemListElement: [
-      ...skillCategories.map((c, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        name: c.title,
-        description: c.skills.join(', '),
-      })),
-      ...specializedAreas.map((a, i) => ({
-        '@type': 'ListItem',
-        position: skillCategories.length + i + 1,
-        name: a.title,
-        description: a.items.join(', '),
-      })),
-    ],
-  };
+  // Person (with a specific knowsAbout) is the entity signal answer engines
+  // actually cite; FAQPage targets the questions recruiters, PE firms and
+  // founders ask. The ItemList is kept as a plain inventory of the page.
+  const jsonLd = [
+    personJsonLd,
+    faqJsonLd,
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Skills & expertise — Michael Kaminski',
+      itemListElement: [
+        ...skillCategories.map((c, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: c.title,
+          description: c.skills.join(', '),
+        })),
+        ...specializedAreas.map((a, i) => ({
+          '@type': 'ListItem',
+          position: skillCategories.length + i + 1,
+          name: a.title,
+          description: a.items.join(', '),
+        })),
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       <Seo
-        title="Skills & Expertise | Michael Kaminski — Fintech Finance & Engineering"
-        description="The full technical and domain skill set behind 20+ years across fintech, payments, and lending — languages, cloud, data, AI, ERP and financial systems, plus deep accounting, compliance, treasury, and transaction expertise."
+        title="CFO + CTO Skills in One Operator | Fintech Finance & Engineering — Atlanta or Remote"
+        description="A fractional CFO who also ships production code. 20+ years in fintech, payments and lending: ASC standards, treasury, M&A and $10.8B+ transacted, plus React, Python, cloud and AI. Atlanta or remote US."
         canonicalPath="/skills"
         breadcrumbName="Skills"
         jsonLd={jsonLd}
@@ -78,12 +86,13 @@ const SkillsPage: React.FC = () => {
             Capabilities
           </p>
           <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl">
-            Skills &amp; <span className="accent">Expertise</span>
+            A CFO and a CTO in <span className="accent">one operator</span>
           </h1>
           <p className="text-lg leading-relaxed text-white/70">
             {totalSkillCount}+ technologies, standards, and domains across two careers that
-            usually stay separate — PE-grade finance and hands-on software engineering. The
-            tooling is below; the domain depth is underneath it.
+            usually stay separate — PE-grade finance and hands-on software engineering.
+            Atlanta-based, working on-site or hybrid locally and remotely with companies
+            anywhere in the US.
           </p>
         </motion.div>
 
@@ -195,6 +204,37 @@ const SkillsPage: React.FC = () => {
             );
           })}
         </div>
+
+        {/* Questions the people who actually hire this profile ask. Rendered
+            visibly because FAQPage schema without matching on-page content is
+            a liability, not a shortcut. */}
+        <section className="mt-16">
+          <div className="mb-8 text-center">
+            <h2 className="display mb-3 text-4xl text-white">
+              Hiring <span className="accent">questions</span>
+            </h2>
+            <p className="text-lg text-white/60">
+              For recruiters, executive teams, PE firms staffing portfolio companies, and
+              founders weighing their first senior hire.
+            </p>
+          </div>
+
+          <div className="mx-auto grid max-w-5xl gap-4 md:grid-cols-2">
+            {hiringFaqs.map((faq) => (
+              <motion.div
+                key={faq.question}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                viewport={{ once: true }}
+                className="rilla-card p-6"
+              >
+                <h3 className="mb-2 font-semibold text-white">{faq.question}</h3>
+                <p className="text-sm leading-relaxed text-white/70">{faq.answer}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
