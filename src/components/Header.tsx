@@ -22,7 +22,8 @@ const Header: React.FC = () => {
   const navItems = [
     { name: 'Impact', href: '/#transactions' },
     { name: 'Experience', href: '/#experience' },
-    { name: 'Skills', href: '/#skills' },
+    // Skills is a route (/skills) rather than a homepage anchor — the homepage
+    // keeps only a short overview, so the anchor would have duplicated the tab.
     { name: 'Testimonials', href: '/#testimonials' },
     { name: 'Contact', href: '/#contact' },
   ];
@@ -30,6 +31,7 @@ const Header: React.FC = () => {
   const additionalNavItems: { name: string; href: string }[] = [
     { name: 'Websites', href: '/websites' },
     { name: 'Products', href: '/products' },
+    { name: 'Skills', href: '/skills' },
     { name: 'Writing', href: '/writing' },
     { name: 'Client Outcomes', href: '/client-outcomes' },
   ];

@@ -32,6 +32,7 @@ const Writing = lazy(() => import('./pages/Writing'));
 const Article = lazy(() => import('./pages/Article'));
 const Websites = lazy(() => import('./pages/Websites'));
 const Products = lazy(() => import('./pages/Products'));
+const SkillsPage = lazy(() => import('./pages/SkillsPage'));
 
 const HOME_TITLE = 'Michael Kaminski | Fintech Finance & Engineering Leader in Atlanta';
 const HOME_DESCRIPTION =
@@ -157,6 +158,7 @@ function App() {
                 <Route path="/writing/:slug" element={<Article />} />
                 <Route path="/websites" element={<Websites />} />
                 <Route path="/products" element={<Products />} />
+                <Route path="/skills" element={<SkillsPage />} />
               </Routes>
               </Suspense>
               <AIChatbot />

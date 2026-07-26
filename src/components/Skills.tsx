@@ -1,385 +1,85 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Code, Database, Cloud, BarChart3, Settings, Globe, ChevronDown, ChevronUp, Sparkles, Award } from 'lucide-react';
-import TechLogo from './TechLogos';
+import { Link } from 'react-router-dom';
+import { Code, Database, Cloud, BarChart3, Settings, Globe, Award, Brain, ArrowUpRight } from 'lucide-react';
+import { topSkills, skillCategories, totalSkillCount } from '../data/skills';
 
-const Skills: React.FC = () => {
-  const [openAccordion, setOpenAccordion] = React.useState<number | null>(0); // Open first by default
-  
-  // Editorial cut: consolidated to the highest-signal categories for a
-  // fintech finance + engineering hire (was 29 exhaustive lists).
-  const skillCategories = [
-    {
-      title: "Languages",
-      icon: Code,
-      skills: ["SQL", "Python", "TypeScript", "Java", "C#", "R", "Rust"],
-      gradient: "from-pink-500 to-rose-500",
-      bgGradient: "from-pink-50 to-rose-50"
-    },
-    {
-      title: "Backend & Databases",
-      icon: Database,
-      skills: ["Node.js", "FastAPI", "PostgreSQL", "Redis", "GraphQL", "Supabase", "NeonDB", "Prisma", "MongoDB", "Pinecone", "pgvector"],
-      gradient: "from-teal-500 to-cyan-500",
-      bgGradient: "from-teal-50 to-cyan-50"
-    },
-    {
-      title: "Frontend",
-      icon: Code,
-      skills: ["React", "TypeScript", "Tailwind"],
-      gradient: "from-violet-500 to-purple-500",
-      bgGradient: "from-violet-50 to-purple-50"
-    },
-    {
-      title: "Cloud & DevOps",
-      icon: Cloud,
-      skills: ["AWS", "GCP", "Docker", "Kubernetes", "Serverless", "Vercel", "GitHub", "GitHub Actions"],
-      gradient: "from-sky-500 to-blue-500",
-      bgGradient: "from-sky-50 to-blue-50"
-    },
-    {
-      title: "Data & Analytics",
-      icon: BarChart3,
-      skills: ["Snowflake", "BigQuery", "Redshift", "Airflow", "dbt", "Fivetran", "Tableau", "Power BI", "Looker"],
-      gradient: "from-purple-500 to-pink-500",
-      bgGradient: "from-purple-50 to-pink-50"
-    },
-    {
-      title: "AI & ML",
-      icon: Code,
-      skills: ["OpenAI", "Claude", "Claude Code", "Cursor", "DeepSeek", "Kimi", "LangChain", "MCP", "Hugging Face", "TensorFlow", "PyTorch"],
-      gradient: "from-fuchsia-500 to-pink-500",
-      bgGradient: "from-fuchsia-50 to-pink-50"
-    },
-    {
-      title: "ERP & Financial Systems",
-      icon: Settings,
-      skills: ["NetSuite", "SAP S/4HANA", "Oracle Hyperion", "QuickBooks", "Ramp", "Brex", "Plaid", "Stripe", "Interactive Brokers"],
-      gradient: "from-blue-500 to-cyan-500",
-      bgGradient: "from-blue-50 to-cyan-50"
-    },
-    {
-      title: "SEO & Growth Analytics",
-      icon: BarChart3,
-      skills: ["Ahrefs", "Google Search Console", "Google Analytics", "PostHog", "Mixpanel", "Amplitude", "Segment", "HubSpot", "Salesforce"],
-      gradient: "from-orange-500 to-red-500",
-      bgGradient: "from-orange-50 to-red-50"
-    },
-    {
-      title: "Product & Collaboration",
-      icon: Settings,
-      skills: ["Jira", "Confluence", "Linear", "Notion", "Monday.com", "Airtable", "Figma", "Lucid", "Canva", "Gamma", "Resend", "Shopify"],
-      gradient: "from-indigo-500 to-violet-500",
-      bgGradient: "from-indigo-50 to-violet-50"
-    },
-  ];
-
-  const specializedAreas = [
-    {
-      title: "Systems Architecture",
-      icon: Database,
-      items: ["Core banking systems", "Payment processors", "IVR"],
-      gradient: "from-blue-600 to-cyan-600"
-    },
-    {
-      title: "Accounting & Financial Standards",
-      icon: BarChart3,
-      items: ["ASC 606 (Revenue Recognition)", "ASC 842 (Leases)", "ASC 326 (Credit Losses)", "ASC 815 (Derivatives)", "ASC 820 (Fair Value)", "GAAP", "IFRS", "SOX Compliance"],
-      gradient: "from-green-600 to-emerald-600"
-    },
-    {
-      title: "Compliance & Security",
-      icon: Settings,
-      items: ["SOC 1 & SOC 2 Readiness", "SOC Compliance", "GDPR", "CCPA", "Basel's Principles for Operational Resilience", "SEC/FINRA", "OCC", "Reg X", "Reg Z", "NACHA", "UDAAP", "SCRA", "FCRA", "MERS"],
-      gradient: "from-red-600 to-pink-600"
-    },
-    {
-      title: "Financial Expertise",
-      icon: Award,
-      items: ["Treasury", "FX Management", "Share Repurchases", "Market Execution", "VaR", "VWAP"],
-      gradient: "from-purple-600 to-violet-600"
-    },
-    {
-      title: "Transaction Experience",
-      icon: Globe,
-      items: ["Acquisitions", "M&A Advisory", "Global Markets", "Equity & Debt Capital markets", "IPO Readiness (S1)", "Asset Based Lending", "Asset Backed Securitization (Non-Mortgage) (144A)"],
-      gradient: "from-orange-600 to-red-600"
-    }
-  ];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  return (
-    <section id="skills" className="relative py-14 overflow-hidden scroll-mt-20">
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <motion.div
-          className="absolute top-40 left-10 w-96 h-96 bg-gradient-to-br from-blue-400/5 to-purple-400/5 rounded-full blur-3xl"
-          animate={{
-            x: [0, 40, 0],
-            y: [0, -30, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            repeatType: 'reverse',
-          }}
-        />
-        <motion.div
-          className="absolute bottom-40 right-10 w-80 h-80 bg-gradient-to-br from-pink-400/5 to-indigo-400/5 rounded-full blur-3xl"
-          animate={{
-            x: [0, -35, 0],
-            y: [0, 25, 0],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            repeatType: 'reverse',
-          }}
-        />
-      </div>
-
-      <div className="relative max-w-7xl mx-auto section-padding">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <motion.div
-            className="inline-flex items-center space-x-3 mb-6"
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            viewport={{ once: true }}
-          >
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-2xl">
-              <Sparkles className="w-8 h-8 text-white" />
-            </div>
-            <h2 className="display text-5xl md:text-6xl text-white">
-              Skills &amp; <span className="accent">Expertise</span>
-            </h2>
-          </motion.div>
-          <motion.p
-            className="text-xl text-white/60 max-w-4xl mx-auto leading-relaxed"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            Comprehensive expertise across enterprise systems, analytics, development, and specialized financial technologies.
-            <span className="block mt-2 font-semibold accent">
-              20+ years of hands-on experience with cutting-edge technologies.
-            </span>
-          </motion.p>
-        </motion.div>
-
-        {/* Software Experience Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-14"
-        >
-          {skillCategories.map((category, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              className={`relative rilla-card p-6 overflow-hidden group`}
-              whileHover={{
-                scale: 1.02,
-                y: -5,
-                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
-              }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              {/* Background decoration */}
-              <motion.div
-                className={`absolute top-4 right-4 w-16 h-16 bg-gradient-to-r ${category.gradient} rounded-full opacity-10`}
-                animate={{
-                  scale: [1, 1.2, 1],
-                  rotate: [0, 180, 360],
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  delay: index * 0.2,
-                }}
-              />
-              
-              <div className="relative z-10">
-                <motion.div 
-                  className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r ${category.gradient} rounded-2xl shadow-lg mb-4`}
-                  whileHover={{ 
-                    rotate: 15,
-                    scale: 1.1
-                  }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <category.icon className="w-7 h-7 text-white" />
-                </motion.div>
-                
-                <h3 className="display text-lg text-white mb-3">{category.title}</h3>
-
-                <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill, skillIndex) => (
-                    <motion.div
-                      key={skill}
-                      className="flex items-center space-x-2 px-3 py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-200 group/skill"
-                      whileHover={{
-                        scale: 1.05,
-                        y: -2
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.1 + skillIndex * 0.02, duration: 0.3 }}
-                    >
-                      <TechLogo name={skill} className="w-4 h-4 transition-transform group-hover/skill:scale-110" />
-                      <span className="text-sm font-medium text-white/80 group-hover/skill:text-white">
-                        {skill}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Enhanced Specialized Areas */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="relative"
-        >
-          <div className="text-center mb-16">
-            <motion.h3
-              className="display text-4xl mb-4 text-white"
-              initial={{ scale: 0.9 }}
-              whileInView={{ scale: 1 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              Specialized <span className="accent">Expertise</span>
-            </motion.h3>
-            <p className="text-lg text-white/60">
-              Deep domain knowledge in financial services, compliance, and enterprise systems
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            {specializedAreas.map((area, index) => (
-              <motion.div
-                key={index}
-                className="rilla-card overflow-hidden"
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                whileHover={{ scale: 1.01 }}
-              >
-                <motion.button
-                  className="w-full flex items-center justify-between p-8 focus:outline-none text-left transition-all duration-200"
-                  onClick={() => setOpenAccordion(openAccordion === index ? null : index)}
-                  whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}
-                >
-                  <div className="flex items-center space-x-6">
-                    <motion.div 
-                      className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${area.gradient} rounded-2xl shadow-lg`}
-                      whileHover={{ 
-                        rotate: 10,
-                        scale: 1.1
-                      }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      <area.icon className="w-8 h-8 text-white" />
-                    </motion.div>
-                    <div>
-                      <h4 className="display text-2xl text-white">{area.title}</h4>
-                      <p className="text-sm text-white/50 mt-1">
-                        {area.items.length} areas of expertise
-                      </p>
-                    </div>
-                  </div>
-
-                  <motion.div
-                    animate={{ rotate: openAccordion === index ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex-shrink-0"
-                  >
-                    <div className="bg-accent/15 p-3 rounded-xl">
-                      <ChevronDown className="w-6 h-6 text-accent" />
-                    </div>
-                  </motion.div>
-                </motion.button>
-                
-                <motion.div
-                  initial={false}
-                  animate={{
-                    height: openAccordion === index ? 'auto' : 0,
-                    opacity: openAccordion === index ? 1 : 0,
-                  }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                  className="overflow-hidden"
-                >
-                  <div className="px-8 pb-8">
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {area.items.map((item, itemIndex) => (
-                        <motion.div
-                          key={item}
-                          className="flex items-center space-x-3 p-4 bg-white/5 rounded-xl border border-white/10"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{
-                            opacity: openAccordion === index ? 1 : 0,
-                            y: openAccordion === index ? 0 : 10
-                          }}
-                          transition={{ delay: itemIndex * 0.05, duration: 0.3 }}
-                          whileHover={{
-                            scale: 1.02,
-                            backgroundColor: "rgba(255, 255, 255, 0.08)"
-                          }}
-                        >
-                          <div className="w-3 h-3 bg-accent rounded-full flex-shrink-0" />
-                          <span className="text-white/80 font-medium text-sm">{item}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
+const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  code: Code,
+  database: Database,
+  cloud: Cloud,
+  chart: BarChart3,
+  settings: Settings,
+  globe: Globe,
+  award: Award,
+  brain: Brain,
 };
 
-export default Skills; 
+/**
+ * Homepage overview only — the four headline capabilities plus a link out.
+ * The exhaustive listing lives at /skills (pages/SkillsPage) so the homepage
+ * stays scannable; both read from src/data/skills.ts.
+ */
+const Skills: React.FC = () => (
+  <section id="skills" className="relative overflow-hidden py-14 scroll-mt-20">
+    <div className="relative mx-auto max-w-7xl section-padding">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        viewport={{ once: true }}
+        className="mb-10 text-center"
+      >
+        <h2 className="display mb-4 text-5xl text-white md:text-6xl">
+          Skills &amp; <span className="accent">Expertise</span>
+        </h2>
+        <p className="mx-auto max-w-3xl text-xl leading-relaxed text-white/60">
+          Two careers that usually stay separate — PE-grade finance and hands-on engineering.
+        </p>
+      </motion.div>
+
+      <div className="mb-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {topSkills.map((skill, index) => {
+          const Icon = ICONS[skill.icon];
+          return (
+            <motion.div
+              key={skill.label}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: index * 0.07 }}
+              viewport={{ once: true }}
+              className="rilla-card p-6"
+            >
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/15">
+                <Icon className="h-6 w-6 text-accent" />
+              </div>
+              <h3 className="display mb-2 text-lg text-white">{skill.label}</h3>
+              <p className="text-sm leading-relaxed text-white/60">{skill.detail}</p>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="text-center"
+      >
+        <p className="mb-5 text-sm text-white/40">
+          {skillCategories.length} technical categories &middot; {totalSkillCount}+ technologies,
+          standards, and domains
+        </p>
+        <Link
+          to="/skills"
+          className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 font-bold text-white transition-colors duration-200 hover:border-accent hover:text-accent"
+        >
+          See the full skill set <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </motion.div>
+    </div>
+  </section>
+);
+
+export default Skills;

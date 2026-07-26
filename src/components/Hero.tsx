@@ -244,7 +244,7 @@ const Hero: React.FC = () => {
             { label: 'Momnt', href: 'https://www.momnt.com/' },
             {
               label: 'Stellantis Financial Services',
-              href: 'https://www.stellantisfinancialservices.com/',
+              href: 'https://www.stellantis-fs.com/',
             },
           ]}
         />
