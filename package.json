@@ -28,7 +28,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "linkedin:preview": "node scripts/linkedin-autopost",
-    "linkedin:post": "node scripts/linkedin-autopost --publish"
+    "linkedin:post": "node scripts/linkedin-autopost --publish",
+    "linkedin:whoami": "node scripts/linkedin-autopost/whoami.js"
   },
   "eslintConfig": {
     "extends": [

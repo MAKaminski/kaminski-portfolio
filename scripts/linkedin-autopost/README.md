@@ -6,9 +6,17 @@ description.
 
 ```bash
 npm run linkedin:preview          # dry run — renders artifacts, posts nothing
+npm run linkedin:whoami           # verify a token and print your author URN
 npm run linkedin:post             # publishes (requires credentials, see below)
 node scripts/linkedin-autopost --slug=my-article-slug
 ```
+
+## Never paste a token into a chat, issue, or commit
+
+A `w_member_social` token can post to your feed as you for ~60 days. It belongs
+in `.env.local` (gitignored) or GitHub repository secrets, and nowhere else.
+These scripts read it from the environment, so nobody helping you with this
+needs to see its value.
 
 ## It does not post by default
 
@@ -25,14 +33,20 @@ Review those before running for real.
 
 1. **Create a LinkedIn app** at <https://www.linkedin.com/developers/apps>, and
    associate it with a Page you control.
-2. **Request the "Share on LinkedIn" product**, which grants the
-   `w_member_social` scope. This is the only scope needed to post as yourself.
-3. **Get a member access token** via the 3-legged OAuth flow. LinkedIn's
-   developer console has a token generator that will do this for a single
-   member without you standing up a callback server. Tokens expire in ~60 days,
-   so this is a recurring manual step unless you also store the refresh token.
-4. **Find your author URN.** With the token, `GET https://api.linkedin.com/v2/userinfo`
-   returns a `sub` claim; the URN is `urn:li:person:<sub>`.
+2. **Request two products** on the app's *Products* tab:
+   - *Share on LinkedIn* → grants `w_member_social` (posting).
+   - *Sign In with LinkedIn using OpenID Connect* → grants `openid` / `profile`,
+     which is what lets `linkedin:whoami` read your URN back.
+
+   Posting only strictly needs `w_member_social`; without the OpenID product
+   you'll have to find your URN some other way.
+3. **Generate a member access token.** *Auth → OAuth 2.0 tools → Create token*
+   in the developer console does the 3-legged flow for a single member, so you
+   don't need a callback server. Select `openid`, `profile`, and
+   `w_member_social`. Tokens expire in ~60 days, so this is a recurring manual
+   step unless you also store the refresh token.
+4. **Get your author URN** — put the token in `.env.local` and run
+   `npm run linkedin:whoami`. It prints the exact `urn:li:person:…` to use.
 
 Then set:
 

@@ -12,10 +12,13 @@
 const fs = require('fs');
 const path = require('path');
 
+const { loadEnvLocal } = require('./env');
 const { loadArticles } = require('./articles');
 const { renderCard } = require('./card');
 const { publish } = require('./linkedin');
 const { composePost, SITE } = require('./compose');
+
+loadEnvLocal();
 
 const STATE_FILE = path.join(__dirname, 'posted.json');
 const OUT_DIR = path.join(__dirname, 'out');
