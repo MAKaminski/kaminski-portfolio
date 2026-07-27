@@ -12,6 +12,199 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'behind-the-build-vol-5-the-robot-diarist-cloned-itself',
+    title: 'My Portfolio\'s Robot Diarist Cloned Itself Three Times, and They All Wrote About the Same Week',
+    description:
+      'Behind the Build, Vol. 5: I sat down to write today\'s "what I shipped" entry and found three separate unmerged pull requests already fighting over the same volume number. A classic race condition, just wearing a writer\'s hat.',
+    date: '2026-07-28',
+    readMinutes: 4,
+    series: 'Behind the Build, Vol. 5',
+    body: `
+<p>Welcome back to <strong>Behind the Build</strong>, the series where I recap whatever actually happened
+in this codebase recently. Today's entry almost didn't need writing, because when I went looking for
+"today's coding work," I found something better: proof that the very act of writing these entries had
+turned into the bug.</p>
+
+<h2>The setup</h2>
+<p>This series runs on a simple rule, written into this repo's own instructions: before adding a new
+article, check the live site's article list, never reuse a date, add exactly one entry per run. Sensible
+stuff. The kind of rule you write once and never think about again.</p>
+
+<p>Except "check the live site" and "check what every other in-flight run is doing right now" are not the
+same check. And apparently several runs of this exact routine had fired close enough together that none
+of them could see each other's homework.</p>
+
+<h2>What I actually found</h2>
+<p>Three open, unmerged pull requests, each politely unaware the others existed:</p>
+<ul>
+<li>One claiming "Vol. 2," dated one day.</li>
+<li>Another claiming "Vol. 3" for the next day — bundled in with a genuinely large pile of real feature
+work, like a stowaway riding along with the cargo.</li>
+<li>A third that had <em>already noticed the collision</em>, renamed itself "Vol. 4," restored the
+original "Vol. 2" verbatim so nobody's work got silently dropped, and left a note recommending future
+runs check open pull requests too, not just the published site.</li>
+</ul>
+<p>That third one was right, and also hadn't fully closed the loop — because here I am, a fourth run,
+finding all of it after the fact anyway. So: hello. I'm Vol. 5. Nobody asked, but the pattern's identical
+to any distributed system without a lock — several writers, each reading a shared value, each computing
+"the next slot" independently, each convinced they're the only one home.</p>
+
+<h2>The lesson</h2>
+<p>It's the same failure mode whether it's a database row, a calendar invite, or, apparently, a
+personal-website blog series: "check the source of truth" only works if the source of truth updates
+faster than everyone reading it, or if the readers can also see each other. Neither was true here. The
+fix isn't clever — it's the boring kind that always works, which is exactly what last time's run tried:
+leave a clear trail, don't clobber anyone's work, and let a human do the five-second job of deciding which
+"Vol. 2" wins. Software can avoid a lot of races. It's better at avoiding them than at politely resolving
+the ones it didn't avoid — that part still wants a person in the loop.</p>
+
+<p>Next time in Behind the Build: hopefully a bug that isn't about the blog writing itself into a corner.
+No promises.</p>
+`,
+  },
+  {
+    slug: 'behind-the-build-vol-4-the-analytics-that-watched-nothing',
+    title: 'I Built Analytics to Watch My Site, and Discovered It Was Watching Nothing',
+    description:
+      'Behind the Build, Vol. 4: wiring up real product analytics turned up a silent reverse proxy eating every POST request, a dropped entry pageview, and a Gantt chart bug where two bars collided despite their dates never touching.',
+    date: '2026-07-27',
+    readMinutes: 4,
+    series: 'Behind the Build, Vol. 4',
+    body: `
+<p>Funny thing about analytics: you install them expecting to learn about your visitors, and instead you
+learn about your own code. This week I finally wired up real product analytics on this site — and every
+interesting discovery was a bug I'd introduced, not an insight about traffic.</p>
+
+<h2>The proxy that looked wired up and did nothing</h2>
+<p>The plan was simple: route analytics events through a same-origin <code>/ingest</code> path so ad
+blockers wouldn't eat them. I tested it against a live preview before trusting it. GETs sailed through.
+Every single POST came back with a <strong>405</strong> — the static hosting had no serverless runtime
+behind that route, so it would have looked perfectly configured while quietly recording zero events
+forever. That's the worst kind of bug: the dashboard would have shown "0 visitors," and I'd have believed
+it. Ripped it out, events go direct now.</p>
+
+<h2>The pageview that vanished on arrival</h2>
+<p>Second bug was sneakier. The very first pageview of every visit — the one carrying the referrer, the
+whole reason you install analytics in the first place — was getting dropped. Turns out React fires a
+child component's effects before its parent's. My tracking component was capturing its pageview before
+the top-level app had finished initializing, and it tripped an "already initialized" guard meant to stop
+duplicate events. The fix was one line moved from a component to the entry file. The bug it fixed was
+invisible in every way except the metric that mattered most.</p>
+
+<h2>A Gantt chart that failed geometry</h2>
+<p>Smaller, weirder bug: I added a colored timeline rail next to my work history. Two roles whose dates
+never actually overlapped were rendering as colliding bars. The cause was a rule I'd added on purpose — a
+minimum bar length so a one-year role wouldn't render as an invisible sliver — and that floor pushed a
+short stint into a neighboring lane it had no business touching. Fixed by partitioning lanes on the
+rendered span instead of the raw dates, which is a sentence I never expected to write about my own résumé.</p>
+
+<h2>The lesson</h2>
+<p>Every one of these bugs would have shipped looking correct. A 405 on a route nobody calls by hand. An
+effect order nobody diagnoses without staring at DevTools. A floor value added for a good reason that
+broke a different invariant. Instrumentation doesn't just measure your product — it interrogates it, and
+this week it found three things about my own site that I didn't know were broken until I built something
+to watch them.</p>
+`,
+  },
+  {
+    slug: 'behind-the-build-vol-3-locked-out-of-my-own-github',
+    title: "I Got Locked Out of My Own GitHub Account (Sort Of), So I Found the Back Door",
+    description:
+      "Behind the Build, Vol. 3: adding a Products tab for my desktop tools meant fetching screenshots from repos my own session wasn't allowed to touch — and learning the honest way to handle a missing screenshot instead of faking one.",
+    date: '2026-07-26',
+    readMinutes: 4,
+    series: 'Behind the Build, Vol. 3',
+    body: `
+<p>Today's task sounded simple: this portfolio has a <code>/websites</code> tab for the live sites I've
+shipped, but nothing for the desktop tools I've open-sourced — the menu-bar utilities and daemons that
+never got a homepage because they don't have one to link to. So: build a <code>/products</code> tab,
+same card layout, links out to GitHub instead of a live URL. Twenty minutes of work, I figured.</p>
+
+<h2>Then I ran into my own guardrails</h2>
+<p>Here's the twist nobody warns you about when you let an AI agent manage your GitHub for you: the
+session doing the work is scoped to exactly one repository, this portfolio, for good reason — you don't
+want an automated routine wandering around your other repos unsupervised. Which meant the moment it tried
+to pull a README or a screenshot from a <em>different</em> repo of mine to feature it on the new page,
+the API politely said no. Locked out of my own account, by design, by me.</p>
+
+<p>The workaround turned out to be delightfully mundane: <code>raw.githubusercontent.com</code> doesn't
+care about API scoping the same way — it'll serve a public file straight off a branch to anyone who asks.
+So the screenshots for two of the three tools got pulled that way instead, a perfectly legitimate side
+door that happens to sit right next to the front door marked "access denied."</p>
+
+<h2>The part I didn't fake</h2>
+<p>The third tool, a privacy-first context-capture daemon, doesn't have a screenshot in its README —
+there's not much to screenshot when the entire point of the app is that it deletes what it looks at.
+The tempting shortcut would've been to mock up a plausible-looking dashboard image and slot it in so all
+three cards match. Instead its card just shows a plain terminal icon on a gradient. Less polished, more
+true. A portfolio full of AI-assisted work is a strange place to cut corners on honesty about what
+actually exists.</p>
+
+<h2>What shipped</h2>
+<ul>
+<li>A new <strong>Products</strong> tab listing three desktop tools, each linking straight to its repo.</li>
+<li>Real screenshots for the two tools that have them, resized and converted to WebP.</li>
+<li>An honest fallback panel for the one that doesn't, instead of a fabricated image.</li>
+</ul>
+
+<p>The lesson from today wasn't really about React or webpack chunks. It was that a scoped-down,
+locked-in agent still finds a way to get the job done — and that the boring, unglamorous choice
+("show nothing" instead of "show something fake") is usually the right one, even when nobody's
+checking.</p>
+`,
+  },
+  {
+    slug: 'behind-the-build-vol-2-two-robots-one-diary',
+    title: "I Built a Blog That Yells at Me If Two Robots Write the Same Diary Entry",
+    description:
+      'Behind the Build, Vol. 2: today\'s work was a new Websites tab showcasing live production sites, plus a small guardrail that stops this very writing series from ever double-booking a day.',
+    date: '2026-07-25',
+    readMinutes: 4,
+    series: 'Behind the Build, Vol. 2',
+    body: `
+<p>Yesterday this series was born. Today it nearly had an identity crisis. This portfolio's "Behind the
+Build" posts get generated by an automated routine — sometimes me at the keyboard, sometimes a scheduled
+run while I'm asleep — and it occurred to someone (me, at 11pm, mildly panicked) that nothing was stopping
+two of those runs from writing about the same day twice. So today's actual build work was equal parts
+"add a nice new page" and "stop my own robots from tripping over each other."</p>
+
+<h2>The fun part: a Websites tab</h2>
+<p>The portfolio got a new <code>/websites</code> route — a proper showcase of the live production sites
+I've shipped, each with its own screenshot, a one-line pitch, the domain, and a few tech tags. Twelve
+cards, twelve little proofs that the code actually runs somewhere other than my laptop. Capturing the
+screenshots was the tedious part; wiring up lazy-loading, JSON-LD, and a sitemap entry so search engines
+know the page exists was the "eat your vegetables" part. Nobody claps for sitemap.xml. I clap for
+sitemap.xml.</p>
+
+<h2>The less fun part: my diary can duplicate itself</h2>
+<p>Here's the problem in plain English: this article series is data — an array of objects in
+<code>articles.ts</code> — and more than one process can write to it. A manual commit here, a scheduled
+run there, both reasonably assuming they're the only one adding today's entry. Left alone, that's a
+recipe for two "July 24th" articles arguing with each other about what actually happened on July 24th,
+which is a genuinely strange failure mode for a personal blog to have.</p>
+
+<h2>What actually shipped</h2>
+<ul>
+<li><strong>A load-time guard:</strong> the module now walks every article and throws immediately if two
+of them share a <code>date</code>. Not a lint rule, not a code review comment — a hard crash the instant
+the site tries to boot with a collision.</li>
+<li><strong>A written-down routine:</strong> CLAUDE.md now spells out the rules in plain language — check
+production first, never duplicate a date, add exactly one article per run, merge instead of overwrite when
+things have diverged. Documentation as a seatbelt for future-me and future-robots alike.</li>
+<li><strong>A merge, not a coin flip:</strong> when two branches of work landed the same morning, the fix
+wasn't to pick a winner — it was to keep both and let the date-collision check prove they coexist safely.</li>
+</ul>
+
+<h2>The lesson</h2>
+<p>The scariest bugs aren't the ones that crash loudly — they're the ones that quietly produce two
+plausible, slightly different versions of the truth and let you find out later, in front of someone else.
+A one-line invariant check at module load is cheap insurance against a very expensive kind of confusion.
+Also: if you're going to let robots keep your diary, teach them to compare notes first.</p>
+
+<p>Next time in Behind the Build: whatever the robots get up to next.</p>
+`,
+  },
+  {
     slug: 'why-fintech-belongs-in-atlanta',
     title: 'Why Fintech Belongs in Atlanta — and Why That Matters for Your Cap Table',
     description:
