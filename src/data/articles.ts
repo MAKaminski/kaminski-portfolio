@@ -12,6 +12,57 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'behind-the-build-vol-5-the-robot-diarist-cloned-itself',
+    title: 'My Portfolio\'s Robot Diarist Cloned Itself Three Times, and They All Wrote About the Same Week',
+    description:
+      'Behind the Build, Vol. 5: I sat down to write today\'s "what I shipped" entry and found three separate unmerged pull requests already fighting over the same volume number. A classic race condition, just wearing a writer\'s hat.',
+    date: '2026-07-27',
+    readMinutes: 4,
+    series: 'Behind the Build, Vol. 5',
+    body: `
+<p>Welcome back to <strong>Behind the Build</strong>, the series where I recap whatever actually happened
+in this codebase recently. Today's entry almost didn't need writing, because when I went looking for
+"today's coding work," I found something better: proof that the very act of writing these entries had
+turned into the bug.</p>
+
+<h2>The setup</h2>
+<p>This series runs on a simple rule, written into this repo's own instructions: before adding a new
+article, check the live site's article list, never reuse a date, add exactly one entry per run. Sensible
+stuff. The kind of rule you write once and never think about again.</p>
+
+<p>Except "check the live site" and "check what every other in-flight run is doing right now" are not the
+same check. And apparently several runs of this exact routine had fired close enough together that none
+of them could see each other's homework.</p>
+
+<h2>What I actually found</h2>
+<p>Three open, unmerged pull requests, each politely unaware the others existed:</p>
+<ul>
+<li>One claiming "Vol. 2," dated one day.</li>
+<li>Another claiming "Vol. 3" for the next day — bundled in with a genuinely large pile of real feature
+work, like a stowaway riding along with the cargo.</li>
+<li>A third that had <em>already noticed the collision</em>, renamed itself "Vol. 4," restored the
+original "Vol. 2" verbatim so nobody's work got silently dropped, and left a note recommending future
+runs check open pull requests too, not just the published site.</li>
+</ul>
+<p>That third one was right, and also hadn't fully closed the loop — because here I am, a fourth run,
+finding all of it after the fact anyway. So: hello. I'm Vol. 5. Nobody asked, but the pattern's identical
+to any distributed system without a lock — several writers, each reading a shared value, each computing
+"the next slot" independently, each convinced they're the only one home.</p>
+
+<h2>The lesson</h2>
+<p>It's the same failure mode whether it's a database row, a calendar invite, or, apparently, a
+personal-website blog series: "check the source of truth" only works if the source of truth updates
+faster than everyone reading it, or if the readers can also see each other. Neither was true here. The
+fix isn't clever — it's the boring kind that always works, which is exactly what last time's run tried:
+leave a clear trail, don't clobber anyone's work, and let a human do the five-second job of deciding which
+"Vol. 2" wins. Software can avoid a lot of races. It's better at avoiding them than at politely resolving
+the ones it didn't avoid — that part still wants a person in the loop.</p>
+
+<p>Next time in Behind the Build: hopefully a bug that isn't about the blog writing itself into a corner.
+No promises.</p>
+`,
+  },
+  {
     slug: 'why-fintech-belongs-in-atlanta',
     title: 'Why Fintech Belongs in Atlanta — and Why That Matters for Your Cap Table',
     description:
