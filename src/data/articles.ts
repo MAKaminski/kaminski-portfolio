@@ -12,6 +12,85 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'behind-the-build-vol-2-the-fleet-and-the-silence',
+    title: 'My Automations Didn\'t Crash. They Just Stopped Talking.',
+    description:
+      'Behind the Build, Vol. 2: the daily-article robot quietly skipped four days without erroring once. A look at the fleet of small agents I now run across a portfolio site, a trading account, a resale business, and a spend audit — and why silence is the failure mode nobody instruments for.',
+    date: '2026-07-28',
+    readMinutes: 5,
+    series: 'Behind the Build, Vol. 2',
+    body: `
+<p>This article was supposed to publish on the 25th. And the 26th. And the 27th. It is publishing on the
+28th, which means the automation responsible for writing it missed three consecutive days and did not
+throw a single error while doing so. No alert, no red build, no stack trace. It just… didn't.</p>
+
+<p>That's Vol. 2, then. Not a feature I shipped — a failure mode I found.</p>
+
+<h2>What "the codebase" actually looks like now</h2>
+<p>A year ago, "what I'm working on" meant one repo at a time. Now it's closer to a fleet of small,
+unrelated automations that happen to share an operator:</p>
+<ul>
+<li>A portfolio site that publishes a daily writing series — the thing you're reading, and the thing
+that broke.</li>
+<li>A <strong>Products</strong> page, shipped on the 25th, cataloguing desktop tools that had been
+sitting in public repos with no front door: a macOS system monitor with a desktop HUD, a touchscreen
+driver, an ambient context-capture daemon. The code already existed. The <em>discoverability</em> didn't.</li>
+<li>A brokerage read-only reporter that pulls positions across several accounts each morning and reasons
+about margin eligibility before anything gets sized.</li>
+<li>A recurring-spend auditor that scrapes every subscription and recurring charge, hunts for cheaper
+equivalents, and re-checks each open decision weeks later so "I'll deal with it" has an expiry date.</li>
+<li>A live-commerce assistant that works the chat during a resale livestream, and a separate one that
+posts the go-live announcements.</li>
+<li>A lead-import pipeline that pulls a public contractor licensing dataset, scores it for buyer intent,
+and pushes it into a database behind an outreach app.</li>
+</ul>
+
+<p>None of these are related. A trading account and a livestream chat bot share exactly zero domain
+logic. But structurally they're the same animal: <em>capture some context, impose a schema on it, make
+it re-runnable, and let it run without me.</em> That last clause is doing an enormous amount of
+unearned work.</p>
+
+<h2>The failure mode is silence, not errors</h2>
+<p>Every one of these has decent error handling. What none of them had was a check on the thing that
+actually went wrong here, which is <strong>absence</strong>. The article robot didn't fail loudly — it
+either never fired, or fired and decided there was nothing worth writing, and both outcomes look
+identical from the outside: a quiet day.</p>
+
+<p>Traditional monitoring is built around events. Something happened, and the something was bad. But an
+automation whose whole job is to <em>produce</em> something on a schedule has an inverted signature: the
+bad state is the <em>lack</em> of an event. If your alerting only fires on errors, a job that silently
+stops is indistinguishable from a job that ran perfectly and had nothing to do.</p>
+
+<p>The fix isn't clever. It's a freshness check — assert that the newest item is dated today, and treat
+stagnation itself as the bug. That's now written down as a rule for this repo in plain language: never
+skip a run, and if you can't publish today, publish to the next open date rather than quietly doing
+nothing. Same idea as a dead-man's switch, which fire alarms and pacemakers figured out decades before
+software did.</p>
+
+<h2>Why this gets worse as the fleet grows</h2>
+<p>One automation you notice. Two you probably notice. By the time you're running a dozen small agents
+across unrelated domains, you have no ambient sense of which ones are alive, because you're not looking
+at any of them — that was the entire point of building them. The value of automation is that you stop
+paying attention, and the cost of automation is that you stop paying attention.</p>
+
+<p>Which reframes what "operating a fleet" actually requires. Not more agents. A cheap, boring,
+per-agent answer to one question: <em>when did this last successfully produce something, and is that
+recent enough?</em> Everything else — the model, the prompt, the clever tool use — is downstream of a
+heartbeat.</p>
+
+<h2>The lesson</h2>
+<p>I spend a lot of time on the seam between finance and engineering, and this is a very finance
+observation dressed in engineering clothes: <strong>the absence of a transaction is data.</strong> A
+reconciliation that comes back empty isn't a clean month — it's an unanswered question. Same with an
+agent that has nothing to report. Both need someone to notice the quiet.</p>
+
+<p>Three missed days is a cheap way to learn that. Cheaper than the version where the thing going
+quiet is a trading report or a spend audit.</p>
+
+<p>Next time in Behind the Build: whatever breaks next. Historically, this has been a reliable pipeline.</p>
+`,
+  },
+  {
     slug: 'why-fintech-belongs-in-atlanta',
     title: 'Why Fintech Belongs in Atlanta — and Why That Matters for Your Cap Table',
     description:
