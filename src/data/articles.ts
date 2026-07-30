@@ -12,6 +12,164 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'behind-the-build-vol-7-every-url-returns-200',
+    title: "Every URL on My Site Returns 200, Including the Ones That Don't Exist",
+    description:
+      'Behind the Build, Vol. 7: I had to prove four recovered articles were actually live, and discovered my own verification was a test that could never fail. The fix came from a filename.',
+    date: '2026-07-30',
+    readMinutes: 5,
+    series: 'Behind the Build, Vol. 7',
+    body: `
+<p>Today was cleanup day. Several articles had been written over the past week and never actually
+reached the site — each one sitting in its own branch that quietly never merged. Recovering the text was
+the easy part: it was all still there, nothing had been deleted, and putting it back was an exercise in
+careful copying.</p>
+
+<p>Proving it had actually gone live turned out to be the genuinely interesting problem.</p>
+
+<h2>The test that always passes</h2>
+<p>My first instinct was the obvious one. Ask the site. Request the URL of a previously-missing article,
+look at the status code, and let HTTP answer the question: 200 means it's there, 404 means it isn't.</p>
+
+<p>Every path I asked about returned 200. Including several I invented on the spot.</p>
+
+<p>This isn't a bug. It's the single-page-app bargain, and I configured it myself years ago. There's a
+rewrite rule sending every incoming request to <code>index.html</code>, because the server has no idea
+which article slugs exist — that knowledge lives inside a JavaScript bundle that hasn't run yet. So the
+server says 200 to absolutely everything and lets the browser's router sort out what's real.</p>
+
+<p>Which means a "does this page exist" check built on status codes is a test that passes regardless of
+the answer. That's worse than having no test at all. No test is a known gap; a test that can't fail is a
+gap wearing a badge that says everything's fine. I very nearly wrote "verified, all four articles are
+live" on the strength of four 200s that would have looked exactly the same if the deploy had never
+happened.</p>
+
+<h2>Asking a question that can come back no</h2>
+<p>The thing worth checking was never the route. It was the payload — and the payload had a property I'd
+been ignoring for years because it mostly just looks like noise.</p>
+
+<p>The build tool names compiled files after a hash of their contents. Not a version, not a timestamp: a
+fingerprint. Change one character of one article and the filename changes with it. That's normally a
+cache-busting detail nobody thinks about, but it turns the filename into something much more useful — a
+claim about content that the file itself has to honor.</p>
+
+<p>So the question became answerable. Build locally, note which file the article data landed in, then
+fetch that exact filename from the live domain and compare the two byte for byte. If production is
+serving a file with the same content hash as the one on my laptop, it isn't serving something similar or
+something recent. It's serving the same bytes.</p>
+
+<p>They matched — identical, to the byte — and all nine articles were in it. That's a verification that
+had a real opportunity to come back negative, which is the entire property I wanted and the entire
+property the status-code check lacked.</p>
+
+<h2>The part I got wrong first</h2>
+<p>Worth admitting: my first pass at the payload check also misfired. I grepped the main bundle for the
+article slugs and found the four new ones present and the five older ones apparently missing, which
+briefly looked like I'd shipped a catastrophe — the exact overwrite I'd spent the day repairing.</p>
+
+<p>I hadn't. The article data had been split into a separate lazy-loaded chunk, and the main bundle only
+contained a few slug strings for unrelated routing reasons. I was grepping a file that was never going
+to have the answer, and reading its silence as evidence. Same category of mistake as the 200s, honestly:
+I asked a source that couldn't possibly know, then treated its response as informative.</p>
+
+<h2>The lesson</h2>
+<p>Both mistakes came from the same reflex — reaching for the check that's easy to run rather than the
+one that's hard to fool. A status code is one command. A content-hash comparison takes a few more steps
+and an understanding of how your own bundler works, which is precisely why it's worth something.</p>
+
+<p>The useful question to ask of any verification, before trusting it: <em>what would this look like if
+the thing I'm checking were broken?</em> If the honest answer is "about the same," you haven't verified
+anything. You've just performed the shape of verifying, which is a surprisingly comfortable place to
+stop.</p>
+
+<p>Next time in Behind the Build: hopefully something I got right on the first attempt. The historical
+record here is not encouraging.</p>
+`,
+  },
+  {
+    slug: 'behind-the-build-vol-6-the-fleet-and-the-silence',
+    title: 'My Automations Didn\'t Crash. They Just Stopped Talking.',
+    description:
+      'Behind the Build, Vol. 6: the daily-article robot quietly skipped four days without erroring once. A look at the fleet of small agents I now run across a portfolio site, a trading account, a resale business, and a spend audit — and why silence is the failure mode nobody instruments for.',
+    date: '2026-07-29',
+    readMinutes: 5,
+    series: 'Behind the Build, Vol. 6',
+    body: `
+<p>Nothing new appeared on this site on the 25th, the 26th, or the 27th. The automation responsible for
+publishing here did not throw a single error during that stretch. No alert, no red build, no stack
+trace. It just… went quiet.</p>
+
+<p>The twist, which turned up only later: it had been running the entire time. Every one of those days
+produced an article. They were stranded in branches that never merged — which, from outside, is
+indistinguishable from having produced nothing at all.</p>
+
+<p>That's Vol. 6, then. Not a feature I shipped — a failure mode I found.</p>
+
+<h2>What "the codebase" actually looks like now</h2>
+<p>A year ago, "what I'm working on" meant one repo at a time. Now it's closer to a fleet of small,
+unrelated automations that happen to share an operator:</p>
+<ul>
+<li>A portfolio site that publishes a daily writing series — the thing you're reading, and the thing
+that broke.</li>
+<li>A <strong>Products</strong> page, shipped on the 25th, cataloguing desktop tools that had been
+sitting in public repos with no front door: a macOS system monitor with a desktop HUD, a touchscreen
+driver, an ambient context-capture daemon. The code already existed. The <em>discoverability</em> didn't.</li>
+<li>A brokerage read-only reporter that pulls positions across several accounts each morning and reasons
+about margin eligibility before anything gets sized.</li>
+<li>A recurring-spend auditor that scrapes every subscription and recurring charge, hunts for cheaper
+equivalents, and re-checks each open decision weeks later so "I'll deal with it" has an expiry date.</li>
+<li>A live-commerce assistant that works the chat during a resale livestream, and a separate one that
+posts the go-live announcements.</li>
+<li>A lead-import pipeline that pulls a public contractor licensing dataset, scores it for buyer intent,
+and pushes it into a database behind an outreach app.</li>
+</ul>
+
+<p>None of these are related. A trading account and a livestream chat bot share exactly zero domain
+logic. But structurally they're the same animal: <em>capture some context, impose a schema on it, make
+it re-runnable, and let it run without me.</em> That last clause is doing an enormous amount of
+unearned work.</p>
+
+<h2>The failure mode is silence, not errors</h2>
+<p>Every one of these has decent error handling. What none of them had was a check on the thing that
+actually went wrong here, which is <strong>absence</strong>. The article robot didn't fail loudly — it
+fired, wrote, and left the result somewhere the site couldn't see, which looks identical from the
+outside to never having fired at all: a quiet day.</p>
+
+<p>Traditional monitoring is built around events. Something happened, and the something was bad. But an
+automation whose whole job is to <em>produce</em> something on a schedule has an inverted signature: the
+bad state is the <em>lack</em> of an event. If your alerting only fires on errors, a job that silently
+stops is indistinguishable from a job that ran perfectly and had nothing to do.</p>
+
+<p>The fix isn't clever. It's a freshness check — assert that the newest item is dated today, and treat
+stagnation itself as the bug. That's now written down as a rule for this repo in plain language: never
+skip a run, and if you can't publish today, publish to the next open date rather than quietly doing
+nothing. Same idea as a dead-man's switch, which fire alarms and pacemakers figured out decades before
+software did.</p>
+
+<h2>Why this gets worse as the fleet grows</h2>
+<p>One automation you notice. Two you probably notice. By the time you're running a dozen small agents
+across unrelated domains, you have no ambient sense of which ones are alive, because you're not looking
+at any of them — that was the entire point of building them. The value of automation is that you stop
+paying attention, and the cost of automation is that you stop paying attention.</p>
+
+<p>Which reframes what "operating a fleet" actually requires. Not more agents. A cheap, boring,
+per-agent answer to one question: <em>when did this last successfully produce something, and is that
+recent enough?</em> Everything else — the model, the prompt, the clever tool use — is downstream of a
+heartbeat.</p>
+
+<h2>The lesson</h2>
+<p>I spend a lot of time on the seam between finance and engineering, and this is a very finance
+observation dressed in engineering clothes: <strong>the absence of a transaction is data.</strong> A
+reconciliation that comes back empty isn't a clean month — it's an unanswered question. Same with an
+agent that has nothing to report. Both need someone to notice the quiet.</p>
+
+<p>Three silent days is a cheap way to learn that. Cheaper than the version where the thing going
+quiet is a trading report or a spend audit.</p>
+
+<p>Next time in Behind the Build: whatever breaks next. Historically, this has been a reliable pipeline.</p>
+`,
+  },
+  {
     slug: 'behind-the-build-vol-5-the-robot-diarist-cloned-itself',
     title: 'My Portfolio\'s Robot Diarist Cloned Itself Three Times, and They All Wrote About the Same Week',
     description:
