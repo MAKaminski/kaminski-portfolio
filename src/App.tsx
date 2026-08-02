@@ -16,6 +16,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import AIChatbot from './components/AIChatbot';
 import ReferralCarousel from './components/ReferralCarousel';
+import AnalyticsTracker from './components/AnalyticsTracker';
 
 // Secondary routes are code-split so they don't ship in the main bundle.
 const CFO = lazy(() => import('./pages/CFO'));
@@ -120,6 +121,7 @@ function App() {
       <SmoothScroll>
       <Cursor />
       <Router>
+        <AnalyticsTracker />
         <ThemeContext.Consumer>
           {({ theme }) => (
             <div className="min-h-screen" style={{ background: theme.bg }}>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Download, Clock, ArrowUpRight, Linkedin, Github, MessagesSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { track } from '@vercel/analytics';
+import { track } from '../utils/track';
 import { useTheme } from '../App';
 import { Role } from '../App';
 import Marquee from './Marquee';

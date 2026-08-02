@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Download, Send, Linkedin, Calendar } from 'lucide-react';
-import { track } from '@vercel/analytics';
+import { track } from '../utils/track';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
