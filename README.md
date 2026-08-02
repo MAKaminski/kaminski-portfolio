@@ -193,6 +193,32 @@ one the voice has trained on, `speak` reads the voice's own `fine_tuning.state`
 and retries on a model that is ready — the `X-Twin-Voice-Model` response header
 reports which one actually spoke.
 
+**When the twin answers in text but says nothing**, ask the endpoint why:
+
+```bash
+curl -s -X POST https://www.michael-kaminski.io/api/twin/speak \
+  -H 'content-type: application/json' -d '{"text":"test"}'
+```
+
+A `502` carries the reason. `upstreamCode` separates the two failures that look
+identical from the browser:
+
+| `upstreamCode` | Meaning | Fix |
+| --- | --- | --- |
+| `voice_lookup_failed` | `GET /v1/voices/{id}` failed — bad key, wrong voice ID, or ElevenLabs down. `upstreamStatus` says which. | Check `ELEVENLABS_API_KEY` / `ELEVENLABS_VOICE_ID`. |
+| `voice_not_fine_tuned` | The voice resolved but no model is trained. The `fineTuning` field gives the per-model state. | Depends on the state, below. |
+
+ElevenLabs reports one of `not_started`, `queued`, `fine_tuning`, `fine_tuned`,
+`failed`, `delayed` per model. `queued`/`fine_tuning`/`delayed` means wait.
+`failed` means retrain. **`not_started` across every model means training was
+never kicked off** — the samples exist but the fine-tune was never run, which is
+a PVC that hasn't been trained rather than one that broke. Nothing heals that but
+starting it in the dashboard.
+
+Note that these are distinct from "the key is wrong": a rejected key returns
+`401` and an unknown voice returns `404`, so a `400 voice_not_fine_tuned` proves
+both are valid.
+
 Optional knobs, all clamped to 0–1, no redeploy needed beyond the usual env-var
 rebuild:
 
