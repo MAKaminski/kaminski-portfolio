@@ -113,9 +113,15 @@ three Vercel serverless functions under `api/twin/`:
 | `POST /api/twin/transcribe` | Speech to text (OpenAI Whisper) | `OPENAI_API_KEY` |
 | `POST /api/twin/speak` | Text to speech in a cloned voice (ElevenLabs) | `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID` |
 
-Set these in **Vercel → Project → Settings → Environment Variables**. They are
-read server-side only and are never exposed to the browser — do not prefix them
-with `REACT_APP_`, which would bundle them into the client.
+Set these in **Vercel → Project → Settings → Environment Variables**, scoped to
+the environments you want them in (Production and Preview are separate). They
+are read server-side only and are never exposed to the browser — do not prefix
+them with `REACT_APP_`, which would bundle them into the client.
+
+**Adding or changing a variable requires a redeploy.** Vercel binds env vars to a
+deployment when it builds, so an existing deployment keeps reporting
+`not_configured` until you redeploy — from the Vercel dashboard, or by pushing
+any commit.
 
 The SPA rewrite in `vercel.json` uses `"/((?!api/).*)"` rather than `"/(.*)"` so
 the catch-all can't shadow these functions and serve `index.html` in their place.
