@@ -45,6 +45,15 @@ const sites: Site[] = [
     tags: ['Next.js', 'Options', 'Publishing'],
   },
   {
+    name: 'Commitgraph',
+    url: 'https://top-github-users-makaminski1337.vercel.app',
+    image: '/images/sites/commitgraph.webp',
+    category: 'Data · Open Source',
+    description:
+      'Worldwide, country and city leaderboards for the most active developers on GitHub — with the contribution heatmaps, rank-movement bump charts and distributions that a table of follower counts cannot show. Publishes what it does not know rather than presenting a ranking as fact.',
+    tags: ['Next.js', 'GitHub API', 'Data Viz'],
+  },
+  {
     name: 'COT Signal',
     url: 'https://cot-signal.vercel.app',
     image: '/images/sites/cot-signal.webp',
