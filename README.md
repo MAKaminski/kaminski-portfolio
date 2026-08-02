@@ -101,6 +101,23 @@ The site can be deployed to any static hosting service:
 - **GitHub Pages**: Use the gh-pages package
 - **AWS S3**: Upload the build folder
 
+## Writing & the sitemap
+
+Articles live in `src/data/articles.ts`. One entry per calendar date — the module
+throws at load if two share a `date`.
+
+Series labels are **unnumbered**. The old `Behind the Build, Vol. N` scheme broke
+whenever two drafts were in flight at once: each branch counted the volumes it
+could see on `main` and both wrote "Vol. 2". Current entries use `Field Notes`
+with no counter, so concurrent drafts have nothing to collide over.
+
+`public/sitemap.xml` is **generated, not hand-edited** — `npm run build` runs
+`scripts/generate-sitemap.js` first, which reads the article list and emits every
+route plus every article URL. It was maintained by hand until nine published
+articles turned out to be missing from it; the script refuses to write anything if
+its parse of `articles.ts` looks wrong rather than silently shipping a short
+sitemap. New static routes go in the `routes` array at the top of that script.
+
 ## Digital Twin
 
 The "Talk to my Digital Twin" button on the home page opens a voice-or-text

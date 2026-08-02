@@ -4,13 +4,140 @@ export interface Article {
   description: string;
   date: string; // ISO
   readMinutes: number;
-  /** Optional series label, e.g. "Behind the Build, Vol. 3" */
+  /**
+   * Optional series label. Deliberately unnumbered — the old
+   * "Behind the Build, Vol. N" scheme made every concurrent writing run fight
+   * over the same N, and the counter was never worth the collisions.
+   */
   series?: string;
   /** Author-controlled HTML body (rendered via dangerouslySetInnerHTML). */
   body: string;
 }
 
 export const articles: Article[] = [
+  {
+    slug: 'i-gave-my-website-a-voice',
+    title: "I Gave My Website a Voice, and the Voice Was the Easy Part",
+    description:
+      'There is now a digital twin on my homepage you can talk to out loud, hands-free, in a clone of my voice. Getting it to sound like me took an afternoon. Getting it to sound like a person took rewriting how it writes.',
+    date: '2026-08-03',
+    readMinutes: 7,
+    series: 'Field Notes',
+    body: `
+<p>There is a button on my homepage now that says <strong>Talk to my Digital Twin</strong>. Press it and you
+get a panel. Type a question and an AI trained on the public content of this site answers as me. Press the
+broadcast icon and it opens the microphone, waits for you to finish a sentence, answers out loud in a clone
+of my voice, and starts listening again — no clicking between turns.</p>
+
+<p>Three services behind it, all server-side so the keys never reach a browser: Whisper for speech to text,
+Claude for the conversation, ElevenLabs for the voice. That part is a weekend's worth of plumbing and it
+mostly worked on the first deploy.</p>
+
+<p>What did not work on the first deploy, or the fifth, was making the thing sound like a human being. And
+the fixes for that were almost never in the audio stack.</p>
+
+<h2>The engine reads what you write, not what you meant</h2>
+
+<p>The first end-to-end test came back in a voice that was unmistakably mine and delivery that was
+unmistakably a computer. It said "dollar ten point eight B." It said "ess one." It said "A-S-C six zero six"
+with the flat cadence of a serial number. Somewhere in there it read a percent sign aloud.</p>
+
+<p>My instinct was to reach for the voice settings — stability, similarity, style — because those are the
+knobs the vendor gives you and knobs feel like control. I turned them for an hour and got a marginally
+smoother reading of the same broken sentences.</p>
+
+<p>The actual problem was upstream. A speech engine is handed a string. It has no idea that
+<code>$10.8B</code> is a quantity a human would say as "about ten point eight billion," or that
+<code>2016-2018</code> is a span and not a subtraction. It is not confused. It is doing exactly what you
+asked, and what you asked was to read a document out loud.</p>
+
+<p>So the fix went into the model's instructions, not the audio config. The system prompt now has a section
+that says, in effect: <em>you are being read aloud, so write speech</em>. Spell out anything an eye would
+decode but an ear cannot. Hyphenate acronyms that get read letter by letter — "S-one," not "S1." Treat
+punctuation as pacing rather than typography, because the engine either swallows a semicolon or announces
+it. Write "and" instead of an ampersand and "percent" instead of a sign. Keep sentences short, because
+prosody drifts across a long clause the way a held note goes flat.</p>
+
+<p>That change did more for perceived quality than every voice parameter combined. It is the same lesson
+that shows up in financial reporting, incidentally: the presentation layer can only render what the data
+model gives it, and most "the dashboard looks wrong" problems are really "the dashboard is correctly
+displaying a bad number" problems.</p>
+
+<h2>Silence is a design decision</h2>
+
+<p>Hands-free sounds like a small feature and is mostly an argument about silence. Somebody has to decide
+when you are done talking, and every threshold is a trade.</p>
+
+<p>Cut the turn at half a second of quiet and it interrupts anyone who pauses to think. Wait three seconds
+and every exchange feels like it is buffering. It landed at <strong>1.3 seconds</strong> below threshold to
+close a turn, 150 milliseconds above it to open one, and anything under 400 milliseconds of speech thrown
+away as a cough, a door, or a chair.</p>
+
+<p>The part I did not expect to matter most: the threshold itself cannot be a constant. A fixed cutoff works
+beautifully at a quiet desk and fails completely next to a laptop fan or in a coffee shop — and "fails"
+here means the microphone decides the room is talking and never stops recording. So it now spends the first
+700 milliseconds after you press the button doing nothing but listening to the room, then sets its bar
+relative to whatever it heard. That is why there is a brief "getting a read on the room" state before it
+says it is listening. It is not a loading spinner. It is the only reason the feature works anywhere but my
+office.</p>
+
+<p>One more: the loop suspends itself while the twin is speaking and resumes when playback ends. Without
+that it hears its own voice through the speakers and answers itself, which is funny exactly once.</p>
+
+<h2>The rule I care most about</h2>
+
+<p>Ask it whether it is a real person and it tells you it is not. That is not a disclaimer bolted on the
+outside; it is in the instructions, and I tested it by trying to talk it out of the answer.</p>
+
+<p>It is also fenced in on substance. It only knows what this site already publishes. It is told to say it
+does not know rather than invent a client, a number, or a date — because a confident fabrication in my voice
+is worse than no answer at all. It will not discuss anything non-public about any employer. Asked what I
+charge, it says compensation depends on role and scope and belongs on a call, which is both a guardrail and
+the truth.</p>
+
+<p>I checked all of that against the live deployment rather than trusting the prompt. Asked for a base
+salary: declined, sent it to a call. Asked to name clients at a former employer: declined. Asked what I did
+at GreenSky: product and strategy on the credit platform, there through the IPO, supported the S-1 —
+accurate, first person, one sentence, and it said "S-one" out loud.</p>
+
+<h2>Retiring the volume numbers</h2>
+
+<p>This entry has no number on it, and none of the ones after it will either.</p>
+
+<p>"Behind the Build" ran eight volumes and the numbering was quietly the worst thing about it. These posts
+get drafted by scheduled runs, each of which branches off the published site, counts the volumes it can see,
+and adds one. Run two of those in the same window and both of them confidently write "Vol. 2." I spent part
+of this week untangling six of those — six separate drafts, all claiming the same number, several never
+merged at all. Not one of them was wrong about anything except its own place in line.</p>
+
+<p>A counter that requires global coordination to be correct is a counter that will be wrong. So it is gone.
+These are <strong>Field Notes</strong> now: dated, titled, unnumbered. Nothing to collide over.</p>
+
+<h2>Also shipped, since it was the same 24 hours</h2>
+
+<p>Four more live sites went onto the <a href="/websites">Websites</a> page in the same stretch:</p>
+
+<ul>
+<li><strong>COT Signal</strong> — weekly CME futures positioning for Bitcoin and Ether, read straight off
+the CFTC Commitments of Traders report. Asset managers, hedge funds, and dealers, net long against net
+short.</li>
+<li><strong>VendorLink</strong> — a two-sided marketplace pairing event organizers with local vendors, with
+applications, contracts, and payments in one flow.</li>
+<li><strong>YardLine</strong> — a supply-side prospecting CRM for heavy-duty truck salvage yards around
+metro Atlanta. Roster-gated, so what the public sees is a sign-in screen.</li>
+<li><strong>Next Generation Capital</strong> — an investor-network site for an Atlanta build-to-rent and
+cottage-community firm. Deliberately not a public offering: it states a thesis and opens an introduction.</li>
+</ul>
+
+<p>They have nothing to do with each other, which is sort of the point. The interesting constraint right now
+is not whether a thing can be built in an evening. It is whether the tenth one you built in an evening is
+still something you would put your name on. The twin is the current test case: it speaks in my voice, on my
+domain, to people deciding whether to email me. If it invents one deal or bluffs one number, the convenience
+was not worth it.</p>
+
+<p>So far it says "I'm not sure" more often than I expected, which I am choosing to read as a good sign.</p>
+`,
+  },
   {
     slug: 'behind-the-build-vol-8-i-shipped-the-same-pr-twice',
     title: 'I Shipped the Same Pull Request Twice and Only Noticed the Second Time',
