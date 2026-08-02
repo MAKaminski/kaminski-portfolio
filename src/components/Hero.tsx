@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Download, Clock, ArrowUpRight, Linkedin, Github } from 'lucide-react';
+import { Download, Clock, ArrowUpRight, Linkedin, Github, MessagesSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import { useTheme } from '../App';
@@ -9,6 +9,7 @@ import Marquee from './Marquee';
 import CountUp from './CountUp';
 import SplitReveal from './SplitReveal';
 import Magnetic from './Magnetic';
+import DigitalTwin from './DigitalTwin';
 
 const RILLA_EASE = [0.445, 0.05, 0.55, 0.95] as const;
 
@@ -21,6 +22,7 @@ const Hero: React.FC = () => {
   const yGrid = useTransform(scrollY, [0, 700], [0, 80]);
   // Drifts slower than the grid so the map sits behind it.
   const yMap = useTransform(scrollY, [0, 700], [0, 46]);
+  const [twinOpen, setTwinOpen] = useState(false);
 
   const roles: { key: Role; label: string }[] = [
     { key: 'cfo', label: 'CFO' },
@@ -149,6 +151,18 @@ const Hero: React.FC = () => {
                 >
                   <Download className="w-5 h-5" /> Resume
                 </a>
+              </Magnetic>
+              <Magnetic strength={0.6}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTwinOpen(true);
+                    track('Digital Twin Opened', { source: 'Hero' });
+                  }}
+                  className="btn-pill-ghost text-base"
+                >
+                  <MessagesSquare className="w-5 h-5" /> Talk to my Digital Twin
+                </button>
               </Magnetic>
               <div className="flex items-center gap-2 pl-1">
                 <Magnetic strength={0.5}>
@@ -297,6 +311,8 @@ const Hero: React.FC = () => {
           ]}
         />
       </div>
+
+      <DigitalTwin open={twinOpen} onClose={() => setTwinOpen(false)} />
     </section>
   );
 };

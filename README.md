@@ -101,6 +101,41 @@ The site can be deployed to any static hosting service:
 - **GitHub Pages**: Use the gh-pages package
 - **AWS S3**: Upload the build folder
 
+## Digital Twin
+
+The "Talk to my Digital Twin" button on the home page opens a voice-or-text
+conversation with an AI trained on the public content of this site. It runs on
+three Vercel serverless functions under `api/twin/`:
+
+| Route | Does | Needs |
+| --- | --- | --- |
+| `POST /api/twin/chat` | Streams the conversation (Claude, `claude-opus-5`) | `ANTHROPIC_API_KEY` |
+| `POST /api/twin/transcribe` | Speech to text (OpenAI Whisper) | `OPENAI_API_KEY` |
+| `POST /api/twin/speak` | Text to speech in a cloned voice (ElevenLabs) | `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID` |
+
+Set these in **Vercel → Project → Settings → Environment Variables**. They are
+read server-side only and are never exposed to the browser — do not prefix them
+with `REACT_APP_`, which would bundle them into the client.
+
+Each capability degrades on its own. With no keys set the button still opens and
+explains that the twin isn't configured; without the ElevenLabs pair replies stay
+text-only; without the OpenAI key the microphone reports that voice input is
+unavailable and typing still works.
+
+`ELEVENLABS_VOICE_ID` is the ID of a voice clone created in the ElevenLabs
+dashboard. Until it is set, nothing is spoken — the twin will not fall back to a
+stock voice.
+
+**These endpoints are public and cost money per call.** Each is capped at 20
+requests per minute per IP, but that limit lives in the memory of a single warm
+serverless instance, so it bounds a casual script rather than a distributed one.
+Put a shared store (Vercel KV, Upstash) behind `rateLimit()` in `api/_lib/http.ts`
+before promoting this anywhere high-traffic.
+
+The persona and everything the twin knows live in `api/_lib/persona.ts`. It is
+restricted to what is already published on this site and is instructed to say it
+doesn't know rather than invent a client, a number, or a date.
+
 ## Performance
 
 - Optimized images and assets

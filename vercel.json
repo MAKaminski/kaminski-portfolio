@@ -24,7 +24,8 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "comment": "SPA fallback for every path except the serverless functions under /api.",
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]
