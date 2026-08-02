@@ -26,6 +26,32 @@ const MODEL_PREFERENCE = [
   'eleven_monolingual_v1',
 ];
 
+/** 0–1 knob from the environment, so the voice can be tuned without a code change. */
+function knob(name: string, fallback: number): number {
+  const raw = Number(process.env[name]);
+  return Number.isFinite(raw) ? Math.min(1, Math.max(0, raw)) : fallback;
+}
+
+/**
+ * stability      — lower is more expressive and more variable, higher is steadier
+ *                  and flatter. Conversation wants some life, so sit below centre.
+ * similarity     — how hard the model pulls toward the source recordings. High
+ *                  helps a clone sound like its owner, but drags in artefacts if
+ *                  the source samples were noisy.
+ * style          — exaggerates the speaker's delivery. Costs latency and
+ *                  destabilises a clone, so it stays off unless asked for.
+ * speaker_boost  — improves resemblance to the original speaker at no real cost;
+ *                  the one setting that is simply on for a voice clone.
+ */
+function voiceSettings() {
+  return {
+    stability: knob('ELEVENLABS_STABILITY', 0.4),
+    similarity_boost: knob('ELEVENLABS_SIMILARITY', 0.85),
+    style: knob('ELEVENLABS_STYLE', 0),
+    use_speaker_boost: true,
+  };
+}
+
 function errorCode(body: string): string | undefined {
   try {
     const parsed = JSON.parse(body) as { detail?: { status?: string } | string };
@@ -90,12 +116,13 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
       body: JSON.stringify({
         text: body,
         model_id: modelId,
-        voice_settings: { stability: 0.45, similarity_boost: 0.8 },
+        voice_settings: voiceSettings(),
       }),
     });
 
   try {
     const first = process.env.ELEVENLABS_MODEL_ID || DEFAULT_MODEL;
+    let served = first;
     let upstream = await synth(first);
     let detail = upstream.ok ? '' : await upstream.text();
 
@@ -113,9 +140,10 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
         return;
       }
 
-      upstream = await synth(candidates[0]);
+      served = candidates[0];
+      upstream = await synth(served);
       detail = upstream.ok ? '' : await upstream.text();
-      if (upstream.ok) console.info('[twin/speak] fell back to %s', candidates[0]);
+      if (upstream.ok) console.info('[twin/speak] fell back to %s', served);
     }
 
     if (!upstream.ok) {
@@ -134,6 +162,9 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     const audio = Buffer.from(await upstream.arrayBuffer());
     res.setHeader('Content-Type', 'audio/mpeg');
     res.setHeader('Cache-Control', 'no-store');
+    // Which model actually spoke — the fallback makes this non-obvious, and it
+    // decides which tuning knobs are even available.
+    res.setHeader('X-Twin-Voice-Model', served);
     res.status(200).send(audio);
   } catch (err) {
     console.error('[twin/speak]', err instanceof Error ? err.message : err);

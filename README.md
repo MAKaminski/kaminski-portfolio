@@ -145,6 +145,32 @@ unavailable and typing still works.
 dashboard. Until it is set, nothing is spoken — the twin will not fall back to a
 stock voice.
 
+### Tuning how the twin sounds
+
+A Professional Voice Clone is fine-tuned per model. If the configured model isn't
+one the voice has trained on, `speak` reads the voice's own `fine_tuning.state`
+and retries on a model that is ready — the `X-Twin-Voice-Model` response header
+reports which one actually spoke.
+
+Optional knobs, all clamped to 0–1, no redeploy needed beyond the usual env-var
+rebuild:
+
+| Variable | Default | Effect |
+| --- | --- | --- |
+| `ELEVENLABS_STABILITY` | `0.4` | Lower is more expressive and more variable; higher is steadier and flatter. |
+| `ELEVENLABS_SIMILARITY` | `0.85` | How hard the model pulls toward the source recordings. High helps a clone sound like its owner but amplifies noise in the source samples. |
+| `ELEVENLABS_STYLE` | `0` | Exaggerates delivery. Adds latency and can destabilise a clone — raise only deliberately. |
+| `ELEVENLABS_MODEL_ID` | auto | Pins a model instead of using the fallback. |
+
+`use_speaker_boost` is always on; it improves resemblance to the source speaker
+at no real cost.
+
+**The largest lever isn't here.** Speech quality is dominated by the text handed
+to the engine, and that comes from the `<format>` block in `api/_lib/persona.ts` —
+spell figures out as words, hyphenate letter-by-letter acronyms, keep sentences
+short, and avoid punctuation the engine reads literally. Tune that block before
+touching the knobs above.
+
 **These endpoints are public and cost money per call.** Each is capped at 20
 requests per minute per IP, but that limit lives in the memory of a single warm
 serverless instance, so it bounds a casual script rather than a distributed one.
