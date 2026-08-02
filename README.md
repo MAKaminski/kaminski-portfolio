@@ -101,6 +101,127 @@ The site can be deployed to any static hosting service:
 - **GitHub Pages**: Use the gh-pages package
 - **AWS S3**: Upload the build folder
 
+## Writing & the sitemap
+
+Articles live in `src/data/articles.ts`. One entry per calendar date — the module
+throws at load if two share a `date`.
+
+Series labels are **unnumbered**. The old `Behind the Build, Vol. N` scheme broke
+whenever two drafts were in flight at once: each branch counted the volumes it
+could see on `main` and both wrote "Vol. 2". Current entries use `Field Notes`
+with no counter, so concurrent drafts have nothing to collide over.
+
+`public/sitemap.xml` is **generated, not hand-edited** — `npm run build` runs
+`scripts/generate-sitemap.js` first, which reads the article list and emits every
+route plus every article URL. It was maintained by hand until nine published
+articles turned out to be missing from it; the script refuses to write anything if
+its parse of `articles.ts` looks wrong rather than silently shipping a short
+sitemap. New static routes go in the `routes` array at the top of that script.
+
+## Digital Twin
+
+The "Talk to my Digital Twin" button on the home page opens a voice-or-text
+conversation with an AI trained on the public content of this site. It runs on
+three Vercel serverless functions under `api/twin/`:
+
+| Route | Does | Needs |
+| --- | --- | --- |
+| `POST /api/twin/chat` | Streams the conversation (Claude, `claude-opus-5`) | `ANTHROPIC_API_KEY` |
+| `POST /api/twin/transcribe` | Speech to text (OpenAI Whisper) | `OPENAI_API_KEY` |
+| `POST /api/twin/speak` | Text to speech in a cloned voice (ElevenLabs) | `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID` |
+
+Set these in **Vercel → Project → Settings → Environment Variables**, scoped to
+the environments you want them in (Production and Preview are separate). They
+are read server-side only and are never exposed to the browser — do not prefix
+them with `REACT_APP_`, which would bundle them into the client.
+
+**Adding or changing a variable requires a redeploy.** Vercel binds env vars to a
+deployment when it builds, so an existing deployment keeps reporting
+`not_configured` until you redeploy — from the Vercel dashboard, or by pushing
+any commit.
+
+The SPA rewrite in `vercel.json` uses `"/((?!api/).*)"` rather than `"/(.*)"` so
+the catch-all can't shadow these functions and serve `index.html` in their place.
+
+`api/tsconfig.json` is load-bearing — don't delete it. Vercel compiles `api/*.ts`
+against the nearest tsconfig, and the root one is CRA's (`target: es5`,
+`module: esnext`, `include: ["src"]`). Emitting ESM into a CommonJS context —
+`package.json` has no `"type": "module"` — makes every function fail at load with
+`FUNCTION_INVOCATION_FAILED`, identically and with no useful message. The api
+tsconfig pins CommonJS/ES2022 for the functions only; the CRA build is untouched.
+Note that `vercel.json` entries reject unknown keys (`additionalProperties: false`),
+so it can't carry inline comments — validate changes against
+<https://openapi.vercel.sh/vercel.json> before pushing.
+
+Each capability degrades on its own. With no keys set the button still opens and
+explains that the twin isn't configured; without the ElevenLabs pair replies stay
+text-only; without the OpenAI key the microphone reports that voice input is
+unavailable and typing still works.
+
+### Hands-free conversation
+
+The broadcast icon in the composer starts a continuous loop: speak, pause, and
+the twin answers and starts listening again — no clicking between turns. Turn
+boundaries come from voice-activity detection in `src/hooks/useVoiceLoop.ts`,
+not from a button.
+
+- The energy threshold is **calibrated against the room** on every start (700ms).
+  A fixed cutoff works at a quiet desk and fails on a laptop fan.
+- A turn starts after 150ms above threshold and ends after 1.3s below it.
+  Utterances under 400ms are discarded as coughs and doors; turns are capped at
+  30s.
+- Listening **suspends while the twin speaks** and resumes on playback end, so it
+  never transcribes its own reply. `getUserMedia` also requests echo
+  cancellation, noise suppression, and auto gain.
+
+Tuning constants sit at the top of the hook. If it triggers on background noise,
+raise `NOISE_MULTIPLIER`; if it cuts people off mid-sentence, raise
+`SILENCE_END_FRAMES`.
+
+There is no barge-in — speaking over a reply won't interrupt it. That needs
+acoustic echo handling good enough that the twin doesn't interrupt itself, which
+is a different problem from turn detection.
+
+`ELEVENLABS_VOICE_ID` is the ID of a voice clone created in the ElevenLabs
+dashboard. Until it is set, nothing is spoken — the twin will not fall back to a
+stock voice.
+
+### Tuning how the twin sounds
+
+A Professional Voice Clone is fine-tuned per model. If the configured model isn't
+one the voice has trained on, `speak` reads the voice's own `fine_tuning.state`
+and retries on a model that is ready — the `X-Twin-Voice-Model` response header
+reports which one actually spoke.
+
+Optional knobs, all clamped to 0–1, no redeploy needed beyond the usual env-var
+rebuild:
+
+| Variable | Default | Effect |
+| --- | --- | --- |
+| `ELEVENLABS_STABILITY` | `0.4` | Lower is more expressive and more variable; higher is steadier and flatter. |
+| `ELEVENLABS_SIMILARITY` | `0.85` | How hard the model pulls toward the source recordings. High helps a clone sound like its owner but amplifies noise in the source samples. |
+| `ELEVENLABS_STYLE` | `0` | Exaggerates delivery. Adds latency and can destabilise a clone — raise only deliberately. |
+| `ELEVENLABS_MODEL_ID` | auto | Pins a model instead of using the fallback. |
+
+`use_speaker_boost` is always on; it improves resemblance to the source speaker
+at no real cost.
+
+**The largest lever isn't here.** Speech quality is dominated by the text handed
+to the engine, and that comes from the `<format>` block in `api/_lib/persona.ts` —
+spell figures out as words, hyphenate letter-by-letter acronyms, keep sentences
+short, and avoid punctuation the engine reads literally. Tune that block before
+touching the knobs above.
+
+**These endpoints are public and cost money per call.** Each is capped at 20
+requests per minute per IP, but that limit lives in the memory of a single warm
+serverless instance, so it bounds a casual script rather than a distributed one.
+Put a shared store (Vercel KV, Upstash) behind `rateLimit()` in `api/_lib/http.ts`
+before promoting this anywhere high-traffic.
+
+The persona and everything the twin knows live in `api/_lib/persona.ts`. It is
+restricted to what is already published on this site and is instructed to say it
+doesn't know rather than invent a client, a number, or a date.
+
 ## Performance
 
 - Optimized images and assets
