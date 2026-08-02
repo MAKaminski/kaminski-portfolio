@@ -119,6 +119,13 @@ with `REACT_APP_`, which would bundle them into the client.
 
 The SPA rewrite in `vercel.json` uses `"/((?!api/).*)"` rather than `"/(.*)"` so
 the catch-all can't shadow these functions and serve `index.html` in their place.
+
+`api/tsconfig.json` is load-bearing — don't delete it. Vercel compiles `api/*.ts`
+against the nearest tsconfig, and the root one is CRA's (`target: es5`,
+`module: esnext`, `include: ["src"]`). Emitting ESM into a CommonJS context —
+`package.json` has no `"type": "module"` — makes every function fail at load with
+`FUNCTION_INVOCATION_FAILED`, identically and with no useful message. The api
+tsconfig pins CommonJS/ES2022 for the functions only; the CRA build is untouched.
 Note that `vercel.json` entries reject unknown keys (`additionalProperties: false`),
 so it can't carry inline comments — validate changes against
 <https://openapi.vercel.sh/vercel.json> before pushing.

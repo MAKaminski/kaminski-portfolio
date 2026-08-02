@@ -14,7 +14,8 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     requiredEnv: ['ELEVENLABS_API_KEY', 'ELEVENLABS_VOICE_ID'],
     limit: 20,
     windowMs: 60_000,
-    feature: 'Voice replies',
+    // Reads into "<feature> isn't configured…", so keep this a singular noun.
+    feature: 'Voice playback',
   })) return;
 
   const { text } = (req.body || {}) as { text?: string };
