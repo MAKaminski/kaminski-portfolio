@@ -227,7 +227,23 @@ const Hero: React.FC = () => {
 
       {/* Company marquee (scroll-velocity skew) */}
       <div className="relative mt-16 border-y border-white/10 py-6">
-        <Marquee items={['GreenSky', 'Home Depot', 'HD Supply', 'KPMG', 'Momnt', 'Property Walk']} />
+        {/* Sizes are each mark's natural size at 1x (assets ship at 2x), fitted to a shared
+            box so wide wordmarks and square marks carry the same optical weight. */}
+        <Marquee
+          items={[
+            { name: 'GreenSky', src: '/images/logos/greensky.webp', width: 175, height: 46 },
+            { name: 'Home Depot', src: '/images/logos/home-depot.webp', width: 46, height: 46 },
+            { name: 'HD Supply', src: '/images/logos/hd-supply.webp', width: 200, height: 27 },
+            { name: 'KPMG', src: '/images/logos/kpmg.webp', width: 118, height: 46 },
+            { name: 'Momnt', src: '/images/logos/momnt.webp', width: 200, height: 36 },
+            {
+              name: 'Superior Contracting & Maintenance',
+              src: '/images/logos/superior.webp',
+              width: 200,
+              height: 33,
+            },
+          ]}
+        />
       </div>
     </section>
   );
