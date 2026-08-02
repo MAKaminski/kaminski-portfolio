@@ -12,6 +12,82 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'behind-the-build-vol-2-i-shipped-the-same-pr-twice',
+    title: 'I Shipped the Same Pull Request Twice and Only Noticed the Second Time',
+    description:
+      'Behind the Build, Vol. 2: two new tabs — Websites and Products — landed a day apart and turned out to be the exact same diff wearing different screenshots. What that repetition taught me about when a pattern is worth abstracting (and when it very much is not).',
+    date: '2026-08-02',
+    readMinutes: 5,
+    series: 'Behind the Build, Vol. 2',
+    body: `
+<p>Two things shipped to this site recently. A <a href="/websites">Websites</a> tab, listing the twelve
+production apps I have running on Vercel. Then, a day later, a <a href="/products">Products</a> tab, listing
+the desktop tools sitting in public repos that had never made it onto the portfolio — a macOS system monitor
+with a resizable desktop HUD, a touchscreen driver that seizes the touch device out from under WindowServer,
+and an on-device context-capture daemon that OCRs your screen and then deletes the raw footage.</p>
+
+<p>Different content, different audience, different reason for existing. Identical pull request.</p>
+
+<h2>The diff, twice</h2>
+<p>Both changes came down to the same six moves, in the same order:</p>
+<ul>
+<li><strong>A new page component</strong> holding a hardcoded array of cards — name, image, category, blurb, tags.</li>
+<li><strong>A lazy import and a route</strong> in the app shell, so the page code-splits instead of riding along in the main bundle.</li>
+<li><strong>One nav item</strong>, added in two places, because the desktop and mobile menus are separate lists.</li>
+<li><strong>Screenshots</strong>, captured, converted to WebP, dropped into the public folder.</li>
+<li><strong>An entry in the sitemap</strong>, so the new route is not invisible to crawlers.</li>
+<li><strong>A rebuild</strong>, because the compiled output is committed to this repo.</li>
+</ul>
+
+<p>When you do that once, it's a feature. When you do it twice inside 36 hours, it stops being a feature and
+starts being a checklist you are executing from memory — which is exactly the moment the engineer brain lights
+up and says <em>abstract it</em>. Build a generic card-grid page. Drive it off a config file. Make adding a tab a
+one-line change.</p>
+
+<h2>I didn't, and I think that was right</h2>
+<p>Here is the honest accounting. The shared surface between those two pages is a rounded card with an image on
+top and some text underneath. The differences are small but real: one grid links out to live sites, the other
+links to repos and needs a graceful fallback panel for the tool whose README has no screenshot in it. One has a
+category line about deployment; the other has one about the operating system. The framer-motion stagger delays
+differ because the column counts differ.</p>
+
+<p>Abstracting that gets you a component with a props interface roughly as long as the duplicated markup, plus a
+new decision every time a third page doesn't quite fit — do I add a prop, or a variant flag, or fork it after all?
+Two instances is not a pattern. It's a coincidence with a second data point. The rule I keep coming back to is
+that you abstract on the <strong>third</strong> occurrence, because that's the first time you can actually see which
+parts vary and which parts are load-bearing.</p>
+
+<p>What I did do is write the checklist down. The expensive part of shipping those tabs was never the JSX — it was
+remembering that the mobile nav is a separate array, and that the sitemap will silently rot if you don't touch it.
+Those are the steps that get skipped at 11pm, and skipping them is invisible until a month later when you wonder
+why a page never got indexed. Cheap fix: the list lives in the repo now, so future-me doesn't have to re-derive it.</p>
+
+<h2>The part I'd flag in review</h2>
+<p>Committing the build output is the thing a reviewer should raise an eyebrow at, and I'll raise it myself. Every
+one of these PRs carries a fresh set of hashed bundles and a churned asset manifest alongside the four lines of
+source that actually changed. The diff stat reads like a large change. It isn't. But it does mean the compiled
+artifacts and the source can drift if someone edits one without the other, and it makes the review signal-to-noise
+ratio worse on exactly the changes where you'd want it to be good.</p>
+
+<p>It stays for now because the deployment story here is simple and I'd rather have the boring thing that works
+than the clever thing I have to debug on a Sunday. But it is technical debt, it is written down as technical debt,
+and that distinction matters more than people give it credit for. Debt you've named has a repayment plan. Debt you
+haven't is just a surprise with a delay on it.</p>
+
+<h2>The transferable bit</h2>
+<p>Most of what I do in finance-heavy engineering work is this exact judgment call at larger stakes: something got
+built twice, and someone wants to know whether to consolidate. The answer is almost never about the code. It's about
+whether the two things will keep moving in the same direction. Two report pipelines that both close the month will
+converge, and you should merge them. Two grids that happen to both be grids won't, and merging them buys you a
+config format nobody wants to own.</p>
+
+<p>Repetition is information. It tells you where the seams are. It does not, by itself, tell you to remove them.</p>
+
+<p>If you've got a codebase where every new page or report is a six-step ritual nobody has written down,
+<a href="https://calendly.com/kaminski1337/15min">grab 15 minutes</a> — that ritual is usually where the time is going.</p>
+`,
+  },
+  {
     slug: 'why-fintech-belongs-in-atlanta',
     title: 'Why Fintech Belongs in Atlanta — and Why That Matters for Your Cap Table',
     description:
