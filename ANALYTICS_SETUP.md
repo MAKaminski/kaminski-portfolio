@@ -1,6 +1,82 @@
 # 📊 Comprehensive Analytics Setup Guide
 
-## 🎯 What You'll Get
+## 🦔 PostHog
+
+PostHog is the primary product-analytics tool for the site.
+
+### ⚠️ Required setup — one environment variable
+
+Set **`REACT_APP_POSTHOG_KEY`** in the Vercel project settings (Settings →
+Environment Variables) to the PostHog *Project API key* (`phc_…`, found under
+Project settings in PostHog), then **redeploy**.
+
+Without it PostHog is skipped entirely and the site records nothing — the
+browser console logs a warning saying so. Create React App inlines
+`REACT_APP_*` variables at **build** time, so adding the variable only takes
+effect on the next deploy.
+
+### Why posthog.com used to show nothing
+
+The site had never shipped the PostHog SDK. Only Google Analytics (gated behind
+`REACT_APP_GA_MEASUREMENT_ID`, which isn't set) and Vercel Analytics were
+wired up, and the site's conversion events imported `track` directly from
+`@vercel/analytics`, so they only ever reached Vercel. There was no ingestion
+problem to debug — nothing was sending.
+
+### What's captured now
+
+| Source | Events |
+| --- | --- |
+| Automatic (`posthog-js`) | `$pageview` on every route change, `$pageleave`, `$autocapture` clicks/inputs, `$rageclick`, `$dead_click`, `$web_vitals`, `$exception` |
+| `src/utils/track.ts` | `Calendar Link Clicked`, `Resume Downloaded`, `Contact Form Submission`, `Contact Email Clicked`, `Role Page Visited` — mirrored to Vercel Analytics *and* PostHog |
+| `src/hooks/useAnalytics.ts` | `scroll_depth`, `time_on_page`, plus the `trackEvent`/`trackUserInteraction` helpers |
+
+SPA navigation is handled by `defaults: '2026-05-30'`, which sets
+`capture_pageview: 'history_change'`. Without it PostHog would only record the
+single pageview from the initial document load and every in-app navigation
+(`/writing`, `/cfo`, `/products`, …) would be invisible.
+
+### Adding a new tracked event
+
+Import `track` from `src/utils/track.ts` — never from `@vercel/analytics`
+directly, or the event will skip PostHog:
+
+```typescript
+import { track } from '../utils/track';
+
+track('Newsletter Signup', { source: 'Footer' });
+```
+
+### Optional: reverse proxy
+
+Ad blockers block requests to `us.i.posthog.com`, typically costing 10–30% of
+events. `vercel.json` already contains same-origin rewrites under `/mk-relay`.
+To route events through them, set in Vercel:
+
+```
+REACT_APP_POSTHOG_HOST=/mk-relay
+```
+
+Then redeploy and confirm events still arrive before relying on it. Note this
+bills PostHog traffic as Vercel Fast Data Transfer.
+
+### Verifying it works
+
+1. `npm start` — `debug` is on in development, so every capture is logged to the
+   browser console.
+2. Check **Activity** in PostHog for live events.
+3. Localhost events are ingested but excluded from dashboards by the project's
+   "filter out internal and test users" setting.
+
+### Troubleshooting
+
+- **Still nothing after deploy** — check the browser console for the
+  "`REACT_APP_POSTHOG_KEY` is not set" warning. `REACT_APP_*` variables are
+  inlined at build time, so adding one in Vercel requires a redeploy.
+- **Events in Activity but not on dashboards** — check the test-account filter
+  and the date range.
+
+## 🎯 What You'll Get (Google Analytics)
 
 With this enhanced analytics setup, you'll be able to track:
 

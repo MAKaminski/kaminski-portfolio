@@ -1,4 +1,11 @@
 // Google Analytics 4 Configuration and Tracking Utilities
+//
+// Each helper below also mirrors its event into PostHog. The PostHog call is
+// deliberately *outside* the `window.gtag` guards: GA only loads when
+// REACT_APP_GA_MEASUREMENT_ID is set, and if the mirror sat inside the guard
+// then an unset GA id would silently suppress PostHog too.
+import { capturePostHog } from './posthog';
+
 declare global {
   interface Window {
     gtag: (...args: any[]) => void;
@@ -33,7 +40,10 @@ export const initGA = (measurementId: string) => {
   }
 };
 
-// Track page views
+// Track page views.
+// Intentionally *not* mirrored to PostHog: posthog-js captures `$pageview`
+// itself on every history change (see `defaults` in utils/posthog.ts), so
+// mirroring here would double-count every navigation.
 export const trackPageView = (page: string, title?: string) => {
   if (typeof window !== 'undefined' && window.gtag && gaMeasurementId) {
     window.gtag('config', gaMeasurementId, {
@@ -54,6 +64,7 @@ export const trackPageView = (page: string, title?: string) => {
 
 // Track custom events
 export const trackEvent = (action: string, category: string, label?: string, value?: number) => {
+  capturePostHog(action, { category, label, value });
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', action, {
       event_category: category,
@@ -65,6 +76,7 @@ export const trackEvent = (action: string, category: string, label?: string, val
 
 // Track user interactions
 export const trackUserInteraction = (interaction: string, details?: Record<string, any>) => {
+  capturePostHog('user_interaction', { interaction_type: interaction, ...details });
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'user_interaction', {
       interaction_type: interaction,
@@ -75,6 +87,7 @@ export const trackUserInteraction = (interaction: string, details?: Record<strin
 
 // Track form submissions
 export const trackFormSubmission = (formName: string, formData?: Record<string, any>) => {
+  capturePostHog('form_submit', { form_name: formName });
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'form_submit', {
       form_name: formName,
@@ -85,6 +98,7 @@ export const trackFormSubmission = (formName: string, formData?: Record<string, 
 
 // Track file downloads
 export const trackDownload = (fileName: string, fileType: string) => {
+  capturePostHog('file_download', { file_name: fileName, file_type: fileType });
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'file_download', {
       file_name: fileName,
@@ -95,6 +109,7 @@ export const trackDownload = (fileName: string, fileType: string) => {
 
 // Track external link clicks
 export const trackExternalLink = (url: string, linkText?: string) => {
+  capturePostHog('external_link_click', { url, link_text: linkText || url });
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'click', {
       event_category: 'external_link',
@@ -106,6 +121,7 @@ export const trackExternalLink = (url: string, linkText?: string) => {
 
 // Track scroll depth
 export const trackScrollDepth = (depth: number) => {
+  capturePostHog('scroll_depth', { depth });
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'scroll', {
       event_category: 'engagement',
@@ -117,6 +133,7 @@ export const trackScrollDepth = (depth: number) => {
 
 // Track time on page
 export const trackTimeOnPage = (seconds: number) => {
+  capturePostHog('time_on_page', { seconds });
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'timing_complete', {
       name: 'page_load_time',
@@ -125,7 +142,10 @@ export const trackTimeOnPage = (seconds: number) => {
   }
 };
 
-// Enhanced user identification (anonymized)
+// Enhanced user identification (anonymized).
+// Intentionally *not* mirrored to PostHog: referrer, user agent, screen size,
+// locale and timezone are already attached to every PostHog event as `$`
+// properties, so re-sending them would just duplicate data.
 export const trackUserSession = (sessionData: {
   referrer?: string;
   userAgent?: string;
