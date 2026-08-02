@@ -8,6 +8,7 @@ import SmoothScroll from './components/SmoothScroll';
 import Cursor from './components/Cursor';
 import Header from './components/Header';
 import Hero from './components/Hero';
+import LatestLaunch from './components/LatestLaunch';
 import Experience from './components/Experience';
 import Skills from './components/Skills';
 import Transactions from './components/Transactions';
@@ -132,6 +133,7 @@ function App() {
                     <main>
                       {/* Recruiter-first order: lead with proof, close with fit/contact */}
                       <Hero />
+                      <LatestLaunch />
                       <Transactions />
                       <Highlights />
                       <Experience />

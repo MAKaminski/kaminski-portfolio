@@ -81,9 +81,15 @@ const DigitalTwin: React.FC<{ open: boolean; onClose: () => void }> = ({ open, o
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),
       });
-      // Voice is a bonus, not the feature — if it isn't configured or fails,
-      // the reply is already on screen and we say nothing about it.
-      if (!res.ok) return;
+      // Voice is a bonus and the reply is already on screen, so a failure is
+      // never fatal. But staying silent about it was wrong: someone who turned
+      // voice on and got nothing back has no way to tell a training clone from a
+      // broken button, and it just reads as the feature not working.
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
+        setNotice((n) => n ?? body.error ?? 'Voice playback is unavailable right now.');
+        return;
+      }
 
       stopAudio();
       const url = URL.createObjectURL(await res.blob());
