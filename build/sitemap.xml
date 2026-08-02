@@ -2,63 +2,123 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.michael-kaminski.io/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.michael-kaminski.io/cfo</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.michael-kaminski.io/technology</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.michael-kaminski.io/cpo</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.michael-kaminski.io/strategy</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.michael-kaminski.io/revenue</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.michael-kaminski.io/client-outcomes</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.michael-kaminski.io/websites</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.michael-kaminski.io/products</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.michael-kaminski.io/writing</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/knowledge-graph</loc>
+    <lastmod>2026-08-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/jira-prd</loc>
+    <lastmod>2026-08-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/i-gave-my-website-a-voice</loc>
+    <lastmod>2026-08-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-8-i-shipped-the-same-pr-twice</loc>
+    <lastmod>2026-08-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-7-every-url-returns-200</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-6-the-fleet-and-the-silence</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-5-the-robot-diarist-cloned-itself</loc>
+    <lastmod>2026-07-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-4-the-analytics-that-watched-nothing</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-3-locked-out-of-my-own-github</loc>
+    <lastmod>2026-07-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-2-two-robots-one-diary</loc>
+    <lastmod>2026-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.michael-kaminski.io/writing/why-fintech-belongs-in-atlanta</loc>
@@ -67,8 +127,14 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.michael-kaminski.io/writing/behind-the-build-vol-1-teaching-robots-to-read-my-resume</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.michael-kaminski.io/writing/fractional-cfo-vs-cto-early-fintech</loc>
-    <lastmod>2026-07-24</lastmod>
+    <lastmod>2026-07-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -83,17 +149,5 @@
     <lastmod>2026-07-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.michael-kaminski.io/knowledge-graph</loc>
-    <lastmod>2026-07-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.michael-kaminski.io/jira-prd</loc>
-    <lastmod>2026-07-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
 </urlset>

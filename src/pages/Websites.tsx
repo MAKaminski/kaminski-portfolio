@@ -45,6 +45,15 @@ const sites: Site[] = [
     tags: ['Next.js', 'Options', 'Publishing'],
   },
   {
+    name: 'COT Signal',
+    url: 'https://cot-signal.vercel.app',
+    image: '/images/sites/cot-signal.webp',
+    category: 'Markets · Data',
+    description:
+      'Weekly CME futures positioning for Bitcoin and Ether, read straight off the CFTC Commitments of Traders report — asset managers, hedge funds, and dealers, net long against net short.',
+    tags: ['Next.js', 'Futures', 'CFTC Data'],
+  },
+  {
     name: 'OurAI',
     url: 'https://our-ai-web.vercel.app',
     image: '/images/sites/our-ai-web.webp',
@@ -52,6 +61,24 @@ const sites: Site[] = [
     description:
       'Multiplayer AI workspace where a team and AI agents ship one repo together over a shared live transcript — from idea intake to a human-approved, merged pull request.',
     tags: ['Next.js', 'AI Agents', 'SaaS'],
+  },
+  {
+    name: 'VendorLink',
+    url: 'https://vendor-link-web.vercel.app',
+    image: '/images/sites/vendor-link-web.webp',
+    category: 'Marketplace · SaaS',
+    description:
+      'Two-sided marketplace pairing event organizers with local vendors — profiles, one-click applications and invitations, digital contracts, and payment all in one flow.',
+    tags: ['Next.js', 'Marketplace', 'Payments'],
+  },
+  {
+    name: 'YardLine',
+    url: 'https://yard-line.vercel.app',
+    image: '/images/sites/yard-line.webp',
+    category: 'B2B · CRM',
+    description:
+      'Supply-side prospecting CRM for heavy-duty truck salvage yards around metro Atlanta. Access is roster-gated behind a magic link, so the public entry point is the sign-in screen.',
+    tags: ['Next.js', 'CRM', 'Supabase'],
   },
   {
     name: 'YieldFlow',
@@ -88,6 +115,15 @@ const sites: Site[] = [
     description:
       'Acquisition holdco site targeting founder-led, lower-middle-market companies in the I-85 and I-77 corridors, with a live buy-box and a deal-submission flow.',
     tags: ['Next.js', 'M&A', 'Search Fund'],
+  },
+  {
+    name: 'Next Generation Capital',
+    url: 'https://nextgen-capital-lp.vercel.app',
+    image: '/images/sites/nextgen-capital-lp.webp',
+    category: 'Real Estate · Investor Network',
+    description:
+      'Investor-network site for an Atlanta build-to-rent and cottage-community investment company. Relationship-first by design — it states the thesis and opens an introduction, rather than running a public offering.',
+    tags: ['Next.js', 'Real Estate', 'Investor Relations'],
   },
   {
     name: 'LaceLuxx Financials',

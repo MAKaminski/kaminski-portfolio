@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Download, Clock, ArrowUpRight, Linkedin, Github } from 'lucide-react';
+import { Download, Clock, ArrowUpRight, Linkedin, Github, MessagesSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { track } from '../utils/track';
 import { useTheme } from '../App';
@@ -9,6 +9,7 @@ import Marquee from './Marquee';
 import CountUp from './CountUp';
 import SplitReveal from './SplitReveal';
 import Magnetic from './Magnetic';
+import DigitalTwin from './DigitalTwin';
 
 const RILLA_EASE = [0.445, 0.05, 0.55, 0.95] as const;
 
@@ -19,6 +20,9 @@ const Hero: React.FC = () => {
   const yGlow = useTransform(scrollY, [0, 700], [0, 160]);
   const yPortrait = useTransform(scrollY, [0, 700], [0, -70]);
   const yGrid = useTransform(scrollY, [0, 700], [0, 80]);
+  // Drifts slower than the grid so the map sits behind it.
+  const yMap = useTransform(scrollY, [0, 700], [0, 46]);
+  const [twinOpen, setTwinOpen] = useState(false);
 
   const roles: { key: Role; label: string }[] = [
     { key: 'cfo', label: 'CFO' },
@@ -44,6 +48,25 @@ const Hero: React.FC = () => {
     <section className="relative overflow-hidden bg-ink-900 text-white pt-28 pb-16">
       {/* Spotlight + grid backdrop (parallax) */}
       <div className="pointer-events-none absolute inset-0">
+        {/* Atlanta, drawn from real data: city neighborhood polygons, the interstates,
+            the Chattahoochee, and a star on each company in the marquee below. Sits
+            under the grid so it reads as aged paper rather than a second foreground. */}
+        <motion.div style={{ y: yMap }} className="absolute inset-0 overflow-hidden">
+          <img
+            src="/images/atlanta-map.svg"
+            alt=""
+            aria-hidden="true"
+            // Contained rather than cropped: at any larger scale the outlying stars
+            // (Superior in Kennesaw, GreenSky in Sandy Springs) fall outside the hero,
+            // which is the one thing this layer exists to show.
+            className="absolute left-1/2 top-1/2 h-full w-full max-w-none -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.24]"
+            style={{
+              filter: 'sepia(0.4)',
+              maskImage: 'radial-gradient(ellipse at 50% 45%, black 45%, transparent 80%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at 50% 45%, black 45%, transparent 80%)',
+            }}
+          />
+        </motion.div>
         <motion.div
           style={{ y: yGrid }}
           className="absolute inset-0 opacity-[0.15]"
@@ -128,6 +151,18 @@ const Hero: React.FC = () => {
                 >
                   <Download className="w-5 h-5" /> Resume
                 </a>
+              </Magnetic>
+              <Magnetic strength={0.6}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTwinOpen(true);
+                    track('Digital Twin Opened', { source: 'Hero' });
+                  }}
+                  className="btn-pill-ghost text-base"
+                >
+                  <MessagesSquare className="w-5 h-5" /> Talk to my Digital Twin
+                </button>
               </Magnetic>
               <div className="flex items-center gap-2 pl-1">
                 <Magnetic strength={0.5}>
@@ -227,8 +262,57 @@ const Hero: React.FC = () => {
 
       {/* Company marquee (scroll-velocity skew) */}
       <div className="relative mt-16 border-y border-white/10 py-6">
-        <Marquee items={['GreenSky', 'Home Depot', 'HD Supply', 'KPMG', 'Momnt', 'Property Walk']} />
+        {/* Sizes are each mark's natural size at 1x (assets ship at 2x), fitted to a shared
+            box so wide wordmarks and square marks carry the same optical weight. */}
+        <Marquee
+          items={[
+            {
+              name: 'GreenSky',
+              src: '/images/logos/greensky.webp',
+              href: 'https://www.greensky.com/',
+              width: 175,
+              height: 46,
+            },
+            {
+              name: 'Home Depot',
+              src: '/images/logos/home-depot.webp',
+              href: 'https://www.homedepot.com/',
+              width: 46,
+              height: 46,
+            },
+            {
+              name: 'HD Supply',
+              src: '/images/logos/hd-supply.webp',
+              href: 'https://www.hdsupply.com/',
+              width: 200,
+              height: 27,
+            },
+            {
+              name: 'KPMG',
+              src: '/images/logos/kpmg.webp',
+              href: 'https://www.kpmg.com/',
+              width: 118,
+              height: 46,
+            },
+            {
+              name: 'Momnt',
+              src: '/images/logos/momnt.webp',
+              href: 'https://www.momnt.com/',
+              width: 200,
+              height: 36,
+            },
+            {
+              name: 'Superior Contracting & Maintenance',
+              src: '/images/logos/superior.webp',
+              href: 'https://www.superior-maintenance.com',
+              width: 200,
+              height: 33,
+            },
+          ]}
+        />
       </div>
+
+      <DigitalTwin open={twinOpen} onClose={() => setTwinOpen(false)} />
     </section>
   );
 };

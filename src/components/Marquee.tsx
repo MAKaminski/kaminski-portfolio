@@ -1,8 +1,24 @@
 import React from 'react';
 import { motion, useScroll, useVelocity, useTransform, useSpring } from 'framer-motion';
 
+export interface MarqueeLogo {
+  /** Company name — used as the accessible label and the alt-text fallback. */
+  name: string;
+  /** Path to a white-on-transparent mark under /images/logos. */
+  src: string;
+  /** Company site the mark links out to. */
+  href: string;
+  /**
+   * Rendered size in CSS px (assets ship at 2x). Both are required and set as real
+   * width/height attributes: the track scrolls continuously, so an image without an
+   * intrinsic box collapses to zero width and shunts the whole row when it decodes.
+   */
+  width: number;
+  height: number;
+}
+
 interface MarqueeProps {
-  items: string[];
+  items: MarqueeLogo[];
   className?: string;
 }
 
@@ -17,17 +33,33 @@ const Marquee: React.FC<MarqueeProps> = ({ items, className }) => {
   return (
     <div className={`group relative overflow-hidden ${className || ''}`}>
       <motion.div style={{ skewX: skew }} className="will-change-transform">
-        <div className="flex w-max animate-marquee gap-12 group-hover:[animation-play-state:paused] motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center">
-          {row.map((item, i) => (
-            <span
-              key={i}
-              className="display whitespace-nowrap text-2xl md:text-3xl text-white/35"
-              aria-hidden={i >= items.length}
-            >
-              {item}
-              <span className="accent px-6">/</span>
-            </span>
-          ))}
+        <div className="flex w-max items-center animate-marquee gap-12 group-hover:[animation-play-state:paused] motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center">
+          {row.map((item, i) => {
+            const duplicate = i >= items.length;
+            return (
+              <span key={i} className="flex items-center whitespace-nowrap" aria-hidden={duplicate}>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  // The duplicated half of the track is decorative, so keep it off the tab order.
+                  tabIndex={duplicate ? -1 : undefined}
+                  title={item.name}
+                  className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900"
+                >
+                  <img
+                    src={item.src}
+                    alt={duplicate ? '' : item.name}
+                    width={item.width}
+                    height={item.height}
+                    decoding="async"
+                    className="opacity-45 transition-opacity duration-300 group-hover:opacity-90"
+                  />
+                </a>
+                <span className="accent display px-6 text-2xl md:text-3xl">/</span>
+              </span>
+            );
+          })}
         </div>
       </motion.div>
     </div>
