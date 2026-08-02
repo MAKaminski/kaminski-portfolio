@@ -61,28 +61,59 @@ function errorCode(body: string): string | undefined {
   }
 }
 
-/** Models this voice has finished fine-tuning on, best first. */
-async function readyModels(voiceId: string, key: string): Promise<string[]> {
+/**
+ * ElevenLabs reports fine-tuning per model, one of: not_started, queued,
+ * fine_tuning, fine_tuned, failed, delayed.
+ */
+type Lookup =
+  | { ok: true; state: Record<string, string> }
+  | { ok: false; status: number };
+
+/**
+ * The voice's own fine-tuning state.
+ *
+ * Returns the failure rather than an empty result: "the lookup broke" and "the
+ * voice is trained on nothing" both leave you with no model to fall back to, but
+ * they are completely different problems and the first version of this collapsed
+ * them into the same empty array. That cost an afternoon.
+ */
+async function voiceFineTuning(voiceId: string, key: string): Promise<Lookup> {
   try {
     const res = await fetch(`${API}/voices/${encodeURIComponent(voiceId)}`, {
       headers: { 'xi-api-key': key },
     });
-    if (!res.ok) return [];
+    if (!res.ok) return { ok: false, status: res.status };
 
     const voice = (await res.json()) as {
       fine_tuning?: { state?: Record<string, string> };
     };
-    const state = voice.fine_tuning?.state || {};
-    const ready = Object.keys(state).filter((m) => state[m] === 'fine_tuned');
+    return { ok: true, state: voice.fine_tuning?.state || {} };
+  } catch {
+    return { ok: false, status: 0 };
+  }
+}
 
-    return ready.sort((a, b) => {
+/** Models this voice has finished fine-tuning on, best first. */
+function readyModels(state: Record<string, string>): string[] {
+  return Object.keys(state)
+    .filter((m) => state[m] === 'fine_tuned')
+    .sort((a, b) => {
       const ia = MODEL_PREFERENCE.indexOf(a);
       const ib = MODEL_PREFERENCE.indexOf(b);
       return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
     });
-  } catch {
-    return [];
+}
+
+/** What to tell a visitor, based on where the training actually is. */
+function trainingMessage(state: Record<string, string>): string {
+  const values = Object.values(state);
+  if (values.some((v) => v === 'fine_tuning' || v === 'queued' || v === 'delayed')) {
+    return "The cloned voice is still training, so replies stay text-only until it finishes.";
   }
+  if (values.length && values.every((v) => v === 'failed')) {
+    return 'Voice playback is unavailable right now.';
+  }
+  return "The cloned voice isn't ready yet, so replies stay text-only for now.";
 }
 
 export default async function handler(req: ApiRequest, res: ApiResponse) {
@@ -127,15 +158,37 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     let detail = upstream.ok ? '' : await upstream.text();
 
     if (!upstream.ok && errorCode(detail) === 'voice_not_fine_tuned') {
-      const candidates = (await readyModels(voiceId, key)).filter((m) => m !== first);
-      console.warn('[twin/speak] %s not fine-tuned; ready: %s', first, candidates.join(',') || 'none');
+      const lookup = await voiceFineTuning(voiceId, key);
+
+      // The lookup failing is a different outage from the voice being untrained,
+      // and it is the operator's problem rather than a waiting game. Say which.
+      if (!lookup.ok) {
+        console.error('[twin/speak] voice lookup failed: GET /voices/%s -> %d', voiceId, lookup.status);
+        res.status(502).json({
+          error: 'Voice playback is unavailable right now.',
+          upstreamStatus: lookup.status,
+          upstreamCode: 'voice_lookup_failed',
+        });
+        return;
+      }
+
+      const candidates = readyModels(lookup.state).filter((m) => m !== first);
+      console.warn(
+        '[twin/speak] %s not fine-tuned; states: %s; ready: %s',
+        first,
+        JSON.stringify(lookup.state),
+        candidates.join(',') || 'none'
+      );
 
       if (!candidates.length) {
         res.status(502).json({
-          error:
-            "The cloned voice isn't finished training yet, so replies stay text-only for now.",
+          error: trainingMessage(lookup.state),
           upstreamStatus: upstream.status,
           upstreamCode: 'voice_not_fine_tuned',
+          // Per-model training status. Not a secret — it's the only thing that
+          // distinguishes "wait, it's training" from "the training failed" from
+          // "nobody ever started it", and without it the 502 is unactionable.
+          fineTuning: lookup.state,
         });
         return;
       }
