@@ -19,6 +19,8 @@ const Hero: React.FC = () => {
   const yGlow = useTransform(scrollY, [0, 700], [0, 160]);
   const yPortrait = useTransform(scrollY, [0, 700], [0, -70]);
   const yGrid = useTransform(scrollY, [0, 700], [0, 80]);
+  // Drifts slower than the grid so the map sits behind it.
+  const yMap = useTransform(scrollY, [0, 700], [0, 46]);
 
   const roles: { key: Role; label: string }[] = [
     { key: 'cfo', label: 'CFO' },
@@ -44,6 +46,25 @@ const Hero: React.FC = () => {
     <section className="relative overflow-hidden bg-ink-900 text-white pt-28 pb-16">
       {/* Spotlight + grid backdrop (parallax) */}
       <div className="pointer-events-none absolute inset-0">
+        {/* Atlanta, drawn from real data: city neighborhood polygons, the interstates,
+            the Chattahoochee, and a star on each company in the marquee below. Sits
+            under the grid so it reads as aged paper rather than a second foreground. */}
+        <motion.div style={{ y: yMap }} className="absolute inset-0 overflow-hidden">
+          <img
+            src="/images/atlanta-map.svg"
+            alt=""
+            aria-hidden="true"
+            // Contained rather than cropped: at any larger scale the outlying stars
+            // (Superior in Kennesaw, GreenSky in Sandy Springs) fall outside the hero,
+            // which is the one thing this layer exists to show.
+            className="absolute left-1/2 top-1/2 h-full w-full max-w-none -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.24]"
+            style={{
+              filter: 'sepia(0.4)',
+              maskImage: 'radial-gradient(ellipse at 50% 45%, black 45%, transparent 80%)',
+              WebkitMaskImage: 'radial-gradient(ellipse at 50% 45%, black 45%, transparent 80%)',
+            }}
+          />
+        </motion.div>
         <motion.div
           style={{ y: yGrid }}
           className="absolute inset-0 opacity-[0.15]"
@@ -231,14 +252,45 @@ const Hero: React.FC = () => {
             box so wide wordmarks and square marks carry the same optical weight. */}
         <Marquee
           items={[
-            { name: 'GreenSky', src: '/images/logos/greensky.webp', width: 175, height: 46 },
-            { name: 'Home Depot', src: '/images/logos/home-depot.webp', width: 46, height: 46 },
-            { name: 'HD Supply', src: '/images/logos/hd-supply.webp', width: 200, height: 27 },
-            { name: 'KPMG', src: '/images/logos/kpmg.webp', width: 118, height: 46 },
-            { name: 'Momnt', src: '/images/logos/momnt.webp', width: 200, height: 36 },
+            {
+              name: 'GreenSky',
+              src: '/images/logos/greensky.webp',
+              href: 'https://www.greensky.com/',
+              width: 175,
+              height: 46,
+            },
+            {
+              name: 'Home Depot',
+              src: '/images/logos/home-depot.webp',
+              href: 'https://www.homedepot.com/',
+              width: 46,
+              height: 46,
+            },
+            {
+              name: 'HD Supply',
+              src: '/images/logos/hd-supply.webp',
+              href: 'https://www.hdsupply.com/',
+              width: 200,
+              height: 27,
+            },
+            {
+              name: 'KPMG',
+              src: '/images/logos/kpmg.webp',
+              href: 'https://www.kpmg.com/',
+              width: 118,
+              height: 46,
+            },
+            {
+              name: 'Momnt',
+              src: '/images/logos/momnt.webp',
+              href: 'https://www.momnt.com/',
+              width: 200,
+              height: 36,
+            },
             {
               name: 'Superior Contracting & Maintenance',
               src: '/images/logos/superior.webp',
+              href: 'https://www.superior-maintenance.com',
               width: 200,
               height: 33,
             },

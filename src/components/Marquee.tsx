@@ -6,6 +6,8 @@ export interface MarqueeLogo {
   name: string;
   /** Path to a white-on-transparent mark under /images/logos. */
   src: string;
+  /** Company site the mark links out to. */
+  href: string;
   /**
    * Rendered size in CSS px (assets ship at 2x). Both are required and set as real
    * width/height attributes: the track scrolls continuously, so an image without an
@@ -36,14 +38,24 @@ const Marquee: React.FC<MarqueeProps> = ({ items, className }) => {
             const duplicate = i >= items.length;
             return (
               <span key={i} className="flex items-center whitespace-nowrap" aria-hidden={duplicate}>
-                <img
-                  src={item.src}
-                  alt={duplicate ? '' : item.name}
-                  width={item.width}
-                  height={item.height}
-                  decoding="async"
-                  className="opacity-45 transition-opacity duration-300 group-hover:opacity-90"
-                />
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  // The duplicated half of the track is decorative, so keep it off the tab order.
+                  tabIndex={duplicate ? -1 : undefined}
+                  title={item.name}
+                  className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900"
+                >
+                  <img
+                    src={item.src}
+                    alt={duplicate ? '' : item.name}
+                    width={item.width}
+                    height={item.height}
+                    decoding="async"
+                    className="opacity-45 transition-opacity duration-300 group-hover:opacity-90"
+                  />
+                </a>
                 <span className="accent display px-6 text-2xl md:text-3xl">/</span>
               </span>
             );
