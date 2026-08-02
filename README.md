@@ -117,6 +117,12 @@ Set these in **Vercel → Project → Settings → Environment Variables**. They
 read server-side only and are never exposed to the browser — do not prefix them
 with `REACT_APP_`, which would bundle them into the client.
 
+The SPA rewrite in `vercel.json` uses `"/((?!api/).*)"` rather than `"/(.*)"` so
+the catch-all can't shadow these functions and serve `index.html` in their place.
+Note that `vercel.json` entries reject unknown keys (`additionalProperties: false`),
+so it can't carry inline comments — validate changes against
+<https://openapi.vercel.sh/vercel.json> before pushing.
+
 Each capability degrades on its own. With no keys set the button still opens and
 explains that the twin isn't configured; without the ElevenLabs pair replies stay
 text-only; without the OpenAI key the microphone reports that voice input is
