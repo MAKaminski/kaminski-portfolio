@@ -141,6 +141,30 @@ explains that the twin isn't configured; without the ElevenLabs pair replies sta
 text-only; without the OpenAI key the microphone reports that voice input is
 unavailable and typing still works.
 
+### Hands-free conversation
+
+The broadcast icon in the composer starts a continuous loop: speak, pause, and
+the twin answers and starts listening again — no clicking between turns. Turn
+boundaries come from voice-activity detection in `src/hooks/useVoiceLoop.ts`,
+not from a button.
+
+- The energy threshold is **calibrated against the room** on every start (700ms).
+  A fixed cutoff works at a quiet desk and fails on a laptop fan.
+- A turn starts after 150ms above threshold and ends after 1.3s below it.
+  Utterances under 400ms are discarded as coughs and doors; turns are capped at
+  30s.
+- Listening **suspends while the twin speaks** and resumes on playback end, so it
+  never transcribes its own reply. `getUserMedia` also requests echo
+  cancellation, noise suppression, and auto gain.
+
+Tuning constants sit at the top of the hook. If it triggers on background noise,
+raise `NOISE_MULTIPLIER`; if it cuts people off mid-sentence, raise
+`SILENCE_END_FRAMES`.
+
+There is no barge-in — speaking over a reply won't interrupt it. That needs
+acoustic echo handling good enough that the twin doesn't interrupt itself, which
+is a different problem from turn detection.
+
 `ELEVENLABS_VOICE_ID` is the ID of a voice clone created in the ElevenLabs
 dashboard. Until it is set, nothing is spoken — the twin will not fall back to a
 stock voice.

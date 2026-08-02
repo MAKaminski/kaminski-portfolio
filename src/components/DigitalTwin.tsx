@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mic, Send, Square, Volume2, VolumeX, X, Loader2 } from 'lucide-react';
+import { Mic, Radio, Send, Square, Volume2, VolumeX, X, Loader2 } from 'lucide-react';
+import { useVoiceLoop } from '../hooks/useVoiceLoop';
 
 interface Turn {
   role: 'user' | 'assistant';
@@ -38,6 +39,8 @@ const DigitalTwin: React.FC<{ open: boolean; onClose: () => void }> = ({ open, o
   const stopTimerRef = useRef<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
+  // Lets the close/unmount effect stop the loop without depending on it.
+  const voiceRef = useRef<{ stop: () => void } | null>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -56,6 +59,7 @@ const DigitalTwin: React.FC<{ open: boolean; onClose: () => void }> = ({ open, o
   useEffect(() => {
     if (open) return;
     stopAudio();
+    voiceRef.current?.stop();
     recorderRef.current?.stream.getTracks().forEach((t) => t.stop());
     recorderRef.current = null;
   }, [open, stopAudio]);
@@ -69,6 +73,7 @@ const DigitalTwin: React.FC<{ open: boolean; onClose: () => void }> = ({ open, o
     return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose]);
 
+  /** Resolves when playback finishes, so hands-free knows when to listen again. */
   const speak = useCallback(async (text: string) => {
     try {
       const res = await fetch('/api/twin/speak', {
@@ -85,7 +90,18 @@ const DigitalTwin: React.FC<{ open: boolean; onClose: () => void }> = ({ open, o
       audioUrlRef.current = url;
       const audio = new Audio(url);
       audioRef.current = audio;
-      await audio.play().catch(() => undefined);
+
+      await new Promise<void>((resolve) => {
+        let settled = false;
+        const done = () => {
+          if (settled) return;
+          settled = true;
+          resolve();
+        };
+        audio.onended = done;
+        audio.onerror = done;
+        audio.play().catch(done);
+      });
     } catch {
       /* silent — text is the deliverable */
     }
@@ -170,8 +186,48 @@ const DigitalTwin: React.FC<{ open: boolean; onClose: () => void }> = ({ open, o
       setThinking(false);
     }
 
-    if (reply && !failed && voiceOn) speak(reply);
+    // Awaited so a hands-free turn resumes listening only once the twin has
+    // finished speaking, rather than transcribing its own voice.
+    if (reply && !failed && voiceOn) await speak(reply);
   }, [turns, thinking, voiceOn, speak, stopAudio]);
+
+  /** Shared by the push-to-talk button and the hands-free loop. */
+  const transcribe = useCallback(async (blob: Blob, mimeType: string): Promise<string | null> => {
+    setTranscribing(true);
+    try {
+      const res = await fetch('/api/twin/transcribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ audio: await blobToBase64(blob), mimeType }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { text?: string; error?: string };
+      if (!res.ok) {
+        setNotice(data.error || "I couldn't transcribe that.");
+        return null;
+      }
+      return data.text?.trim() || null;
+    } catch {
+      setNotice('Transcription failed — type it instead?');
+      return null;
+    } finally {
+      setTranscribing(false);
+    }
+  }, []);
+
+  // The loop hands us an utterance, we answer it, then hand control back. Held
+  // in a ref because the handler needs `voice.resume`, which the hook returns.
+  const utteranceRef = useRef<(blob: Blob, mimeType: string) => void>(() => undefined);
+  const voice = useVoiceLoop({
+    onUtterance: (blob, mimeType) => utteranceRef.current(blob, mimeType),
+    onError: setNotice,
+  });
+
+  utteranceRef.current = async (blob, mimeType) => {
+    const text = await transcribe(blob, mimeType);
+    if (text) await send(text);
+    voice.resume();
+  };
+  voiceRef.current = voice;
 
   const stopRecording = useCallback(() => {
     if (stopTimerRef.current) {
@@ -201,31 +257,10 @@ const DigitalTwin: React.FC<{ open: boolean; onClose: () => void }> = ({ open, o
         recorderRef.current = null;
         if (!chunks.length) return;
 
-        setTranscribing(true);
-        try {
-          const blob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });
-          const res = await fetch('/api/twin/transcribe', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              audio: await blobToBase64(blob),
-              mimeType: recorder.mimeType || 'audio/webm',
-            }),
-          });
-          const data = await res.json().catch(() => ({}));
-
-          if (!res.ok) {
-            setNotice((data as { error?: string }).error || "I couldn't transcribe that.");
-          } else if ((data as { text?: string }).text) {
-            await send((data as { text: string }).text);
-          } else {
-            setNotice("I didn't catch anything in that clip.");
-          }
-        } catch {
-          setNotice('Transcription failed — type it instead?');
-        } finally {
-          setTranscribing(false);
-        }
+        const type = recorder.mimeType || 'audio/webm';
+        const text = await transcribe(new Blob(chunks, { type }), type);
+        if (text) await send(text);
+        else setNotice((n) => n ?? "I didn't catch anything in that clip.");
       };
 
       stopAudio();
@@ -236,9 +271,33 @@ const DigitalTwin: React.FC<{ open: boolean; onClose: () => void }> = ({ open, o
     } catch {
       setNotice('I need microphone permission for voice — or just type.');
     }
-  }, [send, stopAudio, stopRecording]);
+  }, [send, transcribe, stopAudio, stopRecording]);
 
   const busy = thinking || transcribing;
+
+  const toggleHandsFree = useCallback(() => {
+    setNotice(null);
+    if (voice.active) {
+      voice.stop();
+    } else {
+      stopRecording();
+      stopAudio();
+      voice.start();
+    }
+  }, [voice, stopRecording, stopAudio]);
+
+  const handsFreeStatus =
+    voice.phase === 'calibrating'
+      ? 'Getting a read on the room…'
+      : voice.phase === 'hearing'
+        ? 'Listening — pause when you’re done'
+        : voice.phase === 'listening'
+          ? 'Go ahead, I’m listening'
+          : transcribing
+            ? 'Transcribing…'
+            : thinking
+              ? 'Thinking…'
+              : 'Speaking…';
 
   return (
     <AnimatePresence>
@@ -305,10 +364,32 @@ const DigitalTwin: React.FC<{ open: boolean; onClose: () => void }> = ({ open, o
                 </div>
               ))}
 
-              {busy && (
+              {busy && !voice.active && (
                 <div className="flex items-center gap-2 text-sm text-white/45">
                   <Loader2 size={15} className="animate-spin" />
                   {transcribing ? 'Transcribing…' : 'Thinking…'}
+                </div>
+              )}
+
+              {voice.active && (
+                <div className="flex items-center gap-3 rounded-xl border border-accent/25 bg-accent/[0.06] px-3 py-2.5">
+                  {/* Level meter — makes it obvious the mic is live and where the
+                      speech threshold sits, which is otherwise invisible. */}
+                  <span className="flex h-5 items-end gap-[3px]" aria-hidden="true">
+                    {[0.25, 0.55, 0.85, 0.55, 0.25].map((peak, i) => (
+                      <span
+                        key={i}
+                        className="w-[3px] rounded-full bg-accent transition-[height] duration-100"
+                        style={{
+                          height: `${Math.max(3, Math.min(1, voice.level / peak) * 20)}px`,
+                          opacity: voice.phase === 'hearing' ? 1 : 0.4,
+                        }}
+                      />
+                    ))}
+                  </span>
+                  <span role="status" className="text-sm text-accent">
+                    {handsFreeStatus}
+                  </span>
                 </div>
               )}
 
@@ -328,8 +409,23 @@ const DigitalTwin: React.FC<{ open: boolean; onClose: () => void }> = ({ open, o
             >
               <button
                 type="button"
+                onClick={toggleHandsFree}
+                aria-label={voice.active ? 'Stop hands-free conversation' : 'Start hands-free conversation'}
+                aria-pressed={voice.active}
+                title="Hands-free — talk, pause, and it answers"
+                className={`shrink-0 rounded-full p-3 transition-colors ${
+                  voice.active
+                    ? 'bg-accent text-ink-900'
+                    : 'border border-white/15 text-white/70 hover:border-accent/60 hover:text-white'
+                }`}
+              >
+                <Radio size={17} />
+              </button>
+
+              <button
+                type="button"
                 onClick={recording ? stopRecording : startRecording}
-                disabled={busy}
+                disabled={busy || voice.active}
                 aria-label={recording ? 'Stop recording' : 'Ask by voice'}
                 className={`shrink-0 rounded-full p-3 transition-colors disabled:opacity-40 ${
                   recording
@@ -343,15 +439,17 @@ const DigitalTwin: React.FC<{ open: boolean; onClose: () => void }> = ({ open, o
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                disabled={busy || recording}
-                placeholder={recording ? 'Listening…' : 'Ask about the work…'}
+                disabled={busy || recording || voice.active}
+                placeholder={
+                  voice.active ? 'Hands-free is on…' : recording ? 'Listening…' : 'Ask about the work…'
+                }
                 aria-label="Your question"
                 className="min-w-0 flex-1 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2.5 text-[15px] text-white placeholder:text-white/35 focus:border-accent/60 focus:outline-none disabled:opacity-50"
               />
 
               <button
                 type="submit"
-                disabled={busy || recording || !input.trim()}
+                disabled={busy || recording || voice.active || !input.trim()}
                 aria-label="Send"
                 className="shrink-0 rounded-full bg-accent p-3 text-ink-900 transition-opacity disabled:opacity-30"
               >
