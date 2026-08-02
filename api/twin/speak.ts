@@ -37,7 +37,8 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
       },
       body: JSON.stringify({
         text: text.trim().slice(0, MAX_CHARS),
-        model_id: 'eleven_turbo_v2_5',
+        // Overridable: not every ElevenLabs plan exposes every model.
+        model_id: process.env.ELEVENLABS_MODEL_ID || 'eleven_turbo_v2_5',
         voice_settings: { stability: 0.45, similarity_boost: 0.8 },
       }),
     });
@@ -45,7 +46,23 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     if (!upstream.ok) {
       const detail = await upstream.text();
       console.error('[twin/speak]', upstream.status, detail.slice(0, 400));
-      res.status(502).json({ error: 'Voice playback is unavailable right now.' });
+
+      // Surface enough to tell a bad key from a bad voice ID from a model the
+      // plan doesn't carry. ElevenLabs answers {detail: {status, message}};
+      // the status slug is a diagnostic code, not a secret.
+      let code: string | undefined;
+      try {
+        const parsed = JSON.parse(detail) as { detail?: { status?: string } | string };
+        code = typeof parsed.detail === 'string' ? parsed.detail : parsed.detail?.status;
+      } catch {
+        /* upstream did not answer JSON */
+      }
+
+      res.status(502).json({
+        error: 'Voice playback is unavailable right now.',
+        upstreamStatus: upstream.status,
+        ...(code ? { upstreamCode: code } : {}),
+      });
       return;
     }
 
