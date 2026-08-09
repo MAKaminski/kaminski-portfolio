@@ -32,9 +32,9 @@ const Article = lazy(() => import('./pages/Article'));
 const Websites = lazy(() => import('./pages/Websites'));
 const Products = lazy(() => import('./pages/Products'));
 
-const HOME_TITLE = 'Michael Kaminski | Fintech Finance & Engineering Leader in Atlanta';
+const HOME_TITLE = 'Michael Kaminski — AI Agents & Agent Infrastructure | Atlanta & NYC';
 const HOME_DESCRIPTION =
-  'Michael Kaminski is an Atlanta-based fintech leader fluent in both PE-grade finance and hands-on software engineering — 20+ years across GreenSky, Home Depot, HD Supply, KPMG and fintech startups. Fractional CFO/CTO, product & payments leadership.';
+  'Michael Kaminski builds AI agents that run in production. Took an agent capability from prototype through security, legal, and compliance review inside a regulated lender. Custom MCP servers, multi-agent orchestration, and eval harnesses in Python and TypeScript. Atlanta, relocating to New York City.';
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-screen flex items-center justify-center text-gray-500">Loading…</div>

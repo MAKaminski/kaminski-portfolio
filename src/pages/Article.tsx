@@ -23,17 +23,18 @@ const Article: React.FC = () => {
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
+    '@type': 'Article',
     headline: article.title,
     description: article.description,
     datePublished: article.date,
     dateModified: article.date,
-    author: {
-      '@type': 'Person',
-      name: 'Michael Kaminski',
-      url: SITE_URL,
-    },
-    publisher: { '@type': 'Person', name: 'Michael Kaminski' },
+    // Point at the Person @id declared in public/index.html rather than
+    // re-declaring a second, unlinked author entity. This is what feeds the
+    // article's authority back into the site's entity graph.
+    author: { '@id': `${SITE_URL}/#person` },
+    publisher: { '@id': `${SITE_URL}/#person` },
+    url: `${SITE_URL}/writing/${article.slug}`,
+    inLanguage: 'en',
     mainEntityOfPage: `${SITE_URL}/writing/${article.slug}`,
     image: `${SITE_URL}/og-image.jpg`,
   };

@@ -16,6 +16,185 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'statistical-gating-for-agent-instruction-changes',
+    title: "Statistical Gating for Agent Instruction Changes",
+    description:
+      "Every edit to an agent's instruction file is an experiment. Mine requires a statistically significant improvement — Welch's t-test, p < 0.10, at least a 5% lift — against a 14-day rolling baseline before the change is allowed to stay. Then the power calculation showed the 14-day window can only detect a 0.97 standard-deviation shift, which makes the 5% threshold decorative.",
+    date: '2026-08-09',
+    readMinutes: 7,
+    series: 'Field Notes',
+    body: `
+<p>An edit to an agent's instruction file is a deploy, and I stopped letting mine ship on a
+hunch. The daily tuning job that maintains my assistant's <code>CLAUDE.md</code> now requires a
+statistically significant improvement — Welch's t-test, p &lt; 0.10, at least a 5% lift — measured
+against a 14-day rolling baseline, before an instruction change is allowed to stay.</p>
+
+<p>Then I ran the power calculation on my own gate and found the 5% threshold is decorative. At
+14 days per window the test can only detect a shift of roughly <strong>0.97 standard
+deviations</strong>. Anything smaller is invisible regardless of what the lift threshold claims.</p>
+
+<p>Both halves of that are this post. The mechanism is worth copying. The window size is the part
+I got wrong, and the arithmetic is short enough to check.</p>
+
+<h2>The prompt is the least-tested code in most agent systems</h2>
+
+<p>Every other artifact in an agent pipeline has a gate. Application code gets a test suite and a
+review. Infrastructure gets a plan and a diff — I have written enough Terraform modules and
+managed enough remote state to know nobody merges those blind.</p>
+
+<p>The instruction file gets none of that. Someone notices the agent did something annoying, adds
+a line telling it not to, and ships. There is no baseline, no holdout, and no record of whether
+the previous eleven lines are still earning their tokens.</p>
+
+<p>That is how instruction files rot. They accumulate rules that were true about one bad
+afternoon and have been costing context ever since.</p>
+
+<h2>You cannot test what you do not score</h2>
+
+<p>The gate needs a dependent variable, so the first build was a rubric, not a test. Five
+dimensions, each scored 0–10 per conversation: goal clarity, rework rate, context hit rate, scope
+discipline, and response density. The daily score is the average across that day's
+conversations, weighted by conversation length.</p>
+
+<p>The rubric is frozen. Changing it invalidates every historical comparison, so a rubric change
+is itself a tracked meta-edit that resets all baselines.</p>
+
+<p>Scores are anchored to observable friction rather than self-assessment. The scorer parses
+transcripts for five pattern classes — corrections ("no, that", "actually", "don't"), rework
+("redo", "start over"), scope drift ("I didn't ask", "just do"), missed context ("I told you
+before", "check memory"), and praise ("exactly", "nailed it"). Friction pulls the dimension score
+down, praise pulls it up.</p>
+
+<p>This is the load-bearing decision. An agent grading its own transcripts will drift toward
+generosity. Regex over the human's actual words will not.</p>
+
+<h2>Welch, not Student, and why that is not pedantry</h2>
+
+<p>Each edit gets a 14-day pre-window and a 14-day post-window of daily scores, compared with
+Welch's t-test. Three outcomes: p &lt; 0.10 and lift ≥ 5% marks the edit <strong>KEPT</strong>;
+p &lt; 0.10 and lift ≤ −5% triggers an <strong>automatic revert</strong>; everything else is
+<strong>INCONCLUSIVE</strong> and the edit stays on probation.</p>
+
+<p>Welch rather than Student's t because the two windows should not have equal variance. A good
+instruction usually works by removing a failure mode, which compresses the bad tail — the
+variance drops as much as the mean rises.</p>
+
+<p>Student's t assumes equal variance and over-rejects when the smaller-variance group is the
+larger sample. That is precisely the case you care about, so the pooled test would hand you your
+most confident false positives on your best edits. Welch costs a few degrees of freedom and
+removes the assumption.</p>
+
+<h2>The arithmetic that broke the design</h2>
+
+<p>A two-sample test at α = 0.10 and 80% power detects a minimum effect of roughly
+(t<sub>α/2</sub> + t<sub>β</sub>) × √(2/n) standard deviations. For a 14-day window that is:</p>
+
+<table>
+  <thead>
+    <tr><th>Days per window</th><th>Minimum detectable effect</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>7</td><td>1.42 SD</td></tr>
+    <tr><td>14</td><td>0.97 SD</td></tr>
+    <tr><td>21</td><td>0.78 SD</td></tr>
+    <tr><td>28</td><td>0.67 SD</td></tr>
+    <tr><td>42</td><td>0.55 SD</td></tr>
+    <tr><td>60</td><td>0.46 SD</td></tr>
+  </tbody>
+</table>
+
+<p>Now convert to the units the gate actually uses. Assume a 7.0 baseline on the 0–10 rubric and a
+day-to-day standard deviation of 0.6 points, which is unremarkable for a metric averaged over a
+handful of conversations.</p>
+
+<p>A 5% lift is 0.35 points, or 0.58 SD. The 14-day window detects 0.97 SD, which is 0.58
+points — <strong>8.3% of baseline</strong>. The statistical test is roughly 1.7× stricter than
+the lift threshold sitting next to it.</p>
+
+<p>So the 5% number never binds. It is doing no work. Every edit that clears the t-test has
+already cleared 5% by a wide margin, and every edit that fails does so on power, not on effect
+size.</p>
+
+<p>Detecting a genuine 5% lift at that variance takes <strong>38 days per window</strong>, not 14.
+And the requirement moves fast with variance:</p>
+
+<table>
+  <thead>
+    <tr><th>Daily score SD</th><th>5% lift, in SD</th><th>Days/window needed</th><th>What 14 days actually detects</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>0.4</td><td>0.88</td><td>17</td><td>5.5%</td></tr>
+    <tr><td>0.5</td><td>0.70</td><td>27</td><td>6.9%</td></tr>
+    <tr><td>0.6</td><td>0.58</td><td>38</td><td>8.3%</td></tr>
+    <tr><td>0.8</td><td>0.44</td><td>66</td><td>11.1%</td></tr>
+    <tr><td>1.0</td><td>0.35</td><td>102</td><td>13.8%</td></tr>
+  </tbody>
+</table>
+
+<p>Read the last column as the honest label on the gate. At SD 1.0 a "5% threshold" is really a
+14% threshold, and the difference is entirely hidden from whoever reads the config file.</p>
+
+<p>The window has to be sized to the variance, not to a calendar. Fourteen days was chosen because
+two weeks is a tidy number, which is not a reason.</p>
+
+<p>There are two ways out and only one of them is cheap. Lengthen the window, and you wait longer
+per lesson. Or shrink the variance by scoring more conversations per day — the daily mean's
+standard error falls with √n, so tripling daily volume cuts the SD by about 42% and pulls the
+required window from 38 days down to roughly 17.</p>
+
+<h2>What the gate cannot do, stated plainly</h2>
+
+<p>It does not control for multiple comparisons. At the configured cadence of one low-risk edit
+every three days, that is about 122 evaluations a year. At α = 0.10 two-sided, noise alone
+produces roughly <strong>six spurious KEPT verdicts and six spurious auto-reverts per year</strong>.
+The auto-revert side is the one that stings: the system will occasionally roll back a good edit
+with statistical confidence.</p>
+
+<p>It is also not a randomized experiment. Pre and post windows are consecutive calendar time, so
+a model version change, a vacation, or a month of unusually messy work lands entirely in one
+window and gets attributed to the edit.</p>
+
+<p>That makes this a noise filter, not a causal claim. It stops the obviously-worse edits and the
+obviously-imaginary wins. It will not tell you why anything moved.</p>
+
+<h2>The safeguards do more work than the test</h2>
+
+<p>Three rules keep the loop from eating itself, and they matter more than the p-value.</p>
+
+<p><strong>Cooldowns.</strong> One low-risk auto-edit per three days, one high-risk proposal per
+week. Without a cooldown the windows overlap so badly that no edit is ever cleanly attributable.</p>
+
+<p><strong>Plateau detection.</strong> If the 14-day rolling score has not improved 2% over the
+prior 14 days and no friction is firing, the day's edit is skipped. The easy wins arrive early;
+after that, editing is mostly a way to add variance.</p>
+
+<p><strong>A risk split with a human in it.</strong> Wording and formatting changes auto-apply.
+Anything that adds a section or changes how the agent decides gets written to a proposals folder
+and waits. Every edit backs up the prior file first and lands in a revertible log, tagged, so a
+bad call is a one-line rollback rather than an archaeology project.</p>
+
+<p>The config file has a section titled "when NOT to edit," and the last line of it is the most
+useful thing in the whole system: <em>doing nothing is always a valid action.</em></p>
+
+<h2>The cost</h2>
+
+<p>Latency. That is the whole bill, and it is larger than I estimated when I built this.</p>
+
+<p>A gated instruction file learns on a 14-day clock at best and, if the variance numbers above
+are right, a 38-day clock in practice. An ungated one learns in an afternoon and is wrong in ways
+nobody measures. I would still take the slow version, but I would not pretend the tradeoff is
+free, and I would not build this at all for a system I was still prototyping.</p>
+
+<p>I have no KEPT verdicts to report yet, because the first honest one cannot exist until a full
+post-window closes. Publishing the design before the results is the point — the design is the
+part that is checkable, and the arithmetic above is the part I would want someone to argue with.</p>
+
+<p>If you are gating prompt or instruction changes statistically at your shop, I want to know what
+window you landed on and what your daily variance looks like. That number is the whole ballgame
+and almost nobody publishes it.</p>
+`,
+  },
+  {
     slug: 'i-gave-my-website-a-voice',
     title: "I Gave My Website a Voice, and the Voice Was the Easy Part",
     description:
