@@ -96,6 +96,53 @@
     border-color: rgba(255, 255, 255, 0.1);
     @apply my-8;
   }
+
+  /* Figures. Charts are authored as SVG so they stay crisp and versionable;
+     the animated one carries its own SMIL timeline. */
+  .article-body figure {
+    @apply my-10;
+  }
+  .article-body figure img {
+    @apply w-full rounded-rilla;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #060606;
+    display: block;
+  }
+  .article-body figcaption {
+    color: rgba(244, 244, 245, 0.55);
+    @apply text-sm mt-3 leading-snug;
+  }
+
+  /* Tables. The essays lead on arithmetic, so these carry real weight. */
+  .article-body table {
+    @apply w-full my-8 text-base;
+    border-collapse: collapse;
+  }
+  .article-body thead th {
+    color: #f4f4f5;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.18);
+    @apply text-left font-semibold py-2.5 pr-6;
+  }
+  .article-body tbody td {
+    color: rgba(244, 244, 245, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    @apply py-2.5 pr-6;
+  }
+  .article-body tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .article-body td:first-child {
+    color: #f4f4f5;
+    @apply font-medium;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .article-body figure[data-animated='true'] img {
+      /* Browsers pause SMIL in an <img> when the animation is not visible, but
+         honour the user's preference explicitly rather than relying on that. */
+      animation-play-state: paused;
+    }
+  }
   
   .card-hover {
     @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;

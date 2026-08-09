@@ -10,6 +10,8 @@ export interface Article {
    * over the same N, and the counter was never worth the collisions.
    */
   series?: string;
+  /** Per-article social card. Falls back to the site-wide og-image.jpg. */
+  ogImage?: string;
   /** Author-controlled HTML body (rendered via dangerouslySetInnerHTML). */
   body: string;
 }
@@ -22,6 +24,7 @@ export const articles: Article[] = [
       "Every edit to an agent's instruction file is an experiment. Mine requires a statistically significant improvement — Welch's t-test, p < 0.10, at least a 5% lift — against a 14-day rolling baseline before the change is allowed to stay. Then the power calculation showed the 14-day window can only detect a 0.97 standard-deviation shift, which makes the 5% threshold decorative.",
     date: '2026-08-09',
     readMinutes: 7,
+    ogImage: '/images/essays/og-statistical-gating.png',
     series: 'Field Notes',
     body: `
 <p>An edit to an agent's instruction file is a deploy, and I stopped letting mine ship on a
@@ -102,6 +105,11 @@ removes the assumption.</p>
     <tr><td>60</td><td>0.46 SD</td></tr>
   </tbody>
 </table>
+<figure>
+<img src="/images/essays/fig1-mde-by-window.svg" alt="Curve of minimum detectable effect against days per window. At 14 days the curve sits at 0.97 standard deviations; the 5 percent lift threshold sits at 0.58 and the curve does not reach it until about 38 days." loading="lazy" decoding="async" />
+<figcaption>The gate can only see effects above the yellow line. The 5% threshold sits inside the shaded band — under it the whole time, doing no work.</figcaption>
+</figure>
+
 
 <p>Now convert to the units the gate actually uses. Assume a 7.0 baseline on the 0–10 rubric and a
 day-to-day standard deviation of 0.6 points, which is unremarkable for a metric averaged over a
@@ -130,6 +138,11 @@ And the requirement moves fast with variance:</p>
     <tr><td>1.0</td><td>0.35</td><td>102</td><td>13.8%</td></tr>
   </tbody>
 </table>
+<figure>
+<img src="/images/essays/fig3-effective-threshold.svg" alt="Bar chart of the smallest lift a 14-day window can actually detect, by day-to-day standard deviation: 5.5 percent at SD 0.4, 6.9 percent at 0.5, 8.3 percent at 0.6, 11.1 percent at 0.8, and 13.8 percent at 1.0." loading="lazy" decoding="async" />
+<figcaption>The honest label on the gate. Every bar to the right of the dashed line is a threshold the config never mentions.</figcaption>
+</figure>
+
 
 <p>Read the last column as the honest label on the gate. At SD 1.0 a "5% threshold" is really a
 14% threshold, and the difference is entirely hidden from whoever reads the config file.</p>
@@ -141,6 +154,13 @@ two weeks is a tidy number, which is not a reason.</p>
 per lesson. Or shrink the variance by scoring more conversations per day — the daily mean's
 standard error falls with √n, so tripling daily volume cuts the SD by about 42% and pulls the
 required window from 38 days down to roughly 17.</p>
+<p>Put the same arithmetic the other way around. If an edit truly delivers a 5% lift, a 14-day window calls it significant <strong>44% of the time</strong>. That is a coin flip on your own best changes. At 38 days it is 81%.</p>
+
+<figure data-animated="true">
+<img src="/images/essays/fig2-power-by-window.svg" alt="Animated chart. The sampling distribution of the observed lift when the true effect is a 5 percent improvement, with the significance threshold marked. The shaded area right of the threshold is statistical power: 27 percent at a 7-day window, 44 percent at 14 days, 81 percent at 38 days, 94 percent at 60 days." loading="lazy" decoding="async" />
+<figcaption>Same arithmetic, run forward. Each frame is a window length; the shaded tail is how often a genuinely good edit gets called significant.</figcaption>
+</figure>
+
 
 <h2>What the gate cannot do, stated plainly</h2>
 

@@ -44,8 +44,13 @@ function setTag(html, re, replacement) {
   return re.test(html) ? html.replace(re, replacement) : html;
 }
 
-function rewriteHead(html, { title, description, canonical, type, jsonLd }) {
+function rewriteHead(html, { title, description, canonical, type, jsonLd, image }) {
   let out = html;
+  if (image) {
+    const abs = image.startsWith('http') ? image : `${ORIGIN}${image}`;
+    out = setTag(out, /<meta property="og:image" content="[^"]*"\s*\/?>/, `<meta property="og:image" content="${esc(abs)}">`);
+    out = setTag(out, /<meta property="twitter:image" content="[^"]*"\s*\/?>/, `<meta property="twitter:image" content="${esc(abs)}">`);
+  }
   out = setTag(out, /<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`);
   out = setTag(out, /<meta name="title" content="[^"]*"\s*\/?>/, `<meta name="title" content="${esc(title)}">`);
   out = setTag(
@@ -146,7 +151,7 @@ function main() {
       publisher: { '@id': `${ORIGIN}/#person` },
       mainEntityOfPage: canonical,
       url: canonical,
-      image: `${ORIGIN}/og-image.jpg`,
+      image: `${ORIGIN}${a.ogImage || '/og-image.jpg'}`,
       inLanguage: 'en',
     };
     const html = injectRoot(
@@ -155,6 +160,7 @@ function main() {
         description: a.description,
         canonical,
         type: 'article',
+        image: a.ogImage,
         jsonLd,
       }),
       articleMarkup(a)

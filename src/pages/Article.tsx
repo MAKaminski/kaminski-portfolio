@@ -36,7 +36,7 @@ const Article: React.FC = () => {
     url: `${SITE_URL}/writing/${article.slug}`,
     inLanguage: 'en',
     mainEntityOfPage: `${SITE_URL}/writing/${article.slug}`,
-    image: `${SITE_URL}/og-image.jpg`,
+    image: `${SITE_URL}${article.ogImage ?? '/og-image.jpg'}`,
   };
 
   return (
@@ -46,6 +46,7 @@ const Article: React.FC = () => {
         description={article.description}
         canonicalPath={`/writing/${article.slug}`}
         type="article"
+        image={article.ogImage}
         jsonLd={jsonLd}
       />
       <Header />
