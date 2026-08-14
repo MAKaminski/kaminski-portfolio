@@ -1,5 +1,77 @@
 # 📊 Comprehensive Analytics Setup Guide
 
+## PostHog — how it's wired (read this first)
+
+PostHog is the primary product-analytics destination. The SDK is initialized in
+`src/utils/posthog.ts` from `src/index.tsx`, before React renders, so the
+session's first `$pageview` isn't lost to a race with mounting.
+
+**`REACT_APP_POSTHOG_KEY` is required.** Set it in the Vercel project settings.
+Without a usable value PostHog is skipped and the site records nothing — loudly,
+via `console.error`, rather than in silence.
+
+### Why the dashboard was empty
+
+Two independent faults, both real. Fixing either alone would have left it empty:
+
+1. **No SDK.** `posthog-js` was never a dependency and nothing called `init()`.
+   The site only ever sent Vercel Analytics, so there was no ingestion problem to
+   debug — nothing was being sent.
+2. **A malformed environment variable.** `REACT_APP_POSTHOG_KEY` was set in
+   Vercel to the literal string `REACT_APP_POSTHOG_KEY = phc_…` — the whole
+   line from these instructions had been pasted into the value box. Adding the
+   SDK on its own would have authenticated against a key that doesn't exist and
+   dropped every event, with the dashboard looking exactly as empty as before.
+
+`normalizeKey()` in `src/utils/posthog.ts` strips quotes and a leading `NAME =`
+prefix, and requires the result to match `phc_…` before trusting it. **That
+means the value currently in Vercel resolves correctly with no dashboard change**
+— though setting it to the bare key is still worth doing, so the next reader
+isn't misled.
+
+The key is deliberately **not** committed. PostHog project keys are write-only
+and public by design — the value ships to every visitor inside the JS bundle
+regardless of where it comes from — but this repo runs GitGuardian, and a
+hardcoded `phc_…` trips it on every pull request. Keeping the key in the
+environment is the cheaper trade, given that the failure mode it reintroduces
+(a missing variable) is now noisy and the one that actually bit this site (a
+malformed variable) is handled.
+
+### What gets captured
+
+| Source | Events |
+| --- | --- |
+| `posthog-js` autocapture | clicks, inputs, `$pageview`, `$pageleave`, exceptions |
+| `src/utils/track.ts` | `Book a Call`, `Resume Downloaded`, `Contact Form Submission` — fanned out to Vercel Analytics *and* PostHog |
+| `src/hooks/useAnalytics.ts` | `scroll_depth`, `time_on_page`, `file_download`, `external_link_click` |
+
+SPA route changes work because the SDK is initialized with
+`defaults: '2026-05-30'`, which sets `capture_pageview: 'history_change'`.
+Without it PostHog records only the initial document load and every in-app
+navigation (`/writing`, `/cfo`, `/products`, …) is invisible.
+
+`useAnalytics` had existed for a long time but was never mounted by anything, so
+none of its behavioural tracking ran. `src/components/AnalyticsTracker.tsx`
+mounts it inside the Router.
+
+### Optional: the ad-blocker relay
+
+`vercel.json` rewrites `/mk-relay/*` to PostHog's ingestion and asset hosts.
+Setting `REACT_APP_POSTHOG_HOST=/mk-relay` routes events through this site's own
+origin, which content blockers don't recognise — typically recovering 10–30% of
+otherwise-dropped events. It is **off by default**: the direct host is the
+known-good path, and a subtly wrong rewrite would break analytics entirely rather
+than partially. The relay rewrites are ordered ahead of the SPA catch-all in
+`vercel.json`, which is load-bearing — Vercel takes the first matching rewrite.
+
+### Verifying after deploy
+
+PostHog's "filter out internal and test users" setting is on for this project,
+so localhost traffic stays out of the dashboards. Check
+**Activity** (not Web Analytics) for the first events — Web Analytics rolls up on
+a delay. In the browser console on the live site, `$pageview` requests should
+appear as POSTs to `us.i.posthog.com`.
+
 ## 🎯 What You'll Get
 
 With this enhanced analytics setup, you'll be able to track:

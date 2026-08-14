@@ -88,6 +88,17 @@ yards in metro Atlanta), YieldFlow (bank-bonus yield optimizer), Next
 Generation Capital (investor network for an Atlanta build-to-rent firm),
 Alpha-Kite, and others. The full list lives on the Websites page of this site.
 
+The newest one is Commitgraph, worldwide and country and city leaderboards for
+the most active developers on GitHub. It visualises the data instead of printing
+a table, and it labels what it does not know. Today it ranks about six thousand
+six hundred developers across eighty eight countries. The goal is all of them,
+and the thing standing in the way is the free A-P-I rate limit. One token is
+five thousand requests an hour. One call per user would take about four years to
+cover the whole platform, which passed one hundred eighty million developers in
+the twenty twenty five Octoverse report. Batching one hundred users into a single
+GraphQL point brings that to about two weeks on the same free token. So the open
+problem is the shape of the call structure, not the budget.
+
 Desktop tools on GitHub: MacMonitor (a macOS menu-bar system monitor extended
 with a resizable desktop HUD), Touch Up D (turns a touchscreen monitor into a
 real touch control deck for macOS), DesktopLens (privacy-first on-device context

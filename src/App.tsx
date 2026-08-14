@@ -3,11 +3,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { Analytics } from '@vercel/analytics/react';
 import { initGA } from './utils/analytics';
+import AnalyticsTracker from './components/AnalyticsTracker';
 import Seo from './components/Seo';
 import SmoothScroll from './components/SmoothScroll';
 import Cursor from './components/Cursor';
 import Header from './components/Header';
 import Hero from './components/Hero';
+import LatestLaunch from './components/LatestLaunch';
 import Experience from './components/Experience';
 import Skills from './components/Skills';
 import Transactions from './components/Transactions';
@@ -123,6 +125,8 @@ function App() {
         <ThemeContext.Consumer>
           {({ theme }) => (
             <div className="min-h-screen" style={{ background: theme.bg }}>
+              {/* Inside the Router — it reads useLocation to see route changes. */}
+              <AnalyticsTracker />
               <Suspense fallback={<RouteFallback />}>
               <Routes>
                 <Route path="/" element={
@@ -132,6 +136,7 @@ function App() {
                     <main>
                       {/* Recruiter-first order: lead with proof, close with fit/contact */}
                       <Hero />
+                      <LatestLaunch />
                       <Transactions />
                       <Highlights />
                       <Experience />
