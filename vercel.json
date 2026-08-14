@@ -24,6 +24,14 @@
   ],
   "rewrites": [
     {
+      "source": "/mk-relay/static/:path(.*)",
+      "destination": "https://us-assets.i.posthog.com/static/:path"
+    },
+    {
+      "source": "/mk-relay/:path(.*)",
+      "destination": "https://us.i.posthog.com/:path"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }

@@ -1,4 +1,18 @@
 // Google Analytics 4 Configuration and Tracking Utilities
+//
+// Every helper below is gated on `window.gtag`, which only exists once `initGA`
+// runs — and `initGA` is skipped unless REACT_APP_GA_MEASUREMENT_ID is set,
+// which it isn't. So each of these was a no-op in production. They now mirror
+// to PostHog *outside* the gtag guard, which is the point: the behavioural
+// signal (scroll depth, dwell time, downloads, outbound clicks) reaches
+// PostHog whether or not GA is ever configured.
+//
+// Deliberately absent: a PostHog mirror inside `trackPageView`. posthog-js is
+// initialized with `defaults: '2026-05-30'`, which captures pageviews on
+// history changes by itself; emitting one here too would double-count every
+// route change.
+import { capturePostHog } from './posthog';
+
 declare global {
   interface Window {
     gtag: (...args: any[]) => void;
@@ -54,6 +68,8 @@ export const trackPageView = (page: string, title?: string) => {
 
 // Track custom events
 export const trackEvent = (action: string, category: string, label?: string, value?: number) => {
+  capturePostHog(action, { category, label, value });
+
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', action, {
       event_category: category,
@@ -65,6 +81,8 @@ export const trackEvent = (action: string, category: string, label?: string, val
 
 // Track user interactions
 export const trackUserInteraction = (interaction: string, details?: Record<string, any>) => {
+  capturePostHog('user_interaction', { interaction_type: interaction, ...details });
+
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'user_interaction', {
       interaction_type: interaction,
@@ -75,6 +93,10 @@ export const trackUserInteraction = (interaction: string, details?: Record<strin
 
 // Track form submissions
 export const trackFormSubmission = (formName: string, formData?: Record<string, any>) => {
+  // Name only — `formData` is whatever the visitor typed into the contact form
+  // (name, email, message) and has no business being in an analytics payload.
+  capturePostHog('form_submit', { form_name: formName });
+
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'form_submit', {
       form_name: formName,
@@ -85,6 +107,8 @@ export const trackFormSubmission = (formName: string, formData?: Record<string, 
 
 // Track file downloads
 export const trackDownload = (fileName: string, fileType: string) => {
+  capturePostHog('file_download', { file_name: fileName, file_type: fileType });
+
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'file_download', {
       file_name: fileName,
@@ -95,6 +119,8 @@ export const trackDownload = (fileName: string, fileType: string) => {
 
 // Track external link clicks
 export const trackExternalLink = (url: string, linkText?: string) => {
+  capturePostHog('external_link_click', { link_url: url, link_text: linkText });
+
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'click', {
       event_category: 'external_link',
@@ -106,6 +132,8 @@ export const trackExternalLink = (url: string, linkText?: string) => {
 
 // Track scroll depth
 export const trackScrollDepth = (depth: number) => {
+  capturePostHog('scroll_depth', { depth });
+
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'scroll', {
       event_category: 'engagement',
@@ -117,6 +145,8 @@ export const trackScrollDepth = (depth: number) => {
 
 // Track time on page
 export const trackTimeOnPage = (seconds: number) => {
+  capturePostHog('time_on_page', { seconds });
+
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'timing_complete', {
       name: 'page_load_time',

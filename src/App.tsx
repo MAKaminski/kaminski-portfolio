@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { Analytics } from '@vercel/analytics/react';
 import { initGA } from './utils/analytics';
+import AnalyticsTracker from './components/AnalyticsTracker';
 import Seo from './components/Seo';
 import SmoothScroll from './components/SmoothScroll';
 import Cursor from './components/Cursor';
@@ -124,6 +125,8 @@ function App() {
         <ThemeContext.Consumer>
           {({ theme }) => (
             <div className="min-h-screen" style={{ background: theme.bg }}>
+              {/* Inside the Router — it reads useLocation to see route changes. */}
+              <AnalyticsTracker />
               <Suspense fallback={<RouteFallback />}>
               <Routes>
                 <Route path="/" element={
