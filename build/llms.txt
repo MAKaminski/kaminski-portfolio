@@ -1,54 +1,63 @@
 # Michael Kaminski
 
-> Atlanta-based fintech leader who is fluent in BOTH PE-grade finance and hands-on
-> software engineering — a rare finance-plus-engineering combination. 20+ years across
-> GreenSky, Home Depot, HD Supply, KPMG, and multiple fintech startups. Available for
-> fractional CFO/CTO and product/engineering leadership, and open to full-time executive roles.
+> Technical product manager working at the agent layer. Builds AI agents that run in
+> production — custom MCP servers, multi-agent pipelines, and eval harnesses in Python
+> and TypeScript. Took an AI agent capability from prototype through security, legal, and
+> compliance review inside a regulated lender. Atlanta, relocating to New York City.
 
 ## Who he is
 
-Michael Kaminski is a fintech finance-and-engineering leader based in Atlanta, GA. He is
-unusual because he operates credibly on both sides of the table: he builds the financial
-models and reporting a private-equity board expects (FP&A, treasury, quality of earnings,
-M&A, board reporting) AND writes and architects the software that ships the product
-(full-stack engineering, product management, payments, digital banking, SaaS/AI platforms).
+Michael Kaminski is a technical product manager who builds AI agent infrastructure. He is
+currently Senior Product Owner, Collections & Servicing at Stellantis Financial Services US;
+the AI agent work is scope inside that role, not the title.
 
-## Positioning
+What is unusual about him is the combination: he can price a system and he can ship it.
+Before working at the agent layer he spent years in corporate finance and strategy, and he
+has authored Terraform modules with multi-environment remote state and operated production
+Kubernetes clusters.
 
-- Primary niche: Fintech Finance + Engineering leadership, Atlanta.
-- Services: Fractional CFO, Fractional CTO, product & payments leadership, PE-sponsor reporting.
-- Open to: Full-time executive roles (CFO / CTO / CPO / VP) at $0–100MM revenue companies.
-- Location: Atlanta, GA. Works on-site, hybrid, or remote.
+## What he works on
+
+- Agentic workflow design and multi-agent orchestration
+- Custom Model Context Protocol (MCP) servers
+- Tool design an agent can actually call
+- Eval harness design, including statistical gating for agent instruction changes
+- Human approval gates on irreversible agent actions
+- Retrieval-augmented generation, LLM application architecture
+- Python, TypeScript, Terraform, Kubernetes, PostgreSQL
 
 ## Selected experience
 
-- Fyxed — Interim CEO (2025), fintech; scaled to ~$50K MRR.
-- Momnt — Sr. Manager, Product Engineering (2023–2025), fintech lending/credit.
-- Property Walk — Founder (2022–2023), proptech.
-- GreenSky — Product Manager, Credit & Strategy (2016–2018), post-IPO fintech.
-- HD Supply — Sr. Analyst, Strategic Finance (2015–2016); led a 2,500-FTE restructuring and
-  a $50MM excess-inventory optimization.
-- KPMG — Senior Consultant, Advisory (2014–2015).
-- Home Depot — Sr. Analyst, Merchandising Finance & Treasury (2011–2014); supported a $4B
-  share-repurchase program.
-- ModularEquity / MEK Capital — Founder / Managing Partner (2011–2025).
-
-## Expertise
-
-Fintech, payments, digital banking, SaaS, AI/ML platforms, FP&A, treasury, quality of
-earnings, ASC standards, SOC/GDPR/PCI compliance, private-equity sponsor reporting, M&A,
-product management, full-stack software engineering, data & analytics.
+- Stellantis Financial Services — Senior Product Owner, Collections & Servicing (present).
+  Owns a voice-AI initiative evaluating multi-agent orchestration options.
+- Google — Agentic Researcher, Engineering, Core PMO (Oct–Dec 2025).
+- Momnt — Tech lead, Credit Analysis & Accounting Engine (2023–2024). Delivery
+  accountability, not people management.
+- Modular Equity — Executive investment vehicle he manages (2023–present).
+- GreenSky — fintech; product, credit and strategy (2016–).
+- HD Supply — Sr. Analyst, Strategic Finance (2015–2016). Supported a $1.8B divestiture
+  program, built a $244M branch-network hub-and-spoke DCF, modeled a comp-arbitrage case for
+  relocating roughly 2,000 roles, and ran portfolio analytics on a $500M CapEx program.
+- KPMG — Senior Consultant, Advisory (2014–2015). Eight engagements, $300M in client tax savings.
+- The Home Depot — career origin (2011–2014).
+- Superior Contracting & Maintenance — founder, still operating; roughly $20M revenue/yr.
 
 ## Education
 
 - MBA, Georgia State University (2011).
 - BS, Computer Science, DeVry University (2008).
 
+## Writing
+
+Field notes on agent infrastructure at https://www.michael-kaminski.io/writing
+
+- Statistical Gating for Agent Instruction Changes —
+  https://www.michael-kaminski.io/writing/statistical-gating-for-agent-instruction-changes
+
 ## Contact
 
 - Website: https://www.michael-kaminski.io
-- Email: mkaminski1337@gmail.com
-- Phone: (404) 838-8613
+- Email: MKaminski1337@gmail.com
 - LinkedIn: https://www.linkedin.com/in/michaelxaxkaminski
 - GitHub: https://github.com/MAKaminski
-- Book a call: https://calendly.com/kaminski1337/15min
+- DEV: https://dev.to/makaminski1337

@@ -5,3 +5,5 @@ node_modules/
 **/*.pyc
 frontend/build/
 backend/.venv/
+# Intermediate render scaffold, never committed.
+public/images/essays/_og-square.svg

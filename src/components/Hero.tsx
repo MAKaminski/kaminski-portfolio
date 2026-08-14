@@ -107,9 +107,9 @@ const Hero: React.FC = () => {
                 immediate
                 delay={0.15}
                 lines={[
-                  'Fintech',
-                  <>Finance <span className="accent">+</span> Engineering</>,
-                  'Leader',
+                  'I build',
+                  <>AI <span className="accent">agents</span></>,
+                  'that run in production',
                 ]}
               />
             </h1>
@@ -120,8 +120,8 @@ const Hero: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, ease: RILLA_EASE, delay: 0.5 }}
             >
-              Fluent in both the boardroom and the codebase. I build the financial model a
-              private-equity board expects — and ship the software that runs the product.
+              Agent infrastructure, MCP servers, and eval harnesses inside a regulated lender.
+              Python and TypeScript. Atlanta, relocating to New York City.
             </motion.p>
 
             {/* CTAs */}

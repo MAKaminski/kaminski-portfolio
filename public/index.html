@@ -9,25 +9,23 @@
     <meta name="theme-color" content="#060606" />
 
     <!-- Primary SEO Meta Tags -->
-    <title>Michael Kaminski | Fintech Finance & Engineering Leader in Atlanta</title>
-    <meta name="title" content="Michael Kaminski | Fintech Finance & Engineering Leader in Atlanta">
-    <meta name="description" content="Michael Kaminski is an Atlanta-based fintech leader who is fluent in both PE-grade finance and hands-on software engineering — 20+ years spanning GreenSky, Home Depot, HD Supply, KPMG and fintech startups. Fractional CFO/CTO, product & payments leadership.">
-    <meta name="keywords" content="Michael Kaminski, Atlanta fintech leader, fintech finance engineering, fractional CFO fintech, fractional CTO Atlanta, fintech product leader, payments strategy, Atlanta technology executive">
+    <title>Michael Kaminski — AI Agents &amp; Agent Infrastructure | Atlanta &amp; NYC</title>
+    <meta name="title" content="Michael Kaminski — AI Agents & Agent Infrastructure | Atlanta & NYC">
+    <meta name="description" content="Michael Kaminski builds AI agents that run in production. Took an agent capability from prototype through security, legal, and compliance review inside a regulated lender. Custom MCP servers, multi-agent orchestration, and eval harnesses in Python and TypeScript. Atlanta, relocating to New York City.">
     <meta name="author" content="Michael Kaminski">
     <meta name="robots" content="index, follow, max-image-preview:large">
-    <!-- Google Search Console: paste your verification tag below (or verify via DNS TXT), then submit sitemap.xml.
-         <meta name="google-site-verification" content="YOUR_TOKEN_HERE"> -->
-    <!-- Bing Webmaster Tools: <meta name="msvalidate.01" content="YOUR_TOKEN_HERE"> -->
+    <!-- meta name="keywords" deliberately removed 2026-08-09: ignored by Google since ~2009,
+         and its contents described the wrong entity (fractional CFO / payments strategy). -->
     <!-- Canonical is emitted per-route by src/components/Seo.tsx (react-helmet-async)
-         so each page gets exactly one canonical instead of a conflicting pair. -->
+         and by scripts/prerender.js for the static shells. -->
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="profile">
     <meta property="profile:first_name" content="Michael">
     <meta property="profile:last_name" content="Kaminski">
     <meta property="og:url" content="https://www.michael-kaminski.io/">
-    <meta property="og:title" content="Michael Kaminski | Fintech Finance & Engineering Leader in Atlanta">
-    <meta property="og:description" content="Atlanta-based fintech leader fluent in both PE-grade finance and hands-on engineering. 20+ years across GreenSky, Home Depot, HD Supply, KPMG and fintech startups.">
+    <meta property="og:title" content="Michael Kaminski — AI Agents & Agent Infrastructure">
+    <meta property="og:description" content="Builds AI agents that run in production inside a regulated lender. Custom MCP servers, multi-agent orchestration, eval harnesses. Python / TypeScript.">
     <meta property="og:image" content="https://www.michael-kaminski.io/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -36,60 +34,92 @@
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://www.michael-kaminski.io/">
-    <meta property="twitter:title" content="Michael Kaminski | Fintech Finance & Engineering Leader in Atlanta">
-    <meta property="twitter:description" content="Atlanta-based fintech leader fluent in both PE-grade finance and hands-on engineering. 20+ years across GreenSky, Home Depot, HD Supply, KPMG and fintech startups.">
+    <meta property="twitter:title" content="Michael Kaminski — AI Agents & Agent Infrastructure">
+    <meta property="twitter:description" content="Builds AI agents that run in production inside a regulated lender. Custom MCP servers, multi-agent orchestration, eval harnesses. Python / TypeScript.">
     <meta property="twitter:image" content="https://www.michael-kaminski.io/og-image.jpg">
 
-    <!-- Local / Geo Meta Tags -->
+    <!-- Local / Geo Meta Tags — NYC added; onsite roles there are in play -->
     <meta name="geo.region" content="US-GA">
-    <meta name="geo.placename" content="Atlanta">
+    <meta name="geo.placename" content="Atlanta, New York">
     <meta name="geo.position" content="33.7490;-84.3880">
     <meta name="ICBM" content="33.7490, -84.3880">
 
-    <!-- Structured Data: ProfilePage + Person -->
+    <!-- Structured Data: Person. The @id is the anchor every other schema block
+         on this site points at, and sameAs is how search engines and LLMs decide
+         that this site, LinkedIn, GitHub, and DEV are one entity. If the LinkedIn
+         vanity URL ever changes, update it here the same day. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://www.michael-kaminski.io/#person",
+      "name": "Michael Kaminski",
+      "givenName": "Michael",
+      "familyName": "Kaminski",
+      "url": "https://www.michael-kaminski.io/",
+      "image": "https://www.michael-kaminski.io/og-image.jpg",
+      "email": "mailto:MKaminski1337@gmail.com",
+      "jobTitle": "Senior Product Owner — Collections & Servicing (AI Agent Platform Lead)",
+      "description": "Technical product manager working at the agent layer. Took an AI agent capability from prototype through security, legal, and compliance review to production inside a regulated lender. Builds custom MCP servers, multi-agent pipelines, and eval harnesses in Python and TypeScript.",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Stellantis Financial Services US",
+        "url": "https://www.stellantisfinancialservices.com/"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Atlanta",
+        "addressRegion": "GA",
+        "addressCountry": "US"
+      },
+      "alumniOf": [
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Georgia State University",
+          "url": "https://www.gsu.edu/",
+          "description": "MBA, 2011"
+        },
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "DeVry University",
+          "url": "https://www.devry.edu/",
+          "description": "B.S. Computer Science, 2008"
+        }
+      ],
+      "knowsAbout": [
+        "AI agents",
+        "Agentic workflow design",
+        "Model Context Protocol (MCP)",
+        "Multi-agent orchestration",
+        "Claude Agent SDK",
+        "Eval harness design",
+        "Retrieval-augmented generation",
+        "Large language models",
+        "Python",
+        "TypeScript",
+        "Terraform",
+        "Kubernetes",
+        "PostgreSQL",
+        "Regulated lending technology",
+        "Payments infrastructure",
+        "Product management"
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/michaelxaxkaminski",
+        "https://github.com/MAKaminski",
+        "https://dev.to/makaminski1337",
+        "https://x.com/EBITDA_Engineer"
+      ]
+    }
+    </script>
+
+    <!-- Structured Data: ProfilePage, pointing at the Person above -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "ProfilePage",
-      "dateModified": "2026-07-20",
-      "mainEntity": {
-        "@type": "Person",
-        "name": "Michael Kaminski",
-        "jobTitle": "Fintech Finance & Engineering Leader",
-        "description": "Atlanta-based fintech leader fluent in both PE-grade finance and hands-on software engineering, with 20+ years across GreenSky, Home Depot, HD Supply, KPMG and fintech startups.",
-        "url": "https://www.michael-kaminski.io",
-        "image": "https://www.michael-kaminski.io/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c.jpeg",
-        "email": "mailto:mkaminski1337@gmail.com",
-        "telephone": "+1-404-838-8613",
-        "sameAs": [
-          "https://www.linkedin.com/in/michaelxaxkaminski",
-          "https://github.com/MAKaminski"
-        ],
-        "alumniOf": [
-          { "@type": "CollegeOrUniversity", "name": "Georgia State University" },
-          { "@type": "CollegeOrUniversity", "name": "DeVry University" }
-        ],
-        "knowsAbout": [
-          "Fintech",
-          "Payments",
-          "Digital Banking",
-          "Software Engineering",
-          "Financial Planning & Analysis",
-          "Private Equity Reporting",
-          "Quality of Earnings",
-          "Treasury",
-          "Mergers & Acquisitions",
-          "Product Management",
-          "Fractional CFO",
-          "Fractional CTO"
-        ],
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Atlanta",
-          "addressRegion": "GA",
-          "addressCountry": "US"
-        }
-      }
+      "dateModified": "2026-08-09",
+      "mainEntity": { "@id": "https://www.michael-kaminski.io/#person" }
     }
     </script>
 
@@ -104,23 +134,31 @@
           "name": "Who is Michael Kaminski?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Michael Kaminski is an Atlanta-based fintech leader who is bilingual in finance and engineering — he pairs PE-grade financial expertise (FP&A, treasury, quality of earnings, M&A) with hands-on software engineering and product leadership. His career spans GreenSky, Home Depot, HD Supply, KPMG, and multiple fintech startups."
+            "text": "Michael Kaminski is a technical product manager who builds AI agents that run in production. He took an AI agent capability from prototype through security, legal, and compliance review inside a regulated lender, and builds custom Model Context Protocol (MCP) servers, multi-agent pipelines, and eval harnesses in Python and TypeScript. He is Senior Product Owner, Collections & Servicing at Stellantis Financial Services US, where the agent work sits inside that role."
           }
         },
         {
           "@type": "Question",
-          "name": "What makes Michael Kaminski's background unusual for a fintech leader?",
+          "name": "What does Michael Kaminski work on?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Very few fintech leaders can operate credibly on both sides of the table. Michael can build the financial models a private-equity board expects and write and architect the software that ships the product — an uncommon finance-plus-engineering combination in the Atlanta fintech market."
+            "text": "Agent infrastructure: agentic workflow design, multi-agent orchestration, custom MCP servers, tool design an agent can actually call, eval harness design, and human approval gates on irreversible agent actions. He has authored Terraform modules with multi-environment remote state and operated production Kubernetes clusters."
           }
         },
         {
           "@type": "Question",
-          "name": "Is Michael Kaminski available for fractional CFO or CTO work?",
+          "name": "What makes Michael Kaminski's background unusual?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Michael advises founders and PE-backed fintech, payments, and SaaS companies as a fractional CFO/CTO and product-and-engineering leader, and is open to full-time executive roles. He is based in Atlanta, GA and works on-site, hybrid, or remote."
+            "text": "He can price a system and he can ship it. Before working at the agent layer he spent years in corporate finance and strategy — supporting a $1.8B divestiture program, building a $244M branch-network DCF, and running portfolio analytics on a $500M CapEx program at HD Supply — and he was tech lead for Momnt's credit analysis and accounting engine. Very few people building agent infrastructure can also model the business case for it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where is Michael Kaminski based?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Atlanta, Georgia, and relocating to New York City. He is open to onsite roles in NYC."
           }
         }
       ]
@@ -145,27 +183,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   </head>
   <body>
+    <!-- scripts/prerender.js injects the real page text into #root at build time.
+         React's createRoot() discards it on mount, so this is what crawlers read
+         and what paints first, not what users interact with. -->
     <div id="root"></div>
     <noscript>
-      <h1>Michael Kaminski — Fintech Finance &amp; Engineering Leader in Atlanta</h1>
+      <h1>Michael Kaminski — I build AI agents that run in production</h1>
       <p>
-        Michael Kaminski is an Atlanta-based fintech leader who is fluent in both PE-grade
-        finance and hands-on software engineering. Over 20+ years he has worked across
-        GreenSky (post-IPO credit &amp; strategy), Home Depot (merchandising finance &amp;
-        treasury, $4B share repurchase), HD Supply (strategic finance, 2,500-FTE
-        restructuring, $50MM inventory optimization), KPMG advisory, and multiple fintech
-        startups (Momnt, Fyxed, Property Walk).
+        Agent infrastructure, MCP servers, and eval harnesses inside a regulated lender.
+        Python and TypeScript. Atlanta, relocating to New York City.
       </p>
       <p>
-        He works as a fractional CFO/CTO and product-and-engineering leader for founders and
-        private-equity-backed fintech, payments, digital banking, and SaaS companies, and is
-        open to full-time executive roles. Based in Atlanta, GA — on-site, hybrid, or remote.
+        Michael Kaminski is a technical product manager working at the agent layer. He took an AI
+        agent capability from prototype through security, legal, and compliance review to
+        production inside a regulated lender, and builds custom Model Context Protocol (MCP)
+        servers, multi-agent pipelines, and eval harnesses in Python and TypeScript.
+      </p>
+      <p>
+        He is Senior Product Owner, Collections &amp; Servicing at Stellantis Financial Services
+        US, where the agent work sits inside that role. Earlier: Momnt (tech lead, credit analysis
+        and accounting engine), GreenSky, HD Supply, KPMG, and The Home Depot. He also runs
+        Modular Equity and founded Superior Contracting &amp; Maintenance.
       </p>
       <ul>
-        <li>Email: mkaminski1337@gmail.com</li>
-        <li>Phone: (404) 838-8613</li>
+        <li>Email: MKaminski1337@gmail.com</li>
         <li>LinkedIn: https://www.linkedin.com/in/michaelxaxkaminski</li>
         <li>GitHub: https://github.com/MAKaminski</li>
+        <li>DEV: https://dev.to/makaminski1337</li>
       </ul>
       <p>Please enable JavaScript to view the full interactive portfolio.</p>
     </noscript>

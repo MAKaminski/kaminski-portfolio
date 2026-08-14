@@ -1,0 +1,304 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico" sizes="48x48"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><link rel="icon" type="image/png" sizes="192x192" href="/logo192.png"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#060606"/><title>Statistical Gating for Agent Instruction Changes | Michael Kaminski</title><meta name="title" content="Statistical Gating for Agent Instruction Changes | Michael Kaminski"><meta name="description" content="Every edit to an agent's instruction file is an experiment. Mine requires a statistically significant improvement — Welch's t-test, p &lt; 0.10, at least a 5% lift — against a 14-day rolling baseline before the change is allowed to stay. Then the power calculation showed the 14-day window can only detect a 0.97 standard-deviation shift, which makes the 5% threshold decorative."><meta name="author" content="Michael Kaminski"><meta name="robots" content="index, follow, max-image-preview:large"><meta property="og:type" content="article"><meta property="profile:first_name" content="Michael"><meta property="profile:last_name" content="Kaminski"><meta property="og:url" content="https://www.michael-kaminski.io/writing/statistical-gating-for-agent-instruction-changes"><meta property="og:title" content="Statistical Gating for Agent Instruction Changes | Michael Kaminski"><meta property="og:description" content="Every edit to an agent's instruction file is an experiment. Mine requires a statistically significant improvement — Welch's t-test, p &lt; 0.10, at least a 5% lift — against a 14-day rolling baseline before the change is allowed to stay. Then the power calculation showed the 14-day window can only detect a 0.97 standard-deviation shift, which makes the 5% threshold decorative."><meta property="og:image" content="https://www.michael-kaminski.io/images/essays/og-statistical-gating.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:site_name" content="Michael Kaminski"><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://www.michael-kaminski.io/writing/statistical-gating-for-agent-instruction-changes"><meta property="twitter:title" content="Statistical Gating for Agent Instruction Changes | Michael Kaminski"><meta property="twitter:description" content="Every edit to an agent's instruction file is an experiment. Mine requires a statistically significant improvement — Welch's t-test, p &lt; 0.10, at least a 5% lift — against a 14-day rolling baseline before the change is allowed to stay. Then the power calculation showed the 14-day window can only detect a 0.97 standard-deviation shift, which makes the 5% threshold decorative."><meta property="twitter:image" content="https://www.michael-kaminski.io/images/essays/og-statistical-gating.png"><meta name="geo.region" content="US-GA"><meta name="geo.placename" content="Atlanta, New York"><meta name="geo.position" content="33.7490;-84.3880"><meta name="ICBM" content="33.7490, -84.3880"><script type="application/ld+json">{
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://www.michael-kaminski.io/#person",
+      "name": "Michael Kaminski",
+      "givenName": "Michael",
+      "familyName": "Kaminski",
+      "url": "https://www.michael-kaminski.io/",
+      "image": "https://www.michael-kaminski.io/og-image.jpg",
+      "email": "mailto:MKaminski1337@gmail.com",
+      "jobTitle": "Senior Product Owner — Collections & Servicing (AI Agent Platform Lead)",
+      "description": "Technical product manager working at the agent layer. Took an AI agent capability from prototype through security, legal, and compliance review to production inside a regulated lender. Builds custom MCP servers, multi-agent pipelines, and eval harnesses in Python and TypeScript.",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Stellantis Financial Services US",
+        "url": "https://www.stellantisfinancialservices.com/"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Atlanta",
+        "addressRegion": "GA",
+        "addressCountry": "US"
+      },
+      "alumniOf": [
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Georgia State University",
+          "url": "https://www.gsu.edu/",
+          "description": "MBA, 2011"
+        },
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "DeVry University",
+          "url": "https://www.devry.edu/",
+          "description": "B.S. Computer Science, 2008"
+        }
+      ],
+      "knowsAbout": [
+        "AI agents",
+        "Agentic workflow design",
+        "Model Context Protocol (MCP)",
+        "Multi-agent orchestration",
+        "Claude Agent SDK",
+        "Eval harness design",
+        "Retrieval-augmented generation",
+        "Large language models",
+        "Python",
+        "TypeScript",
+        "Terraform",
+        "Kubernetes",
+        "PostgreSQL",
+        "Regulated lending technology",
+        "Payments infrastructure",
+        "Product management"
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/michaelxaxkaminski",
+        "https://github.com/MAKaminski",
+        "https://dev.to/makaminski1337"
+      ]
+    }</script><script type="application/ld+json">{
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      "dateModified": "2026-08-09",
+      "mainEntity": { "@id": "https://www.michael-kaminski.io/#person" }
+    }</script><script type="application/ld+json">{
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Who is Michael Kaminski?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Michael Kaminski is a technical product manager who builds AI agents that run in production. He took an AI agent capability from prototype through security, legal, and compliance review inside a regulated lender, and builds custom Model Context Protocol (MCP) servers, multi-agent pipelines, and eval harnesses in Python and TypeScript. He is Senior Product Owner, Collections & Servicing at Stellantis Financial Services US, where the agent work sits inside that role."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does Michael Kaminski work on?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Agent infrastructure: agentic workflow design, multi-agent orchestration, custom MCP servers, tool design an agent can actually call, eval harness design, and human approval gates on irreversible agent actions. He has authored Terraform modules with multi-environment remote state and operated production Kubernetes clusters."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What makes Michael Kaminski's background unusual?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "He can price a system and he can ship it. Before working at the agent layer he spent years in corporate finance and strategy — supporting a $1.8B divestiture program, building a $244M branch-network DCF, and running portfolio analytics on a $500M CapEx program at HD Supply — and he was tech lead for Momnt's credit analysis and accounting engine. Very few people building agent infrastructure can also model the business case for it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where is Michael Kaminski based?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Atlanta, Georgia, and relocating to New York City. He is open to onsite roles in NYC."
+          }
+        }
+      ]
+    }</script><script type="application/ld+json">{
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.michael-kaminski.io/" }
+      ]
+    }</script><link rel="apple-touch-icon" href="/logo192.png"/><link rel="manifest" href="/manifest.json"/><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet"><script defer="defer" src="/static/js/main.cb1d3e94.js"></script><link href="/static/css/main.3e6f4896.css" rel="stylesheet"><link rel="canonical" href="https://www.michael-kaminski.io/writing/statistical-gating-for-agent-instruction-changes"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Statistical Gating for Agent Instruction Changes","description":"Every edit to an agent's instruction file is an experiment. Mine requires a statistically significant improvement — Welch's t-test, p < 0.10, at least a 5% lift — against a 14-day rolling baseline before the change is allowed to stay. Then the power calculation showed the 14-day window can only detect a 0.97 standard-deviation shift, which makes the 5% threshold decorative.","datePublished":"2026-08-09","dateModified":"2026-08-09","author":{"@id":"https://www.michael-kaminski.io/#person"},"publisher":{"@id":"https://www.michael-kaminski.io/#person"},"mainEntityOfPage":"https://www.michael-kaminski.io/writing/statistical-gating-for-agent-instruction-changes","url":"https://www.michael-kaminski.io/writing/statistical-gating-for-agent-instruction-changes","image":"https://www.michael-kaminski.io/images/essays/og-statistical-gating.png","inLanguage":"en"}</script></head><body><div id="root">
+<main style="max-width:52rem;margin:0 auto;padding:4rem 1.25rem;color:#e9e9e9;background:#060606;font-family:system-ui,sans-serif;line-height:1.6">
+<article>
+<h1>Statistical Gating for Agent Instruction Changes</h1>
+<p><time datetime="2026-08-09">2026-08-09</time> · 7 min read · by Michael Kaminski</p>
+<p><em>Every edit to an agent's instruction file is an experiment. Mine requires a statistically significant improvement — Welch's t-test, p &lt; 0.10, at least a 5% lift — against a 14-day rolling baseline before the change is allowed to stay. Then the power calculation showed the 14-day window can only detect a 0.97 standard-deviation shift, which makes the 5% threshold decorative.</em></p>
+
+<p>An edit to an agent's instruction file is a deploy, and I stopped letting mine ship on a
+hunch. The daily tuning job that maintains my assistant's <code>CLAUDE.md</code> now requires a
+statistically significant improvement — Welch's t-test, p &lt; 0.10, at least a 5% lift — measured
+against a 14-day rolling baseline, before an instruction change is allowed to stay.</p>
+
+<p>Then I ran the power calculation on my own gate and found the 5% threshold is decorative. At
+14 days per window the test can only detect a shift of roughly <strong>0.97 standard
+deviations</strong>. Anything smaller is invisible regardless of what the lift threshold claims.</p>
+
+<p>Both halves of that are this post. The mechanism is worth copying. The window size is the part
+I got wrong, and the arithmetic is short enough to check.</p>
+
+<h2>The prompt is the least-tested code in most agent systems</h2>
+
+<p>Every other artifact in an agent pipeline has a gate. Application code gets a test suite and a
+review. Infrastructure gets a plan and a diff — I have written enough Terraform modules and
+managed enough remote state to know nobody merges those blind.</p>
+
+<p>The instruction file gets none of that. Someone notices the agent did something annoying, adds
+a line telling it not to, and ships. There is no baseline, no holdout, and no record of whether
+the previous eleven lines are still earning their tokens.</p>
+
+<p>That is how instruction files rot. They accumulate rules that were true about one bad
+afternoon and have been costing context ever since.</p>
+
+<h2>You cannot test what you do not score</h2>
+
+<p>The gate needs a dependent variable, so the first build was a rubric, not a test. Five
+dimensions, each scored 0–10 per conversation: goal clarity, rework rate, context hit rate, scope
+discipline, and response density. The daily score is the average across that day's
+conversations, weighted by conversation length.</p>
+
+<p>The rubric is frozen. Changing it invalidates every historical comparison, so a rubric change
+is itself a tracked meta-edit that resets all baselines.</p>
+
+<p>Scores are anchored to observable friction rather than self-assessment. The scorer parses
+transcripts for five pattern classes — corrections ("no, that", "actually", "don't"), rework
+("redo", "start over"), scope drift ("I didn't ask", "just do"), missed context ("I told you
+before", "check memory"), and praise ("exactly", "nailed it"). Friction pulls the dimension score
+down, praise pulls it up.</p>
+
+<p>This is the load-bearing decision. An agent grading its own transcripts will drift toward
+generosity. Regex over the human's actual words will not.</p>
+
+<h2>Welch, not Student, and why that is not pedantry</h2>
+
+<p>Each edit gets a 14-day pre-window and a 14-day post-window of daily scores, compared with
+Welch's t-test. Three outcomes: p &lt; 0.10 and lift ≥ 5% marks the edit <strong>KEPT</strong>;
+p &lt; 0.10 and lift ≤ −5% triggers an <strong>automatic revert</strong>; everything else is
+<strong>INCONCLUSIVE</strong> and the edit stays on probation.</p>
+
+<p>Welch rather than Student's t because the two windows should not have equal variance. A good
+instruction usually works by removing a failure mode, which compresses the bad tail — the
+variance drops as much as the mean rises.</p>
+
+<p>Student's t assumes equal variance and over-rejects when the smaller-variance group is the
+larger sample. That is precisely the case you care about, so the pooled test would hand you your
+most confident false positives on your best edits. Welch costs a few degrees of freedom and
+removes the assumption.</p>
+
+<h2>The arithmetic that broke the design</h2>
+
+<p>A two-sample test at α = 0.10 and 80% power detects a minimum effect of roughly
+(t<sub>α/2</sub> + t<sub>β</sub>) × √(2/n) standard deviations. For a 14-day window that is:</p>
+
+<table>
+  <thead>
+    <tr><th>Days per window</th><th>Minimum detectable effect</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>7</td><td>1.42 SD</td></tr>
+    <tr><td>14</td><td>0.97 SD</td></tr>
+    <tr><td>21</td><td>0.78 SD</td></tr>
+    <tr><td>28</td><td>0.67 SD</td></tr>
+    <tr><td>42</td><td>0.55 SD</td></tr>
+    <tr><td>60</td><td>0.46 SD</td></tr>
+  </tbody>
+</table>
+<figure>
+<img src="/images/essays/fig1-mde-by-window.svg" alt="Curve of minimum detectable effect against days per window. At 14 days the curve sits at 0.97 standard deviations; the 5 percent lift threshold sits at 0.58 and the curve does not reach it until about 38 days." loading="lazy" decoding="async" />
+<figcaption>The gate can only see effects above the yellow line. The 5% threshold sits inside the shaded band — under it the whole time, doing no work.</figcaption>
+</figure>
+
+
+<p>Now convert to the units the gate actually uses. Assume a 7.0 baseline on the 0–10 rubric and a
+day-to-day standard deviation of 0.6 points, which is unremarkable for a metric averaged over a
+handful of conversations.</p>
+
+<p>A 5% lift is 0.35 points, or 0.58 SD. The 14-day window detects 0.97 SD, which is 0.58
+points — <strong>8.3% of baseline</strong>. The statistical test is roughly 1.7× stricter than
+the lift threshold sitting next to it.</p>
+
+<p>So the 5% number never binds. It is doing no work. Every edit that clears the t-test has
+already cleared 5% by a wide margin, and every edit that fails does so on power, not on effect
+size.</p>
+
+<p>Detecting a genuine 5% lift at that variance takes <strong>38 days per window</strong>, not 14.
+And the requirement moves fast with variance:</p>
+
+<table>
+  <thead>
+    <tr><th>Daily score SD</th><th>5% lift, in SD</th><th>Days/window needed</th><th>What 14 days actually detects</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>0.4</td><td>0.88</td><td>17</td><td>5.5%</td></tr>
+    <tr><td>0.5</td><td>0.70</td><td>27</td><td>6.9%</td></tr>
+    <tr><td>0.6</td><td>0.58</td><td>38</td><td>8.3%</td></tr>
+    <tr><td>0.8</td><td>0.44</td><td>66</td><td>11.1%</td></tr>
+    <tr><td>1.0</td><td>0.35</td><td>102</td><td>13.8%</td></tr>
+  </tbody>
+</table>
+<figure>
+<img src="/images/essays/fig3-effective-threshold.svg" alt="Bar chart of the smallest lift a 14-day window can actually detect, by day-to-day standard deviation: 5.5 percent at SD 0.4, 6.9 percent at 0.5, 8.3 percent at 0.6, 11.1 percent at 0.8, and 13.8 percent at 1.0." loading="lazy" decoding="async" />
+<figcaption>The honest label on the gate. Every bar to the right of the dashed line is a threshold the config never mentions.</figcaption>
+</figure>
+
+
+<p>Read the last column as the honest label on the gate. At SD 1.0 a "5% threshold" is really a
+14% threshold, and the difference is entirely hidden from whoever reads the config file.</p>
+
+<p>The window has to be sized to the variance, not to a calendar. Fourteen days was chosen because
+two weeks is a tidy number, which is not a reason.</p>
+
+<p>There are two ways out and only one of them is cheap. Lengthen the window, and you wait longer
+per lesson. Or shrink the variance by scoring more conversations per day — the daily mean's
+standard error falls with √n, so tripling daily volume cuts the SD by about 42% and pulls the
+required window from 38 days down to roughly 17.</p>
+<p>Put the same arithmetic the other way around. If an edit truly delivers a 5% lift, a 14-day window calls it significant <strong>44% of the time</strong>. That is a coin flip on your own best changes. At 38 days it is 81%.</p>
+
+<figure data-animated="true">
+<img src="/images/essays/fig2-power-by-window.svg" alt="Animated chart. The sampling distribution of the observed lift when the true effect is a 5 percent improvement, with the significance threshold marked. The shaded area right of the threshold is statistical power: 27 percent at a 7-day window, 44 percent at 14 days, 81 percent at 38 days, 94 percent at 60 days." loading="lazy" decoding="async" />
+<figcaption>Same arithmetic, run forward. Each frame is a window length; the shaded tail is how often a genuinely good edit gets called significant.</figcaption>
+</figure>
+
+
+<h2>What the gate cannot do, stated plainly</h2>
+
+<p>It does not control for multiple comparisons. At the configured cadence of one low-risk edit
+every three days, that is about 122 evaluations a year. At α = 0.10 two-sided, noise alone
+produces roughly <strong>six spurious KEPT verdicts and six spurious auto-reverts per year</strong>.
+The auto-revert side is the one that stings: the system will occasionally roll back a good edit
+with statistical confidence.</p>
+
+<p>It is also not a randomized experiment. Pre and post windows are consecutive calendar time, so
+a model version change, a vacation, or a month of unusually messy work lands entirely in one
+window and gets attributed to the edit.</p>
+
+<p>That makes this a noise filter, not a causal claim. It stops the obviously-worse edits and the
+obviously-imaginary wins. It will not tell you why anything moved.</p>
+
+<h2>The safeguards do more work than the test</h2>
+
+<p>Three rules keep the loop from eating itself, and they matter more than the p-value.</p>
+
+<p><strong>Cooldowns.</strong> One low-risk auto-edit per three days, one high-risk proposal per
+week. Without a cooldown the windows overlap so badly that no edit is ever cleanly attributable.</p>
+
+<p><strong>Plateau detection.</strong> If the 14-day rolling score has not improved 2% over the
+prior 14 days and no friction is firing, the day's edit is skipped. The easy wins arrive early;
+after that, editing is mostly a way to add variance.</p>
+
+<p><strong>A risk split with a human in it.</strong> Wording and formatting changes auto-apply.
+Anything that adds a section or changes how the agent decides gets written to a proposals folder
+and waits. Every edit backs up the prior file first and lands in a revertible log, tagged, so a
+bad call is a one-line rollback rather than an archaeology project.</p>
+
+<p>The config file has a section titled "when NOT to edit," and the last line of it is the most
+useful thing in the whole system: <em>doing nothing is always a valid action.</em></p>
+
+<h2>The cost</h2>
+
+<p>Latency. That is the whole bill, and it is larger than I estimated when I built this.</p>
+
+<p>A gated instruction file learns on a 14-day clock at best and, if the variance numbers above
+are right, a 38-day clock in practice. An ungated one learns in an afternoon and is wrong in ways
+nobody measures. I would still take the slow version, but I would not pretend the tradeoff is
+free, and I would not build this at all for a system I was still prototyping.</p>
+
+<p>I have no KEPT verdicts to report yet, because the first honest one cannot exist until a full
+post-window closes. Publishing the design before the results is the point — the design is the
+part that is checkable, and the arithmetic above is the part I would want someone to argue with.</p>
+
+<p>If you are gating prompt or instruction changes statistically at your shop, I want to know what
+window you landed on and what your daily variance looks like. That number is the whole ballgame
+and almost nobody publishes it.</p>
+
+</article>
+<p><a href="/writing">All writing</a> · <a href="/">Michael Kaminski</a></p>
+</main></div><noscript><h1>Michael Kaminski — I build AI agents that run in production</h1><p>Agent infrastructure, MCP servers, and eval harnesses inside a regulated lender. Python and TypeScript. Atlanta, relocating to New York City.</p><p>Michael Kaminski is a technical product manager working at the agent layer. He took an AI agent capability from prototype through security, legal, and compliance review to production inside a regulated lender, and builds custom Model Context Protocol (MCP) servers, multi-agent pipelines, and eval harnesses in Python and TypeScript.</p><p>He is Senior Product Owner, Collections &amp; Servicing at Stellantis Financial Services US, where the agent work sits inside that role. Earlier: Momnt (tech lead, credit analysis and accounting engine), GreenSky, HD Supply, KPMG, and The Home Depot. He also runs Modular Equity and founded Superior Contracting &amp; Maintenance.</p><ul><li>Email: MKaminski1337@gmail.com</li><li>LinkedIn: https://www.linkedin.com/in/michaelxaxkaminski</li><li>GitHub: https://github.com/MAKaminski</li><li>DEV: https://dev.to/makaminski1337</li></ul><p>Please enable JavaScript to view the full interactive portfolio.</p></noscript></body></html>
