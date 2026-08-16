@@ -53,6 +53,8 @@ Field notes on agent infrastructure at https://www.michael-kaminski.io/writing
 
 - Statistical Gating for Agent Instruction Changes —
   https://www.michael-kaminski.io/writing/statistical-gating-for-agent-instruction-changes
+- Shipping an AI Agent Through Compliance Review in Regulated Lending —
+  https://www.michael-kaminski.io/writing/shipping-an-ai-agent-through-compliance-review
 
 ## Contact
 

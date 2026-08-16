@@ -18,6 +18,169 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'shipping-an-ai-agent-through-compliance-review',
+    title: "Shipping an AI Agent Through Compliance Review in Regulated Lending",
+    description:
+      "On May 12, 2025 the CFPB withdrew 67 guidance documents in a single notice, including both circulars covering adverse-action notices for complex algorithms. The underlying duty did not move. Build the agent against the statute and against the evidence it will have to produce — starting with a 120-day retention floor that most agent logs miss.",
+    date: '2026-08-16',
+    readMinutes: 8,
+    series: 'Field Notes',
+    body: `
+<p>On May 12, 2025 the CFPB withdrew 67 guidance documents in a single Federal Register
+notice: 8 policy statements, 7 interpretive rules, 13 advisory opinions, and 39 other
+guidance documents. Two of them were the circulars that told lenders how adverse-action
+notices had to work when a complex algorithm made the decision.</p>
+
+<p>Not one word of the underlying duty changed. The Equal Credit Opportunity Act still
+requires a statement of specific reasons, and Regulation B still says what "specific"
+means.</p>
+
+<p>So the rule I now build against: design the agent against the statute and against the
+evidence it will have to produce. Guidance is the most volatile layer in the stack and
+the easiest one to mistake for the requirement.</p>
+
+<h2>Guidance is the layer that moves. Write against the layer that doesn't.</h2>
+
+<p>There are three layers, and they have very different half-lives.</p>
+
+<p><strong>Statute</strong> is Congress: ECOA, the FDCPA, GLBA. <strong>Regulation</strong> is
+notice-and-comment rulemaking: 12 CFR 1002 (Regulation B), 12 CFR 1006 (Regulation F).
+<strong>Guidance</strong> is circulars, bulletins, and advisory opinions, which is to say a memo.</p>
+
+<p>On one day in May 2025, the third layer moved 67 times. The second and first layers did
+not move at all.</p>
+
+<p>It keeps moving, too, and not only in bulk. The Regulation B advisory opinion on Special
+Purpose Credit Programs, on the books since January 2021, was withdrawn on June 17, 2026 —
+more than a year after the mass withdrawal, on its own.</p>
+
+<p>If a control in your design document cites a circular, that control has the shelf life of
+a memo. Cite the section of the regulation instead. It is a slower read and it survives
+administrations.</p>
+
+<h2>The review is an evidence problem, not a model problem</h2>
+
+<p>I prepared for my first one as though it were about model behavior — accuracy, refusal
+rates, how the thing handles an ugly prompt. Reviewers asked about records.</p>
+
+<p>Nearly every question reduced to the same four: what did the system decide, on what
+inputs, under which version of the instructions and the model, and can you reproduce that
+answer later when someone asks.</p>
+
+<p>"Later" is the word carrying the weight. It is not a design detail. It has a number, and
+the number is bigger than most teams assume.</p>
+
+<h2>Your trace retention floor is 120 days, not 30</h2>
+
+<p>Regulation B, 12 CFR 1002.9, sets a chain of clocks on a credit application.</p>
+
+<p>The creditor has <strong>30 days</strong> after a completed application to notify the
+applicant of the action taken. That notice either carries the specific reasons, or it
+discloses the applicant's right to request them. If it discloses the right, the applicant
+has <strong>60 days</strong> from the notification to ask, and the creditor then has
+<strong>30 days</strong> to deliver.</p>
+
+<p>30 + 60 + 30 = <strong>120 days</strong>. That is the worst-case gap between the moment
+the agent produces a decision and the moment someone has to state, precisely, why it made
+that decision.</p>
+
+<p>Thirty days is a common default retention on logging platforms, and defaults are how most
+retention windows get set. Inherit that one and the decision stays reproducible for a
+quarter of the window in which it can be demanded.</p>
+
+<p>That gap is not a nit. It is the difference between answering an examiner and telling an
+examiner you cannot answer.</p>
+
+<p>And 120 days is the floor from the notification path alone. Records-retention rules run
+longer, and the practical constraint is usually the exam cycle rather than any of these
+clocks. Size the trace to the longest one, not the nearest.</p>
+
+<h2>The reason string has to come from the thing that made the decision</h2>
+
+<p>Regulation B requires that the statement of reasons be specific and indicate the
+principal reasons for the action. It goes further and names two answers that do not
+count: that the applicant failed to achieve a qualifying score, and that the decision
+rested on the creditor's internal standards or policies.</p>
+
+<p>That rules out the most convenient agent architecture available to you.</p>
+
+<p>The convenient one is two models: the first produces a decision, the second reads the
+decision and writes an explanation. It is easy to build, it demos beautifully, and the
+output is fluent.</p>
+
+<p>It is also a caption, not a reason. The second model is describing the first model's
+output, not its cause. If the decision was driven by features the explanation layer never
+saw, the explanation is a plausible guess that happens to be well-written — which is the
+worst possible failure mode, because nothing about it looks wrong.</p>
+
+<p>The reason has to be emitted by the decision path itself, as a byproduct of the decision,
+in the same transaction. If that is expensive, the expense is the requirement.</p>
+
+<h2>Counting is a compliance control, and counting is where the bug will be</h2>
+
+<p>Regulation F, 12 CFR 1006.14, in effect since November 30, 2021, presumes a violation if
+a collector places more than 7 calls about a particular debt within 7 consecutive days, or
+calls within 7 days of a live conversation about that debt.</p>
+
+<p>The window is rolling. Here is what it costs to implement it as a calendar week.</p>
+
+<p>A counter that resets Monday at 00:00 will happily allow 7 calls placed Saturday and
+Sunday, then 7 more on Monday and Tuesday. That is 14 calls inside a four-day span. The
+counter never reads above 7 in either week, and the presumption fires anyway.</p>
+
+<p>Rolling window, rolling counter. Keyed per consumer and per debt, because the limit is
+per debt and a consumer with two accounts has two independent budgets.</p>
+
+<p>There is a second version of the same bug that only appears in multi-agent designs. Give
+the voice agent and the messaging agent one counter each and they will sum to twice the
+limit while both report compliance. The counter belongs to the account, not to the agent
+that happens to be calling.</p>
+
+<p>None of that needs a model. It needs a row lock. The general lesson from the review was
+that the parts of the system a regulator cares most about are usually the parts that should
+never have been probabilistic.</p>
+
+<h2>Effective challenge means an adversary with standing</h2>
+
+<p>Banks have been running a model governance framework since well before any of this:
+SR 11-7, issued jointly by the Federal Reserve and the OCC in 2011. Its center of gravity is
+a phrase worth stealing regardless of your industry — <strong>effective challenge</strong>.
+Critical review by informed, technically competent people who are independent of the team
+that built the model.</p>
+
+<p>Independence is the half everyone implements. Standing is the half that decides whether
+the review was real.</p>
+
+<p>A reviewer who can file a concern but cannot stop a launch is not effective challenge.
+That is a comment. The test is simple and slightly uncomfortable: name the person who can
+say no, confirm they know they can, and do it before you build rather than the week you
+want to ship.</p>
+
+<h2>What it costs</h2>
+
+<p>Time, and a specific kind of scope loss that is worth naming honestly.</p>
+
+<p>Everything above pushes the design toward the boring architecture. Deterministic code
+where the rule is deterministic. A model only where judgment genuinely helps. The frequency
+counter becomes a database constraint. The reason string becomes a required output of the
+decision path. The model is left with the part that is actually hard.</p>
+
+<p>That is a visibly smaller agent than the prototype. The prototype ran the whole workflow
+end to end and was, frankly, more impressive in a demo. The reviewable version hands three
+of those steps back to a state machine and looks less like the future.</p>
+
+<p>I would ship the smaller one every time. In a regulated line the thing that kills a
+program is rarely a slow launch. It is an unreproducible decision surfacing in an
+examination eighteen months later, when the person who built the system has moved teams and
+the log rolled off at day 30.</p>
+
+<p>If you have taken an agent through a compliance review in lending, I want to know one
+number: where did your trace retention actually land, and was it chosen or inherited from a
+logging default? That is the number I would check first in anyone's design, including my
+own.</p>
+`,
+  },
+  {
     slug: 'statistical-gating-for-agent-instruction-changes',
     title: "Statistical Gating for Agent Instruction Changes",
     description:
