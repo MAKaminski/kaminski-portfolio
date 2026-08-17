@@ -4,6 +4,8 @@ import { Clock, Calendar, Download } from 'lucide-react';
 import Seo from '../components/Seo';
 import Header from '../components/Header';
 import { getArticle } from '../data/articles';
+import { getClipForArticle } from '../data/clips';
+import VideoEmbed from '../components/VideoEmbed';
 
 const SITE_URL = 'https://www.michael-kaminski.io';
 
@@ -21,6 +23,8 @@ const Article: React.FC = () => {
     );
   }
 
+  const clip = getClipForArticle(article.slug);
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -37,6 +41,24 @@ const Article: React.FC = () => {
     inLanguage: 'en',
     mainEntityOfPage: `${SITE_URL}/writing/${article.slug}`,
     image: `${SITE_URL}${article.ogImage ?? '/og-image.jpg'}`,
+    // When a field clip teases this essay, hang it off the Article as a
+    // VideoObject so the clip and the write-up resolve to one entity rather
+    // than two unrelated URLs.
+    ...(clip
+      ? {
+          video: {
+            '@type': 'VideoObject',
+            '@id': `${SITE_URL}/clips#${clip.slug}`,
+            name: clip.title,
+            description: clip.description,
+            thumbnailUrl: [`${SITE_URL}${clip.poster}`],
+            contentUrl: `${SITE_URL}${clip.src}`,
+            uploadDate: clip.uploadDate,
+            duration: `PT${clip.durationSec}S`,
+            transcript: clip.transcript,
+          },
+        }
+      : {}),
   };
 
   return (
@@ -67,6 +89,17 @@ const Article: React.FC = () => {
           <span className="inline-flex items-center gap-1"><Clock size={14} /> {article.readMinutes} min read</span>
         </div>
         <h1 className="display text-4xl text-white leading-tight mb-8">{article.title}</h1>
+
+        {clip && (
+          <div className="mb-10">
+            <VideoEmbed clip={clip} />
+            <p className="mt-3 text-center text-sm text-white/40">
+              <Link to="/clips" className="hover:text-accent underline">
+                All field clips
+              </Link>
+            </p>
+          </div>
+        )}
 
         <div className="article-body" dangerouslySetInnerHTML={{ __html: article.body }} />
 

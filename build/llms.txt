@@ -56,6 +56,21 @@ Field notes on agent infrastructure at https://www.michael-kaminski.io/writing
 - Shipping an AI Agent Through Compliance Review in Regulated Lending —
   https://www.michael-kaminski.io/writing/shipping-an-ai-agent-through-compliance-review
 
+## Field clips
+
+Ten-second clips, each compressing one finding from a system he runs. Full transcripts are
+on the page at https://www.michael-kaminski.io/clips
+
+- "The gate that stops nothing" — a Welch's t-test gate on an agent's instruction file with
+  a 5% minimum-lift threshold that never binds: at the observed variance a 14-day window can
+  only detect 8.3%, and an edit that truly delivers 5% clears the gate 44% of the time.
+  https://www.michael-kaminski.io/clips#statistical-gating-coin-flip
+- "Zero trades, and the level still moved" — a dealer-gamma pipeline walked the QQQ gamma
+  flip 3.9 points (718.3 → 722.2) and dropped the put wall from 710 to 700 across eight
+  consecutive writes while spot stayed pinned at 717.12. The chain re-fit; nothing traded.
+  An overwritten study file has no history to argue with, so an append-only CSV was added
+  alongside it. https://www.michael-kaminski.io/clips#levels-that-move-when-nothing-trades
+
 ## Contact
 
 - Website: https://www.michael-kaminski.io

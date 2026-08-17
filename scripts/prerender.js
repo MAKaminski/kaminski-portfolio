@@ -21,6 +21,7 @@ const ORIGIN = 'https://www.michael-kaminski.io';
 const ROOT = path.join(__dirname, '..');
 const BUILD = path.join(ROOT, 'build');
 const ARTICLES = path.join(ROOT, 'src', 'data', 'articles.ts');
+const CLIPS = path.join(ROOT, 'src', 'data', 'clips.ts');
 
 const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -38,6 +39,25 @@ function loadArticles() {
   const out = load();
   if (!Array.isArray(out) || !out.length) throw new Error('parsed zero articles');
   return out;
+}
+
+// Same slice-and-eval trick for clips.ts. Returns [] rather than throwing —
+// the clips page is additive and must never take the article prerender down.
+function loadClips() {
+  try {
+    const src = fs.readFileSync(CLIPS, 'utf8');
+    const start = src.indexOf('export const clips');
+    const end = src.indexOf('export const getClip');
+    if (start === -1 || end === -1 || end <= start) return [];
+    const chunk = src.slice(start, end).replace('export const clips: Clip[] =', 'module.exports =');
+    // eslint-disable-next-line no-eval
+    const load = eval(`(function () { const module = { exports: {} }; ${chunk}; return module.exports; })`);
+    const out = load();
+    return Array.isArray(out) ? out : [];
+  } catch (err) {
+    console.warn(`prerender: clips skipped (${err && err.message})`);
+    return [];
+  }
 }
 
 function setTag(html, re, replacement) {
@@ -193,7 +213,66 @@ function main() {
   fs.mkdirSync(path.join(BUILD, 'writing'), { recursive: true });
   fs.writeFileSync(path.join(BUILD, 'writing', 'index.html'), writingHtml);
 
-  console.log(`prerender: home + /writing + ${written} articles`);
+  // /clips — the transcript is the point. A 10-second vertical video is opaque
+  // to every crawler that matters, so the spoken line and the finding behind it
+  // are written into the static markup and into VideoObject schema.
+  const clips = loadClips();
+  if (clips.length) {
+    const clipsCanonical = `${ORIGIN}/clips`;
+    const clipsJsonLd = clips.map((c) => ({
+      '@context': 'https://schema.org',
+      '@type': 'VideoObject',
+      '@id': `${clipsCanonical}#${c.slug}`,
+      name: c.title,
+      description: c.description,
+      thumbnailUrl: [`${ORIGIN}${c.poster}`],
+      contentUrl: `${ORIGIN}${c.src}`,
+      uploadDate: c.uploadDate,
+      duration: `PT${c.durationSec}S`,
+      width: c.width,
+      height: c.height,
+      transcript: c.transcript,
+      inLanguage: 'en',
+      isFamilyFriendly: true,
+      creator: { '@id': `${ORIGIN}/#person` },
+      publisher: { '@id': `${ORIGIN}/#person` },
+    }));
+    const clipsMarkup = `
+<main style="max-width:52rem;margin:0 auto;padding:4rem 1.25rem;color:#e9e9e9;background:#060606;font-family:system-ui,sans-serif;line-height:1.6">
+<h1>Field clips — Michael Kaminski</h1>
+<p>One finding, ten seconds. Each clip compresses a single result from a system he runs; the full arithmetic is in the write-up underneath it.</p>
+${clips
+  .map(
+    (c) => `<section id="${esc(c.slug)}">
+<h2>${esc(c.title)}</h2>
+<p><em>${esc(c.description)}</em></p>
+<video controls playsinline preload="none" poster="${esc(c.poster)}" src="${esc(c.src)}" width="${c.width}" height="${c.height}"></video>
+${c.context}
+<h3>Transcript</h3>
+<blockquote>${esc(c.transcript)}</blockquote>
+${c.relatedArticleSlug ? `<p><a href="/writing/${esc(c.relatedArticleSlug)}">Read the full write-up</a></p>` : ''}
+</section>`
+  )
+  .join('')}
+<p><a href="/writing">All writing</a> · <a href="/">Michael Kaminski</a></p>
+</main>`;
+    const clipsHtml = injectRoot(
+      rewriteHead(shell, {
+        title: 'Field Clips — Agent & Pipeline Infrastructure | Michael Kaminski',
+        description:
+          'Ten-second field clips on agent and pipeline infrastructure: statistical gates that never bind, and dealer-gamma levels that move on zero trades. Full transcripts on the page.',
+        canonical: clipsCanonical,
+        type: 'website',
+        image: clips[0] && clips[0].poster,
+        jsonLd: clipsJsonLd,
+      }),
+      clipsMarkup
+    );
+    fs.mkdirSync(path.join(BUILD, 'clips'), { recursive: true });
+    fs.writeFileSync(path.join(BUILD, 'clips', 'index.html'), clipsHtml);
+  }
+
+  console.log(`prerender: home + /writing + ${written} articles + ${clips.length} clips`);
 }
 
 try {

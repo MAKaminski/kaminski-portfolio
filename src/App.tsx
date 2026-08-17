@@ -29,6 +29,7 @@ const AnalyticsDashboard = lazy(() => import('./components/AnalyticsDashboard'))
 const JiraPRD = lazy(() => import('./pages/JiraPRD'));
 const Writing = lazy(() => import('./pages/Writing'));
 const Article = lazy(() => import('./pages/Article'));
+const Clips = lazy(() => import('./pages/Clips'));
 const Websites = lazy(() => import('./pages/Websites'));
 const Products = lazy(() => import('./pages/Products'));
 
@@ -153,6 +154,7 @@ function App() {
                 <Route path="/jira-prd" element={<JiraPRD />} />
                 <Route path="/writing" element={<Writing />} />
                 <Route path="/writing/:slug" element={<Article />} />
+                <Route path="/clips" element={<Clips />} />
                 <Route path="/websites" element={<Websites />} />
                 <Route path="/products" element={<Products />} />
               </Routes>
