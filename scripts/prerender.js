@@ -131,13 +131,18 @@ const HOME_MARKUP = `
 <a href="https://dev.to/makaminski1337">DEV</a></p>
 </main>`;
 
-function articleMarkup(a) {
+function articleMarkup(a, clip) {
+  const clipBlock = clip
+    ? `<figure><video controls playsinline preload="none" poster="${esc(clip.poster)}" src="${esc(clip.src)}" width="${clip.width}" height="${clip.height}"></video>
+<figcaption>${esc(clip.title)} · ${clip.durationSec}s — “${esc(clip.transcript)}” (<a href="/clips">all field clips</a>)</figcaption></figure>`
+    : '';
   return `
 <main style="max-width:52rem;margin:0 auto;padding:4rem 1.25rem;color:#e9e9e9;background:#060606;font-family:system-ui,sans-serif;line-height:1.6">
 <article>
 <h1>${esc(a.title)}</h1>
 <p><time datetime="${esc(a.date)}">${esc(a.date)}</time> · ${a.readMinutes} min read · by Michael Kaminski</p>
 <p><em>${esc(a.description)}</em></p>
+${clipBlock}
 ${a.body}
 </article>
 <p><a href="/writing">All writing</a> · <a href="/">Michael Kaminski</a></p>
@@ -149,6 +154,8 @@ function main() {
   if (!fs.existsSync(indexPath)) throw new Error('build/index.html not found');
   const shell = fs.readFileSync(indexPath, 'utf8');
   const articles = loadArticles();
+  const clips = loadClips();
+  const clipForArticle = (slug) => clips.find((c) => c.relatedArticleSlug === slug);
 
   // Home
   const links = articles
@@ -174,6 +181,23 @@ function main() {
       image: `${ORIGIN}${a.ogImage || '/og-image.jpg'}`,
       inLanguage: 'en',
     };
+    // Mirror the runtime Article schema in src/pages/Article.tsx: when a field
+    // clip teases this essay, the VideoObject hangs off the Article here too,
+    // or the pre-JS HTML a crawler reads would disagree with the mounted app.
+    const clip = clipForArticle(a.slug);
+    if (clip) {
+      jsonLd.video = {
+        '@type': 'VideoObject',
+        '@id': `${ORIGIN}/clips#${clip.slug}`,
+        name: clip.title,
+        description: clip.description,
+        thumbnailUrl: [`${ORIGIN}${clip.poster}`],
+        contentUrl: `${ORIGIN}${clip.src}`,
+        uploadDate: clip.uploadDate,
+        duration: `PT${clip.durationSec}S`,
+        transcript: clip.transcript,
+      };
+    }
     const html = injectRoot(
       rewriteHead(shell, {
         title: `${a.title} | Michael Kaminski`,
@@ -183,7 +207,7 @@ function main() {
         image: a.ogImage,
         jsonLd,
       }),
-      articleMarkup(a)
+      articleMarkup(a, clip)
     );
     const dir = path.join(BUILD, 'writing', a.slug);
     fs.mkdirSync(dir, { recursive: true });
@@ -216,7 +240,6 @@ function main() {
   // /clips — the transcript is the point. A 10-second vertical video is opaque
   // to every crawler that matters, so the spoken line and the finding behind it
   // are written into the static markup and into VideoObject schema.
-  const clips = loadClips();
   if (clips.length) {
     const clipsCanonical = `${ORIGIN}/clips`;
     const clipsJsonLd = clips.map((c) => ({
