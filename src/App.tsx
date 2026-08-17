@@ -32,6 +32,7 @@ const Article = lazy(() => import('./pages/Article'));
 const Clips = lazy(() => import('./pages/Clips'));
 const Websites = lazy(() => import('./pages/Websites'));
 const Products = lazy(() => import('./pages/Products'));
+const Changelog = lazy(() => import('./pages/Changelog'));
 
 const HOME_TITLE = 'Michael Kaminski — AI Agents & Agent Infrastructure | Atlanta & NYC';
 const HOME_DESCRIPTION =
@@ -157,6 +158,7 @@ function App() {
                 <Route path="/clips" element={<Clips />} />
                 <Route path="/websites" element={<Websites />} />
                 <Route path="/products" element={<Products />} />
+                <Route path="/changelog" element={<Changelog />} />
               </Routes>
               </Suspense>
               <AIChatbot />

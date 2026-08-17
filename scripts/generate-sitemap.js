@@ -27,6 +27,7 @@ const routes = [
   { path: '/products', changefreq: 'monthly', priority: '0.8' },
   { path: '/writing', changefreq: 'weekly', priority: '0.8' },
   { path: '/clips', changefreq: 'weekly', priority: '0.8' },
+  { path: '/changelog', changefreq: 'weekly', priority: '0.7' },
   { path: '/knowledge-graph', changefreq: 'monthly', priority: '0.7' },
   { path: '/jira-prd', changefreq: 'monthly', priority: '0.6' },
 ];

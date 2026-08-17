@@ -36,6 +36,7 @@ const Footer: React.FC = () => {
                 </li>
               ))}
               <li><Link to="/writing" className="text-white/70 hover:text-accent transition-colors">Writing</Link></li>
+              <li><Link to="/changelog" className="text-white/70 hover:text-accent transition-colors">Changelog</Link></li>
             </ul>
           </div>
 
