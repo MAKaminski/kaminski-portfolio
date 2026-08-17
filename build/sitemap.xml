@@ -61,6 +61,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.michael-kaminski.io/clips</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.michael-kaminski.io/knowledge-graph</loc>
     <lastmod>2026-08-17</lastmod>
     <changefreq>monthly</changefreq>
