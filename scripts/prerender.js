@@ -22,6 +22,7 @@ const ROOT = path.join(__dirname, '..');
 const BUILD = path.join(ROOT, 'build');
 const ARTICLES = path.join(ROOT, 'src', 'data', 'articles.ts');
 const CLIPS = path.join(ROOT, 'src', 'data', 'clips.ts');
+const CHANGELOG = path.join(ROOT, 'src', 'data', 'changelog.ts');
 
 const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -59,6 +60,60 @@ function loadClips() {
     return [];
   }
 }
+
+// changelog.ts imports articles.ts and clips.ts, so it can't be sliced whole.
+// Only the hand-written `shipped` array is plain data; the essay and clip
+// entries are rebuilt here from the arrays already loaded above, mirroring the
+// derivation in changelog.ts. Fail-soft: the changelog is additive and must
+// never take the article prerender down.
+const KIND_WEIGHT = { launch: 0, feature: 1, tool: 2, essay: 3, clip: 4 };
+
+function loadShipped() {
+  try {
+    const src = fs.readFileSync(CHANGELOG, 'utf8');
+    const start = src.indexOf('const shipped: ChangeEntry[] =');
+    const end = src.indexOf('/** Essays derive');
+    if (start === -1 || end === -1 || end <= start) return [];
+    const chunk = src.slice(start, end).replace('const shipped: ChangeEntry[] =', 'module.exports =');
+    // eslint-disable-next-line no-eval
+    const load = eval(`(function () { const module = { exports: {} }; ${chunk}; return module.exports; })`);
+    const out = load();
+    return Array.isArray(out) ? out : [];
+  } catch (err) {
+    console.warn(`prerender: changelog skipped (${err && err.message})`);
+    return [];
+  }
+}
+
+function buildChangelog(articles, clips) {
+  const shipped = loadShipped();
+  if (!shipped.length) return [];
+  const essays = articles.map((a) => ({
+    date: a.date,
+    kind: 'essay',
+    title: a.title,
+    summary: a.description,
+    links: [{ label: 'Read the essay', href: `/writing/${a.slug}` }],
+  }));
+  const clipEntries = clips.map((c) => ({
+    date: c.uploadDate,
+    kind: 'clip',
+    title: c.title,
+    summary: c.description,
+    links: [{ label: 'Watch the clip', href: `/clips#${c.slug}` }],
+  }));
+  return [...shipped, ...essays, ...clipEntries].sort(
+    (a, b) => b.date.localeCompare(a.date) || KIND_WEIGHT[a.kind] - KIND_WEIGHT[b.kind]
+  );
+}
+
+const KIND_LABELS = {
+  launch: 'Site launch',
+  feature: 'Feature',
+  tool: 'Open source',
+  essay: 'Essay',
+  clip: 'Field clip',
+};
 
 function setTag(html, re, replacement) {
   return re.test(html) ? html.replace(re, replacement) : html;
@@ -295,7 +350,60 @@ ${c.relatedArticleSlug ? `<p><a href="/writing/${esc(c.relatedArticleSlug)}">Rea
     fs.writeFileSync(path.join(BUILD, 'clips', 'index.html'), clipsHtml);
   }
 
-  console.log(`prerender: home + /writing + ${written} articles + ${clips.length} clips`);
+  // /changelog — the dated record of what shipped. Worth prerendering for the
+  // same reason the essays are: it is the page that answers "is this person
+  // still building?", and a crawler reading the SPA stub cannot see it.
+  const entries = buildChangelog(articles, clips);
+  if (entries.length) {
+    const changelogCanonical = `${ORIGIN}/changelog`;
+    const changelogMarkup = `
+<main style="max-width:52rem;margin:0 auto;padding:4rem 1.25rem;color:#e9e9e9;background:#060606;font-family:system-ui,sans-serif;line-height:1.6">
+<h1>Changelog — Michael Kaminski</h1>
+<p>Every sizable update in one place: a site going live, an essay published, a clip posted, a piece of platform work landing. Each entry is dated the day it shipped and links to the thing itself.</p>
+<ul>
+${entries
+  .map(
+    (e) => `<li><time datetime="${esc(e.date)}">${esc(e.date)}</time> · ${esc(
+      KIND_LABELS[e.kind] || e.kind
+    )} — <strong>${esc(e.title)}</strong>: ${esc(e.summary)}${
+      (e.links || [])
+        .map((l) => ` <a href="${esc(l.href)}">${esc(l.label)}</a>`)
+        .join('')
+    }</li>`
+  )
+  .join('')}
+</ul>
+<p><a href="/websites">Websites</a> · <a href="/products">Products</a> · <a href="/writing">All writing</a> · <a href="/">Michael Kaminski</a></p>
+</main>`;
+    const changelogHtml = injectRoot(
+      rewriteHead(shell, {
+        title: 'Changelog | Michael Kaminski — What Shipped, and When',
+        description:
+          'A running log of every sizable update: production sites launched on Vercel, essays published, field clips posted, and platform work shipped — each entry dated and linked.',
+        canonical: changelogCanonical,
+        type: 'website',
+        jsonLd: {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'Changelog — Michael Kaminski',
+          numberOfItems: entries.length,
+          itemListElement: entries.slice(0, 50).map((e, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: e.title,
+            description: e.summary,
+          })),
+        },
+      }),
+      changelogMarkup
+    );
+    fs.mkdirSync(path.join(BUILD, 'changelog'), { recursive: true });
+    fs.writeFileSync(path.join(BUILD, 'changelog', 'index.html'), changelogHtml);
+  }
+
+  console.log(
+    `prerender: home + /writing + ${written} articles + ${clips.length} clips + ${entries.length} changelog entries`
+  );
 }
 
 try {

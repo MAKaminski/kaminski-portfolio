@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, ArrowUpRight } from 'lucide-react';
+import { ExternalLink, ArrowUpRight, Globe } from 'lucide-react';
 import Seo from '../components/Seo';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -8,7 +8,12 @@ import Footer from '../components/Footer';
 type Site = {
   name: string;
   url: string;
-  image: string;
+  /**
+   * Screenshot under /images/sites. Optional: a site can go live here the day
+   * it deploys, before a capture exists, and gets a typographic panel instead
+   * of a broken image. Add the .webp later and the card picks it up.
+   */
+  image?: string;
   category: string;
   description: string;
   tags: string[];
@@ -34,6 +39,46 @@ const sites: Site[] = [
     description:
       'Luxury live-shopping storefront for authenticated designer handbags. Bid live on Whatnot or shop the collection any time, with a 100% authentication guarantee.',
     tags: ['Next.js', 'E-commerce', 'Whatnot'],
+  },
+  {
+    name: 'The Demand Test',
+    url: 'https://ten-experiments.vercel.app',
+    category: 'Validation · Experiment',
+    description:
+      'A public, zero-spend validation run: nine business ideas, fourteen days, each with its own landing page and its own pass/fail threshold — a booked call, a $1 refundable deposit, a written reply. One gets built, and the data behind the pick gets published with it.',
+    tags: ['Next.js', 'Landing Pages', 'Validation'],
+  },
+  {
+    name: 'Demand Desk',
+    url: 'https://demand-desk-rho.vercel.app',
+    category: 'Analytics · Funnels',
+    description:
+      'The instrumentation behind the demand test — nine landing-page funnels compared side by side, so the decision at the end is read off a chart instead of argued. Access is allowlisted, so the public entry point is the sign-in screen.',
+    tags: ['Next.js', 'Analytics', 'Supabase'],
+  },
+  {
+    name: 'DealPacket',
+    url: 'https://dealpacket.vercel.app',
+    category: 'PropTech · MCP',
+    description:
+      'Real-estate underwriting as an MCP server. One address returns ARV, rent estimates, comps and ownership, then renders the same packet five ways — investor, GC, lender, CPA, title — with the source and fetch timestamp printed beside every figure.',
+    tags: ['MCP', 'Real Estate', 'Next.js'],
+  },
+  {
+    name: 'The Genome of Games',
+    url: 'https://genome-of-games.vercel.app',
+    category: 'Research · Data Viz',
+    description:
+      '168 game mechanics, 618 games, 394 studios and 4,366 inheritance links from 1962 to 2025 — grouped by the design problem each mechanic solves rather than by genre, with every one traced back through its ancestors.',
+    tags: ['Data Viz', 'Ontology', 'Research'],
+  },
+  {
+    name: 'Commitgraph',
+    url: 'https://top-github-users-amber.vercel.app',
+    category: 'Developer Data · Leaderboards',
+    description:
+      'Worldwide, country and city leaderboards for the most active developers on GitHub — with the contribution heatmaps, rank-movement bump charts, tile-grid maps and follower/output scatter that a table of follower counts cannot show.',
+    tags: ['Next.js', 'Data Viz', 'GitHub API'],
   },
   {
     name: 'The Gamma Wall',
@@ -181,14 +226,23 @@ const SiteCard: React.FC<{ site: Site; index: number }> = ({ site, index }) => (
       className="relative block aspect-[16/10] overflow-hidden bg-ink-900"
       aria-label={`Open ${site.name} in a new tab`}
     >
-      <img
-        src={site.image}
-        alt={`${site.name} homepage screenshot`}
-        loading="lazy"
-        width={1280}
-        height={800}
-        className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
-      />
+      {site.image ? (
+        <img
+          src={site.image}
+          alt={`${site.name} homepage screenshot`}
+          loading="lazy"
+          width={1280}
+          height={800}
+          className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      ) : (
+        // No capture yet. A typographic panel reads as a design decision;
+        // a broken <img> reads as a dead site.
+        <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-white/[0.07] via-transparent to-accent/[0.06] px-6 text-center">
+          <Globe size={28} className="text-white/25" />
+          <span className="text-xl font-bold leading-tight text-white/80">{site.name}</span>
+        </div>
+      )}
       {/* Hover overlay with visit affordance */}
       <div className="absolute inset-0 flex items-center justify-center bg-ink-900/60 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
         <span className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-bold text-ink-900">

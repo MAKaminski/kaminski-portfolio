@@ -42,6 +42,30 @@ const products: Product[] = [
       'Privacy-first, on-device context capture — watches your screen, mic, and active app, reduces each window of activity to plain text via OCR and Whisper, then deletes the raw media. Only redacted text ever persists, ready to feed a local LLM or a Claude scheduled task.',
     tags: ['Shell', 'Vision OCR', 'whisper.cpp', 'macOS'],
   },
+  {
+    name: 'Launch Template',
+    repoUrl: 'https://github.com/MAKaminski/launch-template',
+    category: 'Template · Product Launch',
+    description:
+      'Stand up a new product idea — marketing site, analytics, database, payments, and booking — in under fifteen minutes, repeatedly, for many ideas in parallel. One Vercel project per launch so each gets its own domain and deploy cadence; everything underneath is shared and joined by a single launch_slug.',
+    tags: ['Next.js', 'PostHog', 'Supabase', 'Stripe'],
+  },
+  {
+    name: 'depot-mcp',
+    repoUrl: 'https://github.com/MAKaminski/depot-mcp',
+    category: 'MCP Server · Investment Research',
+    description:
+      'A Model Context Protocol server that hands an agent real research tools rather than a search box: price and fundamentals, multi-source news with sentiment scoring, housing and macro indicators, and valuation analysis — all callable as typed tools over a single equity.',
+    tags: ['TypeScript', 'MCP', 'Market Data'],
+  },
+  {
+    name: 'AutoHotKey Go',
+    repoUrl: 'https://github.com/MAKaminski/AutoHotKey_Go',
+    category: 'Windows · Agent Desktop Toolbar',
+    description:
+      'A native Go/Win32 desktop toolbar for collections agents — CRM account scraping, timezone-aware quiet-hour compliance checks, and one-key call actions, with no AutoHotkey runtime and no interpreted script to drift out of sync with the UI.',
+    tags: ['Go', 'Win32', 'Automation'],
+  },
 ];
 
 const repoName = (url: string) => url.replace(/^https?:\/\/github\.com\//, '');
@@ -148,7 +172,7 @@ const Products: React.FC = () => {
     <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       <Seo
         title="Products | Michael Kaminski — Desktop Tools & Open Source"
-        description="Desktop tools and open-source utilities built by Michael Kaminski — macOS system monitors, touchscreen drivers, and ambient context-capture tools, all on GitHub."
+        description="Desktop tools and open-source utilities built by Michael Kaminski — macOS system monitors, touchscreen drivers, ambient context capture, MCP servers, and a product-launch template, all on GitHub."
         canonicalPath="/products"
         breadcrumbName="Products"
         jsonLd={jsonLd}
@@ -166,8 +190,9 @@ const Products: React.FC = () => {
           </p>
           <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl">Products</h1>
           <p className="text-lg leading-relaxed text-white/70">
-            Desktop tools and utilities I&rsquo;ve built and open-sourced on GitHub — mostly
-            macOS system-level software that scratches a specific itch. Tap any card to see the
+            Tools and utilities I&rsquo;ve built and open-sourced on GitHub — system-level
+            software that scratches a specific itch, MCP servers that give an agent real tools to
+            call, and the template the rest of my launches are built on. Tap any card to see the
             code, install instructions, and releases.
           </p>
         </motion.div>
