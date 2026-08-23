@@ -18,6 +18,166 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'one-knowledge-base-four-surfaces',
+    title: "One Knowledge Base, Four Surfaces: Pages, Graph, Search Index, and MCP",
+    description:
+      "The Genome of Games publishes 1,180 records four ways — 1,245 static pages, an interactive graph, a 126 KB search index, and an 8-tool MCP server. One build writes all four in 0.39 seconds. The MCP server never queries the site; it imports a build artifact, so an agent and a crawler cannot disagree. The one surface the build does not own has already drifted by 7,492 links.",
+    date: '2026-08-23',
+    readMinutes: 7,
+    series: 'Field Notes',
+    body: `
+<p>The Genome of Games publishes the same 1,180 records four different ways, and one command
+writes all four: <code>node build.js</code>, 0.39 seconds, zero npm dependencies.</p>
+
+<p>Out come 1,245 static HTML pages for crawlers, an interactive canvas graph for humans, a
+129,037-byte search index for the site's own search box, and a Model Context Protocol server
+exposing 8 tools to agents.</p>
+
+<p>The decision worth copying is the one that sounds like a downgrade. The MCP server does not
+query the site and does not read the source data. It statically imports a 1.9 MB index that the
+build wrote. There is exactly one place where slugs, lineage, and adoption edges get joined, so an
+agent and a crawler cannot come back with different answers.</p>
+
+<p>The dataset is an ontology of video game mechanics — 168 mechanics, 618 games, 394 companies,
+4,366 recorded links, 1962 to 2025. What the records are about does not matter here. The shape of
+the problem shows up anywhere a structured knowledge base has to serve both a search engine and a
+model.</p>
+
+<h2>Four surfaces, one build, a twelve-fold expansion</h2>
+
+<p>Six hand-edited JSON files under <code>data/</code> are the source of truth: the feature
+ontology, the graph, the prose, the company registry, the site copy, and the verified outbound
+links. Together they are 1,312,577 bytes.</p>
+
+<p>The build turns that into 16,644,215 bytes of generated read surface. A 12.7× expansion, and
+every byte of it is disposable.</p>
+
+<table>
+  <thead>
+    <tr><th>Surface</th><th>Consumer</th><th>Bytes</th><th>Per entity</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1,245 static HTML pages</td><td>Crawlers, humans</td><td>14,613,203</td><td>11,728 / page</td></tr>
+    <tr><td><code>mcp-index.json</code> → MCP server</td><td>Agents</td><td>1,901,975</td><td>1,612</td></tr>
+    <tr><td><code>search-index.json</code></td><td>The site's own search box</td><td>129,037</td><td>109</td></tr>
+    <tr><td><code>/graph/</code> canvas</td><td>Humans exploring lineage</td><td>data injected at build</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<p>The build also emits <code>sitemap.xml</code> with 1,245 entries, <code>llms.txt</code>,
+<code>robots.txt</code>, and a 404 page. The same run reports 96,843 internal links across those
+pages.</p>
+
+<p>Nothing in that list is authored. Delete the whole output directory and the next build restores
+it in under half a second.</p>
+
+<h2>The agent surface is a build artifact, not a query path</h2>
+
+<p>The obvious way to serve an agent is to put an API in front of the data and let the MCP server
+call it. That is the version that rots.</p>
+
+<p>An API layer has to re-derive the same things the page renderer derives — how a name becomes a
+slug, which parents count as ancestors, which adoption edges are shown. Two implementations of one
+join is two implementations that will disagree, and the disagreement surfaces as an agent
+confidently citing a URL that renders something else.</p>
+
+<p>So <code>build.js</code> writes <code>data/mcp-index.json</code> as a build step, and
+<code>api/mcp.mjs</code> opens with a static import of it. The serverless function holds no
+derivation logic at all. Its first line of real work is <code>const { meta, families, eras,
+entities } = INDEX</code>.</p>
+
+<p>The protocol itself is spoken by hand — JSON-RPC over POST, no MCP SDK, for the same reason
+there is no Stripe or Supabase SDK anywhere in the repo. <code>initialize</code>,
+<code>tools/list</code>, <code>tools/call</code>, <code>ping</code>, and two notifications is the
+entire surface area. The whole server is 21,508 bytes.</p>
+
+<p>You can check it from a terminal:</p>
+
+<pre><code>curl -s -X POST https://genome-of-games.vercel.app/api/mcp/ \\
+  -H 'Content-Type: application/json' \\
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'</code></pre>
+
+<p>Eight tools come back: overview, search, get_mechanic, get_game, get_studio, trace_lineage,
+list_family, by_year.</p>
+
+<h2>The agent pays 14.7× the search index, per entity, and should</h2>
+
+<p>Same 1,180 entities, two indexes, wildly different budgets. The search index spends 109 bytes
+per entity. The MCP index spends 1,612. That ratio is 14.7×, and it is the most useful number in
+the build.</p>
+
+<p>The search box only needs enough to rank a substring match and hand over a URL: name, type,
+year, path. Everything else is one navigation away, and the human doing the navigating is the
+retrieval system.</p>
+
+<p>An agent has no second hop it can afford. If <code>genome_get_mechanic</code> returns a stub,
+the model either guesses or makes four more tool calls, and both outcomes are worse than a fat
+payload. So the MCP record carries the credited origin game and its developer, the full prose
+essay, parents, children, everything downstream, and the later adopters — pre-joined.</p>
+
+<p>The generic version of this: size a machine-readable surface by how many round trips the
+consumer can tolerate, not by what looks tidy. Humans tolerate many. Agents tolerate roughly one.</p>
+
+<p>The same logic drives the tool descriptions. <code>genome_get_overview</code> spends its budget
+telling the model that "origin" means the first notable <em>shipped</em> implementation rather than
+invention, that over-the-shoulder aim is credited to <em>kill.switch</em> in 2003 rather than
+<em>Resident Evil 4</em> in 2005, and that 949 of 1,180 entities carry a verified Wikipedia
+permalink while the remaining 231 carry none. Coverage gaps are a tool output, not a footnote.</p>
+
+<h2>Determinism is what makes any of this checkable</h2>
+
+<p>Because <code>mcp-index.json</code> is committed rather than gitignored, a rebuild is a
+falsifiable claim. I ran the build three times: 0.40s, 0.39s, 0.39s. The index md5 was
+<code>ba9928a35651fb201b4e0c3e0cab61d7</code> before and after, and <code>git status</code>
+reported zero changed files.</p>
+
+<p>That is the whole verification story. If a build ever produces a diff on a run where the source
+did not change, the pipeline has picked up a clock, a hash seed, or a network call, and the "one
+join" guarantee is already gone.</p>
+
+<p>Committing generated output is usually bad practice. Here it buys a cheap integrity test on
+every pull request, and it keeps the build offline and reproducible — the Wikipedia verification
+pass runs separately, by hand, and writes its results into the committed data.</p>
+
+<h2>The cost: the surface the build does not own has already drifted</h2>
+
+<p>Single source of truth holds only for surfaces inside the build step. The README is outside it,
+and it is already wrong.</p>
+
+<p>The README says 1,243 pages and 89,351 internal links. The build says 1,245 and 96,843. Off by
+two pages, and off by 7,492 links — an 8.4% understatement, sitting in the first file anyone reads.</p>
+
+<p>Nobody edited a number badly. Content was added, every generated surface absorbed it silently,
+and the one hand-written surface stayed where it was. That is the failure mode this architecture
+produces: it does not create disagreement between surfaces it owns, and it hides disagreement with
+surfaces it does not.</p>
+
+<p>The fix is not discipline. It is either generating the README's numbers too, or asserting them
+in the build and failing loudly. I have done neither yet, which is why this paragraph exists.</p>
+
+<p>There is a second bill. The MCP function statically imports 1.9 MB, so every cold start pays for
+the whole dataset whether the caller wanted one mechanic or the overview. At this size that is a
+fine trade. At 20 MB it would not be, and the answer then is a real index with range reads — which
+reintroduces exactly the derivation layer this design removed.</p>
+
+<h2>What I would copy, and what I would not</h2>
+
+<p>Copy the direction of the dependency. Generated artifact in, no query out. The agent surface
+should be downstream of the same build that produces the pages, never a sibling of it.</p>
+
+<p>Copy the honesty budget in the tool descriptions. A model that is told where a dataset is thin
+cites it more carefully than one that is handed clean-looking records.</p>
+
+<p>Do not copy the static import past a few megabytes, and do not copy hand-rolled JSON-RPC into a
+codebase that already has dependencies — the only reason it is defensible here is that the
+alternative was the repo's first one.</p>
+
+<p>If you are shipping a knowledge base to both crawlers and agents, I want to know what your
+per-entity byte ratio is between the two surfaces. Mine is 14.7×. I have not seen anyone else
+publish theirs, and it is the number that decides whether the agent has to make a second call.</p>
+`,
+  },
+  {
     slug: 'shipping-an-ai-agent-through-compliance-review',
     title: "Shipping an AI Agent Through Compliance Review in Regulated Lending",
     description:

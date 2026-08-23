@@ -187,8 +187,10 @@
          React's createRoot() discards it on mount, so this is what crawlers read
          and what paints first, not what users interact with. -->
     <div id="root"></div>
+    <!-- Heading starts at h2: scripts/prerender.js already puts the real h1 in #root,
+         and a no-JS reader sees that markup too. Two h1s in one document was untidy. -->
     <noscript>
-      <h1>Michael Kaminski — I build AI agents that run in production</h1>
+      <h2>Michael Kaminski — I build AI agents that run in production</h2>
       <p>
         Agent infrastructure, MCP servers, and eval harnesses inside a regulated lender.
         Python and TypeScript. Atlanta, relocating to New York City.
