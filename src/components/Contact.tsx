@@ -59,7 +59,7 @@ const Contact: React.FC = () => {
         >
           <h2 className="display text-4xl md:text-5xl text-white mb-4">Get In <span className="accent">Touch</span></h2>
           <p className="text-xl text-white/60 max-w-3xl mx-auto">
-            Building something in fintech, payments, or financial services? Let's talk about fractional CFO/CTO work, product &amp; engineering leadership, or a full-time executive role.
+            Building something at the agent layer, or trying to get one through a review process? I'm looking for senior product roles on agent platforms and agent infrastructure — Technical Product Manager, Senior Product Owner, or PM for an agent platform. Open to fractional and full-time.
           </p>
         </motion.div>
 
@@ -183,10 +183,10 @@ const Contact: React.FC = () => {
             <div className="mt-8 pt-6 border-t border-primary-500">
               <h4 className="font-semibold mb-3">What I'm Looking For</h4>
               <div className="space-y-2 text-primary-100">
-                <p>• Action-oriented, transformational culture</p>
-                <p>• Performance-based compensation & equity</p>
-                <p>• Clear timelines and measurable targets</p>
-                <p>• Opportunity to drive significant impact</p>
+                <p>• Teams shipping AI agents into production, not demos</p>
+                <p>• Regulated or risk-heavy domains where the evidence trail matters</p>
+                <p>• Ownership of the agent surface: tools, evals, and approval gates</p>
+                <p>• Performance-based compensation &amp; equity</p>
               </div>
             </div>
           </motion.div>

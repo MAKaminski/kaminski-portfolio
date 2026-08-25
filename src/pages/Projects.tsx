@@ -1,259 +1,205 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Github, ExternalLink } from 'lucide-react';
-import TechLogo from '../components/TechLogos';
-import { useTheme, Role } from '../App';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowUpRight, ExternalLink } from 'lucide-react';
+import Seo from '../components/Seo';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { projectsByDate, type Project } from '../data/projects';
+import { sites } from '../data/sites';
+import { products } from '../data/products';
 
-const projects = [
-  {
-    title: 'kaminski-portfolio',
-    company: 'Personal',
-    description: 'Personal portfolio starter: React frontend, Python backend, Neon/Prisma/pgvector for projects & AI chatbot messaging. Built to showcase executive and technical experience, with a focus on modular, scalable architecture and AI integration.',
-    tech: ['React', 'Python', 'Neon', 'Prisma', 'pgvector'],
-    role: 'Architect, Full Stack Developer',
-    github: 'https://github.com/MAKaminski/kaminski-portfolio',
-    demo: '',
-    people: 1,
-    budget: '$5K',
-    timeline: '3 months',
-    cost: '$5K',
-    value: 'Showcases executive/technical brand, used for job search and consulting.'
-  },
-  {
-    title: 'SysMemory',
-    company: 'Personal',
-    description: 'Systems/memory utility library developed to optimize or analyze system memory usage, reflecting systems engineering expertise.',
-    tech: ['Python', 'C++'],
-    role: 'Systems Engineer',
-    github: 'https://github.com/MAKaminski/SysMemory',
-    demo: '',
-    people: 1,
-    budget: '$2K',
-    timeline: '2 months',
-    cost: '$2K',
-    value: 'Improved diagnostics for enterprise systems.'
-  },
-  {
-    title: 'data_analysis',
-    company: 'Personal',
-    description: 'Advanced data analysis toolkit for business intelligence and decision-making.',
-    tech: ['Python', 'Pandas', 'Jupyter'],
-    role: 'Data Engineer',
-    github: 'https://github.com/MAKaminski/data_analysis',
-    demo: '',
-    people: 1,
-    budget: '$1K',
-    timeline: '1 month',
-    cost: '$1K',
-    value: 'Enabled data-driven insights for business.'
-  },
-  {
-    title: 'IconGenerator',
-    company: 'Personal',
-    description: 'Tool for automating icon generation for design systems and product interfaces.',
-    tech: ['Python', 'JavaScript'],
-    role: 'Developer',
-    github: 'https://github.com/MAKaminski/IconGenerator',
-    demo: '',
-    people: 1,
-    budget: '$1K',
-    timeline: '1 month',
-    cost: '$1K',
-    value: 'Streamlined UI/UX design workflows.'
-  },
-  {
-    title: 'Enterprise Platform Re-architecture',
-    company: 'Confidential Fintech',
-    description: 'Led the re-architecture of a legacy financial platform into a modular, cloud-native solution, enhancing scalability and reducing time-to-market.',
-    tech: ['Cloud', 'Microservices', 'Docker', 'Kubernetes'],
-    role: 'Executive Sponsor, Systems Architect',
-    github: '',
-    demo: '',
-    people: 25,
-    budget: '$2.5M',
-    timeline: '18 months',
-    cost: '$2.2M',
-    value: 'Reduced technical debt, enabled rapid growth, improved reliability.'
-  },
-  {
-    title: 'Fintech Product Launch',
-    company: 'Confidential Fintech',
-    description: 'Built and managed cross-functional teams to deliver critical fintech products, resulting in significant revenue growth.',
-    tech: ['Payments', 'Digital Banking', 'API Integrations'],
-    role: 'Product Owner, Team Lead',
-    github: '',
-    demo: '',
-    people: 15,
-    budget: '$1.2M',
-    timeline: '12 months',
-    cost: '$1.1M',
-    value: 'Launched new products, drove revenue and market expansion.'
-  },
-  {
-    title: 'Process Optimization Initiative',
-    company: 'Confidential Fintech',
-    description: 'Implemented structured methodologies that improved operational efficiency and reduced technical debt.',
-    tech: ['Lean', 'Agile', 'Automation Tools'],
-    role: 'Transformation Lead',
-    github: '',
-    demo: '',
-    people: 10,
-    budget: '$500K',
-    timeline: '6 months',
-    cost: '$400K',
-    value: 'Increased delivery predictability, reduced costs, improved quality.'
-  }
-];
+const SITE_URL = 'https://www.michael-kaminski.io';
 
-// Map roles to relevant project titles (or add a 'roles' field to each project for more flexibility)
-const roleProjectMap: Record<Role, string[]> = {
-  default: projects.map(p => p.title),
-  cfo: [
-    'Enterprise Platform Re-architecture',
-    'Process Optimization Initiative',
-    'kaminski-portfolio',
-  ],
-  cpo: [
-    'Fintech Product Launch',
-    'kaminski-portfolio',
-    'IconGenerator',
-  ],
-  strategy: [
-    'Enterprise Platform Re-architecture',
-    'Process Optimization Initiative',
-    'kaminski-portfolio',
-  ],
-  technology: [
-    'kaminski-portfolio',
-    'SysMemory',
-    'Enterprise Platform Re-architecture',
-    'IconGenerator',
-  ],
-  revenue: [
-    'Fintech Product Launch',
-    'Process Optimization Initiative',
-    'kaminski-portfolio',
-  ],
-};
+/**
+ * Case-study card. Deliberately leads with role and outcome rather than with a
+ * screenshot: the question this page exists to answer is "what did he own, and
+ * what came of it", which the previous version of the site never stated
+ * anywhere a reader (or a crawler) could find it.
+ */
+const CaseStudyCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => (
+  <motion.article
+    initial={{ opacity: 0, y: 24 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: (index % 3) * 0.08 }}
+    viewport={{ once: true }}
+    className="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition-colors duration-300 hover:border-accent/60 sm:p-8"
+  >
+    <div className="mb-3 flex flex-wrap items-center gap-2">
+      {project.tier === 'flagship' && (
+        <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-ink-900">
+          Flagship
+        </span>
+      )}
+      <span className="text-[11px] font-medium uppercase tracking-wide text-accent">{project.domain}</span>
+      <time dateTime={project.date} className="text-[11px] text-white/40">
+        {project.date}
+      </time>
+    </div>
 
-const radius = 180;
-const center = 220;
+    <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
+      <Link to={`/projects/${project.slug}`} className="hover:text-accent">
+        {project.title}
+      </Link>
+    </h2>
 
-const ProjectWheel: React.FC = () => {
-  const [selected, setSelected] = useState<number | null>(null);
-  const { currentRole } = useTheme();
-  const filteredProjects = projects.filter(p => roleProjectMap[currentRole].includes(p.title));
+    <p className="mb-4 text-white/70">{project.summary}</p>
+
+    <p className="mb-4 text-sm text-white/60">
+      <span className="font-semibold text-white/80">My role: </span>
+      {project.role}
+    </p>
+
+    <ul className="mb-5 space-y-3">
+      {project.outcome.map((o) => (
+        <li key={o.metric} className="border-l-2 border-accent/40 pl-4">
+          <p className="font-semibold text-white">{o.metric}</p>
+          <p className="text-sm text-white/60">{o.detail}</p>
+          <a
+            href={o.source}
+            className="mt-1 inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline"
+          >
+            {o.sourceLabel} <ArrowUpRight size={13} />
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    {/* An explicit gap, rather than a number nobody can check. */}
+    {project.outcomePending && (
+      <p className="mb-5 rounded-lg border border-white/10 bg-white/[0.03] p-4 text-sm italic text-white/50">
+        {project.outcomePending}
+      </p>
+    )}
+
+    <Link
+      to={`/projects/${project.slug}`}
+      className="mt-auto inline-flex items-center gap-2 font-semibold text-accent hover:underline"
+    >
+      Read the full case study <ArrowUpRight size={16} />
+    </Link>
+  </motion.article>
+);
+
+const Projects: React.FC = () => {
+  const cases = projectsByDate();
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Projects — Michael Kaminski',
+    numberOfItems: cases.length + sites.length + products.length,
+    itemListElement: [
+      ...cases.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: p.title,
+        description: p.summary,
+        url: `${SITE_URL}/projects/${p.slug}`,
+      })),
+      ...sites.map((s, i) => ({
+        '@type': 'ListItem',
+        position: cases.length + i + 1,
+        name: s.name,
+        description: s.description,
+        url: s.url,
+      })),
+      ...products.map((p, i) => ({
+        '@type': 'ListItem',
+        position: cases.length + sites.length + i + 1,
+        name: p.name,
+        description: p.description,
+        url: p.repoUrl,
+      })),
+    ],
+  };
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[600px]" style={{ background: 'var(--bg)' }}>
-      <div className="relative w-[440px] h-[440px] mx-auto">
-        {filteredProjects.map((project, idx) => {
-          const angle = (2 * Math.PI * idx) / filteredProjects.length;
-          const y = center + radius * Math.sin(angle) - 40;
-          const x = center + radius * Math.cos(angle) - 40;
-          return (
-            <motion.div
-              key={project.title}
-              className={`absolute cursor-pointer group`}
-              style={{ top: y, left: x, borderColor: 'var(--primary)' }}
-              initial={{ scale: 0.8, opacity: 0.7 }}
-              animate={{ scale: selected === idx ? 1.15 : 1, opacity: 1 }}
-              transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-              onClick={() => setSelected(idx)}
-              onMouseEnter={() => setSelected(idx)}
-              onMouseLeave={() => setSelected(null)}
-              title={project.title}
-            >
-              <div className={`w-20 h-20 rounded-full flex items-center justify-center shadow-lg bg-white border-2 relative`} style={{ borderColor: 'var(--primary)' }}>
-                <TechLogo name={project.tech[0]} className="w-10 h-10" />
-                {/* Tooltip */}
-                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-20">
-                  {project.title}
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-      <AnimatePresence>
-        {selected !== null && filteredProjects[selected] && (
-          <motion.div
-            key={filteredProjects[selected].title}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 40 }}
-            transition={{ duration: 0.3 }}
-            className="absolute top-[480px] left-1/2 -translate-x-1/2 w-full max-w-xl z-10"
-          >
-            <div className="flex flex-col md:flex-row gap-6 items-start">
-              <div className="flex-shrink-0">
-                <TechLogo name={filteredProjects[selected].tech[0]} className="w-16 h-16 mb-2" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-primary-700 mb-1">{filteredProjects[selected].title}</h3>
-                <div className="text-sm text-gray-500 mb-2">{filteredProjects[selected].company}</div>
-                <p className="text-gray-700 mb-3">{filteredProjects[selected].description}</p>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {filteredProjects[selected].tech.map((tech) => (
-                    <span key={tech} className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium">{tech}</span>
-                  ))}
-                </div>
-                <div className="text-sm text-gray-500 mb-1">Role: <span className="font-semibold text-gray-700">{filteredProjects[selected].role}</span></div>
-                <div className="text-xs text-gray-500 mb-1">People Managed: <span className="font-semibold text-gray-700">{filteredProjects[selected].people}</span></div>
-                <div className="text-xs text-gray-500 mb-1">Budget Managed: <span className="font-semibold text-gray-700">{filteredProjects[selected].budget}</span></div>
-                <div className="text-xs text-gray-500 mb-1">Timeline: <span className="font-semibold text-gray-700">{filteredProjects[selected].timeline}</span></div>
-                <div className="text-xs text-gray-500 mb-1">Cost: <span className="font-semibold text-gray-700">{filteredProjects[selected].cost}</span></div>
-                <div className="text-xs text-gray-500 mb-2">Value Delivered: <span className="font-semibold text-gray-700">{filteredProjects[selected].value}</span></div>
-                <div className="flex gap-4 mt-2">
-                  {filteredProjects[selected].github && (
-                    <a href={filteredProjects[selected].github} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-primary-700 flex items-center">
-                      <Github className="w-5 h-5 mr-1" /> GitHub
-                    </a>
-                  )}
-                  {filteredProjects[selected].demo && (
-                    <a href={filteredProjects[selected].demo} target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-primary-700 flex items-center">
-                      <ExternalLink className="w-5 h-5 mr-1" /> Demo
-                    </a>
-                  )}
-                </div>
-              </div>
+    <div className="min-h-screen bg-ink-900">
+      <Seo
+        title="Projects & Case Studies | Michael Kaminski"
+        description={`Case studies in agent infrastructure and regulated lending, plus ${sites.length} live production sites and ${products.length} open-source tools. Every claim links to its source.`}
+        canonicalPath="/projects"
+        breadcrumbName="Projects"
+        jsonLd={jsonLd}
+      />
+      <Header />
+
+      <main className="section-padding pt-32">
+        <div className="mx-auto max-w-6xl px-4">
+          <header className="mb-14 max-w-3xl">
+            <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl">Projects</h1>
+            <p className="text-lg text-white/70">
+              Case studies first: the problem, the constraints, what I personally owned, what shipped,
+              and what came of it. Every number links to where you can check it.
+            </p>
+          </header>
+
+          <div className="mb-20 grid gap-6 lg:grid-cols-2">
+            {cases.map((p, i) => (
+              <CaseStudyCard key={p.slug} project={p} index={i} />
+            ))}
+          </div>
+
+          <section className="mb-16">
+            <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
+              <h2 className="text-2xl font-bold text-white">
+                Live production sites <span className="text-white/40">({sites.length})</span>
+              </h2>
+              <Link to="/websites" className="font-semibold text-accent hover:underline">
+                See all with screenshots →
+              </Link>
             </div>
-            <button
-              className="absolute top-2 right-2 text-gray-400 hover:text-primary-600 text-lg font-bold"
-              onClick={() => setSelected(null)}
-              aria-label="Close"
-            >
-              ×
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {sites.map((s) => (
+                <article
+                  key={s.url}
+                  className="rounded-xl border border-white/10 bg-white/[0.02] p-4 transition-colors hover:border-accent/50"
+                >
+                  <h3 className="mb-1 font-bold text-white">
+                    <a href={s.url} target="_blank" rel="noopener noreferrer" className="hover:text-accent">
+                      {s.name} <ExternalLink size={13} className="inline" />
+                    </a>
+                  </h3>
+                  <p className="mb-2 text-[11px] uppercase tracking-wide text-accent">{s.category}</p>
+                  <p className="text-sm text-white/60">{s.description}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <div className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
+              <h2 className="text-2xl font-bold text-white">
+                Open-source tools <span className="text-white/40">({products.length})</span>
+              </h2>
+              <Link to="/products" className="font-semibold text-accent hover:underline">
+                See all →
+              </Link>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {products.map((p) => (
+                <article
+                  key={p.repoUrl}
+                  className="rounded-xl border border-white/10 bg-white/[0.02] p-4 transition-colors hover:border-accent/50"
+                >
+                  <h3 className="mb-1 font-bold text-white">
+                    <a href={p.repoUrl} target="_blank" rel="noopener noreferrer" className="hover:text-accent">
+                      {p.name} <ExternalLink size={13} className="inline" />
+                    </a>
+                  </h3>
+                  <p className="mb-2 text-[11px] uppercase tracking-wide text-accent">{p.category}</p>
+                  <p className="text-sm text-white/60">{p.description}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 };
 
-const BoardPEReporting: React.FC = () => (
-  <section className="mb-12 px-6 py-8 rounded-2xl shadow-lg" style={{ background: 'linear-gradient(90deg, var(--primary), var(--secondary))', color: '#fff' }}>
-    <h2 className="text-2xl font-bold mb-2">Board & PE Sponsor Reporting</h2>
-    <p className="mb-2 text-lg">Extensive experience designing and delivering Board and Private Equity sponsor reporting for multi-entity structures, including:</p>
-    <ul className="list-disc pl-6 mb-2 text-base">
-      <li>Bain Capital</li>
-      <li>The Carlyle Group</li>
-      <li>Clayton, Dubilier & Rice</li>
-    </ul>
-    <p className="mb-0">Expertise in consolidations, KPI dashboards, and executive reporting for complex, multi-entity organizations. Delivered actionable insights to C-suite, sponsors, and board members, driving strategic decisions and value creation.</p>
-  </section>
-);
-
-const Projects: React.FC = () => (
-  <section className="min-h-screen" style={{ background: 'var(--bg)' }}>
-    <div className="max-w-7xl mx-auto py-12 px-4">
-      <BoardPEReporting />
-      <h1 className="text-4xl font-bold mb-8" style={{ color: 'var(--primary)' }}>Projects</h1>
-      <ProjectWheel />
-    </div>
-  </section>
-);
-
-export default Projects; 
+export default Projects;

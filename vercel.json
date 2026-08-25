@@ -5,20 +5,50 @@
   "redirects": [
     {
       "source": "/(.*)",
-      "has": [{ "type": "host", "value": "michaelkaminski.com" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "michaelkaminski.com"
+        }
+      ],
       "destination": "https://www.michael-kaminski.io/$1",
       "permanent": true
     },
     {
       "source": "/(.*)",
-      "has": [{ "type": "host", "value": "www.michaelkaminski.com" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.michaelkaminski.com"
+        }
+      ],
       "destination": "https://www.michael-kaminski.io/$1",
       "permanent": true
     },
     {
       "source": "/(.*)",
-      "has": [{ "type": "host", "value": "michael-kaminski.io" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "michael-kaminski.io"
+        }
+      ],
       "destination": "https://www.michael-kaminski.io/$1",
+      "permanent": true
+    },
+    {
+      "source": "/cfo",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
+      "source": "/revenue",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
+      "source": "/client-outcomes",
+      "destination": "/projects",
       "permanent": true
     }
   ],

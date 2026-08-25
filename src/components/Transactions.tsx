@@ -1,100 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, Building2, Calendar } from 'lucide-react';
+import { transactions, transactionTotals } from '../data/transactions';
 
 const Transactions: React.FC = () => {
-  const transactions = [
-    {
-      date: "Jun 2024",
-      value: 400,
-      company: "Momnt",
-      asset: "Debt",
-      type: "144(a)",
-      entity: "Saluda Grade"
-    },
-    {
-      date: "Sep 2023",
-      value: 15,
-      company: "Momnt",
-      asset: "Equity",
-      type: "Series B",
-      entity: "TruStage Ventures"
-    },
-    {
-      date: "May 2018",
-      value: 1010,
-      company: "GreenSky",
-      asset: "Equity",
-      type: "S1",
-      entity: "Public Markets"
-    },
-    {
-      date: "Dec 2017",
-      value: 200,
-      company: "GreenSky",
-      asset: "Debt",
-      type: "Debt Facility",
-      entity: "PIMCO"
-    },
-    {
-      date: "Apr 2016",
-      value: 1000,
-      company: "HD Supply",
-      asset: "Debt",
-      type: "Senior Unsecured",
-      entity: "Public Markets"
-    },
-    {
-      date: "Feb 2015",
-      value: 825,
-      company: "HD Supply",
-      asset: "Equity",
-      type: "Divestiture",
-      entity: "Power Solutions"
-    },
-    {
-      date: "Apr 2014",
-      value: 90,
-      company: "HD Supply",
-      asset: "Equity",
-      type: "Divestiture",
-      entity: "Crown Bolt"
-    },
-    {
-      date: "Apr 2014",
-      value: 957,
-      company: "HD Supply",
-      asset: "Equity",
-      type: "Secondary",
-      entity: "Bain, Carlyle, Dublier & Rice"
-    },
-    {
-      date: "May 2012",
-      value: 4000,
-      company: "Home Depot",
-      asset: "Equity",
-      type: "Share Repurchase",
-      entity: "Goldman"
-    },
-    {
-      date: "Oct 2011",
-      value: 700,
-      company: "Home Depot",
-      asset: "Debt",
-      type: "Line of Credit",
-      entity: "Citi"
-    },
-    {
-      date: "Sep 2011",
-      value: 2000,
-      company: "Home Depot",
-      asset: "Debt",
-      type: "Senior Unsecured",
-      entity: "Public Markets"
-    }
-  ];
 
-  const totalValue = transactions.reduce((sum, transaction) => sum + transaction.value, 0);
+  const totals = transactionTotals();
+  const totalValue = totals.totalM;
 
   return (
     <section id="transactions" className="section-padding" style={{ background: 'var(--bg)' }}>
@@ -121,20 +33,20 @@ const Transactions: React.FC = () => {
           viewport={{ once: true }}
           className="grid md:grid-cols-3 gap-6 mb-12"
         >
-          <div className="bg-white rounded-xl p-6 shadow-lg text-center">
+          <div className="rilla-card p-6 text-center">
             <TrendingUp className="w-8 h-8 text-primary-600 mx-auto mb-3" />
-            <h3 className="text-2xl font-bold text-gray-900">${totalValue.toLocaleString()}M</h3>
-            <p className="text-gray-600">Total Transaction Value</p>
+            <h3 className="text-2xl font-bold text-white">${totalValue.toLocaleString()}M</h3>
+            <p className="text-white/60">Total Transaction Value</p>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-lg text-center">
+          <div className="rilla-card p-6 text-center">
             <Building2 className="w-8 h-8 text-primary-600 mx-auto mb-3" />
-            <h3 className="text-2xl font-bold text-gray-900">{transactions.length}</h3>
-            <p className="text-gray-600">Transactions Completed</p>
+            <h3 className="text-2xl font-bold text-white">{transactions.length}</h3>
+            <p className="text-white/60">Transactions Completed</p>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-lg text-center">
+          <div className="rilla-card p-6 text-center">
             <Calendar className="w-8 h-8 text-primary-600 mx-auto mb-3" />
-            <h3 className="text-2xl font-bold text-gray-900">20+ Years</h3>
-            <p className="text-gray-600">Experience Span</p>
+            <h3 className="text-2xl font-bold text-white">20+ Years</h3>
+            <p className="text-white/60">Experience Span</p>
           </div>
         </motion.div>
 
@@ -144,7 +56,7 @@ const Transactions: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
-          className="bg-white rounded-2xl shadow-lg overflow-hidden"
+          className="rilla-card overflow-hidden"
         >
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -168,12 +80,12 @@ const Transactions: React.FC = () => {
                     viewport={{ once: true }}
                     whileHover={{ backgroundColor: '#f8fafc', scale: 1.01 }}
                     className={`border-b border-gray-200 transition-all duration-200 ${
-                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                      index % 2 === 0 ? 'bg-transparent' : 'bg-white/[0.03]'
                     }`}
                   >
-                    <td className="px-6 py-4 font-medium text-gray-900">{transaction.date}</td>
+                    <td className="px-6 py-4 font-medium text-white">{transaction.date}</td>
                     <td className="px-6 py-4 font-bold text-primary-600">${transaction.value.toLocaleString()}</td>
-                    <td className="px-6 py-4 text-gray-700">{transaction.company}</td>
+                    <td className="px-6 py-4 text-white/70">{transaction.company}</td>
                     <td className="px-6 py-4">
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                         transaction.asset === 'Equity' 
@@ -183,8 +95,8 @@ const Transactions: React.FC = () => {
                         {transaction.asset}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-gray-700">{transaction.type}</td>
-                    <td className="px-6 py-4 text-gray-700">{transaction.entity}</td>
+                    <td className="px-6 py-4 text-white/70">{transaction.type}</td>
+                    <td className="px-6 py-4 text-white/70">{transaction.entity}</td>
                   </motion.tr>
                 ))}
               </tbody>
@@ -200,16 +112,16 @@ const Transactions: React.FC = () => {
           viewport={{ once: true }}
           className="mt-12 grid md:grid-cols-2 lg:grid-cols-4 gap-6"
         >
-          {[
-            { type: "Equity", count: 6, value: 6897 },
-            { type: "Debt", count: 5, value: 3900 },
-            { type: "IPO/S1", count: 1, value: 1010 },
-            { type: "Divestitures", count: 2, value: 915 }
-          ].map((summary, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-lg text-center">
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">{summary.type}</h4>
+          {/* Derived from the table above, never typed by hand. The previous
+              hard-coded version claimed 14 transactions worth $12,722M against
+              a table of 11 worth $11,197M — it double-counted IPO and
+              divestitures inside Equity and Debt, and was never updated when
+              the Momnt 144(a) landed. */}
+          {Object.entries(totals.byAsset).map(([type, summary], index) => (
+            <div key={index} className="rilla-card p-6 text-center">
+              <h4 className="text-lg font-semibold text-white mb-2">{type}</h4>
               <p className="text-2xl font-bold text-primary-600 mb-1">${summary.value.toLocaleString()}M</p>
-              <p className="text-gray-600">{summary.count} transactions</p>
+              <p className="text-white/60">{summary.count} transactions</p>
             </div>
           ))}
         </motion.div>

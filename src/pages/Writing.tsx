@@ -9,8 +9,8 @@ const Writing: React.FC = () => {
   return (
     <div className="min-h-screen bg-ink-900 text-white">
       <Seo
-        title="Writing — Fintech Finance & Engineering | Michael Kaminski"
-        description="Essays on the fintech finance × engineering intersection — fractional CFO/CTO strategy, quality of earnings, and building finance and product as one system. By Michael Kaminski, Atlanta."
+        title="Writing — Agent Infrastructure & Evals | Michael Kaminski"
+        description="Field notes on AI agent infrastructure, MCP servers, eval harnesses, and shipping agents inside a regulated lender. By Michael Kaminski, Atlanta."
         canonicalPath="/writing"
         breadcrumbName="Writing"
       />
@@ -18,7 +18,7 @@ const Writing: React.FC = () => {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
         <div className="text-center mb-12">
-          <h2 className="display text-4xl text-white mb-3">Notes from the finance <span className="accent">×</span> engineering intersection</h2>
+          <h1 className="display text-4xl text-white mb-3">Field notes on <span className="accent">agent infrastructure</span></h1>
           <p className="text-lg text-white/60 max-w-2xl mx-auto">
             Practical essays for fintech founders and operators — where PE-grade finance and hands-on
             engineering meet.

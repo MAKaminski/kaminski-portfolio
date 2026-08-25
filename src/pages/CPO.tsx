@@ -64,7 +64,7 @@ const CPO: React.FC = () => {
           className="text-center mb-16"
         >
           <p className="text-lg text-accent font-semibold mb-4">Michael Kaminski is a strategic Chief Product Officer with a proven track record in product leadership, analytics, and market growth.</p>
-          <h2 className="display text-5xl text-white mb-6">Chief Product Officer</h2>
+          <h1 className="display text-5xl text-white mb-6">Product ownership at the agent layer</h1>
           <p className="text-xl text-white/60 max-w-4xl mx-auto leading-relaxed">
             Strategic product leader with proven track record in building and scaling products 
             from concept to market leadership. Expert in product strategy, user experience, 

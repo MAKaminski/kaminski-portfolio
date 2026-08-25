@@ -18,13 +18,10 @@ import AIChatbot from './components/AIChatbot';
 import ReferralCarousel from './components/ReferralCarousel';
 
 // Secondary routes are code-split so they don't ship in the main bundle.
-const CFO = lazy(() => import('./pages/CFO'));
 const CPO = lazy(() => import('./pages/CPO'));
 const Strategy = lazy(() => import('./pages/Strategy'));
 const Technology = lazy(() => import('./pages/Technology'));
-const Revenue = lazy(() => import('./pages/Revenue'));
 const KnowledgeGraph = lazy(() => import('./pages/KnowledgeGraph'));
-const ClientOutcomes = lazy(() => import('./pages/ClientOutcomes'));
 const AnalyticsDashboard = lazy(() => import('./components/AnalyticsDashboard'));
 const JiraPRD = lazy(() => import('./pages/JiraPRD'));
 const Writing = lazy(() => import('./pages/Writing'));
@@ -33,6 +30,9 @@ const Clips = lazy(() => import('./pages/Clips'));
 const Websites = lazy(() => import('./pages/Websites'));
 const Products = lazy(() => import('./pages/Products'));
 const Changelog = lazy(() => import('./pages/Changelog'));
+const Projects = lazy(() => import('./pages/Projects'));
+const CaseStudy = lazy(() => import('./pages/CaseStudy'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 const HOME_TITLE = 'Michael Kaminski — AI Agents & Agent Infrastructure | Atlanta & NYC';
 const HOME_DESCRIPTION =
@@ -48,7 +48,7 @@ type Theme = {
   bg: string;
 };
 
-export type Role = 'default' | 'cfo' | 'cpo' | 'strategy' | 'technology' | 'revenue';
+export type Role = 'default' | 'cpo' | 'strategy' | 'technology';
 
 type ThemeContextType = {
   theme: Theme;
@@ -68,11 +68,9 @@ const DARK_THEME: Theme = {
 
 const themePresets: Record<Role, Theme> = {
   default: DARK_THEME,
-  cfo: DARK_THEME,
   cpo: DARK_THEME,
   strategy: DARK_THEME,
   technology: DARK_THEME,
-  revenue: DARK_THEME,
 };
 
 const ThemeContext = createContext<ThemeContextType>({
@@ -144,13 +142,10 @@ function App() {
                     <Footer />
                   </>
                 } />
-                <Route path="/cfo" element={<CFO />} />
                 <Route path="/cpo" element={<CPO />} />
                 <Route path="/strategy" element={<Strategy />} />
                 <Route path="/technology" element={<Technology />} />
-                <Route path="/revenue" element={<Revenue />} />
                 <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
-                <Route path="/client-outcomes" element={<ClientOutcomes />} />
                 <Route path="/analytics" element={<AnalyticsDashboard />} />
                 <Route path="/jira-prd" element={<JiraPRD />} />
                 <Route path="/writing" element={<Writing />} />
@@ -159,6 +154,11 @@ function App() {
                 <Route path="/websites" element={<Websites />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/changelog" element={<Changelog />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/projects/:slug" element={<CaseStudy />} />
+                {/* Catch-all. Without it a typo'd URL returned 200 with the
+                    home page's HTML and then rendered nothing at all. */}
+                <Route path="*" element={<NotFound />} />
               </Routes>
               </Suspense>
               <AIChatbot />

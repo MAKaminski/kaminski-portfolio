@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, Send, X, Bot, User } from 'lucide-react';
+import { transactionTotals } from '../data/transactions';
+
+const DEAL_TOTAL = transactionTotals().headline;
 
 interface Message {
   id: string;
@@ -35,7 +38,7 @@ const AIChatbot: React.FC = () => {
   const knowledgeBase = {
     experience: {
       keywords: ['experience', 'background', 'career', 'work history', 'jobs'],
-      response: "I have 20+ years of experience spanning both finance and engineering, including:\n• Fintech leadership fluent in PE-grade finance and hands-on software engineering\n• Led $10.8B+ in transactions across equity, debt, and M&A\n• Successfully scaled operations from 0→1→10\n• IPO experience with GreenSky\n• Turnaround and transformation expertise"
+      response: `I have 20+ years of experience spanning both finance and engineering, including:\n• Fintech leadership fluent in PE-grade finance and hands-on software engineering\n• Led ${DEAL_TOTAL} in transactions across equity, debt, and M&A\n• Successfully scaled operations from 0→1→10\n• IPO experience with GreenSky\n• Turnaround and transformation expertise`
     },
     skills: {
       keywords: ['skills', 'technologies', 'software', 'tools', 'expertise'],
@@ -59,7 +62,7 @@ const AIChatbot: React.FC = () => {
     },
     transactions: {
       keywords: ['transactions', 'deals', 'm&a', 'ipo', 'debt', 'equity'],
-      response: "I've led $10.8B+ in transactions including:\n• GreenSky IPO ($1B+)\n• HD Supply divestitures ($1.8B+)\n• Home Depot share repurchase ($4B)\n• Various debt facilities and equity rounds\n• Experience across public markets, PE, and strategic buyers"
+      response: `I've led ${DEAL_TOTAL} in transactions including:\n• GreenSky IPO ($1B+)\n• HD Supply divestitures ($1.8B+)\n• Home Depot share repurchase ($4B)\n• Various debt facilities and equity rounds\n• Experience across public markets, PE, and strategic buyers`
     }
   };
 

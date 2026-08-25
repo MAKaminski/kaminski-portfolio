@@ -47,6 +47,35 @@ Kubernetes clusters.
 - MBA, Georgia State University (2011).
 - BS, Computer Science, DeVry University (2008).
 
+## Case studies
+
+Full write-ups at https://www.michael-kaminski.io/projects — each one structured as
+problem, constraints, his role, what shipped, and outcome, with every number linked to a
+source.
+
+- "A Compliance-Reviewed AI Agent in Regulated Lending" — took an AI agent capability from
+  prototype through security, legal, and compliance review into production at a regulated
+  consumer lender. Designed against the statute rather than against guidance, which is why
+  the May 2025 CFPB withdrawal of 67 guidance documents required no design change; trace
+  retention set to a 120-day floor derived from the adverse-action dispute window rather
+  than the 30-day default most agent logging ships with. Adoption and operational results
+  are not yet cleared for publication and are marked as such on the page.
+  https://www.michael-kaminski.io/projects/compliance-reviewed-agent
+- "The Genome of Games — One Knowledge Base, Four Surfaces" — 1,180 records published four
+  ways (1,245 static pages, an interactive graph, a 129,037-byte search index, an 8-tool
+  MCP server) by one 0.39-second dependency-free build.
+  https://www.michael-kaminski.io/projects/genome-of-games
+- "A Dealer-Gamma Pipeline That Moved on Zero Trades" — 33 runs a day across seven
+  underlyings, and the append-only write that revealed levels drifting on a closed market.
+  https://www.michael-kaminski.io/projects/dealer-gamma-pipeline
+
+## What he is looking for
+
+Senior product roles at the agent layer — Technical Product Manager, Senior Product Owner,
+or PM for an agent platform — at teams shipping AI agents into production, especially where
+the environment is regulated and the evidence trail matters. Open to fractional and
+full-time. Atlanta, relocating to New York City.
+
 ## Writing
 
 Field notes on agent infrastructure at https://www.michael-kaminski.io/writing
