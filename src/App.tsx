@@ -33,6 +33,7 @@ const Changelog = lazy(() => import('./pages/Changelog'));
 const Projects = lazy(() => import('./pages/Projects'));
 const CaseStudy = lazy(() => import('./pages/CaseStudy'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const About = lazy(() => import('./pages/About'));
 
 const HOME_TITLE = 'Michael Kaminski — AI Agents & Agent Infrastructure | Atlanta & NYC';
 const HOME_DESCRIPTION =
@@ -154,6 +155,7 @@ function App() {
                 <Route path="/websites" element={<Websites />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/changelog" element={<Changelog />} />
+                <Route path="/about" element={<About />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/projects/:slug" element={<CaseStudy />} />
                 {/* Catch-all. Without it a typo'd URL returned 200 with the

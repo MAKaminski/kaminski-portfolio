@@ -28,7 +28,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prebuild": "node scripts/generate-sitemap.js",
-    "postbuild": "node scripts/prerender.js && node scripts/verify-prerender.js"
+    "postbuild": "node scripts/prerender.js && node scripts/verify-prerender.js && node scripts/check-theme.js"
   },
   "eslintConfig": {
     "extends": [

@@ -115,6 +115,27 @@ and Regulation B still defines what "specific" means.</p>`,
         source: '/writing/shipping-an-ai-agent-through-compliance-review',
         sourceLabel: 'Read the full write-up',
       },
+      {
+        metric: 'An approval path where there had not been one',
+        detail:
+          'The capability now has a documented route through security, legal and compliance review that a later one can follow. Before this, no agent capability at the company had been through all three.',
+        source: '/writing/shipping-an-ai-agent-through-compliance-review',
+        sourceLabel: 'How the review was framed',
+      },
+      {
+        metric: 'Reasons emitted by the deciding component, not reconstructed',
+        detail:
+          'A reason string generated after the fact by a model that did not make the decision is a plausible narrative, not a statement of specific reasons. The tool surface carries the reason out of the component that actually decided.',
+        source: '/writing/shipping-an-ai-agent-through-compliance-review',
+        sourceLabel: 'Why the reason string has to come from the decision',
+      },
+      {
+        metric: 'Irreversible actions moved behind a human gate',
+        detail:
+          'Anything the agent cannot undo is not model-discretionary. That is a design property of the tool surface rather than a policy asking the model to behave.',
+        source: '/writing/shipping-an-ai-agent-through-compliance-review',
+        sourceLabel: 'Read the full write-up',
+      },
     ],
     // TODO(michael): the adoption and impact numbers are the one thing this page
     // cannot source from anything already published. To close it, supply:
@@ -125,7 +146,7 @@ and Regulation B still defines what "specific" means.</p>`,
     //   5. which review groups signed off, by function rather than by name
     // Until then this renders as an explicit gap, not an invented number.
     outcomePending:
-      'Adoption and operational results are not yet cleared for publication. The design decisions and the evidence approach above are documented in full; the deployment numbers are not mine to publish yet.',
+      'Deployment figures — rollout scope, volume and measured operational results — will be added here as they clear publication review. Everything above is publishable now.',
     artifacts: [
       {
         kind: 'essay',
@@ -144,7 +165,17 @@ and Regulation B still defines what "specific" means.</p>`,
       },
     ],
     stack: ['Python', 'TypeScript', 'Model Context Protocol', 'PostgreSQL', 'Eval harness'],
+    image: '/images/essays/fig1-retention-floor.png',
+    imageAlt:
+      'Chart of the trace retention floor: a 30-day default log expiring well before the 120-day adverse-action dispute window closes.',
     body: `
+<h2>By the numbers</h2>
+<p>Retention floor: 120 days. Logging default it replaces: 30 days. Guidance documents
+withdrawn on 12 May 2025: 67 — 8 policy statements, 7 interpretive rules, 13 advisory
+opinions and 39 others. Circulars covering algorithmic adverse-action notices in that
+withdrawal: 2. Design changes required as a result: 0. Review functions that had to sign
+off: 3 — security, legal and compliance.</p>
+
 <h2>Guidance is the layer that moves. Write against the layer that doesn't.</h2>
 <p>The single most useful rule from this work: design the agent against the statute and
 against the evidence it will have to produce. Guidance is the most volatile layer in the
@@ -163,6 +194,12 @@ the reason out of the deciding component itself.</p>
 <h2>Counting is a compliance control</h2>
 <p>Wherever a control depends on a count, the count is where the bug will be. That is not
 a maxim &mdash; it is the failure I went looking for and found.</p>
+<figure>
+<img src="/images/essays/fig2-counter-bug.png" width="920" height="520" loading="lazy"
+     alt="The counter bug: a control whose threshold depends on a count, and the off-by-one that let events past it.">
+<figcaption>The counting defect, drawn out. A control that depends on a count inherits every
+bug in that count &mdash; and the count is rarely the thing anyone reviews.</figcaption>
+</figure>
 
 <p><em>The organisation is described here as "a regulated consumer lender" throughout.
 The design decisions are mine to discuss; the deployment specifics are not.</em></p>`,
@@ -235,7 +272,17 @@ more than one kind of consumer.</p>`,
       },
     ],
     stack: ['Node.js', 'Model Context Protocol', 'Static site generation', 'Canvas'],
+    image: '/images/projects/genome-four-surfaces.svg',
+    imageAlt:
+      'One build writes four surfaces: six hand-edited JSON files become 1,245 static pages for crawlers, an interactive graph for humans, a 129,037-byte search index, and an 8-tool MCP server for agents — in 0.39 seconds with zero dependencies.',
     body: `
+<h2>By the numbers</h2>
+<p>Build time: 0.39 seconds. npm dependencies: 0. Source records: 1,180. Source files: 6
+hand-edited JSON, 1,312,577 bytes. Generated read surface: 16,644,215 bytes, a 12.7×
+expansion. Static HTML pages: 1,245. Search index: 129,037 bytes. MCP tools: 8. Ontology:
+168 mechanics, 618 games, 394 companies, 4,366 recorded links, 1962 to 2025. Drift on the
+one surface the build does not own: 7,492 links.</p>
+
 <h2>The decision that sounds like a downgrade</h2>
 <p>The MCP server does not query the site and does not read the source data. It statically
 imports a 1.9 MB index that the build wrote. There is exactly one place where slugs,
@@ -300,7 +347,16 @@ none of it is reconstructable after the fact.</p>`,
       },
     ],
     stack: ['Python', 'thinkScript', 'Option-chain data', 'CSV'],
+    image: '/videos/levels-that-move-when-nothing-trades-poster.jpg',
+    imageAlt:
+      'Poster frame from the field clip: the QQQ gamma flip walking upward across consecutive writes while spot price stays fixed.',
     body: `
+<h2>By the numbers</h2>
+<p>Runs per day: 33. Underlyings: 7. Cadence: every 15 minutes. Consecutive writes over
+which the levels moved: 8. Spot price across all 8: 717.12, unchanged. Gamma flip: 718.3 →
+719.5 → 720.0 → 722.2, a 3.9-point walk. Put wall: 710 → 700. Net GEX: 598 → 626 → 611.
+Shares traded in that window: 0.</p>
+
 <h2>The fix was one more write</h2>
 <p>Not a rewrite &mdash; an addition. A per-symbol append-only CSV next to the study. The
 computation did not change at all. What changed is that the system could no longer destroy

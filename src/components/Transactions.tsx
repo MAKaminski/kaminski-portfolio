@@ -79,7 +79,7 @@ const Transactions: React.FC = () => {
                     transition={{ duration: 0.5, delay: index * 0.05 }}
                     viewport={{ once: true }}
                     whileHover={{ backgroundColor: '#f8fafc', scale: 1.01 }}
-                    className={`border-b border-gray-200 transition-all duration-200 ${
+                    className={`border-b border-white/10 transition-all duration-200 ${
                       index % 2 === 0 ? 'bg-transparent' : 'bg-white/[0.03]'
                     }`}
                   >
@@ -89,8 +89,8 @@ const Transactions: React.FC = () => {
                     <td className="px-6 py-4">
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                         transaction.asset === 'Equity' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-blue-100 text-blue-800'
+                          ? 'border border-emerald-400/30 bg-emerald-400/10 text-emerald-300'
+                          : 'border border-sky-400/30 bg-sky-400/10 text-sky-300'
                       }`}>
                         {transaction.asset}
                       </span>

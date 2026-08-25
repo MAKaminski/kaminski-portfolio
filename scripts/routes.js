@@ -15,6 +15,7 @@
 /** Routes that are prerendered AND submitted to Google. */
 const indexedRoutes = [
   { path: '/', changefreq: 'weekly', priority: '1.0' },
+  { path: '/about', changefreq: 'monthly', priority: '0.9' },
   { path: '/projects', changefreq: 'weekly', priority: '0.9' },
   { path: '/websites', changefreq: 'monthly', priority: '0.8' },
   { path: '/products', changefreq: 'monthly', priority: '0.8' },
