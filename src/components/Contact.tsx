@@ -70,9 +70,9 @@ const Contact: React.FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
-            className="bg-white rounded-2xl shadow-lg p-8"
+            className="rilla-card p-8"
           >
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
+            <h3 className="text-2xl font-bold text-white mb-6">Contact Information</h3>
             
             {/* Professional Headshot */}
             <div className="flex items-center mb-6">
@@ -88,8 +88,8 @@ const Contact: React.FC = () => {
                 />
               </picture>
               <div>
-                <h4 className="text-lg font-semibold text-gray-900">Michael Kaminski</h4>
-                <p className="text-gray-600">Fintech Finance &amp; Engineering Leader · Atlanta</p>
+                <h4 className="text-lg font-semibold text-white">Michael Kaminski</h4>
+                <p className="text-white/60">Fintech Finance &amp; Engineering Leader · Atlanta</p>
               </div>
             </div>
             
@@ -97,7 +97,7 @@ const Contact: React.FC = () => {
               <div className="flex items-center">
                 <Mail className="w-6 h-6 text-primary-600 mr-4" />
                 <div>
-                  <p className="font-semibold text-gray-900">Email</p>
+                  <p className="font-semibold text-white">Email</p>
                   <a href="mailto:mkaminski1337@gmail.com" className="text-primary-600 hover:text-primary-700 transition-colors duration-200">
                     mkaminski1337@gmail.com
                   </a>
@@ -107,7 +107,7 @@ const Contact: React.FC = () => {
               <div className="flex items-center">
                 <Phone className="w-6 h-6 text-primary-600 mr-4" />
                 <div>
-                  <p className="font-semibold text-gray-900">Phone</p>
+                  <p className="font-semibold text-white">Phone</p>
                   <a href="tel:+14048388613" className="text-primary-600 hover:text-primary-700 transition-colors duration-200">
                     (404) 838-8613
                   </a>
@@ -117,16 +117,16 @@ const Contact: React.FC = () => {
               <div className="flex items-center">
                 <MapPin className="w-6 h-6 text-primary-600 mr-4" />
                 <div>
-                  <p className="font-semibold text-gray-900">Location</p>
-                  <p className="text-gray-600">Atlanta, GA (Preferred)</p>
-                  <p className="text-gray-600">Open to relocation for the right opportunity</p>
+                  <p className="font-semibold text-white">Location</p>
+                  <p className="text-white/60">Atlanta, GA (Preferred)</p>
+                  <p className="text-white/60">Open to relocation for the right opportunity</p>
                 </div>
               </div>
               
               <div className="flex items-center">
                 <Linkedin className="w-6 h-6 text-primary-600 mr-4" />
                 <div>
-                  <p className="font-semibold text-gray-900">LinkedIn</p>
+                  <p className="font-semibold text-white">LinkedIn</p>
                   <a href="https://linkedin.com/in/michaelxaxkaminski" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 transition-colors duration-200">
                     linkedin.com/in/michaelxaxkaminski
                   </a>
@@ -134,12 +134,12 @@ const Contact: React.FC = () => {
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <h4 className="font-semibold text-gray-900 mb-3">Current Status</h4>
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <h4 className="font-semibold text-white mb-3">Current Status</h4>
               <div className="space-y-2">
-                <p className="text-gray-600">• Actively seeking executive opportunities</p>
-                <p className="text-gray-600">• Open to PE industry return</p>
-                <p className="text-gray-600">• Available for immediate start</p>
+                <p className="text-white/60">• Open to senior product roles at the agent layer</p>
+                <p className="text-white/60">• Fractional and full-time both work</p>
+                <p className="text-white/60">• Available for immediate start</p>
               </div>
             </div>
           </motion.div>
@@ -150,12 +150,13 @@ const Contact: React.FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="rounded-2xl shadow-lg p-8 text-white"
-            style={{ background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}
+            className="rounded-rilla border border-accent/30 bg-accent/[0.06] p-8 text-white"
           >
             <h3 className="text-2xl font-bold mb-6">Ready to Connect?</h3>
-            <p className="mb-8 leading-relaxed" style={{ color: 'var(--secondary)' }}>
-              I'm looking for opportunities where I can leverage my executive experience in turnarounds, strategic transformations, and scaling operations. Let's discuss how we can create value together.
+            <p className="mb-8 leading-relaxed text-white/70">
+              I'm looking for senior product roles at the agent layer — teams shipping AI agents
+              into production, especially where the environment is regulated and the evidence
+              trail matters as much as the model. Fastest path is the calendar link.
             </p>
             
             <div className="space-y-4">
@@ -164,7 +165,7 @@ const Contact: React.FC = () => {
                 target="_blank" 
                 rel="noopener noreferrer"
                 onClick={() => track('Calendar Link Clicked', { source: 'Contact Section' })}
-                className="w-full bg-white text-primary-600 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center"
+                className="w-full bg-accent text-ink-900 font-bold py-3 px-6 rounded-lg hover:brightness-90 transition-all duration-200 flex items-center justify-center"
               >
                 <Calendar className="w-5 h-5 mr-2" />
                 Book Call
@@ -173,7 +174,7 @@ const Contact: React.FC = () => {
               <a
                 href="mailto:mkaminski1337@gmail.com?subject=Portfolio%20inquiry"
                 onClick={() => track('Contact Email Clicked', { source: 'Contact Section' })}
-                className="w-full bg-transparent border-2 border-white text-white font-semibold py-3 px-6 rounded-lg hover:bg-white hover:text-primary-600 transition-colors duration-200 flex items-center justify-center"
+                className="w-full bg-transparent border-2 border-white/25 text-white font-semibold py-3 px-6 rounded-lg hover:bg-white hover:text-ink-900 transition-colors duration-200 flex items-center justify-center"
               >
                 <Send className="w-5 h-5 mr-2" />
                 Send Message
@@ -200,9 +201,9 @@ const Contact: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="mt-12 max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8"
+          className="mt-12 max-w-2xl mx-auto rilla-card p-8"
         >
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Send a Message</h3>
+          <h3 className="text-2xl font-bold text-white mb-6 text-center">Send a Message</h3>
           <div className="grid sm:grid-cols-2 gap-4 mb-4">
             <input
               name="name"
@@ -211,7 +212,7 @@ const Contact: React.FC = () => {
               required
               placeholder="Your name"
               aria-label="Your name"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              className="w-full px-4 py-3 rounded-lg border border-white/15 bg-white/5 text-white placeholder-white/40 outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/40"
             />
             <input
               name="email"
@@ -221,7 +222,7 @@ const Contact: React.FC = () => {
               required
               placeholder="Your email"
               aria-label="Your email"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              className="w-full px-4 py-3 rounded-lg border border-white/15 bg-white/5 text-white placeholder-white/40 outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/40"
             />
           </div>
           <textarea
@@ -232,16 +233,16 @@ const Contact: React.FC = () => {
             rows={5}
             placeholder="How can I help?"
             aria-label="Message"
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none mb-4"
+            className="w-full px-4 py-3 rounded-lg border border-white/15 bg-white/5 text-white placeholder-white/40 outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/40 mb-4"
           />
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
+            className="w-full bg-accent text-ink-900 font-bold py-3 px-6 rounded-lg hover:brightness-90 transition-all duration-200 flex items-center justify-center"
           >
             <Send className="w-5 h-5 mr-2" />
             Send Message
           </button>
-          <p className="text-xs text-gray-400 text-center mt-3">Goes straight to my inbox.</p>
+          <p className="text-xs text-white/50 text-center mt-3">Goes straight to my inbox.</p>
         </motion.form>
       </div>
     </section>

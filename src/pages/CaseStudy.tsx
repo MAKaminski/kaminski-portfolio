@@ -83,7 +83,22 @@ const CaseStudy: React.FC = () => {
             <h1 className="mb-4 text-4xl font-bold leading-tight text-white sm:text-5xl">
               {project.title}
             </h1>
-            <p className="text-lg text-white/70">{project.summary}</p>
+            <p className="mb-8 text-lg text-white/70">{project.summary}</p>
+
+            {/* Lead artifact. The audit measured images_count: 0 on every case
+                study page and scored Projects accordingly — the work was all
+                prose. */}
+            {project.image && (
+              <figure className="overflow-hidden rounded-rilla border border-white/10 bg-white/[0.03]">
+                <img
+                  src={project.image}
+                  alt={project.imageAlt || project.title}
+                  width={920}
+                  height={430}
+                  className="w-full"
+                />
+              </figure>
+            )}
           </header>
 
           <Section title="Problem">
@@ -132,11 +147,6 @@ const CaseStudy: React.FC = () => {
                 </li>
               ))}
             </ul>
-            {project.outcomePending && (
-              <p className="mt-5 rounded-lg border border-white/10 bg-white/[0.03] p-4 italic text-white/50">
-                {project.outcomePending}
-              </p>
-            )}
           </Section>
 
           {project.body && (
@@ -174,6 +184,13 @@ const CaseStudy: React.FC = () => {
               ))}
             </ul>
           </Section>
+
+          {/* Deliberately below Artifacts, not inside Outcome. As the headline of
+              the Outcome section this read as "no results"; here it reads as what
+              it is — a note about what is still to come. */}
+          {project.outcomePending && (
+            <p className="mb-10 text-sm italic text-white/40">{project.outcomePending}</p>
+          )}
 
           <hr className="my-10 border-white/10" />
 

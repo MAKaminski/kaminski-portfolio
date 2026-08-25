@@ -69,11 +69,11 @@ const Highlights: React.FC = () => {
               className="rilla-card p-8 card-hover"
             >
               <div className="flex items-start mb-6">
-                <div className="bg-primary-100 rounded-lg p-3 mr-4">
-                  <highlight.icon className="w-8 h-8 text-primary-600" />
+                <div className="rounded-lg border border-accent/25 bg-accent/10 p-3 mr-4">
+                  <highlight.icon className="w-8 h-8 text-accent" />
                 </div>
                 <div>
-                  <span className="inline-block px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-2">
+                  <span className="inline-block px-3 py-1 rounded-full border border-white/15 bg-white/5 text-sm font-medium text-accent mb-2">
                     {highlight.category}
                   </span>
                   <h3 className="text-xl font-bold text-white mb-3">{highlight.title}</h3>
@@ -84,32 +84,6 @@ const Highlights: React.FC = () => {
           ))}
         </div>
 
-        {/* Additional Achievements */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mt-16 bg-gradient-to-r from-gray-50 to-primary-50 rounded-2xl p-8"
-        >
-          <h3 className="text-2xl font-bold text-white mb-6 text-center">Additional Achievements</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              // "2,500+ FTEs" and "$50MM inventory optimization opportunity"
-              // used to head this list. Both were unsourced and unverifiable;
-              // the sourced version of this claim is the deal table.
-              "Implemented comprehensive digital transformation frameworks",
-              "Established data-driven performance metrics across organizations",
-              "Successfully navigated complex regulatory environments",
-              "Built and scaled high-performing executive teams"
-            ].map((achievement, index) => (
-              <div key={index} className="flex items-center">
-                <div className="w-2 h-2 bg-primary-500 rounded-full mr-3 flex-shrink-0"></div>
-                <span className="text-white/70">{achievement}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   );

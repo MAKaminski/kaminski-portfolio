@@ -65,13 +65,6 @@ const CaseStudyCard: React.FC<{ project: Project; index: number }> = ({ project,
       ))}
     </ul>
 
-    {/* An explicit gap, rather than a number nobody can check. */}
-    {project.outcomePending && (
-      <p className="mb-5 rounded-lg border border-white/10 bg-white/[0.03] p-4 text-sm italic text-white/50">
-        {project.outcomePending}
-      </p>
-    )}
-
     <Link
       to={`/projects/${project.slug}`}
       className="mt-auto inline-flex items-center gap-2 font-semibold text-accent hover:underline"

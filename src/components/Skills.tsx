@@ -13,64 +13,55 @@ const Skills: React.FC = () => {
       title: "Languages",
       icon: Code,
       skills: ["SQL", "Python", "TypeScript", "Java", "C#", "R", "Rust"],
-      gradient: "from-pink-500 to-rose-500",
-      bgGradient: "from-pink-50 to-rose-50"
+      gradient: "from-pink-500 to-rose-500"
     },
     {
       title: "Backend & Databases",
       icon: Database,
       skills: ["Node.js", "FastAPI", "PostgreSQL", "Redis", "GraphQL", "Supabase", "NeonDB", "Prisma", "MongoDB", "Pinecone", "pgvector"],
-      gradient: "from-teal-500 to-cyan-500",
-      bgGradient: "from-teal-50 to-cyan-50"
+      gradient: "from-teal-500 to-cyan-500"
     },
     {
       title: "Frontend",
       icon: Code,
       skills: ["React", "TypeScript", "Tailwind"],
-      gradient: "from-violet-500 to-purple-500",
-      bgGradient: "from-violet-50 to-purple-50"
+      gradient: "from-violet-500 to-purple-500"
     },
     {
       title: "Cloud & DevOps",
       icon: Cloud,
       skills: ["AWS", "GCP", "Docker", "Kubernetes", "Serverless", "Vercel", "GitHub", "GitHub Actions"],
-      gradient: "from-sky-500 to-blue-500",
-      bgGradient: "from-sky-50 to-blue-50"
+      gradient: "from-sky-500 to-blue-500"
     },
     {
       title: "Data & Analytics",
       icon: BarChart3,
       skills: ["Snowflake", "BigQuery", "Redshift", "Airflow", "dbt", "Fivetran", "Tableau", "Power BI", "Looker"],
-      gradient: "from-purple-500 to-pink-500",
-      bgGradient: "from-purple-50 to-pink-50"
+      gradient: "from-purple-500 to-pink-500"
     },
     {
       title: "AI & ML",
       icon: Code,
       skills: ["OpenAI", "Claude", "Claude Code", "Cursor", "DeepSeek", "Kimi", "LangChain", "MCP", "Hugging Face", "TensorFlow", "PyTorch"],
-      gradient: "from-fuchsia-500 to-pink-500",
-      bgGradient: "from-fuchsia-50 to-pink-50"
+      gradient: "from-fuchsia-500 to-pink-500"
     },
     {
       title: "ERP & Financial Systems",
       icon: Settings,
       skills: ["NetSuite", "SAP S/4HANA", "Oracle Hyperion", "QuickBooks", "Ramp", "Brex", "Plaid", "Stripe", "Interactive Brokers"],
-      gradient: "from-blue-500 to-cyan-500",
-      bgGradient: "from-blue-50 to-cyan-50"
+      gradient: "from-blue-500 to-cyan-500"
     },
     {
       title: "SEO & Growth Analytics",
       icon: BarChart3,
       skills: ["Ahrefs", "Google Search Console", "Google Analytics", "PostHog", "Mixpanel", "Amplitude", "Segment", "HubSpot", "Salesforce"],
-      gradient: "from-orange-500 to-red-500",
-      bgGradient: "from-orange-50 to-red-50"
+      gradient: "from-orange-500 to-red-500"
     },
     {
       title: "Product & Collaboration",
       icon: Settings,
       skills: ["Jira", "Confluence", "Linear", "Notion", "Monday.com", "Airtable", "Figma", "Lucid", "Canva", "Gamma", "Resend", "Shopify"],
-      gradient: "from-indigo-500 to-violet-500",
-      bgGradient: "from-indigo-50 to-violet-50"
+      gradient: "from-indigo-500 to-violet-500"
     },
   ];
 
@@ -113,9 +104,9 @@ const Skills: React.FC = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.05,
-        delayChildren: 0.1,
-      },
-    },
+        delayChildren: 0.1
+      }
+    }
   };
 
   const itemVariants = {
@@ -126,9 +117,9 @@ const Skills: React.FC = () => {
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
-      },
-    },
+        ease: "easeOut"
+      }
+    }
   };
 
   return (
@@ -139,24 +130,24 @@ const Skills: React.FC = () => {
           className="absolute top-40 left-10 w-96 h-96 bg-gradient-to-br from-blue-400/5 to-purple-400/5 rounded-full blur-3xl"
           animate={{
             x: [0, 40, 0],
-            y: [0, -30, 0],
+            y: [0, -30, 0]
           }}
           transition={{
             duration: 15,
             repeat: Infinity,
-            repeatType: 'reverse',
+            repeatType: 'reverse'
           }}
         />
         <motion.div
           className="absolute bottom-40 right-10 w-80 h-80 bg-gradient-to-br from-pink-400/5 to-indigo-400/5 rounded-full blur-3xl"
           animate={{
             x: [0, -35, 0],
-            y: [0, 25, 0],
+            y: [0, 25, 0]
           }}
           transition={{
             duration: 18,
             repeat: Infinity,
-            repeatType: 'reverse',
+            repeatType: 'reverse'
           }}
         />
       </div>
@@ -222,12 +213,12 @@ const Skills: React.FC = () => {
                 className={`absolute top-4 right-4 w-16 h-16 bg-gradient-to-r ${category.gradient} rounded-full opacity-10`}
                 animate={{
                   scale: [1, 1.2, 1],
-                  rotate: [0, 180, 360],
+                  rotate: [0, 180, 360]
                 }}
                 transition={{
                   duration: 8,
                   repeat: Infinity,
-                  delay: index * 0.2,
+                  delay: index * 0.2
                 }}
               />
               
@@ -344,7 +335,7 @@ const Skills: React.FC = () => {
                   initial={false}
                   animate={{
                     height: openAccordion === index ? 'auto' : 0,
-                    opacity: openAccordion === index ? 1 : 0,
+                    opacity: openAccordion === index ? 1 : 0
                   }}
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                   className="overflow-hidden"

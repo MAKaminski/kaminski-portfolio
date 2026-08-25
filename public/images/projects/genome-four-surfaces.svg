@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 430" width="920" height="430" role="img"
+     aria-label="One build writes four surfaces. Six hand-edited JSON files totalling 1,312,577 bytes and 1,180 records go through one 0.39-second dependency-free build, which writes 1,245 static HTML pages for crawlers, an interactive canvas graph for humans, a 129,037-byte search index for site search, and an 8-tool MCP server for agents. The MCP server imports the build artifact rather than querying the site, so an agent and a crawler cannot disagree.">
+  <defs>
+    <style>
+      .bg   { fill: #060606; }
+      .card { fill: #ffffff; fill-opacity: 0.04; stroke: #ffffff; stroke-opacity: 0.12; }
+      .accn { fill: #fff500; }
+      .ttl  { fill: #ffffff; font: 700 14px 'Space Grotesk', system-ui, sans-serif; }
+      .num  { fill: #ffffff; font: 700 16px 'Space Grotesk', system-ui, sans-serif; }
+      .lbl  { fill: #ffffff; fill-opacity: 0.60; font: 400 12px 'Space Grotesk', system-ui, sans-serif; }
+      .eyebrow { fill: #fff500; font: 700 10.5px 'Space Grotesk', system-ui, sans-serif; letter-spacing: .09em; }
+      .foot { fill: #ffffff; fill-opacity: 0.75; font: 400 12.5px 'Space Grotesk', system-ui, sans-serif; }
+      .wire { stroke: #ffffff; stroke-opacity: 0.22; fill: none; }
+      .wire-accent { stroke: #fff500; stroke-opacity: 0.5; fill: none; stroke-dasharray: 4 3; }
+    </style>
+    <marker id="a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0.5 L8 4 L0 7.5 z" fill="#ffffff" fill-opacity="0.35"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="920" height="430"/>
+
+  <!-- Source -->
+  <text class="eyebrow" x="32" y="42">SOURCE OF TRUTH</text>
+  <rect class="card" x="30" y="56" width="172" height="102" rx="12"/>
+  <text class="num" x="46" y="86">6 JSON files</text>
+  <text class="lbl" x="46" y="110">1,180 records</text>
+  <text class="lbl" x="46" y="128">1,312,577 bytes</text>
+  <text class="lbl" x="46" y="146">hand-edited</text>
+
+  <!-- Build -->
+  <path class="wire" d="M202 107 H254" marker-end="url(#a)"/>
+  <text class="eyebrow" x="258" y="42">ONE BUILD</text>
+  <rect class="card" x="256" y="56" width="182" height="102" rx="12"/>
+  <text class="num" x="272" y="86">node build.js</text>
+  <text class="accn" x="272" y="115" style="font:700 24px 'Space Grotesk',system-ui,sans-serif">0.39s</text>
+  <text class="lbl" x="272" y="136">zero dependencies</text>
+  <text class="lbl" x="272" y="152">12.7× expansion</text>
+
+  <!-- Fan-out -->
+  <path class="wire" d="M438 107 H472 V80  H504" marker-end="url(#a)"/>
+  <path class="wire" d="M438 107 H472 V150 H504" marker-end="url(#a)"/>
+  <path class="wire" d="M438 107 H472 V220 H504" marker-end="url(#a)"/>
+  <path class="wire" d="M438 107 H472 V290 H504" marker-end="url(#a)"/>
+
+  <!-- Surfaces: number column at 522, title at 646, consumer right-anchored at 874 -->
+  <text class="eyebrow" x="508" y="42">FOUR SURFACES, ONE ARTIFACT</text>
+
+  <rect class="card" x="504" y="56" width="386" height="48" rx="10"/>
+  <text class="num" x="522" y="86">1,245</text>
+  <text class="ttl" x="622" y="86">static HTML pages</text>
+  <text class="lbl" x="874" y="86" text-anchor="end">crawlers</text>
+
+  <rect class="card" x="504" y="126" width="386" height="48" rx="10"/>
+  <text class="num" x="522" y="156">1</text>
+  <text class="ttl" x="622" y="156">interactive graph</text>
+  <text class="lbl" x="874" y="156" text-anchor="end">humans</text>
+
+  <rect class="card" x="504" y="196" width="386" height="48" rx="10"/>
+  <text class="num" x="522" y="226">129,037 B</text>
+  <text class="ttl" x="622" y="226">search index</text>
+  <text class="lbl" x="874" y="226" text-anchor="end">site search</text>
+
+  <rect class="card" x="504" y="266" width="386" height="48" rx="10"/>
+  <text class="num" x="522" y="296">8</text>
+  <text class="ttl" x="622" y="296">MCP tools</text>
+  <text class="lbl" x="874" y="296" text-anchor="end">agents</text>
+
+  <!-- The MCP surface reads the build artifact, not the site -->
+  <path class="wire-accent" d="M504 296 C 466 296, 466 200, 438 145"/>
+
+  <rect class="card" x="30" y="334" width="860" height="68" rx="12"/>
+  <text class="eyebrow" x="50" y="360">THE DECISION WORTH COPYING</text>
+  <text class="foot" x="50" y="382">The MCP server never queries the site and never reads the source. It statically imports the index the build wrote, so</text>
+  <text class="foot" x="50" y="398">slugs, lineage and adoption edges join in exactly one place — and an agent and a crawler cannot disagree.</text>
+</svg>

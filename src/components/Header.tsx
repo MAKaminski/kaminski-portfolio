@@ -31,6 +31,7 @@ const Header: React.FC = () => {
   ];
 
   const additionalNavItems: { name: string; href: string }[] = [
+    { name: 'About', href: '/about' },
     { name: 'Projects', href: '/projects' },
     { name: 'Websites', href: '/websites' },
     { name: 'Products', href: '/products' },

@@ -290,7 +290,7 @@ ${ctaBlock()}
 }
 
 // ─── Home ──────────────────────────────────────────────────────────────────
-function homeMarkup({ articles, referrals, transactions, jobs, projects, totals }) {
+function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about }) {
   const articleLinks = articles
     .map((a) => `<li><a href="/writing/${esc(a.slug)}">${esc(a.title)}</a> — ${esc(a.description)}</li>`)
     .join('');
@@ -344,6 +344,10 @@ multi-agent pipelines, and eval harnesses in Python and TypeScript. What is unus
 the combination is that I can price a system and I can ship it: before the agent work I
 spent years in corporate finance and strategy, and I have authored Terraform modules with
 multi-environment remote state and operated production Kubernetes clusters.</p>
+
+<h2>About</h2>
+${about.map((para) => `<p>${esc(para)}</p>`).join('')}
+<p><a href="/about">More about how I got here, and the full role history</a></p>
 
 <h2>What I work on</h2>
 <ul>
@@ -401,7 +405,6 @@ ${img(p.image, p.imageAlt || p.title, 800, 450)}
 <p>${esc(p.summary)}</p>
 <p><strong>My role:</strong> ${esc(p.role)}</p>
 <ul>${p.outcome.map((o) => `<li><strong>${esc(o.metric)}</strong> — ${esc(o.detail)} <a href="${esc(o.source)}">${esc(o.sourceLabel)}</a></li>`).join('')}</ul>
-${p.outcomePending ? `<p><em>${esc(p.outcomePending)}</em></p>` : ''}
 <p><a href="/projects/${esc(p.slug)}">Read the full case study</a></p>
 </article>`
     )
@@ -476,7 +479,6 @@ ${p.problem}
           )}</a></li>`
       )
       .join('')}</ul>
-${p.outcomePending ? `<p><em>${esc(p.outcomePending)}</em></p>` : ''}
 
 ${p.body || ''}
 
@@ -485,6 +487,7 @@ ${p.body || ''}
 
 <h2>Artifacts</h2>
 <ul>${p.artifacts.map((a) => `<li><a href="${esc(a.href)}">${esc(a.label)}</a> (${esc(a.kind)})</li>`).join('')}</ul>
+${p.outcomePending ? `<p><em>${esc(p.outcomePending)}</em></p>` : ''}
 </article>
 <p><a href="/projects">All projects</a> · <a href="/">Michael Kaminski</a></p>`
   );
@@ -572,6 +575,7 @@ function main() {
   const jobs = loadData('experience.ts', 'export const jobTimeline', 'export const getJob');
   // Mirrors projectsByDate() in src/data/projects.ts: flagship first, then
   // newest. The static and mounted versions of /projects must agree on order.
+  const about = loadData('about.ts', 'export const aboutParagraphs', 'export const aboutIntro');
   const projects = loadData('projects.ts', 'export const projects', 'export const getProject').sort(
     (a, b) =>
       Number(b.tier === 'flagship') - Number(a.tier === 'flagship') || b.date.localeCompare(a.date)
@@ -639,7 +643,55 @@ function main() {
         crumbs: [{ name: 'Home', path: '/' }],
         jsonLd: reviewLd,
       },
-      homeMarkup({ articles, referrals, transactions, jobs, projects, totals })
+      homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about })
+    )
+  );
+
+  // ── /about ──
+  safely('/about', () =>
+    write(
+      '/about',
+      {
+        title: 'About Michael Kaminski — Technical Product Manager, Agent Layer',
+        description:
+          'How I got from corporate finance to agent infrastructure, and why the two halves turn out to be the same job. Full role history with dates.',
+        crumbs: [
+          { name: 'Home', path: '/' },
+          { name: 'About', path: '/about' },
+        ],
+        jsonLd: {
+          '@context': 'https://schema.org',
+          '@type': 'AboutPage',
+          name: 'About Michael Kaminski',
+          url: `${ORIGIN}/about`,
+          mainEntity: { '@id': `${ORIGIN}/#person` },
+        },
+      },
+      page(
+        '/about',
+        `
+<h1>About Michael Kaminski</h1>
+<p>Technical product manager at the agent layer. Atlanta, relocating to New York City.</p>
+${about.map((para) => `<p>${esc(para)}</p>`).join('')}
+
+<h2>Where I've worked</h2>
+<ol>${jobs
+          .map(
+            (j) => `<li><strong>${j.link ? `<a href="${esc(j.link)}">${esc(j.company)}</a>` : esc(j.company)}</strong>
+— ${esc(j.title)} · <time>${esc(j.period)}</time><br>${esc(j.description)}${
+              j.exit ? `<br><em>${esc(j.exit)}</em>` : ''
+            }</li>`
+          )
+          .join('')}</ol>
+
+<h2>The finance half, in numbers</h2>
+<p>${totals.count} named transactions totalling $${totals.totalM.toLocaleString()}M — ${esc(
+          totals.headline
+        )} — across equity, debt, an IPO and a $4,000M share repurchase. Every one is listed
+with its date, counterparty and instrument on the <a href="/">home page</a>.</p>
+
+<p><a href="/projects">Case studies</a> · <a href="/writing">Writing</a></p>`
+      )
     )
   );
 

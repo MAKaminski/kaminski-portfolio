@@ -232,7 +232,7 @@ const TechLogo: React.FC<TechLogoProps> = ({ name, className = "w-8 h-8" }) => {
 
   // Fallback to text for logos not in our list
   return (
-    <span className="text-sm font-medium text-gray-700">{name}</span>
+    <span className="text-sm font-medium text-white/70">{name}</span>
   );
 };
 

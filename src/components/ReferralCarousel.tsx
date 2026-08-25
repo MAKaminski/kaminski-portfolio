@@ -49,16 +49,16 @@ const ReferralCarousel: React.FC = () => {
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 rounded-full border border-white/15 bg-white/10 p-3 text-white backdrop-blur transition-all duration-200 hover:bg-white/20 hover:scale-110"
           >
-            <ChevronLeft size={24} className="text-gray-700" />
+            <ChevronLeft size={24} className="text-white/70" />
           </button>
 
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 rounded-full border border-white/15 bg-white/10 p-3 text-white backdrop-blur transition-all duration-200 hover:bg-white/20 hover:scale-110"
           >
-            <ChevronRight size={24} className="text-gray-700" />
+            <ChevronRight size={24} className="text-white/70" />
           </button>
 
           {/* Carousel Container */}
@@ -73,7 +73,7 @@ const ReferralCarousel: React.FC = () => {
                 className="flex justify-center"
               >
                 <div className="max-w-4xl mx-auto">
-                  <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+                  <div className="rilla-card p-8 md:p-12">
                     <div className="flex items-start space-x-6">
                       <div className="flex-shrink-0">
                         {referrals[currentIndex].avatar ? (
@@ -91,7 +91,7 @@ const ReferralCarousel: React.FC = () => {
                             }}
                           />
                         ) : null}
-                        <div className={`w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl ${referrals[currentIndex].avatar ? 'hidden' : ''}`}>
+                        <div className={`w-16 h-16 rounded-full border border-accent/30 bg-accent/15 flex items-center justify-center text-accent font-bold text-xl ${referrals[currentIndex].avatar ? 'hidden' : ''}`}>
                           {referrals[currentIndex].name.charAt(0)}
                         </div>
                       </div>
@@ -99,10 +99,10 @@ const ReferralCarousel: React.FC = () => {
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-4">
                           <div>
-                            <h3 className="text-xl font-semibold text-gray-900">
+                            <h3 className="text-xl font-semibold text-white">
                               {referrals[currentIndex].name}
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="text-white/60">
                               {referrals[currentIndex].title} at {referrals[currentIndex].company}
                             </p>
                           </div>
@@ -124,11 +124,11 @@ const ReferralCarousel: React.FC = () => {
                           </div>
                         </div>
                         
-                        <blockquote className="text-lg text-gray-700 leading-relaxed italic">
+                        <blockquote className="text-lg text-white/70 leading-relaxed italic">
                           "{referrals[currentIndex].content}"
                         </blockquote>
                         
-                        <div className="mt-6 text-sm text-gray-500">
+                        <div className="mt-6 text-sm text-white/50">
                           {referrals[currentIndex].date}
                         </div>
                       </div>
@@ -157,7 +157,7 @@ const ReferralCarousel: React.FC = () => {
 
         {/* CTA Section */}
         <div className="text-center mt-12">
-          <p className="text-gray-600 mb-4">
+          <p className="text-white/60 mb-4">
             Ready to work with Michael Kaminski?
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -165,7 +165,7 @@ const ReferralCarousel: React.FC = () => {
               href="https://calendly.com/kaminski1337/15min"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-accent font-bold text-ink-900 transition-all duration-200 hover:brightness-90 hover:scale-105"
             >
               Schedule a Consultation
             </a>
@@ -173,7 +173,7 @@ const ReferralCarousel: React.FC = () => {
               href="https://www.linkedin.com/in/michaelxaxkaminski"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-white/25 text-white transition-all duration-200 hover:bg-white hover:text-ink-900 font-medium"
             >
               Connect on LinkedIn
             </a>
