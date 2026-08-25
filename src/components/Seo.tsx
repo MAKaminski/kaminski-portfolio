@@ -17,6 +17,12 @@ export interface SeoProps {
   jsonLd?: object | object[];
   /** When set, emits a Home > {breadcrumbName} BreadcrumbList for this route. */
   breadcrumbName?: string;
+  /**
+   * Keep this route out of the index. Used by the role pages (a recruiter lens
+   * on one body of work, not a second positioning — left indexable they compete
+   * with "/" for what this person does) and by not-found states.
+   */
+  noindex?: boolean;
 }
 
 /**
@@ -32,6 +38,7 @@ const Seo: React.FC<SeoProps> = ({
   type = 'website',
   jsonLd,
   breadcrumbName,
+  noindex = false,
 }) => {
   const canonical = `${SITE_URL}${canonicalPath}`;
   const resolvedImage = image
@@ -57,6 +64,7 @@ const Seo: React.FC<SeoProps> = ({
       <meta name="title" content={title} />
       <meta name="description" content={description} />
       <link rel="canonical" href={canonical} />
+      {noindex && <meta name="robots" content="noindex, follow" />}
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />

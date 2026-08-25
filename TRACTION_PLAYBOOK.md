@@ -2,8 +2,13 @@
 
 The site is technically strong, but at Domain Rating 0 rankings come from **measurement +
 off-page authority + a publishing cadence**, not more on-page tweaks. This is the do-it list.
-Positioning to keep consistent everywhere: **"Fintech Finance & Engineering Leader — Atlanta.
-Fluent in both PE-grade finance and hands-on software engineering."**
+Positioning to keep consistent everywhere (updated 2026-08-25 — the site now leads with the
+agent work, and this doc was the last place still selling the old framing):
+**"I build AI agents that run in production — agent infrastructure, MCP servers, and eval
+harnesses, inside a regulated lender. Atlanta, relocating to NYC."**
+The finance depth is the *differentiator*, not a second identity: very few people building
+agent infrastructure can also price the business case for it. Lead with agents; bring the
+finance in as the reason he can survive a compliance review.
 
 Canonical URL: `https://www.michael-kaminski.io` · Email: `mkaminski1337@gmail.com` ·
 LinkedIn: `linkedin.com/in/michaelxaxkaminski` · GitHub: `github.com/MAKaminski` ·
@@ -43,8 +48,8 @@ Google and LLMs treat these as one entity:
 ## 4. Paste-ready copy
 
 **LinkedIn headline (pick one):**
-- `Fintech Finance & Engineering Leader | Fractional CFO/CTO | Atlanta | Fluent in the boardroom and the codebase`
-- `I build the financial model the board expects and the software that ships the product | Fintech CFO/CTO — Atlanta`
+- `I build AI agents that run in production | Agent infrastructure, MCP servers, eval harnesses | Atlanta → NYC`
+- `Technical PM at the agent layer | Shipped an AI agent through security, legal & compliance review in regulated lending`
 
 **LinkedIn / bio (short — directories):**
 > Michael Kaminski is an Atlanta-based fintech leader fluent in both PE-grade finance and hands-on

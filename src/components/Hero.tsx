@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { transactionTotals } from '../data/transactions';
 import { Download, Clock, ArrowUpRight, Linkedin, Github, MessagesSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { track } from '@vercel/analytics';
@@ -23,19 +24,26 @@ const Hero: React.FC = () => {
   // Drifts slower than the grid so the map sits behind it.
   const yMap = useTransform(scrollY, [0, 700], [0, 46]);
   const [twinOpen, setTwinOpen] = useState(false);
+  const totals = transactionTotals();
 
   const roles: { key: Role; label: string }[] = [
-    { key: 'cfo', label: 'CFO' },
-    { key: 'cpo', label: 'CPO' },
+    { key: 'cpo', label: 'Product' },
     { key: 'strategy', label: 'Strategy' },
     { key: 'technology', label: 'Technology' },
-    { key: 'revenue', label: 'Revenue' },
   ];
 
   const stats = [
     { to: 20, suffix: '+', label: 'Years across finance & engineering' },
     { to: 3, suffix: '', label: 'Successful exits' },
-    { prefix: '$', to: 10.8, decimals: 1, suffix: 'B+', label: 'Transactions led' },
+    // Derived from src/data/transactions.ts, not typed by hand. This read
+    // "$10.8B+" for a long time while the table beneath it summed to $11,197M.
+    {
+      prefix: '$',
+      to: Math.floor(totals.totalM / 100) / 10,
+      decimals: 1,
+      suffix: 'B+',
+      label: 'Transactions led',
+    },
   ];
 
   const handleRoleClick = (role: Role, path: string) => {

@@ -1,36 +1,25 @@
 /* eslint-disable */
-// Rebuilds public/sitemap.xml from the routes below plus every article in
-// src/data/articles.ts.
+// Rebuilds public/sitemap.xml from scripts/routes.js plus every article in
+// src/data/articles.ts and every case study in src/data/projects.ts.
 //
 // This exists because the hand-maintained version rotted: nine articles had
 // shipped without ever being added, so they were live and unlisted. A sitemap
 // that has to be edited by hand every time you publish is a sitemap that will
-// be wrong. Runs automatically as part of `npm run build`.
+// be wrong.
+//
+// The route list used to live here as its own array, which rotted a second
+// way: it advertised ten URLs that scripts/prerender.js never wrote files for,
+// so Google was told about eleven pages that all served the home page's HTML.
+// Both scripts now read scripts/routes.js. Runs automatically as `prebuild`.
 const fs = require('fs');
 const path = require('path');
+const { indexedRoutes } = require('./routes');
 
 const ORIGIN = 'https://www.michael-kaminski.io';
 const ROOT = path.join(__dirname, '..');
 const ARTICLES = path.join(ROOT, 'src', 'data', 'articles.ts');
+const PROJECTS = path.join(ROOT, 'src', 'data', 'projects.ts');
 const OUT = path.join(ROOT, 'public', 'sitemap.xml');
-
-// Static routes, mirroring the <Route> list in src/App.tsx.
-const routes = [
-  { path: '/', changefreq: 'weekly', priority: '1.0' },
-  { path: '/cfo', changefreq: 'monthly', priority: '0.9' },
-  { path: '/technology', changefreq: 'monthly', priority: '0.9' },
-  { path: '/cpo', changefreq: 'monthly', priority: '0.9' },
-  { path: '/strategy', changefreq: 'monthly', priority: '0.9' },
-  { path: '/revenue', changefreq: 'monthly', priority: '0.9' },
-  { path: '/client-outcomes', changefreq: 'monthly', priority: '0.8' },
-  { path: '/websites', changefreq: 'monthly', priority: '0.8' },
-  { path: '/products', changefreq: 'monthly', priority: '0.8' },
-  { path: '/writing', changefreq: 'weekly', priority: '0.8' },
-  { path: '/clips', changefreq: 'weekly', priority: '0.8' },
-  { path: '/changelog', changefreq: 'weekly', priority: '0.7' },
-  { path: '/knowledge-graph', changefreq: 'monthly', priority: '0.7' },
-  { path: '/jira-prd', changefreq: 'monthly', priority: '0.6' },
-];
 
 const source = fs.readFileSync(ARTICLES, 'utf8');
 const slugs = [...source.matchAll(/^\s{4}slug: '([^']+)',$/gm)].map((m) => m[1]);
@@ -43,15 +32,36 @@ if (!slugs.length || slugs.length !== dates.length) {
   process.exit(1);
 }
 
+const projectSrc = fs.readFileSync(PROJECTS, 'utf8');
+const projectSlugs = [...projectSrc.matchAll(/^\s{4}slug: '([^']+)',$/gm)].map((m) => m[1]);
+const projectDates = [...projectSrc.matchAll(/^\s{4}date: '([^']+)',$/gm)].map((m) => m[1]);
+
+if (!projectSlugs.length || projectSlugs.length !== projectDates.length) {
+  console.error(
+    `generate-sitemap: parsed ${projectSlugs.length} slugs and ${projectDates.length} dates from projects.ts — refusing to write a sitemap I don't trust.`
+  );
+  process.exit(1);
+}
+
+function todayIso() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 // Newest article dates the /writing index and the site root.
 const newest = dates.slice().sort().reverse()[0];
 
 const entries = [
-  ...routes.map((r) => ({
+  ...indexedRoutes.map((r) => ({
     loc: ORIGIN + r.path,
     lastmod: r.path === '/' || r.path === '/writing' ? newest : todayIso(),
     changefreq: r.changefreq,
     priority: r.priority,
+  })),
+  ...projectSlugs.map((slug, i) => ({
+    loc: `${ORIGIN}/projects/${slug}`,
+    lastmod: projectDates[i],
+    changefreq: 'monthly',
+    priority: '0.9',
   })),
   ...slugs.map((slug, i) => ({
     loc: `${ORIGIN}/writing/${slug}`,
@@ -60,10 +70,6 @@ const entries = [
     priority: '0.7',
   })),
 ];
-
-function todayIso() {
-  return new Date().toISOString().slice(0, 10);
-}
 
 const xml = [
   '<?xml version="1.0" encoding="UTF-8"?>',
@@ -83,4 +89,6 @@ const xml = [
 ].join('\n');
 
 fs.writeFileSync(OUT, xml);
-console.log(`Wrote sitemap.xml — ${routes.length} routes + ${slugs.length} articles`);
+console.log(
+  `Wrote sitemap.xml — ${indexedRoutes.length} routes + ${projectSlugs.length} case studies + ${slugs.length} articles`
+);

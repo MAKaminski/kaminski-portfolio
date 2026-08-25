@@ -30,12 +30,10 @@ const Highlights: React.FC = () => {
     }
   ];
 
-  const keyMetrics = [
-    { label: "Total Transaction Value", value: "$10.8B+", description: "Across all deal types" },
-    { label: "Companies Transformed", value: "4+", description: "Major organizational changes" },
-    { label: "Years of Experience", value: "20+", description: "Executive leadership" },
-    { label: "Industries Served", value: "8+", description: "Diverse sector expertise" }
-  ];
+  // The four "key metric" tiles that used to sit here are gone. "$10.8B+"
+  // contradicted the deal table two sections down (which sums to $11.2B), and
+  // "Companies Transformed 4+" / "Industries Served 8+" had no definition
+  // behind them at all. The deal table is the sourced version of this claim.
 
   return (
     <section id="highlights" className="section-padding" style={{ background: 'var(--bg)' }}>
@@ -54,23 +52,6 @@ const Highlights: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* Key Metrics */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          viewport={{ once: true }}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
-        >
-          {keyMetrics.map((metric, index) => (
-            <div key={index} className="bg-gradient-to-br from-primary-50 to-blue-50 rounded-xl p-6 text-center">
-              <h3 className="text-3xl font-bold text-primary-600 mb-2">{metric.value}</h3>
-              <p className="text-lg font-semibold text-gray-900 mb-1">{metric.label}</p>
-              <p className="text-gray-600">{metric.description}</p>
-            </div>
-          ))}
-        </motion.div>
-
         {/* Highlights Grid */}
         <div className="grid lg:grid-cols-2 gap-8">
           {highlights.map((highlight, index) => (
@@ -85,7 +66,7 @@ const Highlights: React.FC = () => {
                 rotateY: 2,
                 boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
               }}
-              className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 card-hover"
+              className="rilla-card p-8 card-hover"
             >
               <div className="flex items-start mb-6">
                 <div className="bg-primary-100 rounded-lg p-3 mr-4">
@@ -95,8 +76,8 @@ const Highlights: React.FC = () => {
                   <span className="inline-block px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-2">
                     {highlight.category}
                   </span>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{highlight.title}</h3>
-                  <p className="text-gray-700 leading-relaxed">{highlight.description}</p>
+                  <h3 className="text-xl font-bold text-white mb-3">{highlight.title}</h3>
+                  <p className="text-white/70 leading-relaxed">{highlight.description}</p>
                 </div>
               </div>
             </motion.div>
@@ -111,11 +92,12 @@ const Highlights: React.FC = () => {
           viewport={{ once: true }}
           className="mt-16 bg-gradient-to-r from-gray-50 to-primary-50 rounded-2xl p-8"
         >
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Additional Achievements</h3>
+          <h3 className="text-2xl font-bold text-white mb-6 text-center">Additional Achievements</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              "Led organizational transformation of 2,500+ FTEs",
-              "Identified and resolved $50MM inventory optimization opportunity",
+              // "2,500+ FTEs" and "$50MM inventory optimization opportunity"
+              // used to head this list. Both were unsourced and unverifiable;
+              // the sourced version of this claim is the deal table.
               "Implemented comprehensive digital transformation frameworks",
               "Established data-driven performance metrics across organizations",
               "Successfully navigated complex regulatory environments",
@@ -123,7 +105,7 @@ const Highlights: React.FC = () => {
             ].map((achievement, index) => (
               <div key={index} className="flex items-center">
                 <div className="w-2 h-2 bg-primary-500 rounded-full mr-3 flex-shrink-0"></div>
-                <span className="text-gray-700">{achievement}</span>
+                <span className="text-white/70">{achievement}</span>
               </div>
             ))}
           </div>

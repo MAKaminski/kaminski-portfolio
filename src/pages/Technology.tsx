@@ -64,7 +64,7 @@ const Technology: React.FC = () => {
           className="text-center mb-16"
         >
           <p className="text-lg text-accent font-semibold mb-4">Michael Kaminski is an Atlanta-based technology leader who ships production software and understands the P&amp;L behind it — a rare engineering-plus-finance combination in fintech.</p>
-          <h2 className="display text-5xl text-white mb-6">Fintech CTO &amp; Engineering Leader</h2>
+          <h1 className="display text-5xl text-white mb-6">The infrastructure agents run on</h1>
           <p className="text-xl text-white/60 max-w-4xl mx-auto leading-relaxed">
             Technology leadership for fintech, payments and SaaS teams — cloud architecture,
             product engineering, data platforms and security. Hands-on with React/TypeScript

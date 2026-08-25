@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Compass, TrendingUp, Target, Globe, Zap, Download, Calendar } from 'lucide-react';
+import { transactionTotals } from '../data/transactions';
 import Seo from '../components/Seo';
 import Header from '../components/Header';
+
+const DEAL_TOTAL = transactionTotals().headline;
 
 const Strategy: React.FC = () => {
   const strategyHighlights = [
@@ -22,7 +25,7 @@ const Strategy: React.FC = () => {
       icon: Target,
       title: "M&A & Corporate Development",
       description: "Led complex strategic transactions and corporate development initiatives that created significant value",
-      details: ["$10.8B+ in transactions", "IPO strategy & execution", "Divestiture planning", "Strategic partnerships"]
+      details: [`${DEAL_TOTAL} in transactions`, "IPO strategy & execution", "Divestiture planning", "Strategic partnerships"]
     },
     {
       icon: Globe,
@@ -39,7 +42,7 @@ const Strategy: React.FC = () => {
   ];
 
   const keyMetrics = [
-    { label: "Strategic Transactions", value: "$10.8B+", description: "Total value led" },
+    { label: "Strategic Transactions", value: DEAL_TOTAL, description: "Total value led" },
     { label: "Companies Transformed", value: "4+", description: "Strategic initiatives" },
     { label: "Market Expansions", value: "5+", description: "Successful entries" },
     { label: "Performance Improvements", value: "300%+", description: "Average growth" }
@@ -49,7 +52,7 @@ const Strategy: React.FC = () => {
     <div className="min-h-screen bg-ink-900 text-white">
       <Seo
         title="Fintech Strategy & M&A Advisor in Atlanta | Michael Kaminski"
-        description="Fintech strategy, corporate development and M&A advisory from an Atlanta operator who has led $10.8B+ in transactions across IPOs, divestitures and share repurchases — and can execute the finance and the technology behind the plan."
+        description="Fintech strategy, corporate development and M&A advisory from an Atlanta operator who has led $11.1B+ in transactions across IPOs, divestitures and share repurchases — and can execute the finance and the technology behind the plan."
         canonicalPath="/strategy"
         breadcrumbName="Fintech Strategy & M&A"
       />
@@ -64,10 +67,10 @@ const Strategy: React.FC = () => {
           className="text-center mb-16"
         >
           <p className="text-lg text-accent font-semibold mb-4">Michael Kaminski is an Atlanta-based strategy and M&amp;A advisor for fintech — pairing 20+ years of corporate development with the finance and engineering depth to actually execute the plan.</p>
-          <h2 className="display text-5xl text-white mb-6">Fintech Strategy &amp; M&amp;A Advisor</h2>
+          <h1 className="display text-5xl text-white mb-6">Pricing the system, and shipping it</h1>
           <p className="text-xl text-white/60 max-w-4xl mx-auto leading-relaxed">
             Strategy, corporate development and M&amp;A for fintech, payments and PE-backed
-            companies. Proven across $10.8B+ in transactions — IPOs, divestitures and
+            companies. Proven across {DEAL_TOTAL} in transactions — IPOs, divestitures and
             capital-return programs — with a rare ability to carry a plan from the boardroom
             through the financial model and into the product.
           </p>

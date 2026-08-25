@@ -28,4 +28,15 @@ article, always:
    sibling branch's article: recover it and renumber, never drop it to resolve a collision.
 6. **Rebuild `build/` before committing.** The compiled bundle is checked in, so an article added
    to `src/` without a `npm run build` leaves the committed artifact contradicting the source.
-7. Never mention Stellantis or SFS in any article, and anonymize any non-public or deal data.
+7. Never mention Stellantis or SFS in **article body copy or in project/case-study
+   narrative** — describe the employer as "a regulated consumer lender" — and anonymize any
+   non-public or deal data. The employer name may still appear where it is load-bearing for
+   entity resolution and already public: `Person.worksFor` in `public/index.html`,
+   `public/llms.txt`, and the `src/data/experience.ts` timeline. (This used to read "in any
+   article", which left it unclear whether the JSON-LD was in scope; it is not.)
+
+8. **Every route must be prerendered.** `scripts/routes.js` is the single source of truth
+   for non-article routes and is consumed by both `scripts/prerender.js` and
+   `scripts/generate-sitemap.js`. Adding a route to one and not the other is what caused
+   eleven URLs to serve the home page's HTML to crawlers. `scripts/verify-prerender.js`
+   runs after every build and will say so if it happens again — read its output.

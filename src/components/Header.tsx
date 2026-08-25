@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Menu, X, Calendar, Linkedin, Github, Sparkles } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { track } from '@vercel/analytics';
+
+const CALENDLY_URL = 'https://calendly.com/kaminski1337/15min';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,16 +31,17 @@ const Header: React.FC = () => {
   ];
 
   const additionalNavItems: { name: string; href: string }[] = [
+    { name: 'Projects', href: '/projects' },
     { name: 'Websites', href: '/websites' },
     { name: 'Products', href: '/products' },
     { name: 'Writing', href: '/writing' },
     { name: 'Clips', href: '/clips' },
     { name: 'Changelog', href: '/changelog' },
-    { name: 'Client Outcomes', href: '/client-outcomes' },
   ];
 
   const handleScheduleCall = () => {
-    window.open('https://calendly.com/kaminski1337/15min', '_blank');
+    // The anchor does the navigating now — this only records the click.
+    track('Calendar Link Clicked', { source: 'Header' });
   };
 
   return (
@@ -113,7 +117,10 @@ const Header: React.FC = () => {
             ))}
             
             {/* Enhanced Book a Call Button */}
-            <motion.button
+            <motion.a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={handleScheduleCall}
               className="relative flex flex-shrink-0 items-center whitespace-nowrap space-x-2 px-5 py-2.5 bg-accent text-ink-900 rounded-full font-bold shadow-lg hover:brightness-90 transition-all duration-200 overflow-hidden group"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -146,7 +153,7 @@ const Header: React.FC = () => {
               >
                 <Sparkles size={14} />
               </motion.div>
-            </motion.button>
+            </motion.a>
           </nav>
 
           {/* Mobile menu button */}
@@ -217,7 +224,10 @@ const Header: React.FC = () => {
             ))}
             
             {/* Mobile Book a Call Button */}
-            <motion.button
+            <motion.a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => {
                 handleScheduleCall();
                 setIsMenuOpen(false);
@@ -235,7 +245,7 @@ const Header: React.FC = () => {
               <Calendar size={16} />
               <span>Book a Call</span>
               <Sparkles size={14} />
-            </motion.button>
+            </motion.a>
           </motion.div>
         </motion.div>
       </div>
