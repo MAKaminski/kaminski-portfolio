@@ -34,6 +34,11 @@ const Projects = lazy(() => import('./pages/Projects'));
 const CaseStudy = lazy(() => import('./pages/CaseStudy'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const About = lazy(() => import('./pages/About'));
+// Pulls in src/data/articles.ts, which gzips to ~36 kB of essay bodies and grows
+// daily. Eagerly importing it put all of that in main.js — a bundle shared by
+// every route — to render one line of text. Lazy, with its own boundary so the
+// strip never blocks the hero behind the route-level fallback.
+const FeaturedArticle = lazy(() => import('./components/FeaturedArticle'));
 
 const HOME_TITLE = 'Michael Kaminski — AI Agents & Agent Infrastructure | Atlanta & NYC';
 const HOME_DESCRIPTION =
@@ -133,6 +138,12 @@ function App() {
                     <main>
                       {/* Recruiter-first order: lead with proof, close with fit/contact */}
                       <Hero />
+                      {/* Height-matched placeholder: the real strip measures ~80px at desktop and
+                          ~196px stacked at 375px. Approximate, since it grows with title length,
+                          but it keeps the lazy chunk from shifting the page under the hero. */}
+                      <Suspense fallback={<div className="border-y border-white/10 bg-white/[0.03] py-4"><div className="h-[132px] sm:h-12" /></div>}>
+                        <FeaturedArticle />
+                      </Suspense>
                       <Transactions />
                       <Highlights />
                       <Experience />

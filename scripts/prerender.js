@@ -345,6 +345,8 @@ the combination is that I can price a system and I can ship it: before the agent
 spent years in corporate finance and strategy, and I have authored Terraform modules with
 multi-environment remote state and operated production Kubernetes clusters.</p>
 
+
+<p><strong>Latest:</strong> <a href="/writing/${esc(articles[0].slug)}">${esc(articles[0].title)}</a> — ${esc(articles[0].description)}</p>
 <h2>About</h2>
 ${about.map((para) => `<p>${esc(para)}</p>`).join('')}
 <p><a href="/about">More about how I got here, and the full role history</a></p>
