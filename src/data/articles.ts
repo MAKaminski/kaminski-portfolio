@@ -18,6 +18,165 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'human-approval-gates-for-irreversible-agent-actions',
+    title: "Human Approval Gates for Irreversible Agent Actions",
+    description:
+      "I run 47 agent skills against my own accounts. Two of them stop at the moment of action and wait for me. The gate that protects you is not the one that fires on every run — it is capability removal, which costs zero human attention, and kill gates, which cost nothing until they fire. The axis is reversibility, not importance: a cancelled tutoring appointment gets no gate and a $60 order does. Three of the 47 honor the kill switch, which is the part I got wrong.",
+    date: '2026-08-30',
+    readMinutes: 7,
+    series: 'Field Notes',
+    body: `
+<p>Most of what gets called a human approval gate is latency wearing a safety vest.</p>
+
+<p>I run 47 agent skills against my own accounts — brokerage, bank, email, calendar, four
+publishing platforms, a booking system, a database. Two of them stop at the moment of action and
+wait for me. The other 45 do not, and that is deliberate.</p>
+
+<p>The reason is arithmetic. A gate that fires on every run is not a safety mechanism. It is a
+queue, and I am the only worker on it.</p>
+
+<h2>Approve-everything breaks at the second decimal place</h2>
+
+<p>My publishing target is 21 posts a week across five platforms that carry
+<code>publish: true</code>. Add three weekday engagement slots — 15 — and ten job applications on
+each weekday the apply job runs, which is 50.</p>
+
+<p>That is 86 outward actions in a normal week, before anything ad hoc. Every one of them is
+visible to somebody who is not me.</p>
+
+<p>If each needs a human yes, the human is the throughput ceiling. And a person clearing 86
+approvals a week is not reading them by Wednesday.</p>
+
+<p>That is the failure nobody writes down. Approval theater is worse than no gate, because it
+converts a decision into a signature and moves the responsibility onto the signature.</p>
+
+<h2>Three mechanisms, ranked by human attention per unit of protection</h2>
+
+<table>
+  <thead>
+    <tr><th>Mechanism</th><th>Attention per run</th><th>Holds while I am asleep</th><th>Count in my fleet</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Capability removal</td><td>zero</td><td>yes</td><td>19 of 47</td></tr>
+    <tr><td>Kill gate</td><td>zero until it fires, then zero</td><td>yes</td><td>6 rules, all platforms</td></tr>
+    <tr><td>Human approval gate</td><td>one decision, every time</td><td>no</td><td>2 of 47</td></tr>
+  </tbody>
+</table>
+
+<p>The ordering is the whole argument. Approval is the most expensive tool in the set and the only
+one that stops working the moment I am unavailable, so it goes last and it goes narrow.</p>
+
+<h2>1. Remove the capability. You cannot approve what the agent cannot do.</h2>
+
+<p>My brokerage reader is one sentence long at the top: read-only, never trades or moves money.
+The margin-eligibility skill that sizes a levered book is advisory only and never transmits
+orders. The network-map crawler never sends mail, never writes to a CRM, and never moves money.</p>
+
+<p>Nineteen of the 47 skills carry a line like that. It is not a gate. It is a missing verb.</p>
+
+<p>The cost per run is zero, and it is the only mechanism on the list that is still holding at
+3 a.m. Every one of those skills runs on a schedule, and most of those schedules fire while I am
+asleep. An approval gate on a scheduled job is a job that does not run.</p>
+
+<h2>2. Kill gates, not pause gates</h2>
+
+<p>The publishing config says it plainly: no human approval step per post. Then it lists six rules
+that <em>do not pause for a human — they kill the item</em>.</p>
+
+<p>Never invent a fact. Never publish an employer-internal metric. Score at least 24 of 30 on the
+rubric with no dimension at 2 or below. No topic repeat inside 90 days. Clean secret scan before
+any public push. Read back what was posted before reporting success.</p>
+
+<p>A pause gate costs attention twice — once when it fires and once when it does not, because I
+still have to look to find out which. A kill gate costs nothing until it fires, and when it fires
+there is nothing to review. The item is gone, not waiting.</p>
+
+<p>The cost, named: kill gates throw away good work. A draft that scores 23 dies, and some of
+those were fine. I pay it because a skipped slot beats a bad post, and because the alternative is
+a review queue I would stop reading by Thursday and then trust anyway.</p>
+
+<h2>3. Reserve approval for the irreversible, not the important</h2>
+
+<p>Two skills stop and wait. The first drafts an email to my CPA and will not send it — it
+requires two independent conditions before it will even draft, then shows me the draft and waits.
+The second does a full shopping run: finds the product, logs in, fills the cart, fills the
+shipping form, and stops one click short. Its spec says it never clicks the final purchase button
+and everything else is fair game.</p>
+
+<p>Now the contrast that makes the rule legible. A third skill cancels my son's tutoring
+appointments, and its spec says the opposite: do not stop at the confirmation, cancellations are
+intentional, finish it.</p>
+
+<p>Cancelling a session matters more to his week than a $60 order matters to mine. It gets no
+gate. The order gets one.</p>
+
+<p>The variable is not importance. It is whether undo exists and what undo costs. A rebook is
+four clicks in the same system. A purchase is a chargeback, a return window, and an email to a
+stranger.</p>
+
+<h2>Blast radius is the axis, and it is a function, not a label</h2>
+
+<p>The clearest version of this in my fleet is the tuning job that edits my own instruction files
+every day. Low-risk edits — tone, formatting — auto-apply. High-risk edits — new sections, new
+behavior rules — get proposed and wait.</p>
+
+<p>Same skill, same file, two different defaults, chosen per edit. That is the general form: gate
+on the blast radius of the action, not on the name of the tool.</p>
+
+<p>It also stacks with a gate I have <a href="/writing/statistical-gating-for-agent-instruction-changes">written
+up separately</a>: no edit stays without a statistically significant improvement — Welch's t-test,
+p &lt; 0.10, at least 5% — against a 14-day rolling baseline. Approval decides whether the change
+lands. Statistics decide whether it survives.</p>
+
+<h2>The alternative I keep getting offered, and why I do not take it</h2>
+
+<p>The standard counter is: skip the gates, log everything, review after. Cheap to build, nothing
+blocks, and you keep a full audit trail.</p>
+
+<p>It works for reversible actions and it is strictly worse for the rest. A log tells you an
+irreversible thing happened. It does not un-happen it.</p>
+
+<p>The two skills I gate cost me maybe four decisions a month between them. Reviewing a log of
+86 weekly actions well enough to catch the one bad send costs more than that every Monday, and it
+catches it after the send.</p>
+
+<p>Logging is how you learn what to gate. It is not the gate.</p>
+
+<h2>Where mine is broken</h2>
+
+<p>There is a shared kill switch. Three skills of the 47 check it.</p>
+
+<p>One <code>touch state/STOP</code> should halt the fleet. It halts the job applier, the cost-out
+scan, and the CPA drafter. That is it.</p>
+
+<p>Of the six skills that take an action a third party can see — posting, emailing, applying,
+booking, writing to a database — five never look at that file. The one that posts to three social
+accounts has no kill switch at all.</p>
+
+<p>And the classification lives in prose. Twenty-eight of the 47 carry no restriction line of any
+kind. Nothing enforces the taxonomy. It is a sentence I wrote in a markdown file on the day I
+built the skill.</p>
+
+<p>The failure mode is not dramatic, which is why it will happen. A skill written read-only on a
+Tuesday grows a write path on a Thursday. The sentence at the top still says read-only. It is
+now false, and nothing in the system notices.</p>
+
+<h2>What I would build next</h2>
+
+<p>Not more approval. Make the class machine-checkable.</p>
+
+<p>Declare the capability in frontmatter. Have the runner refuse an outbound write from a skill
+that declared itself read-only. Move the kill-switch check out of 47 individual good intentions
+and into the thing that executes them.</p>
+
+<p>That moves the gate from what I wrote to what runs. Until then the honest summary is that I
+have real teeth on about 40% of the fleet and prose everywhere else, and I know which 40%.</p>
+
+<p>If you are gating agent actions at your shop, I would trade notes on where you drew the
+reversibility line — and on what it cost you the first time you drew it wrong.</p>
+`,
+  },
+  {
     slug: 'one-knowledge-base-four-surfaces',
     title: "One Knowledge Base, Four Surfaces: Pages, Graph, Search Index, and MCP",
     description:
