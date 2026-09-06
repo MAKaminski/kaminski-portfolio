@@ -18,6 +18,93 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'designing-tools-an-agent-can-actually-call',
+    title: "Designing Tools an Agent Can Actually Call",
+    description:
+      "The brokerage MCP server connected to my agent exposes 34 tools and not one takes an account identifier, so it can never answer a question across my three accounts. The 228-line read-only script I wrote around it taught five rules: the variable the user changes is an argument, enumerate before you fetch, return the decision variable, make read-only structural, and keep retry and fallback inside the tool. The admitted cost: the tool has never completed a pull, because I designed it for auth a scheduler cannot satisfy.",
+    date: '2026-09-06',
+    readMinutes: 7,
+    series: 'Field Notes',
+    body: `
+<p>A tool that hides the one variable the user actually changes is not a tool. It is a demo.</p>
+
+<p>The brokerage MCP server connected to my agent exposes 34 tools. Twenty of them are reads: positions, balances, summary, trades, price history, option chains. Not one of the 34 takes an account identifier. The three that matter most — <code>get_account_positions</code>, <code>get_account_summary</code>, <code>get_account_balances</code> — have an empty parameter schema. No arguments at all.</p>
+
+<p>I hold three accounts under one login: a taxable fund, a Roth IRA, and a Traditional IRA. The server is bound to whichever one is active. Every question I ask across accounts — total cash, which positions can carry a covered call, how the IRAs sit relative to the fund — is a question the tool cannot answer, and no prompt fixes that.</p>
+
+<p>So I wrote a 228-line Python script that calls the broker's Client Portal API directly, and I learned more about tool design from the workaround than from the thing it replaced.</p>
+
+<h2>The parameter the user varies must be an argument</h2>
+
+<p>The claim is simple: if the person asking varies X between calls, X is a parameter. Not a setting, not session state, not a login. A parameter the model can see and fill.</p>
+
+<p>The MCP server's designers made the account a session property. That is a reasonable choice for a human at a terminal who logs into one account and stays there. It is the wrong choice for an agent, because the agent's entire job is to answer the question "across all of them."</p>
+
+<p>The Client Portal API gets this right, and the shape is worth copying. <code>GET /portfolio/accounts</code> enumerates every account under the login. Then <code>GET /portfolio/{id}/summary</code>, <code>/ledger</code>, and <code>/positions/{page}</code> take the id explicitly. The script loops. Three accounts, one session, one JSON file at the end.</p>
+
+<p>The API also enforces the order — you must call <code>/portfolio/accounts</code> before any <code>/portfolio/{id}/*</code> call or you get a 401 or a 500. That is a second lesson hiding in the first: a tool that needs a prerequisite call should say so in its own error, and the wrapper should just do it. Mine does.</p>
+
+<h2>Normalize into the shape the decision needs, not the shape the API returns</h2>
+
+<p>The raw position record from the broker has a dozen fields with three different names for the ticker depending on the asset class. The consumer of my snapshot — a covered-call screen — needs exactly one derived number: how many 100-share lots does this position hold.</p>
+
+<p>So the script computes it at pull time. For any stock position with quantity above zero, <code>covered_call_lots = quantity // 100</code>, and <code>covered_call_candidate</code> is true when that is at least one. The agent reading the file never does the division.</p>
+
+<p>That is the general rule. Pre-compute the fields the downstream decision keys on, name them after the decision, and leave the raw fields alongside for audit. An agent that has to derive the decision variable from six raw ones will get it wrong about as often as a person doing it in their head.</p>
+
+<p>The honest caveat is in the code as a comment: the lot count is quantity-based only. It does not verify the symbol has a listed option chain. A position in something without options will show as a candidate. That check is on the enhancement list, not in the script.</p>
+
+<h2>Read-only is a property of the code, not the prompt</h2>
+
+<p>The MCP server ships nine write tools alongside its reads: create, update, and delete for alerts, watchlists, and order instructions. <code>create_order_instruction</code> is right there in the list.</p>
+
+<p>My standing rule is that nothing I automate places a trade or moves money. I could enforce that in the agent's instructions. I do not trust that, and I have <a href="/writing/human-approval-gates-for-irreversible-agent-actions">written up why</a>: a rule in prose is a sentence that stops being true the day someone adds a write path.</p>
+
+<p>The script enforces it structurally. It calls GET endpoints only. The order endpoints are named in the docstring as deliberately unused. There is no function in the file that can send an order, so no instruction change, no prompt injection, and no confused tool call can produce one.</p>
+
+<p>The cost is real. The moment I want the agent to, say, set a price alert, I have to write that path on purpose and put a gate on it. That friction is the point. It is a lot cheaper than the alternative.</p>
+
+<h2>Put the fallback inside the tool</h2>
+
+<p>The live path depends on a local gateway process on <code>https://localhost:5000</code> with a self-signed certificate and a session that expires. The script POSTs <code>/tickle</code> on every run to keep it alive, but it still fails.</p>
+
+<p>When it does, the tool handles it, not the agent. Five attempts with capped exponential backoff — 2, 4, 8, and 15 seconds between them — and then it fails over to a second data path entirely: the broker's Flex Web Service. That is a token-authenticated REST call that returns an XML statement, polled up to ten times at five-second intervals while the report generates.</p>
+
+<p>The fallback is 152 lines and gives end-of-day data instead of live. The output file carries a <code>source</code> field, <code>cpapi_live</code> or <code>flex_backup</code>, so the consumer knows which it got.</p>
+
+<p>The reason this belongs in the tool is throughput. An agent that has to notice a failure, reason about retries, and pick a backup path burns a full model turn on plumbing, and it will make a different choice each time. A function makes the same choice every time and logs it.</p>
+
+<h2>Where it is still broken</h2>
+
+<p>The script was written on 2026-06-19. As of 2026-09-06 the snapshot file it is supposed to write does not exist, and the <code>data/</code> directory has never been created. It has not completed a single pull.</p>
+
+<p>The reason is authentication. The gateway needs a browser login with two-factor, and the session dies after inactivity. A scheduled job cannot satisfy that, and I have not sat down and done it by hand either. The Flex fallback would work headless — it needs only a token — but its token and query id are still empty strings in the example config.</p>
+
+<p>So the honest state is: I designed the tool correctly and then did not finish the one step that lets it run without me. The right fix is the boring one. Fill in the Flex credentials, make it the primary path for the daily pull, and reserve the live gateway for when I am sitting there anyway.</p>
+
+<p>That inverts the original design — live first, batch as backup — and it is the correct inversion for an agent. The agent that consumes this runs at 9 a.m. on weekdays, on a schedule. It does not need intraday. It needs a path that never asks a human for a second factor.</p>
+
+<h2>The five rules, compressed</h2>
+
+<table>
+  <thead>
+    <tr><th>Rule</th><th>What it looked like here</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>The variable the user changes is an argument</td><td>Account id on every portfolio call, not session state</td></tr>
+    <tr><td>Enumerate before you fetch</td><td><code>/portfolio/accounts</code> first, then loop</td></tr>
+    <tr><td>Return the decision variable, not the raw record</td><td><code>covered_call_lots</code> computed at pull time</td></tr>
+    <tr><td>Read-only is structural</td><td>No order function exists in the file</td></tr>
+    <tr><td>Retry and fallback live in the tool</td><td>5 tries, then Flex, source flagged in output</td></tr>
+  </tbody>
+</table>
+
+<p>None of these are novel. All five were violated by a shipped MCP server from a serious vendor, and I violated the sixth — design for the auth the scheduler actually has — myself.</p>
+
+<p>If you are wrapping a vendor API for an agent and the vendor's tool list looks complete but your agent keeps failing on the same question, check the parameter schemas before you check the prompt. The missing argument is usually the whole bug.</p>
+`,
+  },
+  {
     slug: 'human-approval-gates-for-irreversible-agent-actions',
     title: "Human Approval Gates for Irreversible Agent Actions",
     description:
