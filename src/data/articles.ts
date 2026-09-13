@@ -18,6 +18,98 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'prompt-cache-floors-are-per-model',
+    title: "Prompt Cache Floors Are Per-Model, and the Cheap Model Has the Highest One",
+    description:
+      "Claude's minimum cacheable prompt is 512 tokens on Opus 5, 1,024 on Sonnet 5, and 4,096 on Haiku 4.5, so the cheapest model is the hardest to cache and a miss bills silently at base rate. I measured the 53 SKILL.md files this machine loads: 53 clear the Opus floor, 44 clear Sonnet, 12 clear Haiku. On the median file, Sonnet 5 with caching is 57% cheaper on input than Haiku 4.5 without it, and the two cross at a 65% hit rate. The admitted cost: a harness I don't own sends the request, so file length is the only lever I hold.",
+    date: '2026-09-13',
+    readMinutes: 6,
+    series: 'Field Notes',
+    body: `
+<p>Fifty-three skill files load on this machine. All 53 clear Claude's prompt-cache floor on Opus 5. Twelve clear it on Haiku 4.5. Same files, same flag. Nothing changed but the model on the other end.</p>
+
+<p>The conclusion first: routing a workload to the cheapest model can route it out of the cache, and when that happens nothing errors. The request is processed uncached and billed at the base rate. If you run a model router, the cache floor of the cheapest model you ever route to is a design input, not a footnote.</p>
+
+<h2>The floors are per-model, and they run backwards from price</h2>
+
+<p>Anthropic's prompt-caching documentation, checked 2026-09-13, lists the minimum cacheable prompt length by model: 512 tokens for Opus 5, 1,024 for Sonnet 5, 4,096 for Haiku 4.5.</p>
+
+<p>Read that as a ladder. The model that bills $5 per million input tokens caches anything over 512. The model that bills $1 needs eight times the prefix before it will cache at all.</p>
+
+<p>The documentation is explicit about what happens below the floor: the request "will be processed without caching, and no error is returned." The only signal is in the response. If <code>cache_creation_input_tokens</code> and <code>cache_read_input_tokens</code> both come back 0, nothing cached.</p>
+
+<h2>What 53 real files look like against the floors</h2>
+
+<p>A skill file is a stable instruction block that gets resent on every call. It is the textbook thing to cache. So I measured every <code>SKILL.md</code> that Claude Code and Cowork load on this machine, 5 of mine and 48 from installed plugins, against the three floors.</p>
+
+<p>The measurement is a 22-line shell script: <code>find</code>, <code>wc -c</code>, <code>awk</code>. It counts characters and converts at 3.8 characters per token, which puts the thresholds at 1,946, 3,891, and 15,565 characters.</p>
+
+<p>Results, re-run 2026-09-13:</p>
+
+<ul>
+<li>Opus 5, 512-token floor: 53 of 53 clear. 100%.</li>
+<li>Sonnet 5, 1,024-token floor: 44 of 53. 83%.</li>
+<li>Haiku 4.5, 4,096-token floor: 12 of 53. 22%.</li>
+</ul>
+
+<p>Smallest file 2,009 characters, median 8,994, largest 32,002. At the proxy rate that is roughly 530, 2,370, and 8,420 tokens. The median skill file is more than double the Sonnet floor and a little over half the Haiku floor.</p>
+
+<p>Forty-one of the 53 sit below the Haiku floor. Nine sit below Sonnet's. None sit below Opus's.</p>
+
+<p>This is not one outlier dragging the numbers. The largest file is 16 times the smallest, and the distribution itself straddles the Sonnet floor and sits under the Haiku floor. A typical skill file, written to do its job and no longer, lands in exactly the band where the cheapest model refuses to cache it.</p>
+
+<p>The character count is a proxy, and it errs in the direction I want. The real cached prefix also carries the system prompt and tool definitions, so a file that clears here clears for real. It says less about files that miss; some of those may clear once the rest of the prefix is counted. The usage fields on the response are the only real test.</p>
+
+<h2>The arithmetic on the median file</h2>
+
+<p>Take the median file, 2,367 tokens, resent on 1,000 calls. Input tokens only. Assume a 90% cache hit rate once caching is on. Prices are the published Claude API rates: base input, 5-minute cache write at 1.25x, cache read at 0.1x.</p>
+
+<ul>
+<li>Haiku 4.5, below its floor, uncached: 2.37M tokens at $1.00 per million. $2.37.</li>
+<li>Sonnet 5, cached: 10% of calls write at $2.50, 90% read at $0.20. $0.59 + $0.43 = $1.02.</li>
+<li>Opus 5, cached: writes at $6.25, reads at $0.50. $1.48 + $1.06 = $2.54.</li>
+</ul>
+
+<p>Sonnet 5 with the cache beats Haiku 4.5 without it by 57%. Opus 5 with the cache costs 7% more than Haiku without it, 17 cents on a thousand calls. On this prefix, the cheap model is not the cheap model.</p>
+
+<p>Make the hit rate the variable. Sonnet's blended input cost per million is $2.50(1 − h) + $0.20h, which is $2.50 − $2.30h. Haiku uncached is a flat $1.00. They cross at h = 0.65. Above a 65% hit rate, Sonnet 5 with caching is cheaper on input than Haiku 4.5 without it.</p>
+
+<p>Output tokens are not in this. Haiku bills $5 per million on output against Sonnet's $10, so a workload that is mostly generation tilts back toward Haiku. Skill-driven agent turns are not mostly generation. They are a long stable prefix and a short answer, which is exactly the shape the cache was built for.</p>
+
+<h2>The lever I thought I had, and the one I have</h2>
+
+<p>The next thing I checked was whether I had ever set <code>cache_control</code>. A grep across every project on this machine returns zero hits outside a vendored pip library that uses the same words for HTTP headers.</p>
+
+<p>Then the reason. Zero files here import the Anthropic SDK or call the endpoint. These prefixes are assembled and sent by a harness I do not own. Claude Code and Cowork build the system prompt, load the skills, and send the request. Whether and where they set a breakpoint is their decision, and I never see the request.</p>
+
+<p>So the flag is not my lever. The only lever I hold is the length of the file, and whether the call lands on a model whose floor that length clears.</p>
+
+<h2>Two options, and what each costs</h2>
+
+<p>Option one: pad every skill file to 4,096 tokens so it caches on every model. The median file needs 1,729 more tokens, a 73% increase. Padded and cached on Haiku at a 90% hit rate, 1,000 calls cost 4.10M tokens at a $0.215 blend, or $0.88. That is the cheapest line in this essay and the one I dislike most. I would be lengthening an instruction block to hit a billing threshold, and every one of those 1,729 tokens sits in the context window on every call.</p>
+
+<p>Option two: accept that cheap-model routing and prompt caching are two optimizations that fight, and keep skill-heavy turns off Haiku. That costs the output-price delta, and it does nothing for the nine files under the Sonnet floor.</p>
+
+<p>I have not settled this, and I do not fully control it. The harness picks the model too. What I can say is that the decision belongs at the router, and the floor table belongs in the router's config, not in a doc somebody read once.</p>
+
+<h2>If you own the request</h2>
+
+<p>If your code calls the API directly, you have levers I do not. Three rules fall out of the numbers above.</p>
+
+<p>First, size the shared prefix to the floor of the cheapest model you will ever route it to, or do not route it there. For Haiku 4.5 the number to remember is 4,096.</p>
+
+<p>Second, treat the usage fields as the test. A cache miss is silent, so log <code>cache_read_input_tokens</code> per call and alert when it is zero on a request you expected to hit.</p>
+
+<p>Third, run the crossover before you pick the model. At a 65% hit rate Sonnet 5 beats Haiku 4.5 on input. Your hit rate is a property of your traffic, and nobody publishes theirs. Measure it, because it picks the model for you.</p>
+
+<h2>The cost</h2>
+
+<p>I only know any of this because I went looking. For as long as these 53 files have been loaded, some fraction of calls has run below a floor and billed at base rate. I cannot tell you the fraction, because the harness owns the request and I never logged the usage fields.</p>
+
+<p>The failure mode is not an error. It is a number that never appears.</p>
+`,
+  },
+  {
     slug: 'designing-tools-an-agent-can-actually-call',
     title: "Designing Tools an Agent Can Actually Call",
     description:
