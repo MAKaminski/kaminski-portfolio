@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Linkedin, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { referrals } from '../data/referrals';
+import { PROFILES } from '../data/profiles';
 
 
 const ReferralCarousel: React.FC = () => {
@@ -170,7 +171,7 @@ const ReferralCarousel: React.FC = () => {
               Schedule a Consultation
             </a>
             <a
-              href="https://www.linkedin.com/in/michaelxaxkaminski"
+              href={PROFILES.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-white/25 text-white transition-all duration-200 hover:bg-white hover:text-ink-900 font-medium"

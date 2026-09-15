@@ -46,7 +46,11 @@ const PHONE_HUMAN = '(404) 838-8613';
 const LINKEDIN = 'https://www.linkedin.com/in/michaelxaxkaminski';
 const GITHUB = 'https://github.com/MAKaminski';
 const DEV = 'https://dev.to/makaminski1337';
+const X = 'https://x.com/EBITDA_Engineer';
 const RESUME = '/docs/Kaminski Resume.pdf';
+// Same file src/components/Hero.tsx renders, so the crawler image and the hydrated
+// image are one download instead of two.
+const HERO_PORTRAIT = '/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c-880x1040.webp';
 
 const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -185,16 +189,21 @@ function rewriteHead(html, { title, description, canonical, type, jsonLd, image,
   out = setTag(out, /<meta name="description" content="[^"]*"\s*\/?>/, `<meta name="description" content="${esc(description)}">`);
   out = setTag(out, /<meta property="og:title" content="[^"]*"\s*\/?>/, `<meta property="og:title" content="${esc(title)}">`);
   out = setTag(out, /<meta property="og:description" content="[^"]*"\s*\/?>/, `<meta property="og:description" content="${esc(description)}">`);
-  out = setTag(out, /<meta property="og:url" content="[^"]*"\s*\/?>/, `<meta property="og:url" content="${esc(canonical)}">`);
+  out = setTag(out, /<meta property="og:url" content="[^"]*"\s*\/?>/, `<meta property="og:url" content="${esc(canonical || ORIGIN + '/')}">`);
   out = setTag(out, /<meta property="og:type" content="[^"]*"\s*\/?>/, `<meta property="og:type" content="${esc(type)}">`);
   out = setTag(out, /<meta property="twitter:title" content="[^"]*"\s*\/?>/, `<meta property="twitter:title" content="${esc(title)}">`);
   out = setTag(out, /<meta property="twitter:description" content="[^"]*"\s*\/?>/, `<meta property="twitter:description" content="${esc(description)}">`);
-  out = setTag(out, /<meta property="twitter:url" content="[^"]*"\s*\/?>/, `<meta property="twitter:url" content="${esc(canonical)}">`);
+  out = setTag(out, /<meta property="twitter:url" content="[^"]*"\s*\/?>/, `<meta property="twitter:url" content="${esc(canonical || ORIGIN + '/')}">`);
   if (noindex) {
     out = setTag(out, /<meta name="robots" content="[^"]*"\s*\/?>/, `<meta name="robots" content="noindex, follow">`);
   }
 
-  const inject = [`<link rel="canonical" href="${esc(canonical)}">`];
+  const inject = canonical ? [`<link rel="canonical" href="${esc(canonical)}">`] : [];
+  // The hero portrait is the mobile LCP element on the home page only. Preload it
+  // here rather than in public/index.html, which is the shell for every route.
+  if (isHome) {
+    inject.push(`<link rel="preload" as="image" type="image/webp" href="${esc(HERO_PORTRAIT)}">`);
+  }
   const blocks = [];
   if (crumbs && crumbs.length) blocks.push(breadcrumbLd(crumbs));
   if (Array.isArray(jsonLd)) blocks.push(...jsonLd);
@@ -252,7 +261,8 @@ function ctaBlock() {
 <a href="tel:${PHONE}">${PHONE_HUMAN}</a> ·
 <a href="${LINKEDIN}">LinkedIn</a> ·
 <a href="${GITHUB}">GitHub</a> ·
-<a href="${DEV}">DEV</a></p>`;
+<a href="${DEV}">DEV</a> ·
+<a href="${X}">X</a></p>`;
 }
 
 function img(src, alt, width, height, eager) {
@@ -328,7 +338,7 @@ ${esc(j.description)}${j.exit ? `<br><em>${esc(j.exit)}</em>` : ''}
     '/',
     `
 <h1>Michael Kaminski — I build AI agents that run in production</h1>
-${img('/michael-kaminski.jpg', 'Michael Kaminski', 400, 400, true)}
+${img(HERO_PORTRAIT, 'Michael Kaminski', 440, 520, true)}
 <p>Agent infrastructure, MCP servers, and eval harnesses inside a regulated lender.
 Python and TypeScript. Atlanta, relocating to New York City.</p>
 
@@ -636,9 +646,9 @@ function main() {
     write(
       '/',
       {
-        title: 'Michael Kaminski — AI Agents & Agent Infrastructure | Atlanta & NYC',
+        title: 'Michael Kaminski — AI Agents in Production | Atlanta',
         description:
-          'Michael Kaminski builds AI agents that run in production. Took an agent capability from prototype through security, legal, and compliance review inside a regulated lender. Custom MCP servers, multi-agent orchestration, and eval harnesses in Python and TypeScript.',
+          'Michael Kaminski builds AI agents that run in production. Took one from prototype through security, legal, and compliance review at a regulated lender.',
         type: 'profile',
         crumbs: [{ name: 'Home', path: '/' }],
         jsonLd: reviewLd,
@@ -826,7 +836,8 @@ with its date, counterparty and instrument on the <a href="/">home page</a>.</p>
       const canonical = `${ORIGIN}/writing/${a.slug}`;
       const jsonLd = {
         '@context': 'https://schema.org',
-        '@type': 'Article',
+        '@type': 'BlogPosting',
+        isPartOf: { '@type': 'Blog', '@id': `${ORIGIN}/writing#blog` },
         headline: a.title,
         description: a.description,
         datePublished: a.date,
@@ -890,6 +901,7 @@ with its date, counterparty and instrument on the <a href="/">home page</a>.</p>
           {
             '@context': 'https://schema.org',
             '@type': 'Blog',
+            '@id': `${ORIGIN}/writing#blog`,
             name: 'Writing — Michael Kaminski',
             description: 'Field notes on agent infrastructure, evals, and shipping AI agents into production.',
             url: `${ORIGIN}/writing`,
@@ -1069,7 +1081,9 @@ ${entries
       rewriteHead(shell, {
         title: 'Not found | Michael Kaminski',
         description: 'That page does not exist.',
-        canonical: `${ORIGIN}/`,
+        // No canonical: a noindex 404 that canonicalizes to the home page tells
+        // Google two contradictory things about one URL.
+        canonical: null,
         type: 'website',
         noindex: true,
       }),

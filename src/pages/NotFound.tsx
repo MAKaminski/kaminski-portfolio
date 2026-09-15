@@ -17,7 +17,7 @@ const NotFound: React.FC = () => (
     <Seo
       title="Not found | Michael Kaminski"
       description="That page does not exist."
-      canonicalPath="/"
+      canonicalPath={null}
       noindex
     />
     <Header />

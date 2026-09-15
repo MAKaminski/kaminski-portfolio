@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { transactionTotals } from '../data/transactions';
 import { Download, Clock, ArrowUpRight, Linkedin, Github, MessagesSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { track } from '@vercel/analytics';
+import { track } from '../utils/track';
 import { useTheme } from '../App';
 import { Role } from '../App';
 import Marquee from './Marquee';
+import { PROFILES } from '../data/profiles';
 import CountUp from './CountUp';
 import SplitReveal from './SplitReveal';
 import Magnetic from './Magnetic';
-import DigitalTwin from './DigitalTwin';
+// The twin (framer-motion panel + voice loop + audio APIs) is ~25 KB of source that
+// nobody needs until they click. Its own Suspense boundary matters: without one the
+// first render would suspend up to App's RouteFallback and paint "Loading" instead
+// of the hero.
+const DigitalTwin = lazy(() => import('./DigitalTwin'));
 
 const RILLA_EASE = [0.445, 0.05, 0.55, 0.95] as const;
+
+/** 2x the 440x520 layout box. Preloaded by scripts/prerender.js on the home shell only. */
+export const HERO_PORTRAIT = '/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c-880x1040.webp';
 
 const Hero: React.FC = () => {
   const { setTheme, currentRole } = useTheme();
@@ -174,7 +182,7 @@ const Hero: React.FC = () => {
               </Magnetic>
               <div className="flex items-center gap-2 pl-1">
                 <Magnetic strength={0.5}>
-                  <a href="https://www.linkedin.com/in/michaelxaxkaminski/" target="_blank" rel="noopener noreferrer"
+                  <a href={PROFILES.linkedin} target="_blank" rel="noopener noreferrer"
                      className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white/80 transition hover:border-accent hover:text-accent" aria-label="LinkedIn">
                     <Linkedin className="w-5 h-5" />
                   </a>
@@ -210,24 +218,32 @@ const Hero: React.FC = () => {
           <div className="lg:col-span-5">
             <motion.div className="relative mx-auto max-w-sm" style={{ y: yPortrait }}>
               <div className="absolute -inset-3 rounded-[26px] bg-accent/20 blur-2xl" />
-              <motion.div
-                initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
-                animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
-                transition={{ duration: 1, ease: RILLA_EASE, delay: 0.35 }}
-                className="relative"
-              >
+              {/* The portrait is the mobile LCP element. It used to be revealed with a
+                  clip-path inset that left it with zero painted area until 1.35 s after
+                  mount, which is where the 6.9 s LCP came from. An accent panel that
+                  slides off the top gives the same reveal without deferring LCP:
+                  occlusion doesn't count against paint, clipping does. */}
+              <div className="relative overflow-hidden rounded-[22px]">
                 <picture>
-                  <source srcSet="/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c.webp" type="image/webp" />
+                  <source srcSet={HERO_PORTRAIT} type="image/webp" />
                   <img
                     src="/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c.jpeg"
                     alt="Michael Kaminski"
                     width={440}
                     height={520}
                     decoding="async"
+                    {...({ fetchpriority: 'high' } as Record<string, string>)}
                     className="w-full rounded-[22px] object-cover border-4 border-accent shadow-2xl"
                   />
                 </picture>
-              </motion.div>
+                <motion.div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-accent"
+                  initial={{ y: '0%' }}
+                  animate={{ y: '-101%' }}
+                  transition={{ duration: 0.8, ease: RILLA_EASE, delay: 0.2 }}
+                />
+              </div>
               <motion.div
                 className="absolute -bottom-4 -left-4 rounded-full bg-accent px-5 py-2 text-sm font-bold text-ink-900 shadow-lg"
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -320,7 +336,11 @@ const Hero: React.FC = () => {
         />
       </div>
 
-      <DigitalTwin open={twinOpen} onClose={() => setTwinOpen(false)} />
+      {twinOpen && (
+        <Suspense fallback={null}>
+          <DigitalTwin open={twinOpen} onClose={() => setTwinOpen(false)} />
+        </Suspense>
+      )}
     </section>
   );
 };

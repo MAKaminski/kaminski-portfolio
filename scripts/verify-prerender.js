@@ -83,7 +83,9 @@ function main() {
     if (!/calendly\.com\/kaminski1337/.test(html)) {
       note(`NO CTA: ${rel} has no Calendly anchor`);
     }
-    if (!/rel="canonical"/.test(html)) {
+    // 404.html is noindex and deliberately has no canonical: pointing it at "/"
+    // told Google two contradictory things about every unknown URL.
+    if (rel !== '404.html' && !/rel="canonical"/.test(html)) {
       note(`NO CANONICAL: ${rel}`);
     }
     for (const tag of html.match(/<img [^>]*>/g) || []) {

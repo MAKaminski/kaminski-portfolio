@@ -20,8 +20,8 @@ const Writing: React.FC = () => {
         <div className="text-center mb-12">
           <h1 className="display text-4xl text-white mb-3">Field notes on <span className="accent">agent infrastructure</span></h1>
           <p className="text-lg text-white/60 max-w-2xl mx-auto">
-            Practical essays for fintech founders and operators — where PE-grade finance and hands-on
-            engineering meet.
+            Field notes from shipping AI agents inside a regulated lender — MCP servers, eval
+            harnesses, approval gates, and what compliance review actually asks for.
           </p>
         </div>
 

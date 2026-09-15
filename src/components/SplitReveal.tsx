@@ -36,9 +36,13 @@ const SplitReveal: React.FC<SplitRevealProps> = ({
         <span key={i} className="block overflow-hidden pb-[0.06em]">
           <motion.span
             className="block"
-            initial={{ y: '115%' }}
+            // Above-the-fold (`immediate`) lines are the desktop LCP candidate. Starting
+            // them fully outside the mask means zero painted text until the 0.9 s
+            // animation lands; a short rise from 35% keeps most of the glyphs painted
+            // on the first frame while keeping the motion.
+            initial={{ y: immediate ? '35%' : '115%' }}
             {...trigger}
-            transition={{ duration: 0.9, ease: RILLA_EASE, delay: delay + i * stagger }}
+            transition={{ duration: immediate ? 0.6 : 0.9, ease: RILLA_EASE, delay: delay + i * stagger }}
           >
             {line}
           </motion.span>
