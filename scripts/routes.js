@@ -11,6 +11,21 @@
 //
 // Both scripts now require this file. scripts/verify-prerender.js asserts after
 // every build that each indexable route below produced a distinct file.
+//
+// Why vercel.json uses legacy `routes` (2026-09-15)
+// -------------------------------------------------
+// Unknown URLs kept returning HTTP 200 with build/index.html after four fixes:
+//   #32 narrowed the SPA rewrite, #33 deleted public/_redirects, #34 removed the
+//   "framework" field, #35 set "framework": null. Each was a real cause; none was
+//   the last one. The fifth: @vercel/static-build still runs framework detection
+//   against package.json, sees react-scripts, and injects the Create React App
+//   preset's *builder* routes (/static cache header -> handle:filesystem ->
+//   /(.*) -> /index.html). "framework": null only stops the CLI passing a slug.
+//   Vercel merges routes per phase with user routes ahead of builder routes, so
+//   an explicit user route `{ src: "^/(.*)$", status: 404, dest: "/404.html" }`
+//   placed after `{ handle: "filesystem" }` wins. That requires the legacy
+//   `routes` form (it cannot coexist with redirects/rewrites/headers), which is
+//   why the host redirects live there too. Do not "simplify" it back.
 
 /** Routes that are prerendered AND submitted to Google. */
 const indexedRoutes = [

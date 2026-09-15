@@ -2,60 +2,15 @@
   "buildCommand": "npm run build",
   "outputDirectory": "build",
   "framework": null,
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "michaelkaminski.com"
-        }
-      ],
-      "destination": "https://www.michael-kaminski.io/$1",
-      "permanent": true
-    },
-    {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.michaelkaminski.com"
-        }
-      ],
-      "destination": "https://www.michael-kaminski.io/$1",
-      "permanent": true
-    },
-    {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "michael-kaminski.io"
-        }
-      ],
-      "destination": "https://www.michael-kaminski.io/$1",
-      "permanent": true
-    },
-    {
-      "source": "/cfo",
-      "destination": "/projects",
-      "permanent": true
-    },
-    {
-      "source": "/revenue",
-      "destination": "/projects",
-      "permanent": true
-    },
-    {
-      "source": "/client-outcomes",
-      "destination": "/projects",
-      "permanent": true
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/analytics",
-      "destination": "/index.html"
-    }
+  "routes": [
+    { "src": "^/(.*)$", "has": [{ "type": "host", "value": "^michaelkaminski\\.com$" }], "status": 308, "headers": { "Location": "https://www.michael-kaminski.io/$1" } },
+    { "src": "^/(.*)$", "has": [{ "type": "host", "value": "^www\\.michaelkaminski\\.com$" }], "status": 308, "headers": { "Location": "https://www.michael-kaminski.io/$1" } },
+    { "src": "^/(.*)$", "has": [{ "type": "host", "value": "^michael-kaminski\\.io$" }], "status": 308, "headers": { "Location": "https://www.michael-kaminski.io/$1" } },
+    { "src": "^/cfo/?$", "status": 308, "headers": { "Location": "/projects" } },
+    { "src": "^/revenue/?$", "status": 308, "headers": { "Location": "/projects" } },
+    { "src": "^/client-outcomes/?$", "status": 308, "headers": { "Location": "/projects" } },
+    { "src": "^/analytics/?$", "dest": "/index.html" },
+    { "handle": "filesystem" },
+    { "src": "^/(.*)$", "status": 404, "dest": "/404.html" }
   ]
 }
