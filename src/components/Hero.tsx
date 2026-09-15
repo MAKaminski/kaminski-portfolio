@@ -72,6 +72,9 @@ const Hero: React.FC = () => {
             src="/images/atlanta-map.svg"
             alt=""
             aria-hidden="true"
+            width={1600}
+            height={1000}
+            decoding="async"
             // Contained rather than cropped: at any larger scale the outlying stars
             // (Superior in Kennesaw, GreenSky in Sandy Springs) fall outside the hero,
             // which is the one thing this layer exists to show.

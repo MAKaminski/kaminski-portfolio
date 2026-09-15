@@ -203,6 +203,10 @@ function rewriteHead(html, { title, description, canonical, type, jsonLd, image,
   // here rather than in public/index.html, which is the shell for every route.
   if (isHome) {
     inject.push(`<link rel="preload" as="image" type="image/webp" href="${esc(HERO_PORTRAIT)}">`);
+    // The hero's Atlanta map backdrop is the largest element in the viewport, so
+    // Chrome scores it as LCP. It is only referenced from the React tree, which
+    // means without this hint it starts downloading after hydration.
+    inject.push(`<link rel="preload" as="image" type="image/svg+xml" href="/images/atlanta-map.svg">`);
   }
   const blocks = [];
   if (crumbs && crumbs.length) blocks.push(breadcrumbLd(crumbs));
