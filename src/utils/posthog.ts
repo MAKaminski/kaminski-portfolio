@@ -40,6 +40,18 @@ export const initPostHog = () => {
   else setTimeout(() => void load(), 1);
 };
 
+/**
+ * Ties the anonymous visitor to an email once they hand one over (the contact
+ * form). This is what turns pageviews into a person record in PostHog's CRM.
+ */
+export const identifyVisitor = (email: string, properties?: Record<string, unknown>) => {
+  if (!POSTHOG_KEY || !email) return;
+  const id = email.trim().toLowerCase();
+  const run = (p: PostHog) => p.identify(id, { email: id, ...properties });
+  if (client) run(client);
+  else void load().then((p) => p && run(p));
+};
+
 /** Fire-and-forget capture; queues behind the lazy import if it has not landed yet. */
 export const captureEvent = (name: string, properties?: Record<string, unknown>) => {
   if (!POSTHOG_KEY) return;

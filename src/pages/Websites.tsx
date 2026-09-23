@@ -5,12 +5,18 @@ import Seo from '../components/Seo';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { sites, type Site } from '../data/sites';
+import { StatsProvider, StatsStrip, SiteCardStats, hostKey, useCardImpression } from '../components/SiteStats';
+import { track } from '../utils/track';
 
 
 const hostOf = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
-const SiteCard: React.FC<{ site: Site; index: number }> = ({ site, index }) => (
+const SiteCard: React.FC<{ site: Site; index: number }> = ({ site, index }) => {
+  const ref = useCardImpression('Website Card Viewed', { name: site.name, host: hostKey(site.url) });
+  const onClick = () => track('Website Card Clicked', { name: site.name, host: hostKey(site.url) });
+  return (
   <motion.div
+    ref={ref}
     initial={{ opacity: 0, y: 24 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: (index % 3) * 0.08 }}
@@ -22,6 +28,7 @@ const SiteCard: React.FC<{ site: Site; index: number }> = ({ site, index }) => (
       href={site.url}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={onClick}
       className="relative block aspect-[16/10] overflow-hidden bg-ink-900"
       aria-label={`Open ${site.name} in a new tab`}
     >
@@ -60,6 +67,7 @@ const SiteCard: React.FC<{ site: Site; index: number }> = ({ site, index }) => (
           href={site.url}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={onClick}
           className="text-lg font-bold text-white transition-colors duration-200 hover:text-accent"
         >
           {site.name}
@@ -68,6 +76,7 @@ const SiteCard: React.FC<{ site: Site; index: number }> = ({ site, index }) => (
           href={site.url}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={onClick}
           className="text-white/40 transition-colors duration-200 hover:text-accent"
           aria-label={`Open ${site.name}`}
         >
@@ -78,10 +87,12 @@ const SiteCard: React.FC<{ site: Site; index: number }> = ({ site, index }) => (
         href={site.url}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={onClick}
         className="mb-3 inline-block text-xs font-medium text-accent/80 hover:text-accent"
       >
         {hostOf(site.url)}
       </a>
+      <SiteCardStats host={hostKey(site.url)} />
       <p className="mb-4 flex-1 text-sm leading-relaxed text-white/70">{site.description}</p>
       <div className="flex flex-wrap gap-2">
         {site.tags.map((tag) => (
@@ -95,7 +106,8 @@ const SiteCard: React.FC<{ site: Site; index: number }> = ({ site, index }) => (
       </div>
     </div>
   </motion.div>
-);
+  );
+};
 
 const Websites: React.FC = () => {
   const jsonLd = {
@@ -112,6 +124,7 @@ const Websites: React.FC = () => {
   };
 
   return (
+    <StatsProvider>
     <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       <Seo
         title="Websites | Michael Kaminski — Live Products & Sites"
@@ -138,6 +151,8 @@ const Websites: React.FC = () => {
             AI tooling. Tap any screenshot to open the live site.
           </p>
         </motion.div>
+
+        <StatsStrip kind="sites" hosts={sites.map((s) => hostKey(s.url))} />
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {sites.map((site, index) => (
@@ -169,6 +184,7 @@ const Websites: React.FC = () => {
       </main>
       <Footer />
     </div>
+    </StatsProvider>
   );
 };
 
