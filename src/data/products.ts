@@ -19,6 +19,22 @@ export type Product = {
 // Desktop tools and open-source utilities built by Michael Kaminski, hosted on GitHub.
 export const products: Product[] = [
   {
+    name: 'launch-template',
+    repoUrl: 'https://github.com/MAKaminski/launch-template',
+    category: 'Template · Next.js 16',
+    description:
+      'Stand up a new product-idea launch — marketing site, analytics, database, payments and booking — in under fifteen minutes, repeatedly, for many ideas in parallel. One hosting project per launch; everything underneath shared and joined by a single launch_slug. Runs with zero credentials; each unconfigured integration degrades to a no-op with one warning.',
+    tags: ['Next.js', 'PostHog', 'Supabase', 'Stripe', 'Cal.com'],
+  },
+  {
+    name: 'TM Voice',
+    repoUrl: 'https://github.com/MAKaminski/tm-voice',
+    category: 'Voice agent · Outbound calling',
+    description:
+      'An outbound calling agent for a residential maintenance contractor. Finds who approves vendors at property managers and hands the answer to a person; it does not sell, quote or book. Suppression, do-not-call, consent, line type, calling window and daily caps are decided in one database transaction before anything reaches the phone network, and consent records are never edited or deleted.',
+    tags: ['TypeScript', 'Vapi', 'Telnyx', 'Compliance'],
+  },
+  {
     name: 'MacMonitor',
     repoUrl: 'https://github.com/MAKaminski/MacMonitor',
     image: '/images/products/macmonitor.webp',

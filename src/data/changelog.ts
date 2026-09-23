@@ -1,5 +1,6 @@
 import { articles } from './articles';
 import { clips } from './clips';
+import { papers } from './papers';
 
 /**
  * The changelog — every sizable update to the profile, in one place.
@@ -18,7 +19,7 @@ import { clips } from './clips';
  *    click to check the claim.
  */
 
-export type ChangeKind = 'launch' | 'essay' | 'clip' | 'feature' | 'tool';
+export type ChangeKind = 'launch' | 'essay' | 'paper' | 'clip' | 'feature' | 'tool';
 
 export type ChangeLink = {
   label: string;
@@ -38,6 +39,7 @@ export type ChangeEntry = {
 export const KIND_LABELS: Record<ChangeKind, string> = {
   launch: 'Site launch',
   essay: 'Essay',
+  paper: 'Paper',
   clip: 'Field clip',
   feature: 'Feature',
   tool: 'Open source',
@@ -50,6 +52,78 @@ export const KIND_LABELS: Record<ChangeKind, string> = {
  * date for platform work — not the day the entry was written.
  */
 const shipped: ChangeEntry[] = [
+  {
+    date: '2026-09-23',
+    kind: 'feature',
+    title: 'Added the Papers section — long-form write-ups as PDFs',
+    summary:
+      'Three white papers with the arithmetic shown: a generator for trade-business websites, the operating system behind a six-person services company, and the instrument behind the nine-idea demand test. Each PDF is the artifact of record; the essays are the short version. Every number is sourced to a repository, a live URL or a measurement you can rerun.',
+    links: [{ label: 'Read the papers', href: '/papers' }],
+    tags: ['PDF', 'React', 'Prerender'],
+  },
+  {
+    date: '2026-09-22',
+    kind: 'launch',
+    title: 'linkedin-engine — control plane on Cloudflare, runner on the Mac, every job in shadow',
+    summary:
+      'The LinkedIn posting, engagement, outreach and job-search scripts lifted into one package with 27 named invariants, 57 differential cases against the originals, 24 tables in D1 (2,760 rows reconciled row-for-row), a 5-minute scheduler cron over a schedules table, and a console behind Cloudflare Access. All 15 schedules run in shadow, and shadow is now enforced by the engine (exit 3, nothing written), not by the prompt.',
+    links: [{ label: 'The banner is not a lock', href: '/writing/the-banner-is-not-a-lock' }],
+    tags: ['Python', 'Cloudflare Workers', 'D1', 'Agents'],
+  },
+  {
+    date: '2026-09-21',
+    kind: 'launch',
+    title: 'trade-site-template — a website generator for trade businesses, two client sites live',
+    summary:
+      'A private Astro-on-Cloudflare template and generator: one intake file in, a built, deployed and verified lead-gen site out. Twelve decision records, ten quality gates, a fabrication rule enforced in the schema, and a measured 46.5 s deploy path. The first launched site was destroyed for being 21% of a reference on content; the fix went into the kit. Client sites generated 2026-09-21 and 2026-09-22.',
+    links: [
+      { label: 'White paper (PDF)', href: '/docs/papers/sites-that-differ-by-data-not-code.pdf' },
+      { label: 'Case study', href: '/projects/trade-site-generator' },
+    ],
+    tags: ['Astro', 'Cloudflare Workers', 'D1', 'Generators'],
+  },
+  {
+    date: '2026-09-18',
+    kind: 'launch',
+    title: 'Transparent Maintenance OS — Growth tab, Claude desk hand-over rule, licences with a voice gate',
+    summary:
+      'The operating system for a six-person maintenance company reached the shape in the white paper: a Growth tab with pipeline clocks, an events ledger, a scorecard against plan and a Monday report card; an ad-spend mirror attributing by phone identity; a licences panel whose sayable column gates what the calling agent may state; and a Call button that hands an account to TM Voice and says queued, never called.',
+    links: [
+      { label: 'White paper (PDF)', href: '/docs/papers/one-database-many-connectors.pdf' },
+      { label: 'Case study', href: '/projects/transparent-maintenance-os' },
+    ],
+    tags: ['Supabase', 'Vercel', 'Agents', 'Operations'],
+  },
+  {
+    date: '2026-09-08',
+    kind: 'launch',
+    title: 'Bloodline — a browser roguelike with no asset files',
+    summary:
+      'An isometric action RPG in Phaser 3 where every sprite, tile and note is generated at boot from code, including a synthesised adaptive score whose harmony, percussion and arpeggio cycles do not repeat for 168 bars. Resumable single-slot save that refuses payloads from a future build, boss HP scaling simulated against the real loot and levelling code, and a headless smoke test that fails on console errors and frame rate under 55.',
+    links: [{ label: 'MAKaminski/bloodline', href: 'https://github.com/MAKaminski/bloodline' }],
+    tags: ['Phaser 3', 'TypeScript', 'Web Audio', 'Vite'],
+  },
+  {
+    date: '2026-09-07',
+    kind: 'tool',
+    title: 'sdlc-agents — four agents, three human gates, guard jobs before any model call',
+    summary:
+      'A label-driven state machine on GitHub Issues that turns a sentence in Slack into a planned, tested, reviewed feature. A bash guard checks the Definition of Ready before any model is invoked, so a story with no Given-When-Then never costs a run. Scope, sequencing and merge stay human. A five-story feature is 16 model runs.',
+    links: [{ label: 'Guard jobs are free', href: '/writing/guard-jobs-are-free' }],
+    tags: ['GitHub Actions', 'Agents', 'Claude Code'],
+  },
+  {
+    date: '2026-09-03',
+    kind: 'launch',
+    title: 'Transparent Permits — rebuilt as contractor-of-record after reading the statute',
+    summary:
+      'A self-serve product for a licensed Georgia residential contractor: structured intake, server-priced Stripe checkout, a private portal, seven drip sequences, sixteen county pages from GeoNames data, and PostHog with a reverse proxy. Launched 2026-09-02; on 2026-09-03 the intake gained six hard stops and scope approval began gating the documents, because the launch pitch matched the licence-lending fact pattern. 63 tests, zero credentials to build.',
+    links: [
+      { label: 'transparent-permits.vercel.app', href: 'https://transparent-permits.vercel.app' },
+      { label: 'The statute rewrote the product', href: '/writing/the-statute-rewrote-the-product' },
+    ],
+    tags: ['Next.js', 'Stripe', 'Supabase', 'Regulated'],
+  },
   {
     date: '2026-08-17',
     kind: 'feature',
@@ -213,6 +287,19 @@ const essayEntries: ChangeEntry[] = articles.map((a) => ({
   tags: [`${a.readMinutes} min read`, ...(a.series ? [a.series] : [])],
 }));
 
+/** Papers derive from papers.ts, same reasoning. */
+const paperEntries: ChangeEntry[] = papers.map((p) => ({
+  date: p.date,
+  kind: 'paper' as const,
+  title: p.title,
+  summary: p.abstract,
+  links: [
+    { label: 'Read the PDF', href: p.pdf },
+    { label: 'All papers', href: '/papers' },
+  ],
+  tags: [`${p.pages} pages`, 'PDF'],
+}));
+
 /** Field clips derive from clips.ts, same reasoning. */
 const clipEntries: ChangeEntry[] = clips.map((c) => ({
   date: c.uploadDate,
@@ -231,11 +318,12 @@ const KIND_WEIGHT: Record<ChangeKind, number> = {
   launch: 0,
   feature: 1,
   tool: 2,
-  essay: 3,
-  clip: 4,
+  paper: 3,
+  essay: 4,
+  clip: 5,
 };
 
-export const changelog: ChangeEntry[] = [...shipped, ...essayEntries, ...clipEntries].sort(
+export const changelog: ChangeEntry[] = [...shipped, ...essayEntries, ...paperEntries, ...clipEntries].sort(
   (a, b) => b.date.localeCompare(a.date) || KIND_WEIGHT[a.kind] - KIND_WEIGHT[b.kind]
 );
 

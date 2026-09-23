@@ -18,6 +18,254 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'the-banner-is-not-a-lock',
+    title: 'The Banner Is Not a Lock: A Shadow Session Wrote the Row It Was Told Not To',
+    description:
+      "My LinkedIn engine runs every job in shadow mode before it is allowed to publish. On 2026-09-22 a shadow scorecard session wrote a ledger row anyway, with the shadow banner at the top of its prompt. The fix was not a better banner. The engine now reads a mode from the environment, and in shadow every command that records a publish or a send exits 3 and writes nothing, a passing gate exits 3, and the session cannot fill forms or attach files. A prompt is an instruction; an exit code is a lock. 27 invariants, 57 differential cases, 2,760 ledger rows reconciled row-for-row.",
+    date: '2026-09-23',
+    readMinutes: 6,
+    series: 'Field Notes',
+    body: `
+<p>On 2026-09-22 a shadow session in my LinkedIn engine wrote a ledger row it had been told not to write. The instruction was the first thing in its prompt, in a banner, in capitals. It wrote the row anyway.</p>
+
+<p>The conclusion first: <strong>a prompt is an instruction, and an instruction is not a lock.</strong> If an agent must not do a thing, the code the agent calls has to refuse, and the refusal has to be an exit code the runner can see. I had known that for irreversible actions. I had not applied it to a mode flag, because "shadow" felt like a setting rather than an action. It is an action. Every publish is one.</p>
+
+<h2>What the engine is</h2>
+
+<p>The engine is a gated, ledger-backed system for one operator's LinkedIn presence: three posts a day on a learning schedule, one considered comment per run, warm outreach inside hard budgets, and a job-search lane. A control plane on Cloudflare decides <em>when</em>. A small runner on my own machine drives my own logged-in browser, because LinkedIn offers no API for most of this. Every run is a fresh session with one playbook and a mode banner; the ledgers are the only memory.</p>
+
+<p>Over three days, 2026-09-21 to 2026-09-22, the engine went from a folder of scripts to a package with 27 named invariants, each with a test that is the definition. Twenty-four ledger tables live in D1 now, generated from one schema spec; 2,760 rows were imported and reconciled row-for-row. Fifty-seven differential cases prove the lifted commands produce the same stdout, stderr, exit code and ledger writes as the originals, modulo an enumerated list of deltas. Fifteen schedules run in shadow. None of that stopped the row.</p>
+
+<h2>What happened</h2>
+
+<p>The scorecard job reconciles accepted invites in the browser and logs the week. Its first live shadow run was a success in every way I had planned to measure: the session started, the browser worked, the playbook ran, and the report came back. Then I read the ledger. There was a new row that a shadow run has no business writing.</p>
+
+<p>The session had the banner. It had the playbook line that says shadow logs and never sends. It had the same model that had followed the same rule in fourteen other shadow runs. On this one it did not. I do not know why, and I have stopped treating "why" as the useful question. <strong>The useful question is what stopped it, and the answer was nothing.</strong> The commands the session called did not know they were in shadow. Only the prompt did.</p>
+
+<h2>The fix</h2>
+
+<p>The runner now sets an environment variable that names the mode, and the engine reads it. In shadow:</p>
+
+<ul>
+<li>Every command that records a publish or a send exits 3 and writes nothing. That is log-post, log-comment, log-send without the shadow flag, log-reply, and the apply record.</li>
+<li>A passing gate exits 3. The gate still runs, still scores, still reports. It cannot return the code that means "go".</li>
+<li>Easy Apply preflight fails.</li>
+<li>The session is started with the tools that fill forms and attach files disallowed, so even a session that decided to try has nothing to try with.</li>
+</ul>
+
+<p>Exit 3 is deliberate. Zero means done, one means error, two means "correctly declined" in this engine's vocabulary. Three means held. The runner treats it as a normal outcome and the console shows it as one, so a shadow run that does exactly what it should now ends in a code that a person can read as "the lock worked".</p>
+
+<p>The playbooks were rebuilt with the same banner, because the banner is still useful. It tells the model what is expected, and most of the time the model does it. The lock is for the rest of the time.</p>
+
+<h2>Why this keeps coming up</h2>
+
+<p>This is the third time on this site I have written the same finding in a different costume. The <a href="/writing/human-approval-gates-for-irreversible-agent-actions">approval-gates essay</a> said that anything the agent cannot undo has to be a property of the tool surface, not a policy asking the model to behave. The <a href="/writing/statistical-gating-for-agent-instruction-changes">statistical-gating essay</a> said a gate that cannot detect the effect it was built for is decorative. This one says a mode that lives only in the prompt is decorative too.</p>
+
+<p>The pattern is the same each time. I write a rule in the place where I write, which is the prompt, and I feel the rule is enforced because I can see it. Then the system does the thing once, and I discover that the only enforcement was my having written it down. <strong>The rule has to move from the place where I write to the place where the code runs, and it has to fail closed.</strong></p>
+
+<p>The engine has a table of invariants for exactly this reason. Each one is marked Code, Partial or Gap. Code means the engine enforces it and a test proves it. Partial means the engine enforces its half and the rest is a playbook instruction. The mode flag was not even on the table, because I had not thought of it as an invariant. It is now: shadow never publishes, and the test is a session that tries.</p>
+
+<h2>Two more gaps closed the same week</h2>
+
+<p>Reading the ledger for the shadow row turned up two smaller ones, both the same shape.</p>
+
+<p>A veto in the engagement candidate list could be overridden by an explicit lane or relevance argument on the command line. That is a rule living in the default rather than in the code. Now the pick filters on the stored lane and a veto is final.</p>
+
+<p>The posting gate checked numbers against the fact ledger but let an unregistered number through if it was plausible. A checkable number found in neither the fact ledger nor a sourced claims row is now a hard fail, which is what the posting playbook had said all along. The playbook said it; the gate did not do it. Same costume.</p>
+
+<h2>What to copy</h2>
+
+<p>If you run agents on a schedule, list every action that must not happen in a given mode, and for each one ask which line of code refuses it. If the answer is "the prompt", you do not have a lock. Add a mode to the environment, make the command exit non-zero and write nothing, and then run a session that tries. The session that tries is the test. Mine wrote a row; yours will do something else. The lock is what makes it a story instead of an incident.</p>
+`,
+  },
+
+  {
+    slug: 'guard-jobs-are-free',
+    title: 'Guard Jobs Are Free: Four Agents, Three Human Gates, and Zero Model Calls on a Bad Request',
+    description:
+      "A four-agent pipeline turns a sentence in Slack into a planned, tested, reviewed feature in GitHub. The design constraint is that no code can be written from an unrefined request: a bash guard job checks the Definition of Ready before any model is invoked, and a story with no Given-When-Then never reaches the dev agent. Labels are the only orchestration primitive, GitHub issues are the database, and a five-story feature costs 16 model runs. Three gates stay human on purpose: scope, sequencing, and merge.",
+    date: '2026-09-22',
+    readMinutes: 5,
+    series: 'Field Notes',
+    body: `
+<p>A feature of five stories costs sixteen model runs in my software-delivery pipeline: one for the product agent, then five each for dev, QA and acceptance. A request that fails the Definition of Ready costs zero, because the check that fails it is a bash script that runs before any model is invoked.</p>
+
+<p>The conclusion first: <strong>put the preconditions in a guard job, not in the prompt.</strong> A guard job is free, it is deterministic, and it fails in a way the issue timeline records. A precondition written into a prompt costs a model call to evaluate and is honoured most of the time.</p>
+
+<h2>The shape</h2>
+
+<p>Four agents, each owning exactly one gate, with no authority over the others' work. The product agent asks whether this is a real, sliced, testable feature; it cannot write code. The dev agent turns one story into one pull request with tests; it cannot start from an unrefined issue. The QA agent asks whether the tests actually prove the criteria; it cannot fix the code. The acceptance agent asks whether the requester would call this done, and looks at the rendered screens at 375, 768 and 1440 pixels to answer; it cannot merge.</p>
+
+<p>Every agent is the same three parts: a role file, a bash guard job, and one model invocation with a per-agent tool allowlist. Adding a fifth agent means copying that pattern.</p>
+
+<h2>Labels are the control flow</h2>
+
+<p>There is no database, queue or persistent service. GitHub issues are the state, and labels are the only orchestration primitive. An intake issue carries the raw request verbatim, never edited. The product agent replies with a proposal. A human adds <code>gate:approved</code>. The agent creates a feature issue and story issues in <code>stage:ready</code>. A human adds <code>agent:dev</code> to one story. Dev, QA and acceptance run unattended from there, and a person gets a message on done, failure or a question.</p>
+
+<p>Every state transition is a label change, and every label change is a visible event in the issue timeline. That is the single biggest reason the system stays cheap to run and easy to debug. When something goes wrong, the answer to "what happened" is on the issue, in order, with timestamps.</p>
+
+<h2>The guard</h2>
+
+<p>The dev agent's guard checks three things before spending a model call: is this a story, is it in ready, and does it carry at least one Given-When-Then acceptance criterion. If any check fails, the guard adds <code>gate:failed</code> and stops. No model, no branch, no cost.</p>
+
+<p>That guard is the design constraint made concrete: <strong>no code can be written from an unrefined request.</strong> Everything else in the pipeline is a consequence. The product agent exists because something has to produce the criteria the guard demands. The QA agent traces each criterion to a test because the criteria are machine-checkable. The acceptance agent reads the original intake rather than the refined story, because refinement loses information and that edge is the check on the loss.</p>
+
+<h2>The three human gates</h2>
+
+<p>Three decisions stay with a person, and each has a reason that is not "we were nervous".</p>
+
+<ul>
+<li><strong>Scope.</strong> Approving the proposal is a business decision. An agent approving its own scope is the vibe-coding problem with extra steps.</li>
+<li><strong>Sequencing.</strong> Stories sit in ready until a person pulls one. Priority is theirs.</li>
+<li><strong>Merge.</strong> The acceptance agent recommends. One irreversible action, one human.</li>
+</ul>
+
+<p>Everything between those three points runs unattended. The kill switch is a label: <code>agent:paused</code> on any item stops every agent for that item before any model call. Disabling Actions stops everything.</p>
+
+<h2>What it costs</h2>
+
+<p>One model call per agent per item. A five-story feature is 1 + 5 + 5 + 5 = 16 runs, plus one extra dev-and-QA cycle for each block. The guard jobs are not in that count because they cost nothing. That arithmetic is why the preconditions live in bash and not in the prompt, and it is the same arithmetic as the <a href="/writing/designing-tools-an-agent-can-actually-call">tool-surface essay</a>: the cheapest place to prevent a bad call is before it is made.</p>
+
+<h2>What is not proven</h2>
+
+<p>The pipeline was built on 2026-09-07 and has run on my own repositories. I have no throughput numbers worth publishing yet, and the honest claim is the structural one: a request without acceptance criteria cannot reach a model that writes code. The count of features shipped through it is a later essay, with the count.</p>
+`,
+  },
+
+  {
+    slug: 'the-statute-rewrote-the-product',
+    title: 'The Statute Rewrote the Product: A Permit Service That Had to Refuse Its Own Launch Pitch',
+    description:
+      "A self-serve product let a homeowner put a licensed contractor's name on their permit and keep their own crew. Georgia's license-lending rules made that pitch the textbook prohibited fact pattern. The product was rebuilt in a day as a contractor-of-record model: scope approval gates the documents, the intake refuses unlicensed crews and trade permits on both the client and the server, and a full refund closes the order. 63 tests, zero credentials to build, and a rule I keep relearning: design against the statute, not the pitch.",
+    date: '2026-09-21',
+    readMinutes: 6,
+    series: 'Field Notes',
+    body: `
+<p>On 2026-09-02 I read the statute that governs what my product was selling, and on 2026-09-03 the product refused its own launch pitch. Everything in between is the essay.</p>
+
+<p>The product is Transparent Permits, a self-serve service from a licensed residential contractor in metro Atlanta. The launch pitch was clean: the contractor's licence on your permit, you keep your crew, one site walk, the owner supervises. A customer describes the project, pays by card, and gets the licence documents in a private portal. It built and rendered with zero credentials, took payment through a server-priced checkout, and closed the order from a webhook with an idempotency ledger. It was a good build of the wrong product.</p>
+
+<h2>What the statute says</h2>
+
+<p>Georgia's licensing law and its rules prohibit lending a licence: putting your number on work you do not actually control. The 2026 changes extended the pattern to the trades from 2026-07-01. Read against the pitch, every phrase was a match. "You keep your crew" is an unlicensed crew under a licence that does not supervise them. "One site walk" is supervision in name. "The owner supervises" is the licensee stepping out of the role the licence exists to hold.</p>
+
+<p>The conclusion first: <strong>the pitch was the fact pattern the rule was written to catch, and no amount of product polish changes that.</strong> The only move was to change what the product is.</p>
+
+<h2>What it became</h2>
+
+<p>A contractor-of-record model. The licensed contractor approves the scope, obtains the permit, and supervises the permitted work through inspections, with the visit count bounded in the agreement. The documents that used to unlock at payment now unlock at scope approval. Declining the scope emails a refund notice, the refund closes the order, and the portal locks.</p>
+
+<p>The interesting part is what the intake refuses. Six hard stops, enforced on the client and again on the server, so a request that fails cannot be submitted by a determined browser:</p>
+
+<ul>
+<li>Trade permits (electrical, plumbing, HVAC), unless the trade licensee's number is supplied.</li>
+<li>Unlicensed crews performing the work.</li>
+<li>Investors doing the labour themselves.</li>
+<li>"Contractors" with no licence, a placeholder number, or the licensee's own number.</li>
+<li>A contractor ordering on an owner's behalf without the owner's contact.</li>
+<li>A subcontractor list that is missing when the work needs one.</li>
+</ul>
+
+<p>Each stop records why it fired, so the intake tells me which pattern people are trying to buy. That is not a bug report. It is the demand signal for the product I cannot sell them.</p>
+
+<h2>Freeze the old agreement, version the new one</h2>
+
+<p>Orders placed under the launch agreement keep it. The agreement module holds version one frozen and version two dated, and the portal renders the text that applied to the order's version. A customer who agreed to one document must never find a different one in their portal. Approve and decline links are signed with an HMAC so the review page cannot be forged, and the first decision wins.</p>
+
+<p>The copy sweep was the long part: home, the intent pages, the county pages, the machine-readable summary, the social card, the success page and seven email sequences all said the old thing. A grep for the launch phrasing is now a test, because copy regresses faster than code.</p>
+
+<h2>Why this rhymes</h2>
+
+<p>The <a href="/writing/shipping-an-ai-agent-through-compliance-review">compliance-review essay</a> on this site argues that the durable move in a regulated system is to design against the statute rather than against guidance, because guidance is the layer that moves. This is the same lesson from the other side. I had designed against the pitch, which is the layer that moves fastest of all, because I wrote it. <strong>Read the statute before the landing page, and read it as a description of what the product does, not as a footnote.</strong></p>
+
+<h2>Numbers</h2>
+
+<p>Rebuild: one working day, 2026-09-02 to 2026-09-03, evaluated on the first and shipped on the second. Tests: 63, all green with no environment configured. Schema changes: none; the new intake fields live in the existing JSON column and the scope decisions are event rows. New environment variables: none; the cron token also keys the review-link signature. Orders refunded under the change: not reported here.</p>
+
+<p>The employer of the licence is a company I work with, not a client I am describing from the outside, and the licence number is deliberately absent from this essay.</p>
+`,
+  },
+  {
+    slug: 'measure-reach-on-the-log-scale',
+    title: "Measure Reach on the Log Scale: 738 Weeks Became 30 on the Same 182 Posts",
+    description:
+      "My LinkedIn scheduler moves a slot on eight observations, so I priced the plan to fix it with volume. On raw impressions (182 posts, mean 223, SD 983, one post carrying 31.9% of all impressions) a two-arm test for a 20% lift needs 7,747 posts per arm, 738 weeks at 21 a week. On log impressions the same posts need 314 per arm, 30 weeks. Reach is multiplicative, so the log scale asks the question the data was generated by. The admitted cost: a log-scale test measures the geometric mean and is partly blind to the 12,959-impression outlier that carried the account.",
+    date: '2026-09-20',
+    readMinutes: 6,
+    series: 'Field Notes',
+    body: `
+<p>My LinkedIn scheduler moves a posting slot on eight data points. I ran the power calculation on the plan to fix that with volume, and on raw impressions it needs 738 weeks. On log impressions, the same 182 posts need 30.</p>
+
+<p>The conclusion first: for any metric that multiplies, and reach is one, the scale you measure on decides whether the experiment can ever finish. Impressions, revenue per post, tokens per conversation, latency tails. Test them on the log scale or accept that the test is decorative.</p>
+
+<p>This is the second time I have found a decorative test in my own system. The <a href="/writing/statistical-gating-for-agent-instruction-changes">first</a> was a 14-day window that could only detect a shift of 0.97 standard deviations. That time the fix was more days. This time more days was the trap.</p>
+
+<h2>The optimizer decides on eight observations</h2>
+
+<p>The scheduler is a Thompson sampler in a 1,171-line Python file. Each arm is a 30-minute bucket inside a daypart, with a Beta(2, 8) prior updated by the engagement rate of every post that landed there. Three dayparts, one arm chosen per daypart, once a week.</p>
+
+<p>Run 2026-09-20, it proposed moving the evening slot from 17:30 to 18:30 on a sampled posterior of 0.266 from an arm with eight observations. The morning slot, twelve. Midday, thirteen.</p>
+
+<p>Eight is a posterior, not a result. The sampler is doing exactly what Thompson sampling does with thin arms, which is draw wide and move often. The retune output prints an estimates-versus-actuals block for the last 14 days, and for the evening slot it reads model estimate 0.0201, actual median 0.0000.</p>
+
+<p>The plan was volume. Twenty-one posts a week, let the arms fill, let the posterior narrow. Before committing a year to that, I priced it.</p>
+
+<h2>On raw impressions, a 20% lift takes 738 weeks to detect</h2>
+
+<p>The store is one file, <code>posts.jsonl</code>, 278 rows, 182 of them with impressions logged. The calculation is 14 lines of Python on the standard library: <code>json</code>, <code>math</code>, <code>statistics</code>.</p>
+
+<p>The 182 posts: mean 223 impressions, standard deviation 983, median 88.5. The largest post did 12,959. The second largest did 2,164. One post is 31.9% of every impression I have ever logged, and 161 of the 182 posts sit below the mean. Sample skewness is 12.1.</p>
+
+<p>For a two-arm test at 80% power and a two-sided alpha of 0.05, the sample per arm is close to 16σ²/δ². A 20% lift on a mean of 223 is δ = 44.65.</p>
+
+<p>16 × 983² / 44.65² = 7,747 posts per arm. Two arms, 15,494 posts. At 21 a week, 738 weeks. Fourteen years, for one comparison, against a threshold I would actually act on.</p>
+
+<p>The obvious objection is that the 12,959 post is doing all of that. It is doing most of it. Drop it and the standard deviation falls to 254, the requirement to 1,107 per arm, 2,214 posts, 105 weeks. Two years, for one comparison, and I had to throw away the only post that mattered to get there.</p>
+
+<h2>On log impressions, the same posts need 30 weeks</h2>
+
+<p>Reach is multiplicative. A post that works does not add 200 impressions to a baseline; it multiplies the baseline. The algorithm shows it to a batch, the batch engages or does not, the next batch is sized on the first. That is a compounding process, and compounding processes produce log-normal outcomes.</p>
+
+<p>So take the natural log of every impression count and run the identical calculation. Same 182 posts, same 14 lines, one flag flipped from <code>raw</code> to <code>log</code>.</p>
+
+<p>Log mean 4.66, which back-transforms to a geometric mean of 106 impressions. Log standard deviation 0.81. A 20% lift is now a constant, ln(1.2) = 0.182, because on the log scale a multiplicative lift is an additive shift.</p>
+
+<p>16 × 0.81² / 0.182² = 314 posts per arm. Two arms, 628 posts. At 21 a week, 30 weeks.</p>
+
+<p>Nothing about the data changed. The raw-scale test was asking a question the distribution could not answer, because the variance of a log-normal is dominated by its tail. The log-scale test asks the question the distribution was generated by.</p>
+
+<p>Sanity check on the fit: 82.4% of the posts fall within one log-standard-deviation of the log mean, against 68% for a true normal. Skewness drops from 12.1 to 2.1. Not a clean log-normal. Close enough that the arithmetic is honest, and far closer than the raw scale was.</p>
+
+<h2>What the log scale costs</h2>
+
+<p>The log-scale test measures the geometric mean. It answers: does this change multiply the reach of a typical post? It does not answer: does this change produce more 12,959-impression posts?</p>
+
+<p>Those are different objectives, and on this account the second one is where the value has been. One post carried 31.9% of all impressions. On the raw scale it sits 13 standard deviations from the mean. On the log scale, 5.9. The log transform pulls it in, which is what makes the test tractable and is also what makes the test partly blind to it.</p>
+
+<p>I do not have a clean way to optimize the median and the tail at once. Extreme-value methods exist for the tail, and they need a tail sample I do not have; there are three posts over 2,000. For now the scheduler optimizes the typical post and I read the outliers by hand.</p>
+
+<p>The second cost is that 30 weeks assumes 21 posts a week, and the weekly scorecard for 2026-09-20 shows 13 of 21 shipped. At 13 a week, 628 posts is 48 weeks. The log scale bought a 25-fold improvement; it did not buy a fast experiment. A two-arm test on this account still takes most of a year, which is why the weekly review adopts at most one change and labels most weeks directional rather than conclusive.</p>
+
+<h2>What changed in the engine, and what did not</h2>
+
+<p>The power script sits next to the scheduler and takes one argument, <code>raw</code> or <code>log</code>. Before any experiment on this account, it prints the posts per arm and the weeks at current cadence. That number now exists at the moment I am deciding whether to run the experiment, which it did not before.</p>
+
+<p>The scheduler itself did not change. Its reward is engagement rate, clipped at 15% and normalized to [0, 1], and engagement rate is a bounded ratio of two counts. The log-normal problem lives in the impressions denominator and in any test that treats impressions as the outcome. The 1,171-line file does not read the power script, and the retune still prints an arm of eight as if eight were enough.</p>
+
+<p>So the honest state is: the test is fixed, and the optimizer still moves on thin arms every Monday. The warm-up floor is 20 observations per daypart, the floor for a bucket to be a candidate is 3. Raising the bucket floor to something the power calculation would respect is the next edit, and it will make the sampler move less, which is the point.</p>
+
+<h2>If you run experiments on a multiplicative metric</h2>
+
+<p>First, look at the ratio of the largest observation to the median before you look at anything else. Here it is 146 to 1. Anything past 10 to 1 on a metric that cannot go below zero is a log-normal until proven otherwise, and a t-test on the raw values will need a sample you do not have.</p>
+
+<p>Second, make the lift a multiplier. A 20% lift is ln(1.2) on the log scale regardless of the baseline, which means one power table serves every arm. On the raw scale the same 20% is a different δ for every baseline, and the table has to be rebuilt each time the mean moves.</p>
+
+<p>Third, report what the test is blind to. A log-scale result is a statement about the geometric mean. If the business runs on the tail, say so in the same sentence, or someone will read a significant result as permission to stop looking for the outlier.</p>
+
+<p>The 738-week number was not a bug in the optimizer. The optimizer was fine. The measurement was on the wrong scale, and it had been for 182 posts before I checked.</p>
+`,
+  },
+  {
     slug: 'prompt-cache-floors-are-per-model',
     title: "Prompt Cache Floors Are Per-Model, and the Cheap Model Has the Highest One",
     description:

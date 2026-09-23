@@ -206,6 +206,177 @@ The design decisions are mine to discuss; the deployment specifics are not.</em>
   },
 
   {
+    slug: 'trade-site-generator',
+    title: 'Sites That Differ by Data, Not Code — a Generator for Trade-Business Websites',
+    summary:
+      'A private template and generator that builds, deploys and verifies a lead-gen website for a trade business from one intake file, with quality gates that refuse a dishonest or thin site.',
+    date: '2026-09-21',
+    tier: 'case-study',
+    domain: 'Small-business web · generators',
+    role:
+      'I owned the contract (what five minutes means), the decision records, the media policy, the fabrication rules in the schema, and the verification step that decides when a deploy is allowed to call itself live. The kit, the gates and the two client sites were built with an agent; the rules it builds against are mine.',
+    problem: `
+<p>A small trade business needs a website that says what it sells, where it works, takes a lead and
+can be found. Built as a project, every site carries the full cost of a project, so most of them
+freeze on the day the agency invoice clears. The way out is to make sites differ by data, not by
+code: one kit renders every site, one validated file describes each business, and a fix to the kit
+reaches every client at once.</p>
+<p>The hard part is not the rendering. It is that a generator is tempted to invent the trust content
+a real site has (reviews, licence numbers, hours, addresses), and that a thin site is worse than no
+site once it is measured against a competitor.</p>`,
+    constraints: [
+      'The generator never fabricates trust content. Reviews and credentials require client-supplied provenance, in the schema, not in a style guide.',
+      'Live means verified: every sitemap URL serving 200, no internal link redirecting, and a tokenless lead proven blocked before the scaffold reports success.',
+      'Client data reaches the client repository only. The template never carries a database id, an image pack or a site file.',
+      'A gate failing on one site is a kit finding, not a per-site waiver.',
+    ],
+    whatShipped: [
+      'A private GitHub template (Astro on Cloudflare Workers with D1 for leads) with nine section components, token-only theming and CSS-first motion.',
+      'Six fixtures (lighting, roofing, HVAC, restaurant software, real estate, full) and per-trade image-pack prompts with alt text.',
+      'Scaffold and destroy scripts, a structured intake schema, a client-site harvester, a six-category SEO scorer with a reference comparison, and a site CLI.',
+      'Quality gates: schema and copy lint, content depth, prose links, axe, overflow, no-JS, reduced motion, focus ring, JS budget, CLS, CTA above the fold, visitor-first UI, local Worker end-to-end, and live verify.',
+      'Two client sites generated on 2026-09-21 and 2026-09-22.',
+    ],
+    outcome: [
+      {
+        metric: '46.5 s from template to verified live site',
+        detail:
+          'Database 2.2 s, bot-check widget 0.3 s, build 1.3 s, repository from template 17.6 s, deploy 11.2 s, verify 13.8 s. Measured 2026-09-21.',
+        source: '/docs/papers/sites-that-differ-by-data-not-code.pdf',
+        sourceLabel: 'White paper, section 3',
+      },
+      {
+        metric: '21% → parity-plus on content depth',
+        detail:
+          'The first launched site had 1,613 words against a 7,722-word reference and was destroyed the same day. Rewritten fixtures carry 10,000 to 12,000 words and score 92+ where the reference scores 75.9.',
+        source: '/docs/papers/sites-that-differ-by-data-not-code.pdf',
+        sourceLabel: 'White paper, section 4',
+      },
+      {
+        metric: 'Image generation sized to the budget: 43 s hero, 15.2 s everything else',
+        detail:
+          'Four settings measured on 2026-09-21; all judged usable by eye. Nine images run in parallel with harvesting and writing, so the critical path is 200 to 260 s.',
+        source: '/docs/papers/sites-that-differ-by-data-not-code.pdf',
+        sourceLabel: 'White paper, section 3',
+      },
+    ],
+    outcomePending:
+      'Lead volume from the generated client sites is not yet reported; both sites are days old. The full five-minute run including content generation for a new business is measured for the deploy half only.',
+    artifacts: [
+      { kind: 'doc', label: 'White paper: Sites That Differ by Data, Not Code (PDF)', href: '/docs/papers/sites-that-differ-by-data-not-code.pdf' },
+      { kind: 'essay', label: 'Field note: the statute rewrote the product', href: '/writing/the-statute-rewrote-the-product' },
+    ],
+    stack: ['Astro', 'TypeScript', 'Cloudflare Workers', 'D1', 'Turnstile', 'Vitest', 'Playwright'],
+    image: '/images/papers/fig-time-budget.png',
+    imageAlt: 'Bar chart of the five-minute contract by step, measured steps in dark grey and estimates in gold.',
+    body: `
+<h2>By the numbers</h2>
+<p>Template to verified live site: 46.5 s. Template repository created and 101 files pushed: 5.2 s.
+Local end-to-end (real Worker, local D1, no account): 3.5 s. First site's content vs the reference:
+1,613 vs 7,722 words. Rewritten fixtures: 10,000 to 12,000 words, 45 to 66 validated prose links,
+score 92+ vs the reference's 75.9. Image generation: 43.1 s for the hero at 1376×768, 15.2 s for
+each of eight others at 1024×576 quantized. Decision records: 12.</p>
+
+<h2>The rule in the schema</h2>
+<p>Trust content requires provenance. A reviews page renders only when client-supplied reviews
+exist. Unsupplied hours, addresses and coordinates are omitted from the page and from the JSON-LD,
+never inferred. The copy linter refuses specific warranty, insurance and licence claims. Sites
+launch honest but thinner until the client supplies the real thing.</p>
+
+<h2>What the first live deploys got wrong</h2>
+<p>Every internal link took a 307, because directory-style output made the platform redirect and
+the canonical pointed at a redirecting URL. Pages returned 404 briefly while the home page was up,
+because assets reach the edge seconds apart. The lead endpoint accepted unverified leads for the
+width of one deploy step, because the bot-check secret was set after the code shipped. Each is now
+a gate: slashless URLs with a test that fails on any redirecting link, a verify step that polls
+every sitemap URL, and a secret that ships in the same Worker version as the code with a fail-closed
+endpoint.</p>`,
+  },
+
+  {
+    slug: 'transparent-maintenance-os',
+    title: 'Transparent Maintenance OS — One Database, an Agent Desk, and Nothing Ever Deleted',
+    summary:
+      'The internal operating system for a six-person maintenance company: one Postgres database, a static page, twelve serverless functions, and an agent that works its own task queue twice a day.',
+    date: '2026-09-18',
+    tier: 'case-study',
+    domain: 'Operations · agent-in-the-loop',
+    role:
+      'I designed the operating model (a task is done once, a process repeats and spawns tasks, a role owns processes), the hub-not-mesh architecture, the agent desk and its hand-over rule, and the attribution design. Thirty decision records are mine; the code was built with agents against them.',
+    problem: `
+<p>A small services company accumulates tools faster than people: a CRM, a field-service system, a
+calendar, a chat platform, an ad platform. Each is wired to the next by an automation nobody
+remembers, and the question "who owes what, by when" has no single answer.</p>
+<p>The constraint that shaped the answer was cost. The system had to be a thin, zero-hosting layer
+over one database, which forced a rule that turned out to be the design: no tool ever talks to
+another tool. They talk to the database.</p>`,
+    constraints: [
+      'Nothing is ever deleted. Soft delete from the UI; every change since 2026-09-11 is in the audit log with before and after values.',
+      'The free hosting plan allows twelve serverless functions, and all twelve are in use.',
+      'The agent desk never sends email, touches sequences, deletes, or writes to the field-service system, the calendar or the chat platform.',
+      'A claim the company makes to a prospect on a call is gated by a column that defaults to false.',
+    ],
+    whatShipped: [
+      'Roles, processes and tasks with a daily spawn job that is idempotent by construction.',
+      'Read-only mirrors of the CRM, the field-service system and the ad platform, raw first and typed when read.',
+      'Outlook calendar blocks for every dated task, and a real fortnight view that says so when the calendar cannot be read.',
+      'A Growth tab: reactivation ranked by recovery, pipeline clocks, an events ledger with drive times, a scorecard against plan, and a weekly report card frozen on Mondays.',
+      'The Claude desk: a scheduled routine that works Claude-owned tasks at 9:00 and 14:00 ET, answers into notes, opens pull requests, and hands tasks to the person who holds the system it cannot reach.',
+      'A licences panel with per-row renewal windows and a voice gate for the outbound calling agent.',
+    ],
+    outcome: [
+      {
+        metric: 'A 62 KB query string, a 400, and a tab that went down',
+        detail:
+          '2,493 accounts on the board × 24-character ids in one filter. Fixed by paging the mirror in memory, and separately by making the optional lookup unable to fail the page it decorates.',
+        source: '/docs/papers/one-database-many-connectors.pdf',
+        sourceLabel: 'White paper, section 4',
+      },
+      {
+        metric: 'Attribution by identity: 0 of 585 jobs had a lead source, 72% of customers have a phone',
+        detail:
+          'Ad leads match on the last ten digits of the phone first, then email. Cost metrics are null until their denominator exists, and the funnel names the rung that is holding.',
+        source: '/docs/papers/one-database-many-connectors.pdf',
+        sourceLabel: 'White paper, section 5',
+      },
+      {
+        metric: '9 of 10 agent-owned tasks were parked where nobody looks',
+        detail:
+          'The desk now reassigns a task to the person who holds the last system in the chain, with the click path in the notes. "Blocked" means waiting on another task again.',
+        source: '/docs/papers/one-database-many-connectors.pdf',
+        sourceLabel: 'White paper, section 6',
+      },
+    ],
+    outcomePending:
+      'Revenue, client names, grades and licence numbers are in the system and not published. Paid-advertising lead volume is a funnel with null cost metrics as of 2026-09-14.',
+    artifacts: [
+      { kind: 'doc', label: 'White paper: One Database, Many Connectors (PDF)', href: '/docs/papers/one-database-many-connectors.pdf' },
+      { kind: 'live', label: 'Transparent Permits (public product from the same company)', href: 'https://transparent-permits.vercel.app' },
+      { kind: 'repo', label: 'TM Voice (the calling agent)', href: 'https://github.com/MAKaminski/tm-voice' },
+    ],
+    stack: ['Supabase', 'PostgreSQL', 'Vercel Functions', 'TypeScript', 'Microsoft Graph', 'Discord', 'Vercel AI Gateway'],
+    image: '/images/papers/fig-identity.png',
+    imageAlt: 'Bar chart: 0 percent of jobs carry a lead source, 72 percent of customers carry a phone, 13 percent carry an email.',
+    body: `
+<h2>By the numbers</h2>
+<p>Accounts on the pipeline board: 2,493. Customers in the field-service mirror: 14,719. Completed
+jobs with a lead source over twelve months: 0 of 585. Customers with a phone: 72%; with an email:
+13%. Serverless functions: 12 of 12. Audit log: every change since 2026-09-11. Decision records: 30.
+Agent desk runs: twice a day, six days a week.</p>
+
+<h2>Hub, never mesh</h2>
+<p>The database holds the operating model and a merged copy of what every other system knows.
+Interfaces act on it, connected systems are mirrored into it, connectors move data and hold none.
+A client's owner follows the CRM until someone changes it on the internal board, and then the board
+owns it; one column settles the argument.</p>
+
+<h2>A snapshot is not a move</h2>
+<p>The weekly report card graded A on day one because the scorecard counted the nine snapshot rows
+written when stage history began as wins. The first history row per account is a baseline, and a
+moves column carries that rule into the table. Same data, zero clients won since plan start.</p>`,
+  },
+
+  {
     slug: 'genome-of-games',
     title: 'The Genome of Games — One Knowledge Base, Four Surfaces',
     summary:
