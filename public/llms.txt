@@ -76,6 +76,14 @@ or PM for an agent platform — at teams shipping AI agents into production, esp
 the environment is regulated and the evidence trail matters. Open to fractional and
 full-time. Atlanta, relocating to New York City.
 
+## Papers (PDF)
+
+Long-form write-ups with the arithmetic shown, at https://www.michael-kaminski.io/papers
+
+- Sites That Differ by Data, Not Code (2026-09-23): a generator for trade-business websites; a measured 46.5 s deploy path; a fabrication rule enforced in the schema. https://www.michael-kaminski.io/docs/papers/sites-that-differ-by-data-not-code.pdf
+- One Database, Many Connectors (2026-09-22): the operating system for a six-person services company; hub-not-mesh; an agent desk that hands work over instead of parking it; attribution by identity. https://www.michael-kaminski.io/docs/papers/one-database-many-connectors.pdf
+- The Demand Instrument (2026-09-21): nine ideas on one template with pass/fail bars set before the traffic; the funnel plumbing most templates get wrong. https://www.michael-kaminski.io/docs/papers/the-demand-instrument.pdf
+
 ## Writing
 
 Field notes on agent infrastructure at https://www.michael-kaminski.io/writing

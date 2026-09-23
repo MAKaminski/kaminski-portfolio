@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Rocket, PenLine, Film, Wrench, Package } from 'lucide-react';
+import { ArrowUpRight, Rocket, PenLine, Film, Wrench, Package, FileText } from 'lucide-react';
 import Seo from '../components/Seo';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -20,6 +20,7 @@ const KIND_ICONS: Record<ChangeKind, React.ComponentType<{ size?: number | strin
   feature: Wrench,
   tool: Package,
   essay: PenLine,
+  paper: FileText,
   clip: Film,
 };
 
@@ -29,6 +30,7 @@ const FILTERS: { value: ChangeKind | 'all'; label: string }[] = [
   { value: 'feature', label: 'Features' },
   { value: 'tool', label: 'Open source' },
   { value: 'essay', label: 'Essays' },
+  { value: 'paper', label: 'Papers' },
   { value: 'clip', label: 'Clips' },
 ];
 
