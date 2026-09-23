@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { Analytics } from '@vercel/analytics/react';
 import { initGA } from './utils/analytics';
+import { initPostHog } from './utils/posthog';
 import Seo from './components/Seo';
 import SmoothScroll from './components/SmoothScroll';
 import Cursor from './components/Cursor';
@@ -14,7 +15,6 @@ import Transactions from './components/Transactions';
 import Highlights from './components/Highlights';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import AIChatbot from './components/AIChatbot';
 import ReferralCarousel from './components/ReferralCarousel';
 
 // Secondary routes are code-split so they don't ship in the main bundle.
@@ -35,10 +35,12 @@ const Projects = lazy(() => import('./pages/Projects'));
 const CaseStudy = lazy(() => import('./pages/CaseStudy'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const About = lazy(() => import('./pages/About'));
+// Floating chat widget: present on every route but not part of first paint.
+const AIChatbot = lazy(() => import('./components/AIChatbot'));
 
-const HOME_TITLE = 'Michael Kaminski — AI Agents & Agent Infrastructure | Atlanta & NYC';
+const HOME_TITLE = 'Michael Kaminski — AI Agents in Production | Atlanta';
 const HOME_DESCRIPTION =
-  'Michael Kaminski builds AI agents that run in production. Took an agent capability from prototype through security, legal, and compliance review inside a regulated lender. Custom MCP servers, multi-agent orchestration, and eval harnesses in Python and TypeScript. Atlanta, relocating to New York City.';
+  'Michael Kaminski builds AI agents that run in production. Took one from prototype through security, legal, and compliance review at a regulated lender.';
 
 const RouteFallback: React.FC = () => (
   <div className="min-h-screen flex items-center justify-center text-gray-500">Loading…</div>
@@ -114,6 +116,8 @@ function App() {
     if (gaId) {
       initGA(gaId);
     }
+    // PostHog: same gate, on REACT_APP_POSTHOG_KEY. See utils/posthog.ts.
+    initPostHog();
   }, []);
 
   return (
@@ -165,7 +169,9 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
               </Suspense>
-              <AIChatbot />
+              <Suspense fallback={null}>
+                <AIChatbot />
+              </Suspense>
               <Analytics />
             </div>
           )}

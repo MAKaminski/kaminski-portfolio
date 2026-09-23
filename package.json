@@ -13,14 +13,14 @@
     "gtag": "^1.0.1",
     "lenis": "^1.3.25",
     "lucide-react": "^0.263.0",
+    "posthog-js": "^1.433.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.5",
     "react-router-dom": "^6.20.0",
     "react-scripts": "5.0.1",
     "recharts": "^3.1.0",
-    "typescript": "^4.9.0",
-    "web-vitals": "^2.1.0"
+    "typescript": "^4.9.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -52,6 +52,7 @@
     "autoprefixer": "^10.4.0",
     "postcss": "^8.4.0",
     "sharp": "^0.33.5",
+    "simple-icons": "^16.31.0",
     "tailwindcss": "^3.3.0"
   }
 }

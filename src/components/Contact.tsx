@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Download, Send, Linkedin, Calendar } from 'lucide-react';
-import { track } from '@vercel/analytics';
+import { track } from '../utils/track';
+import { PROFILES } from '../data/profiles';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -127,7 +128,7 @@ const Contact: React.FC = () => {
                 <Linkedin className="w-6 h-6 text-primary-600 mr-4" />
                 <div>
                   <p className="font-semibold text-white">LinkedIn</p>
-                  <a href="https://linkedin.com/in/michaelxaxkaminski" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 transition-colors duration-200">
+                  <a href={PROFILES.linkedin} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 transition-colors duration-200">
                     linkedin.com/in/michaelxaxkaminski
                   </a>
                 </div>

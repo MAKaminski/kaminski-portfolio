@@ -1,5 +1,6 @@
 import React from 'react';
-import { Mail, Phone, Linkedin, Github, Calendar } from 'lucide-react';
+import { Mail, Phone, Linkedin, Github, Calendar, PenLine, AtSign } from 'lucide-react';
+import { PROFILES } from '../data/profiles';
 import { Link } from 'react-router-dom';
 import NewsletterSignup from './NewsletterSignup';
 
@@ -17,8 +18,8 @@ const Footer: React.FC = () => {
               Michael Kaminski<span className="accent">.</span>
             </h3>
             <p className="text-white/60 max-w-xs">
-              Atlanta-based fintech leader — fluent in both PE-grade finance and hands-on
-              software engineering.
+              Technical product manager at the agent layer — AI agents, MCP servers, and
+              eval harnesses that survive compliance review.
             </p>
           </div>
 
@@ -46,8 +47,10 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               <li><a href="mailto:mkaminski1337@gmail.com" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><Mail size={16} /> mkaminski1337@gmail.com</a></li>
               <li><a href="tel:+14048388613" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><Phone size={16} /> (404) 838-8613</a></li>
-              <li><a href="https://www.linkedin.com/in/michaelxaxkaminski" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><Linkedin size={16} /> LinkedIn</a></li>
-              <li><a href="https://github.com/MAKaminski" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><Github size={16} /> GitHub</a></li>
+              <li><a href={PROFILES.linkedin} target="_blank" rel="noopener noreferrer me" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><Linkedin size={16} /> LinkedIn</a></li>
+              <li><a href={PROFILES.github} target="_blank" rel="noopener noreferrer me" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><Github size={16} /> GitHub</a></li>
+              <li><a href={PROFILES.devto} target="_blank" rel="noopener noreferrer me" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><PenLine size={16} /> DEV</a></li>
+              <li><a href={PROFILES.x} target="_blank" rel="noopener noreferrer me" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><AtSign size={16} /> X</a></li>
               <li><a href="https://calendly.com/kaminski1337/15min" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><Calendar size={16} /> Book a call</a></li>
             </ul>
           </div>

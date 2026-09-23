@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Lenis from 'lenis';
+import type Lenis from 'lenis';
 
 /**
  * Rejouice-style smooth/inertia scrolling via Lenis.
@@ -11,25 +11,14 @@ const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce) return;
 
-    const lenis = new Lenis({
-      duration: 1.1,
-      lerp: 0.1,
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.6,
-    });
-
+    // Lenis is a nice-to-have that has no business in the first-paint bundle.
+    // Load it once the main thread is idle (Safari has no requestIdleCallback).
+    let lenis: Lenis | null = null;
     let raf = 0;
-    const loop = (time: number) => {
-      lenis.raf(time);
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
-
-    // Smooth in-page anchor navigation
+    let cancelled = false;
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement)?.closest('a[href^="#"]') as HTMLAnchorElement | null;
-      if (!a) return;
+      if (!a || !lenis) return;
       const id = a.getAttribute('href');
       if (!id || id === '#') return;
       const el = document.querySelector(id);
@@ -38,12 +27,34 @@ const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         lenis.scrollTo(el as HTMLElement, { offset: -80 });
       }
     };
-    document.addEventListener('click', onClick);
+
+    const start = () => {
+      import('lenis').then(({ default: LenisCtor }) => {
+        if (cancelled) return;
+        lenis = new LenisCtor({
+          duration: 1.1,
+          lerp: 0.1,
+          smoothWheel: true,
+          wheelMultiplier: 1,
+          touchMultiplier: 1.6,
+        });
+        const loop = (time: number) => {
+          lenis?.raf(time);
+          raf = requestAnimationFrame(loop);
+        };
+        raf = requestAnimationFrame(loop);
+        document.addEventListener('click', onClick);
+      });
+    };
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => number };
+    if (typeof w.requestIdleCallback === 'function') w.requestIdleCallback(start);
+    else setTimeout(start, 1);
 
     return () => {
+      cancelled = true;
       cancelAnimationFrame(raf);
       document.removeEventListener('click', onClick);
-      lenis.destroy();
+      lenis?.destroy();
     };
   }, []);
 

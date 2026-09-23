@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Menu, X, Calendar, Linkedin, Github, Sparkles } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { track } from '@vercel/analytics';
+import { track } from '../utils/track';
 
 const CALENDLY_URL = 'https://calendly.com/kaminski1337/15min';
 

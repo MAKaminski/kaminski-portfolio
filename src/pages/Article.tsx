@@ -16,7 +16,7 @@ const Article: React.FC = () => {
   if (!article) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-ink-900 text-white text-center px-4">
-        <Seo title="Not found | Michael Kaminski" description="Article not found." canonicalPath="/writing" />
+        <Seo title="Not found | Michael Kaminski" description="Article not found." canonicalPath={null} noindex />
         <h1 className="text-3xl font-bold text-white mb-4">Article not found</h1>
         <Link to="/writing" className="text-accent font-semibold">← Back to Writing</Link>
       </div>
@@ -27,7 +27,8 @@ const Article: React.FC = () => {
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': 'BlogPosting',
+    isPartOf: { '@type': 'Blog', '@id': `${SITE_URL}/writing#blog` },
     headline: article.title,
     description: article.description,
     datePublished: article.date,

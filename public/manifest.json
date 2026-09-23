@@ -1,7 +1,7 @@
 {
   "short_name": "M. Kaminski",
-  "name": "Michael Kaminski — Fintech Finance & Engineering Leader",
-  "description": "Atlanta-based fintech leader fluent in both PE-grade finance and hands-on software engineering.",
+  "name": "Michael Kaminski \u2014 AI Agents in Production",
+  "description": "Technical product manager at the agent layer: AI agents, MCP servers, and eval harnesses shipped through compliance review at a regulated lender.",
   "icons": [
     {
       "src": "favicon.svg",
@@ -22,6 +22,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#0b1220",
-  "background_color": "#0b1220"
+  "theme_color": "#060606",
+  "background_color": "#060606"
 }
