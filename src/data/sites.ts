@@ -25,6 +25,14 @@ export type Site = {
 // Each screenshot links directly to the running site.
 export const sites: Site[] = [
   {
+    name: 'Transparent Permits',
+    url: 'https://transparent-permits.vercel.app',
+    category: 'Construction · Contractor of Record',
+    description:
+      'Self-serve contractor-of-record service for a licensed Georgia residential contractor: structured intake with hard stops that refuse licence-lending patterns, server-priced Stripe checkout, scope approval that gates the documents, and a private portal. Rebuilt in one day when the statute was read against the launch pitch.',
+    tags: ['Next.js', 'Stripe', 'Supabase', 'Regulated'],
+  },
+  {
     name: 'Modular Equity',
     url: 'https://www.modularequity.com',
     image: '/images/sites/modularequity.webp',

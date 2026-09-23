@@ -100,10 +100,11 @@ const KIND_LABELS = {
   feature: 'Feature',
   tool: 'Open source',
   essay: 'Essay',
+  paper: 'Paper',
   clip: 'Field clip',
 };
 
-function buildChangelog(articles, clips) {
+function buildChangelog(articles, clips, papers) {
   const shipped = loadData('changelog.ts', 'const shipped: ChangeEntry[] =', '/** Essays derive');
   if (!shipped.length) return [];
   const essays = articles.map((a) => ({
@@ -120,7 +121,14 @@ function buildChangelog(articles, clips) {
     summary: c.description,
     links: [{ label: 'Watch the clip', href: `/clips#${c.slug}` }],
   }));
-  return [...shipped, ...essays, ...clipEntries].sort(
+  const paperEntries = (papers || []).map((p) => ({
+    date: p.date,
+    kind: 'paper',
+    title: p.title,
+    summary: p.abstract,
+    links: [{ label: 'Read the PDF', href: p.pdf }],
+  }));
+  return [...shipped, ...essays, ...paperEntries, ...clipEntries].sort(
     (a, b) => b.date.localeCompare(a.date) || KIND_WEIGHT[a.kind] - KIND_WEIGHT[b.kind]
   );
 }
@@ -227,6 +235,7 @@ const NAV = [
   { href: '/websites', label: 'Websites' },
   { href: '/products', label: 'Products' },
   { href: '/writing', label: 'Writing' },
+  { href: '/papers', label: 'Papers' },
   { href: '/clips', label: 'Field clips' },
   { href: '/changelog', label: 'Changelog' },
 ];
@@ -515,6 +524,29 @@ ${cards}`
   );
 }
 
+function papersMarkup(papers) {
+  const cards = papers
+    .map(
+      (p) => `<article>
+<h2><a href="${esc(p.pdf)}">${esc(p.title)}</a></h2>
+<p><em>${esc(p.subtitle)}</em> · ${esc(p.date)} · ${p.pages} pages · PDF</p>
+${img(p.image, `${p.title} — cover`, 1200, 630)}
+<p>${esc(p.abstract)}</p>
+<ul>${p.findings.map((f) => `<li><strong>${esc(f.metric)}</strong> — ${esc(f.detail)}</li>`).join('')}</ul>
+<p>${p.sources.map((s) => `<a href="${esc(s.href)}">${esc(s.label)}</a>`).join(' · ')}</p>
+</article>`
+    )
+    .join('');
+  return page(
+    '/papers',
+    `
+<h1>Papers — ${papers.length} long-form write-ups, as PDFs</h1>
+<p>The essays are the short version. These carry the method and the arithmetic, and every
+number is sourced to a repository, a live URL, or a measurement you can rerun.</p>
+${cards}`
+  );
+}
+
 function productsMarkup(products) {
   const cards = products
     .map(
@@ -569,6 +601,7 @@ function main() {
   const articles = loadData('articles.ts', 'export const articles', 'const seenDates', { required: true });
   const clips = loadData('clips.ts', 'export const clips', 'export const getClip');
   const sites = loadData('sites.ts', 'export const sites', 'export const getSite');
+  const papers = loadData('papers.ts', 'export const papers', 'export const getPaper');
   const products = loadData('products.ts', 'export const products', 'export const getProduct');
   const referrals = loadData('referrals.ts', 'export const referrals', 'export const getReferral');
   const transactions = loadData('transactions.ts', 'export const transactions', 'export const transactionTotals');
@@ -580,7 +613,7 @@ function main() {
     (a, b) =>
       Number(b.tier === 'flagship') - Number(a.tier === 'flagship') || b.date.localeCompare(a.date)
   );
-  const entries = buildChangelog(articles, clips);
+  const entries = buildChangelog(articles, clips, papers);
 
   const totalM = transactions.reduce((s, t) => s + t.value, 0);
   const totals = {
@@ -783,6 +816,54 @@ with its date, counterparty and instrument on the <a href="/">home page</a>.</p>
         },
       },
       websitesMarkup(sites)
+    )
+  );
+
+  // ── /papers ──
+  safely('/papers', () =>
+    write(
+      '/papers',
+      {
+        title: `Papers — ${papers.length} Long-Form Write-Ups | Michael Kaminski`,
+        description:
+          'White papers with the arithmetic shown: agent infrastructure, launch templates, and the measurement mistakes found in production systems. Each one is a PDF you can keep.',
+        image: papers[0] && papers[0].image,
+        crumbs: [
+          { name: 'Home', path: '/' },
+          { name: 'Papers', path: '/papers' },
+        ],
+        jsonLd: [
+          {
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            '@id': `${ORIGIN}/papers#collection`,
+            name: 'Papers by Michael Kaminski',
+            url: `${ORIGIN}/papers`,
+            author: { '@id': `${ORIGIN}/#person` },
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: 'Papers',
+            numberOfItems: papers.length,
+            itemListElement: papers.map((p, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              item: {
+                '@type': 'Report',
+                name: p.title,
+                description: p.abstract,
+                datePublished: p.date,
+                url: `${ORIGIN}${p.pdf}`,
+                encodingFormat: 'application/pdf',
+                author: { '@id': `${ORIGIN}/#person` },
+                inLanguage: 'en',
+              },
+            })),
+          },
+        ],
+      },
+      papersMarkup(papers)
     )
   );
 

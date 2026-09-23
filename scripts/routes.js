@@ -20,6 +20,7 @@ const indexedRoutes = [
   { path: '/websites', changefreq: 'monthly', priority: '0.8' },
   { path: '/products', changefreq: 'monthly', priority: '0.8' },
   { path: '/writing', changefreq: 'weekly', priority: '0.8' },
+  { path: '/papers', changefreq: 'monthly', priority: '0.8' },
   { path: '/clips', changefreq: 'weekly', priority: '0.8' },
   { path: '/changelog', changefreq: 'weekly', priority: '0.7' },
 ];
