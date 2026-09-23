@@ -5,12 +5,18 @@ import Seo from '../components/Seo';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { products, type Product } from '../data/products';
+import { StatsProvider, StatsStrip, ProductCardStats, useCardImpression } from '../components/SiteStats';
+import { track } from '../utils/track';
 
 
 const repoName = (url: string) => url.replace(/^https?:\/\/github\.com\//, '');
 
-const ProductCard: React.FC<{ product: Product; index: number }> = ({ product, index }) => (
+const ProductCard: React.FC<{ product: Product; index: number }> = ({ product, index }) => {
+  const ref = useCardImpression('Product Card Viewed', { name: product.name, repo: repoName(product.repoUrl) });
+  const onClick = () => track('Product Card Clicked', { name: product.name, repo: repoName(product.repoUrl) });
+  return (
   <motion.div
+    ref={ref}
     initial={{ opacity: 0, y: 24 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: (index % 3) * 0.08 }}
@@ -22,6 +28,7 @@ const ProductCard: React.FC<{ product: Product; index: number }> = ({ product, i
       href={product.repoUrl}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={onClick}
       className="relative block aspect-[16/10] overflow-hidden bg-ink-900"
       aria-label={`Open ${product.name} on GitHub`}
     >
@@ -56,6 +63,7 @@ const ProductCard: React.FC<{ product: Product; index: number }> = ({ product, i
           href={product.repoUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={onClick}
           className="text-lg font-bold text-white transition-colors duration-200 hover:text-accent"
         >
           {product.name}
@@ -64,6 +72,7 @@ const ProductCard: React.FC<{ product: Product; index: number }> = ({ product, i
           href={product.repoUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={onClick}
           className="text-white/40 transition-colors duration-200 hover:text-accent"
           aria-label={`Open ${product.name} on GitHub`}
         >
@@ -74,10 +83,12 @@ const ProductCard: React.FC<{ product: Product; index: number }> = ({ product, i
         href={product.repoUrl}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={onClick}
         className="mb-3 inline-flex items-center gap-1.5 text-xs font-medium text-accent/80 hover:text-accent"
       >
         <Github size={13} /> {repoName(product.repoUrl)}
       </a>
+      <ProductCardStats name={product.name} />
       <p className="mb-4 flex-1 text-sm leading-relaxed text-white/70">{product.description}</p>
       <div className="flex flex-wrap gap-2">
         {product.tags.map((tag) => (
@@ -91,7 +102,8 @@ const ProductCard: React.FC<{ product: Product; index: number }> = ({ product, i
       </div>
     </div>
   </motion.div>
-);
+  );
+};
 
 const Products: React.FC = () => {
   const jsonLd = {
@@ -108,6 +120,7 @@ const Products: React.FC = () => {
   };
 
   return (
+    <StatsProvider>
     <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
       <Seo
         title="Products | Michael Kaminski — Desktop Tools & Open Source"
@@ -135,6 +148,8 @@ const Products: React.FC = () => {
             code, install instructions, and releases.
           </p>
         </motion.div>
+
+        <StatsStrip kind="products" names={products.map((p) => p.name)} />
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product, index) => (
@@ -166,6 +181,7 @@ const Products: React.FC = () => {
       </main>
       <Footer />
     </div>
+    </StatsProvider>
   );
 };
 

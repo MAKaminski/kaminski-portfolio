@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Download, Send, Linkedin, Calendar } from 'lucide-react';
 import { track } from '../utils/track';
+import { identifyVisitor } from '../utils/posthog';
 import { PROFILES } from '../data/profiles';
 
 const Contact: React.FC = () => {
@@ -15,6 +16,9 @@ const Contact: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // The one place a visitor tells us who they are: attach the email to their
+    // PostHog person so every earlier and later pageview rolls up to one record.
+    identifyVisitor(formData.email, { name: formData.name, source: 'portfolio contact form' });
     track('Contact Form Submission', { email: formData.email });
 
     // When a form endpoint is configured (e.g. Formspree/Resend), POST to it.
