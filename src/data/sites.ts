@@ -27,6 +27,7 @@ export const sites: Site[] = [
   {
     name: 'Transparent Permits',
     url: 'https://transparent-permits.vercel.app',
+    image: '/images/sites/transparent-permits.webp',
     category: 'Construction · Contractor of Record',
     description:
       'Self-serve contractor-of-record service for a licensed Georgia residential contractor: structured intake with hard stops that refuse licence-lending patterns, server-priced Stripe checkout, scope approval that gates the documents, and a private portal. Rebuilt in one day when the statute was read against the launch pitch.',
@@ -53,6 +54,7 @@ export const sites: Site[] = [
   {
     name: 'The Demand Test',
     url: 'https://ten-experiments.vercel.app',
+    image: '/images/sites/ten-experiments.webp',
     category: 'Validation · Experiment',
     description:
       'A public, zero-spend validation run: nine business ideas, fourteen days, each with its own landing page and its own pass/fail threshold — a booked call, a $1 refundable deposit, a written reply. One gets built, and the data behind the pick gets published with it.',
@@ -61,6 +63,7 @@ export const sites: Site[] = [
   {
     name: 'Demand Desk',
     url: 'https://demand-desk-rho.vercel.app',
+    image: '/images/sites/demand-desk.webp',
     category: 'Analytics · Funnels',
     description:
       'The instrumentation behind the demand test — nine landing-page funnels compared side by side, so the decision at the end is read off a chart instead of argued. Access is allowlisted, so the public entry point is the sign-in screen.',
@@ -69,6 +72,7 @@ export const sites: Site[] = [
   {
     name: 'DealPacket',
     url: 'https://dealpacket.vercel.app',
+    image: '/images/sites/dealpacket.webp',
     category: 'PropTech · MCP',
     description:
       'Real-estate underwriting as an MCP server. One address returns ARV, rent estimates, comps and ownership, then renders the same packet five ways — investor, GC, lender, CPA, title — with the source and fetch timestamp printed beside every figure.',
@@ -77,6 +81,7 @@ export const sites: Site[] = [
   {
     name: 'The Genome of Games',
     url: 'https://genome-of-games.vercel.app',
+    image: '/images/sites/genome-of-games.webp',
     category: 'Research · Data Viz',
     description:
       '168 game mechanics, 618 games, 394 studios and 4,366 inheritance links from 1962 to 2025 — grouped by the design problem each mechanic solves rather than by genre, with every one traced back through its ancestors.',
@@ -85,6 +90,7 @@ export const sites: Site[] = [
   {
     name: 'Commitgraph',
     url: 'https://top-github-users-amber.vercel.app',
+    image: '/images/sites/commitgraph.webp',
     category: 'Developer Data · Leaderboards',
     description:
       'Worldwide, country and city leaderboards for the most active developers on GitHub — with the contribution heatmaps, rank-movement bump charts, tile-grid maps and follower/output scatter that a table of follower counts cannot show.',

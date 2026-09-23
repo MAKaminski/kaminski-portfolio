@@ -21,6 +21,7 @@ export const products: Product[] = [
   {
     name: 'launch-template',
     repoUrl: 'https://github.com/MAKaminski/launch-template',
+    image: '/images/products/launch-template.webp',
     category: 'Template · Next.js 16',
     description:
       'Stand up a new product-idea launch — marketing site, analytics, database, payments and booking — in under fifteen minutes, repeatedly, for many ideas in parallel. One hosting project per launch; everything underneath shared and joined by a single launch_slug. Runs with zero credentials; each unconfigured integration degrades to a no-op with one warning.',
@@ -29,6 +30,7 @@ export const products: Product[] = [
   {
     name: 'TM Voice',
     repoUrl: 'https://github.com/MAKaminski/tm-voice',
+    image: '/images/products/tm-voice.webp',
     category: 'Voice agent · Outbound calling',
     description:
       'An outbound calling agent for a residential maintenance contractor. Finds who approves vendors at property managers and hands the answer to a person; it does not sell, quote or book. Suppression, do-not-call, consent, line type, calling window and daily caps are decided in one database transaction before anything reaches the phone network, and consent records are never edited or deleted.',
@@ -55,22 +57,16 @@ export const products: Product[] = [
   {
     name: 'DesktopLens',
     repoUrl: 'https://github.com/MAKaminski/DesktopLens',
+    image: '/images/products/desktoplens.webp',
     category: 'macOS · Ambient Context Capture',
     description:
       'Privacy-first, on-device context capture — watches your screen, mic, and active app, reduces each window of activity to plain text via OCR and Whisper, then deletes the raw media. Only redacted text ever persists, ready to feed a local LLM or a Claude scheduled task.',
     tags: ['Shell', 'Vision OCR', 'whisper.cpp', 'macOS'],
   },
   {
-    name: 'Launch Template',
-    repoUrl: 'https://github.com/MAKaminski/launch-template',
-    category: 'Template · Product Launch',
-    description:
-      'Stand up a new product idea — marketing site, analytics, database, payments, and booking — in under fifteen minutes, repeatedly, for many ideas in parallel. One Vercel project per launch so each gets its own domain and deploy cadence; everything underneath is shared and joined by a single launch_slug.',
-    tags: ['Next.js', 'PostHog', 'Supabase', 'Stripe'],
-  },
-  {
     name: 'depot-mcp',
     repoUrl: 'https://github.com/MAKaminski/depot-mcp',
+    image: '/images/products/depot-mcp.webp',
     category: 'MCP Server · Investment Research',
     description:
       'A Model Context Protocol server that hands an agent real research tools rather than a search box: price and fundamentals, multi-source news with sentiment scoring, housing and macro indicators, and valuation analysis — all callable as typed tools over a single equity.',
@@ -79,6 +75,7 @@ export const products: Product[] = [
   {
     name: 'AutoHotKey Go',
     repoUrl: 'https://github.com/MAKaminski/AutoHotKey_Go',
+    image: '/images/products/autohotkey-go.webp',
     category: 'Windows · Agent Desktop Toolbar',
     description:
       'A native Go/Win32 desktop toolbar for collections agents — CRM account scraping, timezone-aware quiet-hour compliance checks, and one-key call actions, with no AutoHotkey runtime and no interpreted script to drift out of sync with the UI.',
