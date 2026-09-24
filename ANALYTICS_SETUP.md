@@ -6,12 +6,30 @@ Three layers, all optional at build time, none hardcoded in the bundle.
 |---|---|---|---|
 | Vercel Analytics | `<Analytics />` in `src/App.tsx` | Always on (Vercel-hosted) | Page views + the custom events below, in the Vercel dashboard |
 | Google Analytics 4 | `initGA()` from `src/utils/analytics.ts` | `REACT_APP_GA_MEASUREMENT_ID` | Search Console linkage, GA reports |
-| PostHog | `initPostHog()` from `src/utils/posthog.ts` | `REACT_APP_POSTHOG_KEY` (+ optional `REACT_APP_POSTHOG_HOST`, default `https://us.i.posthog.com`) | Referrer report, funnels, web vitals; the SDK is imported lazily on idle |
+| PostHog | `initPostHog()` from `src/utils/posthog.ts` | `REACT_APP_POSTHOG_KEY` | Referrer report, funnels, web vitals; the SDK is imported lazily on idle and talks to the first-party `/ingest` proxy (see below) |
 
 Custom events go through one helper, `track()` in `src/utils/track.ts`, which fans out to
 Vercel Analytics and PostHog under the same event name:
 `Calendar Link Clicked`, `Contact Form Submission`, `Contact Email Clicked`,
 `Role Page Visited`, `Resume Downloaded`, `Digital Twin Opened`, plus the path and contact events below.
+
+## Leads are stored server-side; analytics go through /ingest
+
+Client-side analytics can be blocked. On 2026-09-24 a newsletter sign-up from Brave never
+reached PostHog, because the only record of it was a posthog-js call to `us.i.posthog.com`,
+which Brave Shields, uBlock and Safari content blockers drop. Two fixes:
+
+- **`POST /api/lead`** (`api/lead.ts`) is the record of every newsletter sign-up and contact
+  lead. It is same-origin, so blockers leave it alone, and it writes to PostHog from the
+  server: `$identify` (distinct id = the email, linked to the browser's anonymous id when the
+  page has one) and a `Lead Received` event (`kind`, `intent`, `variant`, `source`, `page`).
+  It uses a different name from the client's `Contact Lead Captured` / `Newsletter Subscribed`
+  so experiment metrics are not double-counted. It needs the project token as
+  `POSTHOG_PROJECT_TOKEN`, or falls back to `REACT_APP_POSTHOG_KEY`, which Production
+  already has. **To see every lead, filter PostHog for `Lead Received`.**
+- **`/ingest/*`** is a reverse proxy to PostHog US, defined in `vercel.json` ahead of the
+  filesystem handler. posthog-js uses it as `api_host`, so the analytics events that feed the
+  experiments and path funnels are no longer dropped by blockers either.
 
 ## Visitor paths
 
