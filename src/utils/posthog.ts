@@ -52,6 +52,48 @@ export const identifyVisitor = (email: string, properties?: Record<string, unkno
   else void load().then((p) => p && run(p));
 };
 
+/**
+ * Tags the (still anonymous) visitor with a person property, so "who said what
+ * they wanted" is queryable before, and without, anyone typing an email.
+ */
+export const setVisitorProperties = (
+  properties: Record<string, unknown>,
+  setOnce?: Record<string, unknown>,
+) => {
+  if (!POSTHOG_KEY) return;
+  const run = (p: PostHog) => p.setPersonProperties(properties, setOnce);
+  if (client) run(client);
+  else void load().then((p) => p && run(p));
+};
+
+/**
+ * Resolves an experiment's variant for this visitor. Calling getFeatureFlag is
+ * what records the `$feature_flag_called` exposure, so only call this at the
+ * moment the variant is actually shown. Resolves null (render control, no
+ * exposure recorded) when PostHog is off or flags have not arrived in time.
+ */
+export const getExperimentVariant = (flagKey: string, timeoutMs = 1500): Promise<string | null> => {
+  if (!POSTHOG_KEY || typeof window === 'undefined') return Promise.resolve(null);
+  return new Promise((resolve) => {
+    let done = false;
+    const finish = (v: string | null) => {
+      if (done) return;
+      done = true;
+      resolve(v);
+    };
+    const timer = setTimeout(() => finish(null), timeoutMs);
+    void load().then((p) => {
+      if (!p) return finish(null);
+      p.onFeatureFlags(() => {
+        if (done) return;
+        clearTimeout(timer);
+        const v = p.getFeatureFlag(flagKey);
+        finish(typeof v === 'string' ? v : null);
+      });
+    });
+  });
+};
+
 /** Fire-and-forget capture; queues behind the lazy import if it has not landed yet. */
 export const captureEvent = (name: string, properties?: Record<string, unknown>) => {
   if (!POSTHOG_KEY) return;

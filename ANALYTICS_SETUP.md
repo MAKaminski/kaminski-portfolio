@@ -11,7 +11,26 @@ Three layers, all optional at build time, none hardcoded in the bundle.
 Custom events go through one helper, `track()` in `src/utils/track.ts`, which fans out to
 Vercel Analytics and PostHog under the same event name:
 `Calendar Link Clicked`, `Contact Form Submission`, `Contact Email Clicked`,
-`Role Page Visited`, `Resume Downloaded`, `Digital Twin Opened`.
+`Role Page Visited`, `Resume Downloaded`, `Digital Twin Opened`, plus the contact funnel below.
+
+## Contact experiments
+
+The contact section's first question is "what brings you here?" — one click, no typing. Each
+answer is a PostHog experiment (draft until launched) on how little we can ask for:
+
+| Intent | Flag / experiment | control | test |
+|---|---|---|---|
+| Fractional | `contact-fractional-ask` | email + one line on what they're building | `calendar_first`: 15-min Calendly first, email as fallback |
+| Recruiter (full-time) | `contact-recruiter-ask` | email + role link/title | `email_only`: email alone, resume on submit |
+| Reader | `contact-reader-ask` | email field shown immediately | `two_step`: "Keep me posted" click, then the field |
+
+Funnel events, all with `intent` and `variant` properties:
+`Contact Intent Selected` (interested) → `Contact Ask Started` → `Contact Lead Captured`
+(`method`: `form` or `calendar`; willing to share). Picking an intent also sets the person
+properties `contact_intent` / `first_contact_intent` before any email exists; submitting an
+email identifies the person. Exposure (`$feature_flag_called`) fires only when the ask is
+shown, so each experiment's denominator is people who chose that intent. Config lives in
+`src/data/contactExperiments.ts`.
 
 ## Turning a layer on
 
