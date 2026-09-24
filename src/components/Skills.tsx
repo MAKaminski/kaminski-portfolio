@@ -1,10 +1,13 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Code, Database, Cloud, BarChart3, Settings, Globe, ChevronDown, ChevronUp, Sparkles, Award } from 'lucide-react';
+import { Code, Database, Cloud, BarChart3, Settings, Globe, ChevronDown, Award } from 'lucide-react';
 import TechLogo from './TechLogos';
+import { track } from '../utils/track';
+import { useSectionView } from '../hooks/useSectionView';
 
 const Skills: React.FC = () => {
-  const [openAccordion, setOpenAccordion] = React.useState<number | null>(0); // Open first by default
+  const ref = useSectionView<HTMLElement>('skills');
+  // All collapsed: the tool list is the skim, the domain depth is on request.
+  const [openAccordion, setOpenAccordion] = React.useState<number | null>(null);
   
   // Editorial cut: consolidated to the highest-signal categories for a
   // fintech finance + engineering hire (was 29 exhaustive lists).
@@ -98,279 +101,90 @@ const Skills: React.FC = () => {
     }
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+  const toggle = (i: number) => {
+    if (openAccordion !== i) track('Section Expanded', { section: 'skills', item: specializedAreas[i].title });
+    setOpenAccordion(openAccordion === i ? null : i);
   };
 
   return (
-    <section id="skills" className="relative py-14 overflow-hidden scroll-mt-20">
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <motion.div
-          className="absolute top-40 left-10 w-96 h-96 bg-gradient-to-br from-blue-400/5 to-purple-400/5 rounded-full blur-3xl"
-          animate={{
-            x: [0, 40, 0],
-            y: [0, -30, 0]
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            repeatType: 'reverse'
-          }}
-        />
-        <motion.div
-          className="absolute bottom-40 right-10 w-80 h-80 bg-gradient-to-br from-pink-400/5 to-indigo-400/5 rounded-full blur-3xl"
-          animate={{
-            x: [0, -35, 0],
-            y: [0, 25, 0]
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            repeatType: 'reverse'
-          }}
-        />
-      </div>
+    <section ref={ref} id="skills" className="section-padding scroll-mt-20" style={{ background: 'var(--bg)' }}>
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-10">
+          <h2 className="display text-4xl md:text-5xl text-white">
+            Skills &amp; <span className="accent">expertise</span>
+          </h2>
+          <p className="mt-3 text-lg text-white/60 max-w-2xl">
+            The stack I ship with, and the finance and compliance depth behind it.
+          </p>
+        </div>
 
-      <div className="relative max-w-7xl mx-auto section-padding">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <motion.div
-            className="inline-flex items-center space-x-3 mb-6"
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            viewport={{ once: true }}
-          >
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-2xl">
-              <Sparkles className="w-8 h-8 text-white" />
-            </div>
-            <h2 className="display text-5xl md:text-6xl text-white">
-              Skills &amp; <span className="accent">Expertise</span>
-            </h2>
-          </motion.div>
-          <motion.p
-            className="text-xl text-white/60 max-w-4xl mx-auto leading-relaxed"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            Comprehensive expertise across enterprise systems, analytics, development, and specialized financial technologies.
-            <span className="block mt-2 font-semibold accent">
-              20+ years of hands-on experience with cutting-edge technologies.
-            </span>
-          </motion.p>
-        </motion.div>
-
-        {/* Software Experience Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-14"
-        >
-          {skillCategories.map((category, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              className={`relative rilla-card p-6 overflow-hidden group`}
-              whileHover={{
-                scale: 1.02,
-                y: -5,
-                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
-              }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              {/* Background decoration */}
-              <motion.div
-                className={`absolute top-4 right-4 w-16 h-16 bg-gradient-to-r ${category.gradient} rounded-full opacity-10`}
-                animate={{
-                  scale: [1, 1.2, 1],
-                  rotate: [0, 180, 360]
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  delay: index * 0.2
-                }}
-              />
-              
-              <div className="relative z-10">
-                <motion.div 
-                  className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r ${category.gradient} rounded-2xl shadow-lg mb-4`}
-                  whileHover={{ 
-                    rotate: 15,
-                    scale: 1.1
-                  }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <category.icon className="w-7 h-7 text-white" />
-                </motion.div>
-                
-                <h3 className="display text-lg text-white mb-3">{category.title}</h3>
-
-                <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill, skillIndex) => (
-                    <motion.div
+        <div className="grid gap-8 lg:grid-cols-5">
+          {/* Tools, one row per category */}
+          <dl className="lg:col-span-3 rilla-card divide-y divide-white/10">
+            {skillCategories.map((category) => (
+              <div key={category.title} className="grid gap-2 p-4 sm:grid-cols-[10rem_1fr] sm:gap-4">
+                <dt className="flex items-center gap-2 text-sm font-semibold text-white">
+                  <category.icon className="w-4 h-4 text-accent" />
+                  {category.title}
+                </dt>
+                <dd className="flex flex-wrap gap-1.5">
+                  {category.skills.map((skill) => (
+                    <span
                       key={skill}
-                      className="flex items-center space-x-2 px-3 py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all duration-200 group/skill"
-                      whileHover={{
-                        scale: 1.05,
-                        y: -2
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.1 + skillIndex * 0.02, duration: 0.3 }}
+                      className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs font-medium text-white/80"
                     >
-                      <TechLogo name={skill} className="w-4 h-4 transition-transform group-hover/skill:scale-110" />
-                      <span className="text-sm font-medium text-white/80 group-hover/skill:text-white">
-                        {skill}
-                      </span>
-                    </motion.div>
+                      <TechLogo name={skill} className="w-3.5 h-3.5" />
+                      {skill}
+                    </span>
                   ))}
-                </div>
+                </dd>
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Enhanced Specialized Areas */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="relative"
-        >
-          <div className="text-center mb-16">
-            <motion.h3
-              className="display text-4xl mb-4 text-white"
-              initial={{ scale: 0.9 }}
-              whileInView={{ scale: 1 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              Specialized <span className="accent">Expertise</span>
-            </motion.h3>
-            <p className="text-lg text-white/60">
-              Deep domain knowledge in financial services, compliance, and enterprise systems
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            {specializedAreas.map((area, index) => (
-              <motion.div
-                key={index}
-                className="rilla-card overflow-hidden"
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                whileHover={{ scale: 1.01 }}
-              >
-                <motion.button
-                  className="w-full flex items-center justify-between p-8 focus:outline-none text-left transition-all duration-200"
-                  onClick={() => setOpenAccordion(openAccordion === index ? null : index)}
-                  whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}
-                >
-                  <div className="flex items-center space-x-6">
-                    <motion.div 
-                      className={`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r ${area.gradient} rounded-2xl shadow-lg`}
-                      whileHover={{ 
-                        rotate: 10,
-                        scale: 1.1
-                      }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      <area.icon className="w-8 h-8 text-white" />
-                    </motion.div>
-                    <div>
-                      <h4 className="display text-2xl text-white">{area.title}</h4>
-                      <p className="text-sm text-white/50 mt-1">
-                        {area.items.length} areas of expertise
-                      </p>
-                    </div>
-                  </div>
-
-                  <motion.div
-                    animate={{ rotate: openAccordion === index ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex-shrink-0"
-                  >
-                    <div className="bg-accent/15 p-3 rounded-xl">
-                      <ChevronDown className="w-6 h-6 text-accent" />
-                    </div>
-                  </motion.div>
-                </motion.button>
-                
-                <motion.div
-                  initial={false}
-                  animate={{
-                    height: openAccordion === index ? 'auto' : 0,
-                    opacity: openAccordion === index ? 1 : 0
-                  }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                  className="overflow-hidden"
-                >
-                  <div className="px-8 pb-8">
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {area.items.map((item, itemIndex) => (
-                        <motion.div
-                          key={item}
-                          className="flex items-center space-x-3 p-4 bg-white/5 rounded-xl border border-white/10"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{
-                            opacity: openAccordion === index ? 1 : 0,
-                            y: openAccordion === index ? 0 : 10
-                          }}
-                          transition={{ delay: itemIndex * 0.05, duration: 0.3 }}
-                          whileHover={{
-                            scale: 1.02,
-                            backgroundColor: "rgba(255, 255, 255, 0.08)"
-                          }}
-                        >
-                          <div className="w-3 h-3 bg-accent rounded-full flex-shrink-0" />
-                          <span className="text-white/80 font-medium text-sm">{item}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.div>
             ))}
+          </dl>
+
+          {/* Domain depth, collapsed */}
+          <div className="lg:col-span-2">
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-white/50">
+              Specialized expertise
+            </h3>
+            <div className="rilla-card divide-y divide-white/10">
+              {specializedAreas.map((area, i) => (
+                <div key={area.title}>
+                  <button
+                    type="button"
+                    onClick={() => toggle(i)}
+                    aria-expanded={openAccordion === i}
+                    className="flex w-full items-center justify-between gap-3 p-4 text-left hover:bg-white/[0.03]"
+                  >
+                    <span className="flex items-center gap-3">
+                      <area.icon className="w-4 h-4 text-accent" />
+                      <span className="font-semibold text-white">{area.title}</span>
+                      <span className="text-xs text-white/45">{area.items.length}</span>
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 flex-shrink-0 text-accent transition-transform ${openAccordion === i ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                  {openAccordion === i && (
+                    <ul className="flex flex-wrap gap-1.5 px-4 pb-4">
+                      {area.items.map((item) => (
+                        <li
+                          key={item}
+                          className="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs font-medium text-white/80"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 };
 
-export default Skills; 
+export default Skills;

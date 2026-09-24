@@ -11,7 +11,33 @@ Three layers, all optional at build time, none hardcoded in the bundle.
 Custom events go through one helper, `track()` in `src/utils/track.ts`, which fans out to
 Vercel Analytics and PostHog under the same event name:
 `Calendar Link Clicked`, `Contact Form Submission`, `Contact Email Clicked`,
-`Role Page Visited`, `Resume Downloaded`, `Digital Twin Opened`, plus the contact funnel below.
+`Role Page Visited`, `Resume Downloaded`, `Digital Twin Opened`, plus the path and contact events below.
+
+## Visitor paths
+
+The home page forks right under the hero ("Start here") into three paths. Each path uses the
+same key as the contact experiment it ends at, so the path someone chose and the intent they
+later pick can be compared directly. Config lives in `src/data/visitorPaths.ts`.
+
+| Path | Start here card → | Expected next step | Converts at |
+|---|---|---|---|
+| `recruiter` | `#experience` | `Resume Downloaded` | `Contact Lead Captured` (intent=recruiter) |
+| `fractional` | `/projects` | case study pageview | `Contact Lead Captured` (intent=fractional) or `Calendar Link Clicked` |
+| `reader` | `/writing` | article pageview | `Newsletter Subscribed` or `Contact Lead Captured` (intent=reader) |
+
+Behaviour events:
+
+| Event | Properties | Answers |
+|---|---|---|
+| `Path Selected` | `path`, `destination` | Which kind of visitor this is, before they share anything. Also sets person properties `visitor_path` / `first_visitor_path`. |
+| `Home Section Viewed` | `section` (`hero`, `track_record`, `experience`, `skills`, `testimonials`, `contact`) | Scroll depth: how far down the home page people get. Fires once per section per page load. |
+| `Section Expanded` | `section`, `item` | Which collapsed detail people open (deal table, full timeline, a Q&A, a skills area, a long review). |
+| `Nav Clicked` | `item`, `location` (`header`, `mobile_menu`, `footer`) | Where people go from the navigation. |
+| `Contact Direct Clicked` | `channel` (`email`, `phone`, `linkedin`) | Who skips the picker and reaches out directly. |
+| `Newsletter Subscribed` | `source`, `page` | Footer sign-ups; identifies the person with `newsletter_subscribed: true`. Until 2026-09-24 this form only pretended to save. |
+
+The PostHog dashboard "Portfolio: visitor paths" charts these. `$pageview` tiles filter to
+`$host = www.michael-kaminski.io` because the project is shared with other sites.
 
 ## Contact experiments
 

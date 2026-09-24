@@ -1,9 +1,18 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
 import { jobTimeline } from '../data/experience';
-import { GraduationCap, Award } from 'lucide-react';
+import { ChevronDown, GraduationCap } from 'lucide-react';
+import { track } from '../utils/track';
+import { useSectionView } from '../hooks/useSectionView';
+
+// Most recent roles shown up front; the rest of the timeline is one click away.
+const ROLES_SHOWN = 4;
 
 const Experience: React.FC = () => {
+  const ref = useSectionView<HTMLElement>('experience');
+  const [showAll, setShowAll] = useState(false);
+  const [openQ, setOpenQ] = useState<number | null>(null);
+  const roles = showAll ? jobTimeline : jobTimeline.slice(0, ROLES_SHOWN);
+
   const experienceQuestions = [
     {
       title: "Leadership + Culture",
@@ -38,116 +47,106 @@ const Experience: React.FC = () => {
   ];
 
 
+  const toggleAll = () => {
+    if (!showAll) track('Section Expanded', { section: 'experience', item: 'full_timeline' });
+    setShowAll((v) => !v);
+  };
+
+  const toggleQ = (i: number) => {
+    if (openQ !== i) track('Section Expanded', { section: 'experience', item: experienceQuestions[i].title });
+    setOpenQ(openQ === i ? null : i);
+  };
+
   return (
-    <section id="experience" className="section-padding" style={{ background: 'var(--bg)' }}>
+    <section ref={ref} id="experience" className="section-padding scroll-mt-20" style={{ background: 'var(--bg)' }}>
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-          style={{ color: 'var(--primary)' }}
-        >
-          <h2 className="display text-4xl md:text-5xl mb-4 text-white">Experience &amp; <span className="accent">Leadership</span></h2>
-          <p className="text-xl max-w-3xl mx-auto" style={{ color: 'var(--secondary)' }}>
-            Proven track record in executive leadership, strategic decision-making, and organizational transformation with 20+ years of experience
+        <div className="mb-10">
+          <h2 className="display text-4xl md:text-5xl text-white">
+            Experience &amp; <span className="accent">leadership</span>
+          </h2>
+          <p className="mt-3 text-lg text-white/60 max-w-2xl">
+            20+ years across finance and engineering, from PE-backed operators to the agent layer.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Job Timeline */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          viewport={{ once: true }}
-          className="rilla-card p-8 mb-12"
-        >
-          <h3 className="display text-2xl mb-6 text-white">Professional <span className="accent">Timeline</span></h3>
-          <div className="space-y-4">
-            {jobTimeline.map((job, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="flex items-start space-x-4 p-4 rounded-lg hover:bg-white/5 transition-colors duration-200"
-              >
-                <div className="flex-shrink-0 w-24 text-sm font-medium text-white/50">{job.period}</div>
-                <div className="flex-1">
-                  <h4 className="font-semibold text-white">{job.title}</h4>
-                  {job.link ? (
-                    <a
-                      href={job.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block font-medium text-accent underline-offset-2 hover:underline"
-                    >
-                      {job.company}
-                    </a>
-                  ) : (
-                    <p className="font-medium text-accent">{job.company}</p>
-                  )}
-                  <p className="text-white/60 text-sm mt-1">{job.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Education */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          viewport={{ once: true }}
-          className="rilla-card p-8 mb-12"
-        >
-          <div className="flex items-center mb-6">
-            <GraduationCap className="w-8 h-8 mr-3 text-accent" />
-            <h3 className="display text-2xl text-white">Education</h3>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="border-l-4 border-accent pl-6">
-              <h4 className="text-lg font-semibold text-white">Masters of Business Administration</h4>
-              <p className="text-white/60">Georgia State University</p>
-              <p className="text-white/50">2011</p>
-            </div>
-            <div className="border-l-4 border-accent pl-6">
-              <h4 className="text-lg font-semibold text-white">Bachelors of Computer Science</h4>
-              <p className="text-white/60">DeVry University</p>
-              <p className="text-white/50">2008</p>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Experience Questions */}
-        <div className="space-y-8">
-          {experienceQuestions.map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.8, delay: index * 0.15, type: "spring", stiffness: 100 }}
-              viewport={{ once: true, margin: "-100px" }}
-              whileHover={{ y: -5, scale: 1.02 }}
-              className="rilla-card p-8 card-hover"
+        <div className="grid gap-8 lg:grid-cols-5">
+          {/* Timeline */}
+          <div className="lg:col-span-3">
+            <ol className="rilla-card divide-y divide-white/10">
+              {roles.map((job) => (
+                <li key={`${job.company}-${job.period}`} className="flex gap-4 p-5">
+                  <div className="w-24 flex-shrink-0 text-sm font-medium text-white/50">{job.period}</div>
+                  <div>
+                    <h3 className="font-semibold text-white">{job.title}</h3>
+                    {job.link ? (
+                      <a
+                        href={job.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-medium text-accent underline-offset-2 hover:underline"
+                      >
+                        {job.company}
+                      </a>
+                    ) : (
+                      <p className="text-sm font-medium text-accent">{job.company}</p>
+                    )}
+                    <p className="mt-1 text-sm text-white/60">{job.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <button
+              type="button"
+              onClick={toggleAll}
+              aria-expanded={showAll}
+              className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-accent hover:underline underline-offset-4"
             >
-              <div className="flex items-start mb-4">
-                <Award className="w-6 h-6 mr-3 mt-1 flex-shrink-0 text-accent" />
-                <div>
-                  <h3 className="display text-xl text-white mb-2">{item.title}</h3>
-                  <p className="text-white/60 mb-4 italic">"{item.question}"</p>
-                  <p className="text-white/80 leading-relaxed">{item.answer}</p>
+              {showAll ? 'Show fewer roles' : `Show all ${jobTimeline.length} roles`}
+              <ChevronDown className={`w-4 h-4 transition-transform ${showAll ? 'rotate-180' : ''}`} />
+            </button>
+
+            <div className="mt-6 flex items-start gap-3 text-sm text-white/70">
+              <GraduationCap className="w-5 h-5 flex-shrink-0 text-accent" />
+              <p>
+                <span className="font-semibold text-white">MBA</span>, Georgia State University (2011) ·{' '}
+                <span className="font-semibold text-white">BS Computer Science</span>, DeVry University (2008)
+              </p>
+            </div>
+          </div>
+
+          {/* Interview answers, collapsed */}
+          <div className="lg:col-span-2">
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-white/50">
+              How I work
+            </h3>
+            <div className="rilla-card divide-y divide-white/10">
+              {experienceQuestions.map((item, i) => (
+                <div key={item.title}>
+                  <button
+                    type="button"
+                    onClick={() => toggleQ(i)}
+                    aria-expanded={openQ === i}
+                    className="flex w-full items-center justify-between gap-3 p-4 text-left hover:bg-white/[0.03]"
+                  >
+                    <span className="font-semibold text-white">{item.title}</span>
+                    <ChevronDown
+                      className={`w-4 h-4 flex-shrink-0 text-accent transition-transform ${openQ === i ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                  {openQ === i && (
+                    <div className="px-4 pb-4 text-sm">
+                      <p className="italic text-white/55">"{item.question}"</p>
+                      <p className="mt-2 leading-relaxed text-white/80">{item.answer}</p>
+                    </div>
+                  )}
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 };
 
-export default Experience; 
+export default Experience;
