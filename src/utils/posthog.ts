@@ -1,6 +1,7 @@
 /**
  * PostHog, gated on REACT_APP_POSTHOG_KEY exactly like GA4 is gated on
- * REACT_APP_GA_MEASUREMENT_ID: no key, no network call. Set the key in Vercel for
+ * REACT_APP_GA_MEASUREMENT_ID: no key, no network call. Traffic goes through the
+ * first-party /ingest proxy defined in vercel.json. Set the key in Vercel for
  * the Production environment only, so preview deployments never pollute the
  * project (CRA cannot see VERCEL_ENV). The SDK (~60 KB gz) is imported lazily on
  * an idle callback so it never sits in the first-paint bundle.
@@ -11,7 +12,10 @@ let client: PostHog | null = null;
 let loading: Promise<PostHog | null> | null = null;
 
 export const POSTHOG_KEY = process.env.REACT_APP_POSTHOG_KEY;
-export const POSTHOG_HOST = process.env.REACT_APP_POSTHOG_HOST || 'https://us.i.posthog.com';
+// Same-origin reverse proxy (vercel.json routes /ingest/* to PostHog US). Talking
+// to us.i.posthog.com directly meant Brave Shields, uBlock and Safari content
+// blockers silently dropped every event, including lead sign-ups.
+export const POSTHOG_HOST = '/ingest';
 
 const load = (): Promise<PostHog | null> => {
   if (!POSTHOG_KEY || typeof window === 'undefined') return Promise.resolve(null);
@@ -19,6 +23,7 @@ const load = (): Promise<PostHog | null> => {
     loading = import('posthog-js').then(({ default: posthog }) => {
       posthog.init(POSTHOG_KEY as string, {
         api_host: POSTHOG_HOST,
+        ui_host: 'https://us.posthog.com',
         capture_pageview: 'history_change',
         capture_pageleave: true,
         persistence: 'localStorage+cookie',
@@ -92,6 +97,19 @@ export const getExperimentVariant = (flagKey: string, timeoutMs = 1500): Promise
       });
     });
   });
+};
+
+/**
+ * The browser's anonymous PostHog id, when the SDK has loaded. /api/lead sends it
+ * with the lead so the server-side identify joins this visitor's earlier
+ * pageviews. Undefined when PostHog is off or blocked; the lead still lands.
+ */
+export const getAnonymousId = (): string | undefined => {
+  try {
+    return client?.get_distinct_id() || undefined;
+  } catch {
+    return undefined;
+  }
 };
 
 /** Fire-and-forget capture; queues behind the lazy import if it has not landed yet. */

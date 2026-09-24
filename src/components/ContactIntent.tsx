@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, CheckCircle, Download } from 'lucide-react';
 import { track } from '../utils/track';
+import { submitLead } from '../utils/lead';
 import {
-  POSTHOG_KEY,
   getExperimentVariant,
   identifyVisitor,
   setVisitorProperties,
@@ -57,27 +57,11 @@ const ContactIntent: React.FC = () => {
     track('Contact Ask Started', props());
   };
 
-  const deliver = (payload: Record<string, string>) => {
-    if (CONTACT_ENDPOINT) {
-      void fetch(CONTACT_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload),
-      }).catch(() => undefined);
-      return;
-    }
-    // PostHog's person record is the inbox when it is on. With neither PostHog
-    // nor an endpoint configured, fall back to the visitor's mail client.
-    if (!POSTHOG_KEY) {
-      const subject = encodeURIComponent(`Portfolio: ${payload.intent}`);
-      const body = encodeURIComponent(`${payload.detail || ''}\n\nFrom: ${payload.email}`);
-      window.location.href = `mailto:${INBOX}?subject=${subject}&body=${body}`;
-    }
-  };
-
   const submit = (ev: React.FormEvent) => {
     ev.preventDefault();
     if (!exp || !email) return;
+    // submitLead first: it reads the anonymous id before identify replaces it.
+    const stored = submitLead({ kind: 'contact', email, intent: exp.intent, variant, detail, source: 'contact_intent' });
     identifyVisitor(email, {
       contact_intent: exp.intent,
       contact_variant: variant,
@@ -85,8 +69,16 @@ const ContactIntent: React.FC = () => {
       source: 'portfolio contact intent',
     });
     track('Contact Lead Captured', { ...props(), method: 'form' });
-    deliver({ intent: exp.intent, variant, email, detail });
     setStage('done');
+    // Last resort: if the server could not store it and no form endpoint is set,
+    // hand the message to the visitor's mail client rather than lose it.
+    const intent = exp.intent;
+    void stored.then((ok) => {
+      if (ok || CONTACT_ENDPOINT) return;
+      const subject = encodeURIComponent(`Portfolio: ${intent}`);
+      const body = encodeURIComponent(`${detail || ''}\n\nFrom: ${email}`);
+      window.location.href = `mailto:${INBOX}?subject=${subject}&body=${body}`;
+    });
   };
 
   const openCalendar = () => {

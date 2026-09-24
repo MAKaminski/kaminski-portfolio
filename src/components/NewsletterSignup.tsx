@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import { track } from '../utils/track';
 import { identifyVisitor } from '../utils/posthog';
-
-const CONTACT_ENDPOINT = process.env.REACT_APP_CONTACT_ENDPOINT;
+import { submitLead } from '../utils/lead';
 
 /**
  * Sits in the footer, so it is on every page including every article. This used
  * to wait one second on a setTimeout and say "you're on the list" without
- * storing the address anywhere. It now identifies the visitor in PostHog (where
- * `newsletter_subscribed` marks the list) and, when a form endpoint is
- * configured, posts there too.
+ * storing the address anywhere. The address now goes to /api/lead, which
+ * records it server-side where ad blockers cannot drop it (see utils/lead.ts);
+ * the posthog-js identify and event alongside it are analytics only.
  */
 const NewsletterSignup: React.FC<{ source?: string }> = ({ source = 'footer' }) => {
   const [email, setEmail] = useState('');
@@ -20,15 +19,10 @@ const NewsletterSignup: React.FC<{ source?: string }> = ({ source = 'footer' }) 
     e.preventDefault();
     if (!email) return;
     const page = typeof window !== 'undefined' ? window.location.pathname : '';
+    // submitLead first: it reads the anonymous id before identify replaces it.
+    void submitLead({ kind: 'newsletter', email, source });
     identifyVisitor(email, { newsletter_subscribed: true, newsletter_source: source });
     track('Newsletter Subscribed', { source, page });
-    if (CONTACT_ENDPOINT) {
-      void fetch(CONTACT_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ intent: 'newsletter', email, source, page }),
-      }).catch(() => undefined);
-    }
     setIsSubscribed(true);
     setEmail('');
   };
