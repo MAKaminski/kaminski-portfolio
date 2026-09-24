@@ -5,6 +5,12 @@
 > and TypeScript. Took an AI agent capability from prototype through security, legal, and
 > compliance review inside a regulated lender. Atlanta.
 
+## Tools he reaches for
+
+Claude and Claude Code for agent work; custom MCP servers; Jev (TypeSafe's System One
+classifier, released 2026-09-15) for the decisions an agent should not make in prose: a typed
+choice, score, or yes/no with a probability, used as a gate in front of tool calls.
+
 ## Who he is
 
 Michael Kaminski is a technical product manager who builds AI agent infrastructure. He is
