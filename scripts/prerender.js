@@ -47,7 +47,7 @@ const LINKEDIN = 'https://www.linkedin.com/in/michaelxaxkaminski';
 const GITHUB = 'https://github.com/MAKaminski';
 const DEV = 'https://dev.to/makaminski1337';
 const X = 'https://x.com/EBITDA_Engineer';
-const RESUME = '/docs/Kaminski Resume.pdf';
+const RESUME = '/resume.pdf';
 // Same file src/components/Hero.tsx renders, so the crawler image and the hydrated
 // image are one download instead of two.
 const HERO_PORTRAIT = '/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c-880x1040.webp';

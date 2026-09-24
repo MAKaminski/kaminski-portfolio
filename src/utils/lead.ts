@@ -3,7 +3,7 @@ import { getAnonymousId } from './posthog';
 const CONTACT_ENDPOINT = process.env.REACT_APP_CONTACT_ENDPOINT;
 
 export interface Lead {
-  kind: 'newsletter' | 'contact';
+  kind: 'newsletter' | 'contact' | 'resume';
   email: string;
   intent?: string;
   variant?: string;

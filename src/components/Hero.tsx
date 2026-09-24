@@ -13,6 +13,8 @@ import CountUp from './CountUp';
 import SplitReveal from './SplitReveal';
 import Magnetic from './Magnetic';
 import Tilt from './Tilt';
+import ResumeLink from './ResumeLink';
+import ResumeEmailCapture from './ResumeEmailCapture';
 // The twin (framer-motion panel + voice loop + audio APIs) is ~25 KB of source that
 // nobody needs until they click. Its own Suspense boundary matters: without one the
 // first render would suspend up to App's RouteFallback and paint "Loading" instead
@@ -159,14 +161,9 @@ const Hero: React.FC = () => {
                 </a>
               </Magnetic>
               <Magnetic>
-                <a
-                  href="/docs/Kaminski Resume.pdf"
-                  download="Kaminski_Resume.pdf"
-                  onClick={() => track('Resume Downloaded', { source: 'Hero' })}
-                  className="btn-pill-ghost text-base"
-                >
+                <ResumeLink source="Hero" className="btn-pill-ghost text-base">
                   <Download className="w-5 h-5" /> Resume
-                </a>
+                </ResumeLink>
               </Magnetic>
               <div className="flex items-center gap-2 pl-1">
                 <Magnetic strength={0.5}>
@@ -197,6 +194,15 @@ const Hero: React.FC = () => {
             >
               <MessagesSquare className="w-4 h-4" /> Or ask my digital twin anything
             </motion.button>
+
+            <motion.div
+              className="mt-3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, ease: RILLA_EASE, delay: 0.7 }}
+            >
+              <ResumeEmailCapture source="Hero" />
+            </motion.div>
 
             {/* Stats */}
             <motion.div
