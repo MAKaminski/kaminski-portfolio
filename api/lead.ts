@@ -15,10 +15,14 @@
  * `Contact Lead Captured` / `Newsletter Subscribed`, so experiment metrics that
  * count the client events are not double-counted.
  *
+ * After storing it, sends a confirmation to the lead and a notification to
+ * Michael through Resend (see _lib/email.ts); skipped when RESEND_API_KEY is unset.
+ *
  * Needs the PostHog project token, which is the same public `phc_` value the
  * front end uses: POSTHOG_PROJECT_TOKEN, falling back to REACT_APP_POSTHOG_KEY.
  */
 import { rateLimit, type ApiRequest, type ApiResponse } from './_lib/http';
+import { sendLeadEmails } from './_lib/email';
 
 const CAPTURE_HOST = process.env.POSTHOG_CAPTURE_HOST || 'https://us.i.posthog.com';
 const KINDS = new Set(['newsletter', 'contact']);
@@ -93,5 +97,8 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     return res.status(502).json({ error: 'Could not record the lead.', code: 'upstream' });
   }
 
-  return res.status(200).json({ ok: true });
+  // Stored first, emailed second: a Resend outage never loses the lead.
+  const emailed = await sendLeadEmails({ ...props, email, detail: str(b.detail, 500) });
+
+  return res.status(200).json({ ok: true, emailed: emailed ?? 'not_configured' });
 }
