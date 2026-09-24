@@ -2,6 +2,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "build",
   "framework": null,
+  "crons": [{ "path": "/api/cron/announce", "schedule": "0 15 * * *" }],
   "routes": [
     { "src": "^/(.*)$", "has": [{ "type": "host", "value": "^michaelkaminski\\.com$" }], "status": 308, "headers": { "Location": "https://www.michael-kaminski.io/$1" } },
     { "src": "^/(.*)$", "has": [{ "type": "host", "value": "^www\\.michaelkaminski\\.com$" }], "status": 308, "headers": { "Location": "https://www.michael-kaminski.io/$1" } },

@@ -40,3 +40,9 @@ article, always:
    `scripts/generate-sitemap.js`. Adding a route to one and not the other is what caused
    eleven URLs to serve the home page's HTML to crawlers. `scripts/verify-prerender.js`
    runs after every build and will say so if it happens again — read its output.
+
+9. **Publishing emails subscribers.** Every article dated 2026-09-25 or later is sent to the
+   "Field notes" newsletter by `/api/cron/announce` (daily, 15:00 UTC) once its page is live, so
+   the `date` is also the send date: a future `date` waits until that day, and an article more
+   than 7 days old when it ships is never emailed. Treat the title and description as the email
+   subject and body; they go out verbatim.

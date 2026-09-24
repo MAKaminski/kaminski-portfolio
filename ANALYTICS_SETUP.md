@@ -35,6 +35,15 @@ which Brave Shields, uBlock and Safari content blockers drop. Two fixes:
   `LEAD_NOTIFY_EMAIL`. An address gets at most one confirmation per kind per UTC day (Resend
   Idempotency-Key), so the public form cannot be used to flood someone's inbox. Email failures
   are logged and never fail the request; the lead is already stored.
+- **Field notes newsletter** (`api/_lib/newsletter.ts`, `api/cron/announce.ts`). A footer sign-up
+  is also added to the Resend segment "Field notes (michael-kaminski.io newsletter)". Vercel Cron
+  calls `/api/cron/announce` daily at 15:00 UTC; it sends one broadcast per new article to that
+  segment, named `article:<slug>` so a re-run never sends twice. Only articles dated
+  2026-09-25 or later and within the last 7 days qualify, oldest first, one per run, and only once
+  `/writing/<slug>` returns 200 on production. Links carry `utm_source=newsletter`. Resend
+  handles unsubscribes. Env (Production only): `RESEND_NEWSLETTER_KEY` (full access; contacts
+  and broadcasts need it), `RESEND_SEGMENT_ID`, `CRON_SECRET`. Check without sending:
+  `curl -H "Authorization: Bearer $CRON_SECRET" https://www.michael-kaminski.io/api/cron/announce?dry=1`.
 - **`/ingest/*`** is a reverse proxy to PostHog US, defined in `vercel.json` ahead of the
   filesystem handler. posthog-js uses it as `api_host`, so the analytics events that feed the
   experiments and path funnels are no longer dropped by blockers either.
