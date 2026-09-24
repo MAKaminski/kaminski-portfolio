@@ -313,7 +313,19 @@ ${ctaBlock()}
 }
 
 // ─── Home ──────────────────────────────────────────────────────────────────
-function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about }) {
+function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas }) {
+  // Both tiers are emitted: the collapsed `more` tail is still on the page for a crawler.
+  const skillRows = skills
+    .map(
+      (c) => `<div><dt>${esc(c.title)}</dt><dd>${esc(c.core.join(', '))}${
+        c.more.length ? `<span class="more">, ${esc(c.more.join(', '))}</span>` : ''
+      }</dd></div>`
+    )
+    .join('');
+  const areaBlocks = areas
+    .map((a) => `<h3>${esc(a.title)}</h3><ul>${a.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`)
+    .join('');
+
   const articleLinks = articles
     .map((a) => `<li><a href="/writing/${esc(a.slug)}">${esc(a.title)}</a> — ${esc(a.description)}</li>`)
     .join('');
@@ -380,6 +392,11 @@ ${about.map((para) => `<p>${esc(para)}</p>`).join('')}
 <li>Human approval gates on irreversible agent actions</li>
 <li>Terraform, Kubernetes, PostgreSQL, and the infrastructure agents run on</li>
 </ul>
+
+<h2>Skills &amp; expertise</h2>
+<p>The stack I ship with, and the finance and compliance depth behind it.</p>
+<dl>${skillRows}</dl>
+${areaBlocks}
 
 <h2>Selected projects</h2>
 ${projectCards}
@@ -623,6 +640,8 @@ function main() {
   // Mirrors projectsByDate() in src/data/projects.ts: flagship first, then
   // newest. The static and mounted versions of /projects must agree on order.
   const about = loadData('about.ts', 'export const aboutParagraphs', 'export const aboutIntro');
+  const skills = loadData('skills.ts', 'export const skillCategories', 'export const specializedAreas', { required: true });
+  const areas = loadData('skills.ts', 'export const specializedAreas', 'export const skillCount', { required: true });
   const projects = loadData('projects.ts', 'export const projects', 'export const getProject').sort(
     (a, b) =>
       Number(b.tier === 'flagship') - Number(a.tier === 'flagship') || b.date.localeCompare(a.date)
@@ -690,7 +709,7 @@ function main() {
         crumbs: [{ name: 'Home', path: '/' }],
         jsonLd: reviewLd,
       },
-      homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about })
+      homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas })
     )
   );
 
