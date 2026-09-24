@@ -393,6 +393,7 @@ ${about.map((para) => `<p>${esc(para)}</p>`).join('')}
 <li>Custom MCP servers and tool design an agent can actually call</li>
 <li>Eval harness design and statistical gating for agent instruction changes</li>
 <li>Human approval gates on irreversible agent actions</li>
+<li>Jev classifier gates in front of agent actions: a typed choice, score, or yes/no with a calibrated probability in one pass, instead of asking an LLM for prose and parsing it</li>
 <li>Terraform, Kubernetes, PostgreSQL, and the infrastructure agents run on</li>
 </ul>
 
