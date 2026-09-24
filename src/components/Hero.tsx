@@ -12,6 +12,7 @@ import { PROFILES } from '../data/profiles';
 import CountUp from './CountUp';
 import SplitReveal from './SplitReveal';
 import Magnetic from './Magnetic';
+import Tilt from './Tilt';
 // The twin (framer-motion panel + voice loop + audio APIs) is ~25 KB of source that
 // nobody needs until they click. Its own Suspense boundary matters: without one the
 // first render would suspend up to App's RouteFallback and paint "Loading" instead
@@ -136,7 +137,7 @@ const Hero: React.FC = () => {
               transition={{ duration: 0.6, ease: RILLA_EASE, delay: 0.5 }}
             >
               Agent infrastructure, MCP servers, and eval harnesses inside a regulated lender.
-              Python and TypeScript. Atlanta, relocating to New York City.
+              Python and TypeScript. Atlanta.
             </motion.p>
 
             {/* CTAs */}
@@ -205,7 +206,11 @@ const Hero: React.FC = () => {
               transition={{ duration: 0.6, ease: RILLA_EASE, delay: 0.7 }}
             >
               {stats.map((s, i) => (
-                <div key={i}>
+                <div
+                  key={i}
+                  data-cursor
+                  className={`${i % 2 ? 'float-delayed' : 'float'} rounded-xl px-2 py-1 -mx-2 transition-colors hover:bg-white/[0.04]`}
+                >
                   <div className="display accent text-4xl sm:text-5xl">
                     <CountUp to={s.to} prefix={s.prefix} suffix={s.suffix} decimals={s.decimals} />
                   </div>
@@ -218,7 +223,7 @@ const Hero: React.FC = () => {
           {/* Right — portrait (clip-path reveal + parallax) */}
           <div className="lg:col-span-5">
             <motion.div className="relative mx-auto max-w-sm" style={{ y: yPortrait }}>
-              <div className="absolute -inset-3 rounded-[26px] bg-accent/20 blur-2xl" />
+              <div className="absolute -inset-3 rounded-[26px] bg-accent/20 blur-2xl pulse-slow" />
               {/* The portrait is the mobile LCP element. It used to be revealed with a
                   clip-path inset that left it with zero painted area until 1.35 s after
                   mount, which is where the 6.9 s LCP came from. An accent panel that
@@ -246,12 +251,16 @@ const Hero: React.FC = () => {
                 />
               </div>
               <motion.div
-                className="absolute -bottom-4 -left-4 rounded-full bg-accent px-5 py-2 text-sm font-bold text-ink-900 shadow-lg"
+                className="absolute -bottom-4 -left-4"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, ease: RILLA_EASE, delay: 1 }}
               >
-                Open to fractional & full-time
+                <Magnetic strength={0.4}>
+                  <div className="float-delayed rounded-full bg-accent px-5 py-2 text-sm font-bold text-ink-900 shadow-lg">
+                    Open to fractional &amp; full-time
+                  </div>
+                </Magnetic>
               </motion.div>
             </motion.div>
 
@@ -274,15 +283,19 @@ const Hero: React.FC = () => {
               </>
             );
             const cls =
-              'block rounded-2xl border border-white/15 bg-white/[0.04] p-5 transition-colors hover:border-accent/60 hover:bg-accent/[0.06]';
-            return p.href.startsWith('/#') ? (
-              <a key={p.key} href={p.href.slice(1)} onClick={() => choosePath(p)} className={cls}>
-                {inner}
-              </a>
-            ) : (
-              <Link key={p.key} to={p.href} onClick={() => choosePath(p)} className={cls}>
-                {inner}
-              </Link>
+              'block h-full rounded-2xl border border-white/15 bg-white/[0.04] p-5 transition-all duration-300 hover:border-accent/60 hover:bg-accent/[0.06] hover:shadow-[0_0_30px_rgba(255,245,0,0.12)]';
+            return (
+              <Tilt key={p.key}>
+                {p.href.startsWith('/#') ? (
+                  <a href={p.href.slice(1)} onClick={() => choosePath(p)} className={cls}>
+                    {inner}
+                  </a>
+                ) : (
+                  <Link to={p.href} onClick={() => choosePath(p)} className={cls}>
+                    {inner}
+                  </Link>
+                )}
+              </Tilt>
             );
           })}
         </div>
@@ -294,6 +307,13 @@ const Hero: React.FC = () => {
             box so wide wordmarks and square marks carry the same optical weight. */}
         <Marquee
           items={[
+            {
+              name: 'Stellantis Financial Services',
+              src: '/images/logos/stellantis-fs.webp',
+              href: 'https://www.stellantis-fs.com/',
+              width: 178,
+              height: 37,
+            },
             {
               name: 'GreenSky',
               src: '/images/logos/greensky.webp',

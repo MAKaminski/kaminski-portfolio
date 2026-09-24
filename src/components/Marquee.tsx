@@ -53,7 +53,7 @@ const Marquee: React.FC<MarqueeProps> = ({ items, className }) => {
                     width={item.width}
                     height={item.height}
                     decoding="async"
-                    className="opacity-45 transition-opacity duration-300 group-hover:opacity-90"
+                    className="opacity-45 transition duration-300 group-hover:opacity-90 hover:scale-110 hover:opacity-100"
                   />
                 </a>
                 <span className="accent display px-6 text-2xl md:text-3xl">/</span>

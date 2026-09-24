@@ -3,7 +3,7 @@
 > Technical product manager working at the agent layer. Builds AI agents that run in
 > production — custom MCP servers, multi-agent pipelines, and eval harnesses in Python
 > and TypeScript. Took an AI agent capability from prototype through security, legal, and
-> compliance review inside a regulated lender. Atlanta, relocating to New York City.
+> compliance review inside a regulated lender. Atlanta.
 
 ## Who he is
 
@@ -74,7 +74,7 @@ source.
 Senior product roles at the agent layer — Technical Product Manager, Senior Product Owner,
 or PM for an agent platform — at teams shipping AI agents into production, especially where
 the environment is regulated and the evidence trail matters. Open to fractional and
-full-time. Atlanta, relocating to New York City.
+full-time. Atlanta.
 
 ## Papers (PDF)
 

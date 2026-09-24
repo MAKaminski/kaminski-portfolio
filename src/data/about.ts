@@ -27,4 +27,4 @@ export const aboutParagraphs: string[] = [
 ];
 
 export const aboutIntro =
-  'Technical product manager at the agent layer. Atlanta, relocating to New York City.';
+  'Technical product manager at the agent layer. Atlanta.';

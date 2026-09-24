@@ -39,7 +39,7 @@ const About: React.FC = () => {
         <div className="mx-auto max-w-3xl px-4">
           <h1 className="mb-4 text-4xl font-bold text-white sm:text-5xl">About</h1>
           <p className="mb-10 text-lg text-white/60">
-            Technical product manager at the agent layer. Atlanta, relocating to New York City.
+            Technical product manager at the agent layer. Atlanta.
           </p>
 
           <div className="mb-14 space-y-5">
