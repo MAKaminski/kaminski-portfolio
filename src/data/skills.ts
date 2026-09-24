@@ -62,7 +62,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     title: "AI & ML",
-    core: ["OpenAI", "Claude", "Claude Code", "Cursor", "DeepSeek", "Kimi", "LangChain", "MCP", "Hugging Face", "TensorFlow", "PyTorch"],
+    core: ["OpenAI", "Claude", "Claude Code", "Jev", "Cursor", "DeepSeek", "Kimi", "LangChain", "MCP", "Hugging Face", "TensorFlow", "PyTorch"],
     more: ["Anthropic API", "Gemini", "Perplexity", "Ollama", "LangGraph", "LlamaIndex", "ElevenLabs", "scikit-learn", "NLTK", "OpenCV", "Tesseract", "FFmpeg", "Transformers", "Text embeddings", "RAG", "Reinforcement learning", "Transfer learning", "n8n", "Zapier", "Make"],
   },
   {
@@ -89,7 +89,7 @@ export const specializedAreas: SpecializedArea[] = [
   },
   {
     title: "AI Agents & Governance",
-    items: ["Agentic workflow design", "Multi-agent orchestration", "Custom MCP servers & tool design", "Eval harnesses & statistical gating", "Human approval gates on irreversible actions", "Voice AI agents in production (10,000+ hours/month)", "Prompt & instruction-file governance", "Model risk management (SR 11-7)", "RAG & retrieval evaluation", "AI security, legal & compliance review", "Agent observability & evidence trails", "Cost-per-resolution economics"],
+    items: ["Agentic workflow design", "Multi-agent orchestration", "Custom MCP servers & tool design", "Eval harnesses & statistical gating", "Human approval gates on irreversible actions", "Jev (TypeSafe) classifier gates: typed choice / score / yes-no decisions with calibrated probabilities, no prose", "Voice AI agents in production (10,000+ hours/month)", "Prompt & instruction-file governance", "Model risk management (SR 11-7)", "RAG & retrieval evaluation", "AI security, legal & compliance review", "Agent observability & evidence trails", "Cost-per-resolution economics"],
   },
   {
     title: "Accounting & Financial Standards",
