@@ -23,7 +23,7 @@ const path = require('path');
 const OUT = path.join(__dirname, '..', 'public', 'images', 'logos', 'tech');
 const MAP = path.join(__dirname, '..', 'src', 'data', 'techLogos.ts');
 
-// Skill name (as written in src/components/Skills.tsx) -> simple-icons slug.
+// Skill name (as written in src/data/skills.ts) -> simple-icons slug.
 const SIMPLE = {
   SQL: 'mysql', Python: 'python', TypeScript: 'typescript', R: 'r', Rust: 'rust',
   'Node.js': 'nodedotjs', FastAPI: 'fastapi', PostgreSQL: 'postgresql', Redis: 'redis',
@@ -39,12 +39,30 @@ const SIMPLE = {
   'Google Analytics': 'googleanalytics', PostHog: 'posthog', Mixpanel: 'mixpanel',
   HubSpot: 'hubspot', Jira: 'jira', Confluence: 'confluence', Linear: 'linear', Notion: 'notion',
   Airtable: 'airtable', Figma: 'figma', Lucid: 'lucid', Resend: 'resend', Shopify: 'shopify',
+  // Long tail (src/data/skills.ts `more`)
+  Bash: 'gnubash', PHP: 'php', HTML: 'html5', CSS: 'css', YAML: 'yaml',
+  Express: 'express', Django: 'django', Flask: 'flask', MySQL: 'mysql', SQLite: 'sqlite',
+  MariaDB: 'mariadb', Elasticsearch: 'elasticsearch', Neo4j: 'neo4j', Cassandra: 'apachecassandra',
+  Firebase: 'firebase', Milvus: 'milvus', Pydantic: 'pydantic', Jest: 'jest', Pytest: 'pytest',
+  Postman: 'postman', OpenAPI: 'openapiinitiative', 'Next.js': 'nextdotjs', Vite: 'vite',
+  'Framer Motion': 'framer', Webflow: 'webflow', WordPress: 'wordpress', Terraform: 'terraform',
+  Cloudflare: 'cloudflare', Railway: 'railway', Render: 'render', Nginx: 'nginx', Linux: 'linux',
+  Git: 'git', Datadog: 'datadog', Sentry: 'sentry', Grafana: 'grafana', 'PGP/GPG encryption': 'gnuprivacyguard',
+  Metabase: 'metabase', ClickHouse: 'clickhouse', QlikView: 'qlik', 'Apache NiFi': 'apachenifi',
+  'Apache Spark': 'apachespark', Kafka: 'apachekafka', Dask: 'dask', Pandas: 'pandas', NumPy: 'numpy',
+  SciPy: 'scipy', Jupyter: 'jupyter', Plotly: 'plotly', Streamlit: 'streamlit', Parquet: 'apacheparquet',
+  'Anthropic API': 'anthropic', Gemini: 'googlegemini', Perplexity: 'perplexity', Ollama: 'ollama',
+  LangGraph: 'langgraph', ElevenLabs: 'elevenlabs', 'scikit-learn': 'scikitlearn', OpenCV: 'opencv',
+  FFmpeg: 'ffmpeg', 'Transformers': 'huggingface', n8n: 'n8n', Zapier: 'zapier', Make: 'make',
+  PayPal: 'paypal', Square: 'square', Mailchimp: 'mailchimp', SEMrush: 'semrush', Hotjar: 'hotjar',
+  Apollo: 'apollographql', 'Vercel Analytics': 'vercel', Asana: 'asana', Trello: 'trello', Miro: 'miro',
+  Zoom: 'zoom', Calendly: 'calendly', Retool: 'retool',
 };
 
 // Skill name -> devicon file already committed under public/images/logos/tech/.
 const DEVICON = {
   Java: 'java', 'C#': 'csharp', AWS: 'amazonwebservices', 'Oracle Hyperion': 'oracle',
-  Salesforce: 'salesforce', Canva: 'canva',
+  Salesforce: 'salesforce', Canva: 'canva', Oracle: 'oracle',
 };
 
 function luminance(hex) {
