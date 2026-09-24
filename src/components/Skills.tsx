@@ -17,7 +17,10 @@ const Skills: React.FC = () => {
     "Data & Analytics": BarChart3, "AI & ML": Code, "ERP & Financial Systems": Settings,
     "SEO & Growth Analytics": BarChart3, "Product & Collaboration": Settings,
     "Systems Architecture": Database, "Accounting & Financial Standards": BarChart3,
-    "Compliance & Security": Settings, "Financial Expertise": Award, "Transaction Experience": Globe,
+    "Compliance & Security": Settings, "AI Agents & Governance": Code,
+    "FP&A & Controllership": BarChart3, "Capital Markets & Treasury": Award,
+    "Transactions & Corporate Development": Globe, "Credit, Risk & Collections": Database,
+    "Product & Delivery Leadership": Settings, "Industries": Globe,
   };
   // Which categories have their long tail open. The tail is always in the DOM
   // (hidden, not unmounted) so the page indexes the same whether or not anyone
@@ -58,7 +61,7 @@ const Skills: React.FC = () => {
                   {category.core.map((skill) => (
                     <span
                       key={skill}
-                      className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs font-medium text-white/80"
+                      className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs font-medium text-white/80 transition duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-white hover:shadow-[0_0_12px_rgba(255,232,0,0.18)]"
                     >
                       <TechLogo name={skill} className="w-3.5 h-3.5" />
                       {skill}
@@ -69,7 +72,7 @@ const Skills: React.FC = () => {
                       key={skill}
                       // Tailwind's display utilities outrank the `hidden` attribute, so
                       // the toggle swaps the class. The chip stays in the DOM either way.
-                      className={`${expanded[category.title] ? 'inline-flex' : 'hidden'} items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.03] px-2 py-1 text-xs font-medium text-white/60`}
+                      className={`${expanded[category.title] ? 'inline-flex' : 'hidden'} items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.03] px-2 py-1 text-xs font-medium text-white/60 transition duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-white`}
                     >
                       <TechLogo name={skill} className="w-3.5 h-3.5" />
                       {skill}
@@ -117,7 +120,7 @@ const Skills: React.FC = () => {
                     {area.items.map((item) => (
                       <li
                         key={item}
-                        className="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs font-medium text-white/80"
+                        className="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs font-medium text-white/80 transition duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-white"
                       >
                         {item}
                       </li>

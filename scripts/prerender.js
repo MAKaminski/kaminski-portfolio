@@ -313,7 +313,10 @@ ${ctaBlock()}
 }
 
 // ─── Home ──────────────────────────────────────────────────────────────────
-function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas }) {
+function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners }) {
+  const partnerRows = partners
+    .map((p) => `<li><a href="${esc(p.href)}" rel="noopener">${esc(p.name)}</a> — ${esc(p.context)}</li>`)
+    .join('');
   // Both tiers are emitted: the collapsed `more` tail is still on the page for a crawler.
   const skillRows = skills
     .map(
@@ -365,7 +368,7 @@ ${esc(j.description)}${j.exit ? `<br><em>${esc(j.exit)}</em>` : ''}
 <h1>Michael Kaminski — I build AI agents that run in production</h1>
 ${img(HERO_PORTRAIT, 'Michael Kaminski', 440, 520, true)}
 <p>Agent infrastructure, MCP servers, and eval harnesses inside a regulated lender.
-Python and TypeScript. Atlanta, relocating to New York City.</p>
+Python and TypeScript. Atlanta.</p>
 
 <p><strong>What I'm looking for:</strong> senior product roles at the agent layer —
 Technical Product Manager, Senior Product Owner, or PM for an agent platform — at teams
@@ -403,6 +406,11 @@ ${projectCards}
 <p><a href="/projects">All projects and case studies</a> ·
 <a href="/websites">Live production sites</a> ·
 <a href="/products">Open-source tools</a></p>
+
+<h2>Private equity partner experience</h2>
+<p>Operated inside sponsor-backed companies: board packs, covenant math, divestiture programs, and
+value-creation plans built for the sponsors below.</p>
+<ul>${partnerRows}</ul>
 
 <h2>Experience</h2>
 <ul>${jobRows}</ul>
@@ -642,6 +650,7 @@ function main() {
   const about = loadData('about.ts', 'export const aboutParagraphs', 'export const aboutIntro');
   const skills = loadData('skills.ts', 'export const skillCategories', 'export const specializedAreas', { required: true });
   const areas = loadData('skills.ts', 'export const specializedAreas', 'export const skillCount', { required: true });
+  const partners = loadData('partners.ts', 'export const partners', 'export const partnerCount', { required: true });
   const projects = loadData('projects.ts', 'export const projects', 'export const getProject').sort(
     (a, b) =>
       Number(b.tier === 'flagship') - Number(a.tier === 'flagship') || b.date.localeCompare(a.date)
@@ -709,7 +718,7 @@ function main() {
         crumbs: [{ name: 'Home', path: '/' }],
         jsonLd: reviewLd,
       },
-      homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas })
+      homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners })
     )
   );
 
@@ -737,7 +746,7 @@ function main() {
         '/about',
         `
 <h1>About Michael Kaminski</h1>
-<p>Technical product manager at the agent layer. Atlanta, relocating to New York City.</p>
+<p>Technical product manager at the agent layer. Atlanta.</p>
 ${about.map((para) => `<p>${esc(para)}</p>`).join('')}
 
 <h2>Where I've worked</h2>

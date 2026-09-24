@@ -74,7 +74,7 @@ const Experience: React.FC = () => {
           <div className="lg:col-span-3">
             <ol className="rilla-card divide-y divide-white/10">
               {roles.map((job) => (
-                <li key={`${job.company}-${job.period}`} className="flex gap-4 p-5">
+                <li key={`${job.company}-${job.period}`} className="flex gap-4 p-5 transition-colors duration-300 hover:bg-white/[0.03]">
                   <div className="w-24 flex-shrink-0 text-sm font-medium text-white/50">{job.period}</div>
                   <div>
                     <h3 className="font-semibold text-white">{job.title}</h3>

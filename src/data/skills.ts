@@ -85,23 +85,43 @@ export const skillCategories: SkillCategory[] = [
 export const specializedAreas: SpecializedArea[] = [
   {
     title: "Systems Architecture",
-    items: ["Core banking systems", "Payment processors", "IVR"],
+    items: ["Core banking systems", "Loan origination systems (LOS)", "Loan management & servicing platforms", "Payment processors & rails (ACH, card, RTP, wire)", "Stripe Connect & Plaid disbursement architecture", "IVR / Genesys contact-center routing", "Omni-channel orchestration (voice, SMS, email)", "Dialer strategy & contact governance", "Salesforce CRM & case management", "NetSuite ERP architecture & integrations", "MuleSoft / API gateway integration patterns", "Event-driven & queue-based pipelines", "Data warehouse & lakehouse design", "Identity & role provisioning automation", "Multi-tenant SaaS architecture", "Architecture decision records (ADRs)", "Build-vs-buy & vendor architecture", "Data residency & cost-per-resolution modeling", "Disaster recovery & business continuity", "Zero-to-one platform builds"],
+  },
+  {
+    title: "AI Agents & Governance",
+    items: ["Agentic workflow design", "Multi-agent orchestration", "Custom MCP servers & tool design", "Eval harnesses & statistical gating", "Human approval gates on irreversible actions", "Voice AI agents in production (10,000+ hours/month)", "Prompt & instruction-file governance", "Model risk management (SR 11-7)", "RAG & retrieval evaluation", "AI security, legal & compliance review", "Agent observability & evidence trails", "Cost-per-resolution economics"],
   },
   {
     title: "Accounting & Financial Standards",
-    items: ["ASC 606 (Revenue Recognition)", "ASC 842 (Leases)", "ASC 326 (Credit Losses)", "ASC 815 (Derivatives)", "ASC 820 (Fair Value)", "GAAP", "IFRS", "SOX Compliance"],
+    items: ["ASC 606 (Revenue Recognition)", "ASC 842 (Leases)", "ASC 326 / CECL (Credit Losses)", "ASC 815 (Derivatives & Hedging)", "ASC 820 (Fair Value)", "ASC 985-20 (Software Revenue)", "ASC 350-40 (Internal-Use Software Capitalization)", "ASC 310 (Receivables)", "ASC 450 (Contingencies)", "ASC 740 (Income Taxes)", "ASC 805 (Business Combinations)", "ASC 350 (Goodwill & Intangibles)", "ASC 718 (Stock Compensation)", "ASC 830 (Foreign Currency)", "GAAP", "IFRS", "SOX Compliance & ICFR", "Purchase price allocation", "Chart of accounts design", "Multi-entity consolidation & intercompany", "Month-end close acceleration", "Audit readiness & auditor management", "Quality of earnings (QoE)", "GAAP-to-tax reconciliation", "Revenue & fee recognition for lending products"],
+  },
+  {
+    title: "FP&A & Controllership",
+    items: ["Driver-based forecasting", "13-week cash flow forecasting", "Budgeting & variance analysis", "Board packs & KPI trees", "Investor & lender reporting", "Covenant dashboards & compliance", "Unit economics (CAC, LTV, NRR, payback)", "Cohort & vintage analysis", "Pricing & rate-card design", "Utilization & delivery-pyramid modeling", "Working capital & DSO optimization", "Scenario & sensitivity modeling", "Headcount & workforce planning", "Capex approval & portfolio analytics", "Segment & LOB P&L ownership", "Supplier contract renegotiation", "Cost-out & margin expansion programs", "QuickBooks → NetSuite ERP migration", "Payroll, AP/AR & business collections", "Cap-table & equity management (Carta)"],
+  },
+  {
+    title: "Capital Markets & Treasury",
+    items: ["Treasury operations", "Share repurchase programs ($6B+)", "Commercial paper & revolving credit facilities", "Debt facility structuring & lender negotiations", "Asset-backed lending (ABL)", "Asset-backed securitization (non-mortgage, 144A)", "Warehouse lines & forward-flow agreements", "Liquidity & cash pooling", "FX management & hedging", "Interest rate swaps & hedge accounting", "Rating agency & bank relationship management", "Market execution", "VaR", "VWAP", "Options, Greeks & portfolio hedging", "Long-only portfolio management"],
+  },
+  {
+    title: "Transactions & Corporate Development",
+    items: ["Acquisitions & tuck-ins", "M&A advisory", "Buy-and-build roll-ups", "Divestitures & carve-outs ($1.8B program)", "IPO readiness (S-1)", "Series B & growth equity raises", "144(a) debt raises ($400M)", "LBO modeling & sponsor returns", "DCF, comps & precedent transactions", "Synergy modeling & integration planning", "Transition service agreements (TSAs)", "Data-room & diligence management", "Post-merger systems integration", "PE exit readiness", "Term-sheet negotiation", "Global markets", "Equity & debt capital markets"],
+  },
+  {
+    title: "Credit, Risk & Collections",
+    items: ["Credit policy & underwriting strategy", "Scorecard & decision-model oversight", "FICO Decision Modeler & optimization", "Vintage, roll-rate & delinquency analytics", "Loss mitigation & treatment strategy", "Collections strategy & segmentation", "Contact strategy & containment policy", "Credit reporting (Metro 2)", "Portfolio segmentation & pricing", "Fraud & KYC controls", "AML / OFAC screening", "Fair lending analytics", "Loan servicing operations", "Repossession, remarketing & recovery", "Bankruptcy & SCRA handling", "Dispute handling & escalation"],
   },
   {
     title: "Compliance & Security",
-    items: ["SOC 1 & SOC 2 Readiness", "SOC Compliance", "GDPR", "CCPA", "Basel's Principles for Operational Resilience", "SEC/FINRA", "OCC", "Reg X", "Reg Z", "NACHA", "UDAAP", "SCRA", "FCRA", "MERS", "PCI DSS", "ISO 27001", "HIPAA", "PII handling"],
+    items: ["SOC 1 & SOC 2 readiness", "PCI DSS", "ISO 27001", "HIPAA", "GDPR", "CCPA", "GLBA / Reg P", "FDCPA & Reg F", "UDAAP", "FCRA", "SCRA", "TCPA", "TILA / Reg Z", "RESPA / Reg X", "ECOA / Reg B", "Reg E", "NACHA operating rules", "OCC & CFPB examination readiness", "SEC / FINRA", "MERS", "Basel principles for operational resilience", "State lending & licensing requirements", "PII handling & data minimization", "Vendor risk management", "Quality control & audit functions"],
   },
   {
-    title: "Financial Expertise",
-    items: ["Treasury", "FX Management", "Share Repurchases", "Market Execution", "VaR", "VWAP"],
+    title: "Product & Delivery Leadership",
+    items: ["Product roadmaps & NPV-based prioritization", "PRDs, Gherkin acceptance criteria & release trains", "Agile / Scrum at scale (multi-squad)", "Enterprise program governance & PMO", "Change management & adoption", "UAT, business readiness & super-user programs", "Vendor selection, RFPs & SOWs", "Executive & board reporting", "Budget ownership ($25M+)", "Hiring, team building & succession planning", "Cross-functional leadership without direct authority", "Operating model & process design", "SLA management & dispatch operations", "Marketplace & multi-sided product strategy"],
   },
   {
-    title: "Transaction Experience",
-    items: ["Acquisitions", "M&A Advisory", "Global Markets", "Equity & Debt Capital markets", "IPO Readiness (S1)", "Asset Based Lending", "Asset Backed Securitization (Non-Mortgage) (144A)"],
+    title: "Industries",
+    items: ["Consumer auto finance (retail & lease)", "Point-of-sale & home-improvement lending", "Fintech & embedded payments", "B2B SaaS & marketplaces", "Residential & commercial services", "Construction & property management", "Real estate technology", "Wholesale distribution & manufacturing", "Big-box retail", "Professional services & advisory"],
   },
 ];
 
