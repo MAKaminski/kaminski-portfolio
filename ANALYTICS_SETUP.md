@@ -16,7 +16,7 @@ Vercel Analytics and PostHog under the same event name:
 ## Contact experiments
 
 The contact section's first question is "what brings you here?" — one click, no typing. Each
-answer is a PostHog experiment (draft until launched) on how little we can ask for:
+answer is a PostHog experiment (running since 2026-09-24) on how little we can ask for:
 
 | Intent | Flag / experiment | control | test |
 |---|---|---|---|
