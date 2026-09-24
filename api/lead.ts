@@ -26,6 +26,7 @@
  */
 import { rateLimit, type ApiRequest, type ApiResponse } from './_lib/http';
 import { sendLeadEmails } from './_lib/email';
+import { subscribe } from './_lib/newsletter';
 
 const CAPTURE_HOST = process.env.POSTHOG_CAPTURE_HOST || 'https://us.i.posthog.com';
 const KINDS = new Set(['newsletter', 'contact', 'resume']);
@@ -105,7 +106,12 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
   }
 
   // Stored first, emailed second: a Resend outage never loses the lead.
-  const emailed = await sendLeadEmails({ ...props, email, detail: str(b.detail, 500) });
+  // Newsletter sign-ups also join the "Field notes" segment that article
+  // broadcasts go to (see _lib/newsletter.ts and cron/announce.ts).
+  const [emailed, listed] = await Promise.all([
+    sendLeadEmails({ ...props, email, detail: str(b.detail, 500) }),
+    kind === 'newsletter' ? subscribe(email) : Promise.resolve(undefined),
+  ]);
 
-  return res.status(200).json({ ok: true, emailed: emailed ?? 'not_configured' });
+  return res.status(200).json({ ok: true, emailed: emailed ?? 'not_configured', ...(listed !== undefined ? { listed } : {}) });
 }
