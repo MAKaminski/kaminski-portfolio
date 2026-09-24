@@ -27,6 +27,14 @@ which Brave Shields, uBlock and Safari content blockers drop. Two fixes:
   so experiment metrics are not double-counted. It needs the project token as
   `POSTHOG_PROJECT_TOKEN`, or falls back to `REACT_APP_POSTHOG_KEY`, which Production
   already has. **To see every lead, filter PostHog for `Lead Received`.**
+- **Lead emails** (`api/_lib/email.ts`). After `/api/lead` stores a lead it sends, through
+  Resend from `notes@michael-kaminski.io` (verified domain): a confirmation to the lead (reply-to
+  Michael) and a notification to Michael (reply-to the lead, with a PostHog person link). Needs
+  `RESEND_API_KEY`: a send-only key restricted to michael-kaminski.io, set for Production only
+  so preview deploys never email anyone. Optional overrides: `LEAD_FROM_EMAIL`,
+  `LEAD_NOTIFY_EMAIL`. An address gets at most one confirmation per kind per UTC day (Resend
+  Idempotency-Key), so the public form cannot be used to flood someone's inbox. Email failures
+  are logged and never fail the request; the lead is already stored.
 - **`/ingest/*`** is a reverse proxy to PostHog US, defined in `vercel.json` ahead of the
   filesystem handler. posthog-js uses it as `api_host`, so the analytics events that feed the
   experiments and path funnels are no longer dropped by blockers either.
