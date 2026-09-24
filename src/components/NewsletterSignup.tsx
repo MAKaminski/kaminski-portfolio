@@ -1,90 +1,72 @@
 import React, { useState } from 'react';
-import { Mail, CheckCircle, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { CheckCircle, ArrowRight } from 'lucide-react';
+import { track } from '../utils/track';
+import { identifyVisitor } from '../utils/posthog';
 
-const NewsletterSignup: React.FC = () => {
+const CONTACT_ENDPOINT = process.env.REACT_APP_CONTACT_ENDPOINT;
+
+/**
+ * Sits in the footer, so it is on every page including every article. This used
+ * to wait one second on a setTimeout and say "you're on the list" without
+ * storing the address anywhere. It now identifies the visitor in PostHog (where
+ * `newsletter_subscribed` marks the list) and, when a form endpoint is
+ * configured, posts there too.
+ */
+const NewsletterSignup: React.FC<{ source?: string }> = ({ source = 'footer' }) => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    
-    // Simulate API call - replace with actual newsletter service integration
-    setTimeout(() => {
-      setIsSubscribed(true);
-      setIsLoading(false);
-      setEmail('');
-    }, 1000);
+    if (!email) return;
+    const page = typeof window !== 'undefined' ? window.location.pathname : '';
+    identifyVisitor(email, { newsletter_subscribed: true, newsletter_source: source });
+    track('Newsletter Subscribed', { source, page });
+    if (CONTACT_ENDPOINT) {
+      void fetch(CONTACT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ intent: 'newsletter', email, source, page }),
+      }).catch(() => undefined);
+    }
+    setIsSubscribed(true);
+    setEmail('');
   };
 
   if (isSubscribed) {
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="rounded-rilla border border-emerald-400/30 bg-emerald-400/[0.07] p-6 text-center"
-      >
-        <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-white mb-2">You're on the list</h3>
-        <p className="text-white/70">
-          You'll get new field notes on agent infrastructure, evals, and shipping agents into
-          production — nothing else.
-        </p>
-      </motion.div>
+      <p className="flex items-center justify-center gap-2 text-white/80">
+        <CheckCircle className="w-5 h-5 text-emerald-400" />
+        You're on the list: new field notes only, nothing else.
+      </p>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="rilla-card p-6"
-    >
-      <div className="text-center mb-6">
-        <Mail className="w-12 h-12 text-accent mx-auto mb-4" />
-        <h3 className="text-xl font-bold text-white mb-2">
-          Field notes on agent infrastructure
-        </h3>
-        <p className="text-white/60">
-          New essays on MCP servers, eval harnesses, and getting agents through review. No cadence promises.
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email address"
-            required
-            className="w-full px-4 py-3 rounded-lg border border-white/15 bg-white/5 text-white placeholder-white/40 focus:border-accent/60 focus:outline-none focus:ring-2 focus:ring-accent/40"
-          />
-        </div>
-        
+    <div className="text-center">
+      <h3 className="font-bold text-white">Field notes on agent infrastructure</h3>
+      <p className="mt-1 text-sm text-white/60">
+        New essays on MCP servers, eval harnesses, and getting agents through review. No cadence promises.
+      </p>
+      <form onSubmit={handleSubmit} className="mt-4 flex gap-2 max-w-md mx-auto">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Your email"
+          aria-label="Email for field notes"
+          required
+          className="min-w-0 flex-1 px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-white/40 focus:border-accent/60 focus:outline-none focus:ring-2 focus:ring-accent/40"
+        />
         <button
           type="submit"
-          disabled={isLoading}
-          className="w-full flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-sm font-bold text-ink-900 hover:brightness-90"
         >
-          {isLoading ? (
-            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          ) : (
-            <>
-              <span>Subscribe to Insights</span>
-              <ArrowRight size={16} />
-            </>
-          )}
+          Subscribe <ArrowRight size={15} />
         </button>
       </form>
-
-      <p className="text-xs text-white/50 text-center mt-4">
-        No spam. Unsubscribe anytime. We respect your privacy.
-      </p>
-    </motion.div>
+    </div>
   );
 };
 
-export default NewsletterSignup; 
+export default NewsletterSignup;

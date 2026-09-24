@@ -12,7 +12,6 @@ import Hero from './components/Hero';
 import Experience from './components/Experience';
 import Skills from './components/Skills';
 import Transactions from './components/Transactions';
-import Highlights from './components/Highlights';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ReferralCarousel from './components/ReferralCarousel';
@@ -136,10 +135,11 @@ function App() {
                     <Seo title={HOME_TITLE} description={HOME_DESCRIPTION} canonicalPath="/" />
                     <Header />
                     <main>
-                      {/* Recruiter-first order: lead with proof, close with fit/contact */}
+                      {/* Hero forks into three paths (data/visitorPaths.ts); every
+                          section below reports Home Section Viewed, so the
+                          scroll-depth funnel reads top to bottom in this order. */}
                       <Hero />
                       <Transactions />
-                      <Highlights />
                       <Experience />
                       <Skills />
                       <ReferralCarousel />

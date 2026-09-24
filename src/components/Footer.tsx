@@ -3,12 +3,31 @@ import { Mail, Phone, Linkedin, Github, Calendar, PenLine, AtSign } from 'lucide
 import { PROFILES } from '../data/profiles';
 import { Link } from 'react-router-dom';
 import NewsletterSignup from './NewsletterSignup';
+import { track } from '../utils/track';
+
+// Everything the header no longer carries lives here, on every page.
+const EXPLORE = [
+  { name: 'Projects', href: '/projects' },
+  { name: 'Writing', href: '/writing' },
+  { name: 'About', href: '/about' },
+  { name: 'Websites', href: '/websites' },
+  { name: 'Products', href: '/products' },
+  { name: 'Papers', href: '/papers' },
+  { name: 'Clips', href: '/clips' },
+  { name: 'Changelog', href: '/changelog' },
+];
+
+const BY_ROLE = [
+  { name: 'Product', href: '/cpo', role: 'cpo' },
+  { name: 'Strategy', href: '/strategy', role: 'strategy' },
+  { name: 'Technology', href: '/technology', role: 'technology' },
+];
 
 const Footer: React.FC = () => {
   return (
     <footer className="bg-ink-900 text-white border-t-2 border-accent">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="mb-14 max-w-2xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-10 pb-10 border-b border-white/10">
           <NewsletterSignup />
         </div>
 
@@ -25,20 +44,32 @@ const Footer: React.FC = () => {
 
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-widest text-white/50 mb-4">Explore</h4>
-            <ul className="space-y-2">
-              {[
-                { name: 'Impact', href: '#transactions' },
-                { name: 'Experience', href: '#experience' },
-                { name: 'Skills', href: '#skills' },
-                { name: 'Testimonials', href: '#testimonials' },
-              ].map((l) => (
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-2">
+              {EXPLORE.map((l) => (
                 <li key={l.name}>
-                  <a href={l.href} className="text-white/70 hover:text-accent transition-colors">{l.name}</a>
+                  <Link
+                    to={l.href}
+                    onClick={() => track('Nav Clicked', { item: l.name, location: 'footer' })}
+                    className="text-white/70 hover:text-accent transition-colors"
+                  >
+                    {l.name}
+                  </Link>
                 </li>
               ))}
-              <li><Link to="/writing" className="text-white/70 hover:text-accent transition-colors">Writing</Link></li>
-              <li><Link to="/papers" className="text-white/70 hover:text-accent transition-colors">Papers</Link></li>
-              <li><Link to="/changelog" className="text-white/70 hover:text-accent transition-colors">Changelog</Link></li>
+            </ul>
+            <h4 className="text-sm font-semibold uppercase tracking-widest text-white/50 mt-6 mb-3">By role</h4>
+            <ul className="flex gap-4">
+              {BY_ROLE.map((l) => (
+                <li key={l.name}>
+                  <Link
+                    to={l.href}
+                    onClick={() => track('Role Page Visited', { role: l.role, path: l.href })}
+                    className="text-white/70 hover:text-accent transition-colors"
+                  >
+                    {l.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -51,7 +82,7 @@ const Footer: React.FC = () => {
               <li><a href={PROFILES.github} target="_blank" rel="noopener noreferrer me" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><Github size={16} /> GitHub</a></li>
               <li><a href={PROFILES.devto} target="_blank" rel="noopener noreferrer me" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><PenLine size={16} /> DEV</a></li>
               <li><a href={PROFILES.x} target="_blank" rel="noopener noreferrer me" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><AtSign size={16} /> X</a></li>
-              <li><a href="https://calendly.com/kaminski1337/15min" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><Calendar size={16} /> Book a call</a></li>
+              <li><a href="https://calendly.com/kaminski1337/15min" target="_blank" rel="noopener noreferrer" onClick={() => track('Calendar Link Clicked', { source: 'Footer' })} className="flex items-center gap-2 text-white/70 hover:text-accent transition-colors"><Calendar size={16} /> Book a call</a></li>
             </ul>
           </div>
         </div>

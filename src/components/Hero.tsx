@@ -2,10 +2,11 @@ import React, { Suspense, lazy, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { transactionTotals } from '../data/transactions';
 import { Download, Clock, ArrowUpRight, Linkedin, Github, MessagesSquare } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { track } from '../utils/track';
-import { useTheme } from '../App';
-import { Role } from '../App';
+import { setVisitorProperties } from '../utils/posthog';
+import { VISITOR_PATHS, VisitorPath } from '../data/visitorPaths';
+import { useSectionView } from '../hooks/useSectionView';
 import Marquee from './Marquee';
 import { PROFILES } from '../data/profiles';
 import CountUp from './CountUp';
@@ -23,8 +24,7 @@ const RILLA_EASE = [0.445, 0.05, 0.55, 0.95] as const;
 export const HERO_PORTRAIT = '/images/484D0082-4587-4FEF-AE4B-E727C7BF176B_1_105_c-880x1040.webp';
 
 const Hero: React.FC = () => {
-  const { setTheme, currentRole } = useTheme();
-  const navigate = useNavigate();
+  const sectionRef = useSectionView<HTMLElement>('hero');
   const { scrollY } = useScroll();
   const yGlow = useTransform(scrollY, [0, 700], [0, 160]);
   const yPortrait = useTransform(scrollY, [0, 700], [0, -70]);
@@ -33,12 +33,6 @@ const Hero: React.FC = () => {
   const yMap = useTransform(scrollY, [0, 700], [0, 46]);
   const [twinOpen, setTwinOpen] = useState(false);
   const totals = transactionTotals();
-
-  const roles: { key: Role; label: string }[] = [
-    { key: 'cpo', label: 'Product' },
-    { key: 'strategy', label: 'Strategy' },
-    { key: 'technology', label: 'Technology' },
-  ];
 
   const stats = [
     { to: 20, suffix: '+', label: 'Years across finance & engineering' },
@@ -54,14 +48,16 @@ const Hero: React.FC = () => {
     },
   ];
 
-  const handleRoleClick = (role: Role, path: string) => {
-    setTheme(role);
-    navigate(path);
-    track('Role Page Visited', { role, path });
+  // The fork in the road: which of the three visitor paths this person takes.
+  // Tagged on the person too, so it can be compared with the contact intent
+  // they pick later (same keys).
+  const choosePath = (p: VisitorPath) => {
+    track('Path Selected', { path: p.key, destination: p.href });
+    setVisitorProperties({ visitor_path: p.key }, { first_visitor_path: p.key });
   };
 
   return (
-    <section className="relative overflow-hidden bg-ink-900 text-white pt-28 pb-16">
+    <section ref={sectionRef} className="relative overflow-hidden bg-ink-900 text-white pt-24 pb-10">
       {/* Spotlight + grid backdrop (parallax) */}
       <div className="pointer-events-none absolute inset-0">
         {/* Atlanta, drawn from real data: city neighborhood polygons, the interstates,
@@ -121,7 +117,7 @@ const Hero: React.FC = () => {
               Michael Kaminski · Atlanta
             </motion.p>
 
-            <h1 className="display text-[15vw] leading-[0.86] sm:text-7xl lg:text-8xl xl:text-[6.4rem]">
+            <h1 className="display text-[11.5vw] leading-[0.9] sm:text-7xl lg:text-8xl xl:text-[6.4rem]">
               <SplitReveal
                 immediate
                 delay={0.15}
@@ -171,18 +167,6 @@ const Hero: React.FC = () => {
                   <Download className="w-5 h-5" /> Resume
                 </a>
               </Magnetic>
-              <Magnetic strength={0.6}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setTwinOpen(true);
-                    track('Digital Twin Opened', { source: 'Hero' });
-                  }}
-                  className="btn-pill-ghost text-base"
-                >
-                  <MessagesSquare className="w-5 h-5" /> Talk to my Digital Twin
-                </button>
-              </Magnetic>
               <div className="flex items-center gap-2 pl-1">
                 <Magnetic strength={0.5}>
                   <a href={PROFILES.linkedin} target="_blank" rel="noopener noreferrer"
@@ -199,9 +183,23 @@ const Hero: React.FC = () => {
               </div>
             </motion.div>
 
+            <motion.button
+              type="button"
+              onClick={() => {
+                setTwinOpen(true);
+                track('Digital Twin Opened', { source: 'Hero' });
+              }}
+              className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white/60 hover:text-accent transition-colors"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, ease: RILLA_EASE, delay: 0.65 }}
+            >
+              <MessagesSquare className="w-4 h-4" /> Or ask my digital twin anything
+            </motion.button>
+
             {/* Stats */}
             <motion.div
-              className="mt-12 grid grid-cols-3 gap-6 max-w-xl"
+              className="mt-10 grid grid-cols-3 gap-6 max-w-xl"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: RILLA_EASE, delay: 0.7 }}
@@ -257,38 +255,41 @@ const Hero: React.FC = () => {
               </motion.div>
             </motion.div>
 
-            {/* Role selector */}
-            <motion.div
-              className="mt-10"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: RILLA_EASE, delay: 0.8 }}
-            >
-              <p className="mb-3 text-center text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
-                View by role
-              </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {roles.map((role) => (
-                  <button
-                    key={role.key}
-                    onClick={() => handleRoleClick(role.key, `/${role.key}`)}
-                    className={`inline-flex items-center gap-1 rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                      currentRole === role.key
-                        ? 'border-accent bg-accent text-ink-900'
-                        : 'border-white/15 text-white/80 hover:border-accent hover:text-accent'
-                    }`}
-                  >
-                    {role.label} <ArrowUpRight className="w-3.5 h-3.5" />
-                  </button>
-                ))}
-              </div>
-            </motion.div>
           </div>
         </div>
       </div>
 
+      {/* Start here — one card per visitor path */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/55">Start here</p>
+        <div className="grid gap-3 md:grid-cols-3">
+          {VISITOR_PATHS.map((p) => {
+            const inner = (
+              <>
+                <span className="block font-semibold text-white">{p.label}</span>
+                <span className="mt-1 block text-sm text-white/60">{p.blurb}</span>
+                <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-accent">
+                  {p.cta} <ArrowUpRight className="w-4 h-4" />
+                </span>
+              </>
+            );
+            const cls =
+              'block rounded-2xl border border-white/15 bg-white/[0.04] p-5 transition-colors hover:border-accent/60 hover:bg-accent/[0.06]';
+            return p.href.startsWith('/#') ? (
+              <a key={p.key} href={p.href.slice(1)} onClick={() => choosePath(p)} className={cls}>
+                {inner}
+              </a>
+            ) : (
+              <Link key={p.key} to={p.href} onClick={() => choosePath(p)} className={cls}>
+                {inner}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Company marquee (scroll-velocity skew) */}
-      <div className="relative mt-16 border-y border-white/10 py-6">
+      <div className="relative mt-10 border-y border-white/10 py-6">
         {/* Sizes are each mark's natural size at 1x (assets ship at 2x), fitted to a shared
             box so wide wordmarks and square marks carry the same optical weight. */}
         <Marquee

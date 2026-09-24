@@ -1,258 +1,140 @@
 import React, { useState } from 'react';
-import { Menu, X, Calendar, Linkedin, Github, Sparkles } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { Menu, X, Calendar } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { track } from '../utils/track';
 
 const CALENDLY_URL = 'https://calendly.com/kaminski1337/15min';
 
+// Four destinations, one per visitor path plus contact. Everything else lives
+// in the footer and the mobile menu: the old bar had thirteen links, which ran
+// off the right edge at 1440px and took the Book a Call button with it.
+const PRIMARY = [
+  { name: 'Projects', href: '/projects' },
+  { name: 'Writing', href: '/writing' },
+  { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/#contact' },
+];
+
+const SECONDARY = [
+  { name: 'Websites', href: '/websites' },
+  { name: 'Products', href: '/products' },
+  { name: 'Papers', href: '/papers' },
+  { name: 'Clips', href: '/clips' },
+  { name: 'Changelog', href: '/changelog' },
+];
+
+const navClick = (item: string, location: string) => track('Nav Clicked', { item, location });
+
+/** Hash links need a plain anchor so the browser scrolls; routes use <Link>. */
+const NavLink: React.FC<{ href: string; className: string; onClick: () => void; children: React.ReactNode }> = ({
+  href,
+  className,
+  onClick,
+  children,
+}) =>
+  href.includes('#') ? (
+    <a href={href} className={className} onClick={onClick}>
+      {children}
+    </a>
+  ) : (
+    <Link to={href} className={className} onClick={onClick}>
+      {children}
+    </Link>
+  );
+
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { scrollY } = useScroll();
-  const headerBackground = useTransform(
-    scrollY,
-    [0, 100],
-    ['rgba(6, 6, 6, 0.55)', 'rgba(6, 6, 6, 0.9)']
-  );
-  const headerShadow = useTransform(
-    scrollY, 
-    [0, 100], 
-    ['0 1px 3px 0 rgba(0, 0, 0, 0.1)', '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)']
-  );
-  const headerBlur = useTransform(scrollY, [0, 100], ['blur(0px)', 'blur(20px)']);
-
-  // Absolute /#… anchors so nav works from any route (not just the home page).
-  const navItems = [
-    { name: 'Impact', href: '/#transactions' },
-    { name: 'Experience', href: '/#experience' },
-    { name: 'Skills', href: '/#skills' },
-    { name: 'Testimonials', href: '/#testimonials' },
-    { name: 'Contact', href: '/#contact' },
-  ];
-
-  const additionalNavItems: { name: string; href: string }[] = [
-    { name: 'About', href: '/about' },
-    { name: 'Projects', href: '/projects' },
-    { name: 'Websites', href: '/websites' },
-    { name: 'Products', href: '/products' },
-    { name: 'Writing', href: '/writing' },
-    { name: 'Papers', href: '/papers' },
-    { name: 'Clips', href: '/clips' },
-    { name: 'Changelog', href: '/changelog' },
-  ];
-
-  const handleScheduleCall = () => {
-    // The anchor does the navigating now — this only records the click.
-    track('Calendar Link Clicked', { source: 'Header' });
-  };
 
   return (
-    <motion.header 
-      className="fixed top-0 w-full backdrop-blur-lg border-b z-50"
-      style={{
-        backgroundColor: headerBackground,
-        boxShadow: headerShadow,
-        backdropFilter: headerBlur,
-        borderColor: 'rgba(255, 255, 255, 0.1)',
-      }}
-    >
-      {/* Decorative accent line */}
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 1, delay: 0.5 }}
-      />
-      
+    <header className="fixed top-0 w-full z-50 border-b border-white/10 bg-ink-900/85 backdrop-blur-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Wordmark — links home from any page */}
-          <motion.div
-            className="flex-shrink-0 mr-6"
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <Link
+            to="/"
+            className="group flex items-center gap-2.5"
+            aria-label="Michael Kaminski — home"
+            onClick={() => navClick('Home', 'header')}
           >
-            <Link to="/" className="group flex items-center gap-2.5" aria-label="Michael Kaminski — home">
-              <span className="h-2.5 w-2.5 rounded-full bg-accent transition-transform duration-200 group-hover:scale-125" />
-              <span className="text-xl font-bold tracking-tight text-white transition-colors duration-200 group-hover:text-accent">
-                Michael Kaminski
-              </span>
-            </Link>
-          </motion.div>
-          
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-5 lg:space-x-6">
-            {navItems.map((item, index) => (
-              <motion.a
+            <span className="h-2.5 w-2.5 rounded-full bg-accent" />
+            <span className="text-lg font-bold tracking-tight text-white group-hover:text-accent transition-colors">
+              Michael Kaminski
+            </span>
+          </Link>
+
+          <nav className="hidden md:flex items-center gap-7">
+            {PRIMARY.map((item) => (
+              <NavLink
                 key={item.name}
                 href={item.href}
-                className="relative whitespace-nowrap text-white/75 hover:text-accent transition-colors duration-200 font-medium group"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 * index }}
-                whileHover={{ y: -2 }}
+                onClick={() => navClick(item.name, 'header')}
+                className="text-sm font-medium text-white/70 hover:text-white transition-colors"
               >
                 {item.name}
-                <motion.div
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
-                />
-              </motion.a>
+              </NavLink>
             ))}
-            {additionalNavItems.map((item, index) => (
-              <motion.div
-                key={item.name}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 * (navItems.length + index) }}
-              >
-                <Link
-                  to={item.href}
-                  className="relative whitespace-nowrap text-white/75 hover:text-accent transition-colors duration-200 font-medium group"
-                >
-                  {item.name}
-                  <motion.div
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
-                  />
-                </Link>
-              </motion.div>
-            ))}
-            
-            {/* Enhanced Book a Call Button */}
-            <motion.a
+            <a
               href={CALENDLY_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={handleScheduleCall}
-              className="relative flex flex-shrink-0 items-center whitespace-nowrap space-x-2 px-5 py-2.5 bg-accent text-ink-900 rounded-full font-bold shadow-lg hover:brightness-90 transition-all duration-200 overflow-hidden group"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.4)"
-              }}
-              whileTap={{ scale: 0.95 }}
+              onClick={() => track('Calendar Link Clicked', { source: 'Header' })}
+              className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-bold text-ink-900 hover:brightness-90 transition"
             >
-              {/* Animated background shine */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                initial={{ x: '-100%' }}
-                animate={{ x: '100%' }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  repeatType: 'loop',
-                  ease: 'linear'
-                }}
-              />
-              <Calendar size={16} />
-              <span>Book a Call</span>
-              <motion.div
-                className="ml-1"
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <Sparkles size={14} />
-              </motion.div>
-            </motion.a>
+              <Calendar size={15} />
+              Book a call
+            </a>
           </nav>
 
-          {/* Mobile menu button */}
-          <motion.div 
-            className="md:hidden"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+          <button
+            onClick={() => setIsMenuOpen((o) => !o)}
+            className="md:hidden p-2 text-white hover:text-accent rounded-lg"
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMenuOpen}
           >
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="relative p-2 text-white hover:text-accent transition-colors duration-200 rounded-lg hover:bg-white/10"
-            >
-              <motion.div
-                animate={{ rotate: isMenuOpen ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </motion.div>
-            </button>
-          </motion.div>
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
 
-        {/* Enhanced Mobile Navigation */}
         <motion.div
           initial={false}
-          animate={{
-            height: isMenuOpen ? 'auto' : 0,
-            opacity: isMenuOpen ? 1 : 0,
-          }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          animate={{ height: isMenuOpen ? 'auto' : 0, opacity: isMenuOpen ? 1 : 0 }}
+          transition={{ duration: 0.2 }}
           className="md:hidden overflow-hidden"
         >
-          <motion.div
-            className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-ink-900/95 backdrop-blur-lg border-t border-white/10 rounded-b-2xl shadow-lg"
-            initial={{ y: -20 }}
-            animate={{ y: isMenuOpen ? 0 : -20 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-          >
-            {navItems.map((item, index) => (
-              <motion.a
+          <div className="pb-4 pt-1 space-y-1 border-t border-white/10">
+            {[...PRIMARY, ...SECONDARY].map((item, i) => (
+              <NavLink
                 key={item.name}
                 href={item.href}
-                className="block px-4 py-3 text-white/80 hover:text-accent hover:bg-white/5 transition-all duration-200 font-medium rounded-lg"
-                onClick={() => setIsMenuOpen(false)}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: isMenuOpen ? 1 : 0, x: isMenuOpen ? 0 : -20 }}
-                transition={{ duration: 0.3, delay: 0.05 * index }}
-                whileHover={{ x: 5 }}
+                onClick={() => {
+                  navClick(item.name, 'mobile_menu');
+                  setIsMenuOpen(false);
+                }}
+                className={`block px-3 py-2.5 rounded-lg hover:bg-white/5 ${
+                  i < PRIMARY.length ? 'text-white font-medium' : 'text-white/60 text-sm'
+                }`}
               >
                 {item.name}
-              </motion.a>
+              </NavLink>
             ))}
-            {additionalNavItems.map((item, index) => (
-              <motion.div
-                key={item.name}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: isMenuOpen ? 1 : 0, x: isMenuOpen ? 0 : -20 }}
-                transition={{ duration: 0.3, delay: 0.05 * (navItems.length + index) }}
-              >
-                <Link
-                  to={item.href}
-                  className="block px-4 py-3 text-white/80 hover:text-accent hover:bg-white/5 transition-all duration-200 font-medium rounded-lg"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              </motion.div>
-            ))}
-            
-            {/* Mobile Book a Call Button */}
-            <motion.a
+            <a
               href={CALENDLY_URL}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => {
-                handleScheduleCall();
+                track('Calendar Link Clicked', { source: 'Header (mobile)' });
                 setIsMenuOpen(false);
               }}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-accent text-ink-900 rounded-full hover:brightness-90 transition-all duration-200 font-bold shadow-lg mt-4"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ 
-                opacity: isMenuOpen ? 1 : 0, 
-                scale: isMenuOpen ? 1 : 0.9 
-              }}
-              transition={{ duration: 0.3, delay: 0.2 }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className="mt-3 flex items-center justify-center gap-2 rounded-full bg-accent px-4 py-3 font-bold text-ink-900"
             >
               <Calendar size={16} />
-              <span>Book a Call</span>
-              <Sparkles size={14} />
-            </motion.a>
-          </motion.div>
+              Book a call
+            </a>
+          </div>
         </motion.div>
       </div>
-    </motion.header>
+    </header>
   );
 };
 
-export default Header; 
+export default Header;
