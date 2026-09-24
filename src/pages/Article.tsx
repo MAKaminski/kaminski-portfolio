@@ -1,4 +1,5 @@
 import React from 'react';
+import ResumeLink from '../components/ResumeLink';
 import { Link, useParams } from 'react-router-dom';
 import { Clock, Calendar, Download } from 'lucide-react';
 import Seo from '../components/Seo';
@@ -113,13 +114,9 @@ const Article: React.FC = () => {
           >
             Book a 15-min call
           </a>
-          <a
-            href="/docs/Kaminski Resume.pdf"
-            download="Kaminski_Resume.pdf"
-            className="btn-pill-ghost"
-          >
+          <ResumeLink source="Article" className="btn-pill-ghost">
             <Download size={18} className="mr-2" /> Download resume
-          </a>
+          </ResumeLink>
         </div>
       </article>
     </div>

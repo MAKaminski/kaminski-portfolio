@@ -69,6 +69,25 @@ function confirmation(lead: LeadForEmail): { subject: string; text: string; html
     };
   }
 
+  if (lead.kind === 'resume') {
+    const text = [
+      'Here is the resume you asked for on michael-kaminski.io.',
+      `${SITE}/resume.pdf`,
+      `If it is easier to talk than to read, grab 15 minutes: ${CALENDLY}`,
+      '— Michael',
+    ];
+    return {
+      subject: 'Michael Kaminski — resume',
+      text: text.join('\n\n'),
+      html: wrap([
+        esc(text[0]),
+        link(`${SITE}/resume.pdf`, 'michael-kaminski.io/resume.pdf'),
+        `If it is easier to talk than to read, ${link(CALENDLY, 'grab 15 minutes')}.`,
+        '— Michael',
+      ]),
+    };
+  }
+
   const extra =
     lead.intent === 'recruiter'
       ? { t: `My resume is at ${SITE}/resume.pdf.`, h: `My resume is at ${link(`${SITE}/resume.pdf`, 'michael-kaminski.io/resume.pdf')}.` }
@@ -84,7 +103,8 @@ function confirmation(lead: LeadForEmail): { subject: string; text: string; html
 
 /** What lands in Michael's inbox. Reply-to is the lead, so replying answers them. */
 function notification(lead: LeadForEmail): { subject: string; text: string; html: string } {
-  const label = lead.kind === 'newsletter' ? 'newsletter' : `contact / ${lead.intent || 'unknown'}`;
+  const label =
+    lead.kind === 'newsletter' ? 'newsletter' : lead.kind === 'resume' ? 'resume request' : `contact / ${lead.intent || 'unknown'}`;
   const rows: [string, string | undefined][] = [
     ['Email', lead.email],
     ['Kind', lead.kind],

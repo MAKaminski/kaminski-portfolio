@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, CheckCircle, Download } from 'lucide-react';
 import { track } from '../utils/track';
 import { submitLead } from '../utils/lead';
+import ResumeLink from './ResumeLink';
 import {
   getExperimentVariant,
   identifyVisitor,
@@ -190,15 +191,10 @@ const ContactIntent: React.FC = () => {
         <CheckCircle className="w-10 h-10 text-emerald-400 mx-auto" />
         <p className="text-white/80">{copy}</p>
         {exp.intent === 'recruiter' && (
-          <a
-            href="/resume.pdf"
-            download
-            onClick={() => track('Resume Downloaded', { source: 'Contact Intent' })}
-            className={primaryBtn}
-          >
+          <ResumeLink source="Contact Intent" className={primaryBtn}>
             <Download className="w-5 h-5 mr-2" />
             Download resume
-          </a>
+          </ResumeLink>
         )}
         {exp.intent === 'fractional' && (
           <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" onClick={openCalendar} className="text-accent underline underline-offset-4">

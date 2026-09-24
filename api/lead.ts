@@ -11,6 +11,9 @@
  *                 when the page could read one, so earlier pageviews join up
  *   Lead Received kind, intent, variant, source, page (server-side record)
  *
+ * kind is newsletter, contact, or resume (the "email me a copy" field next to the
+ * resume download; that confirmation carries the PDF link).
+ *
  * `Lead Received` is deliberately a different name from the client's
  * `Contact Lead Captured` / `Newsletter Subscribed`, so experiment metrics that
  * count the client events are not double-counted.
@@ -25,7 +28,7 @@ import { rateLimit, type ApiRequest, type ApiResponse } from './_lib/http';
 import { sendLeadEmails } from './_lib/email';
 
 const CAPTURE_HOST = process.env.POSTHOG_CAPTURE_HOST || 'https://us.i.posthog.com';
-const KINDS = new Set(['newsletter', 'contact']);
+const KINDS = new Set(['newsletter', 'contact', 'resume']);
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const str = (v: unknown, max = 300): string | undefined =>
@@ -63,7 +66,11 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
   };
   const personSet = {
     email,
-    ...(kind === 'newsletter' ? { newsletter_subscribed: true } : { contact_intent: props.intent }),
+    ...(kind === 'newsletter'
+      ? { newsletter_subscribed: true }
+      : kind === 'resume'
+        ? { resume_requested: true }
+        : { contact_intent: props.intent }),
     ...(str(b.detail, 500) ? { contact_detail: str(b.detail, 500) } : {}),
   };
   const timestamp = new Date().toISOString();

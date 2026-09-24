@@ -1,4 +1,5 @@
 import React from 'react';
+import ResumeLink from '../components/ResumeLink';
 import { motion } from 'framer-motion';
 import { Code, Cloud, Database, Shield, Zap } from 'lucide-react';
 import Seo from '../components/Seo';
@@ -159,13 +160,9 @@ const Technology: React.FC = () => {
         >
           Schedule a Call
         </a>
-        <a
-          href="/docs/Kaminski Resume.pdf"
-          download="Kaminski_Resume.pdf"
-          className="btn-pill-ghost"
-        >
+        <ResumeLink source="Technology footer" className="btn-pill-ghost">
           Download Full Resume
-        </a>
+        </ResumeLink>
       </div>
     </div>
   );
