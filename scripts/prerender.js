@@ -499,6 +499,7 @@ function projectsMarkup(projects, sites, products) {
       (p) => `<article>
 <h2><a href="/projects/${esc(p.slug)}">${esc(p.title)}</a></h2>
 <p><em>${esc(p.domain)} · <time datetime="${esc(p.date)}">${esc(p.date)}</time></em></p>
+${p.company ? `<p>Built for <a href="${esc(p.company.href)}" rel="noopener">${esc(p.company.name)}</a></p>` : ''}
 ${img(p.image, p.imageAlt || p.title, 800, 450)}
 <p>${esc(p.summary)}</p>
 <p><strong>My role:</strong> ${esc(p.role)}</p>
@@ -553,6 +554,7 @@ function projectMarkup(p) {
 <article>
 <h1>${esc(p.title)}</h1>
 <p><em>${esc(p.domain)} · <time datetime="${esc(p.date)}">${esc(p.date)}</time></em></p>
+${p.company ? `<p>Built for <a href="${esc(p.company.href)}" rel="noopener">${esc(p.company.name)}</a></p>` : ''}
 ${img(p.image, p.imageAlt || p.title, 800, 450, true)}
 <p><strong>${esc(p.summary)}</strong></p>
 
