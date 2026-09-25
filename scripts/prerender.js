@@ -313,7 +313,7 @@ ${ctaBlock()}
 }
 
 // ─── Home ──────────────────────────────────────────────────────────────────
-function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news }) {
+function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news, ventureBackers }) {
   // Mirrors Hero.tsx's banner and NewsStory.tsx: the newest item only.
   const lead = news[0];
   const newsBlock = lead
@@ -330,6 +330,16 @@ function homeMarkup({ articles, referrals, transactions, jobs, projects, totals,
     : '';
   const partnerRows = partners
     .map((p) => `<li><a href="${esc(p.href)}" rel="noopener">${esc(p.name)}</a> — ${esc(p.context)}</li>`)
+    .join('');
+  // Mirrors the Venture capital block in Partners.tsx, grouped by company.
+  const ventureBlocks = ['Momnt', 'GreenSky']
+    .map((company) => {
+      const rows = ventureBackers
+        .filter((v) => v.company === company)
+        .map((v) => `<li><a href="${esc(v.href)}" rel="noopener">${esc(v.name)}</a> — ${esc(v.context)}</li>`)
+        .join('');
+      return rows ? `<h3>${esc(company)}</h3><ul>${rows}</ul>` : '';
+    })
     .join('');
   // Both tiers are emitted: the collapsed `more` tail is still on the page for a crawler.
   const skillRows = skills
@@ -428,6 +438,11 @@ ${projectCards}
 <p>Operated inside sponsor-backed companies: board packs, covenant math, divestiture programs, and
 value-creation plans built for the sponsors below.</p>
 <ul>${partnerRows}</ul>
+
+<h2 id="venture-capital">Venture capital</h2>
+<p>Investors on the cap table during Michael's tenure at the two venture-backed fintechs: GreenSky
+(2016-2018, through its IPO) and Momnt (2023-2025, Series A through securitization).</p>
+${ventureBlocks}
 
 <h2>Experience</h2>
 <ul>${jobRows}</ul>
@@ -668,6 +683,7 @@ function main() {
   const skills = loadData('skills.ts', 'export const skillCategories', 'export const specializedAreas', { required: true });
   const areas = loadData('skills.ts', 'export const specializedAreas', 'export const skillCount', { required: true });
   const partners = loadData('partners.ts', 'export const partners', 'export const partnerCount', { required: true });
+  const ventureBackers = loadData('ventureInvestors.ts', 'export const ventureBackers', 'export const ventureBackerCount', { required: true });
   const news = loadData('news.ts', 'export const news', 'export const latestNews', { required: true });
   const projects = loadData('projects.ts', 'export const projects', 'export const getProject').sort(
     (a, b) =>
@@ -736,7 +752,7 @@ function main() {
         crumbs: [{ name: 'Home', path: '/' }],
         jsonLd: reviewLd,
       },
-      homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news })
+      homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news, ventureBackers })
     )
   );
 
