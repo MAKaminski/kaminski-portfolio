@@ -15,7 +15,7 @@ export interface Partner {
   name: string;
   /** Firm site the mark links out to. */
   href: string;
-  /** White-on-transparent wordmark under /images/logos (ships at 2x). */
+  /** White-on-transparent mark under /images/logos (ships at 2x), from the firm's own artwork. */
   src: string;
   width: number;
   height: number;
@@ -28,24 +28,24 @@ export const partners: Partner[] = [
     name: "The Carlyle Group",
     href: "https://www.carlyle.com/",
     src: "/images/logos/carlyle.webp",
-    width: 112,
-    height: 17,
+    width: 173,
+    height: 24,
     context: "HD Supply sponsor group — $1.8B divestiture program and $500M CapEx portfolio analytics",
   },
   {
     name: "Clayton, Dubilier & Rice",
     href: "https://www.cdr-inc.com/",
     src: "/images/logos/cdr.webp",
-    width: 260,
-    height: 15,
+    width: 93,
+    height: 24,
     context: "HD Supply sponsor group — board-level reporting on strategic finance and divestitures",
   },
   {
     name: "Bain Capital",
     href: "https://www.baincapital.com/",
     src: "/images/logos/bain-capital.webp",
-    width: 184,
-    height: 17,
+    width: 144,
+    height: 24,
     context: "HD Supply sponsor group — value-creation and operational transformation work",
   },
 ];

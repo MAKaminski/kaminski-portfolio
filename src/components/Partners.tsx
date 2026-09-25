@@ -26,7 +26,10 @@ const Partners: React.FC = () => {
         </p>
       </div>
       <div className="py-6">
-        <Marquee items={partners} />
+        <Marquee
+          items={partners}
+          onItemClick={(p) => track('Partner Link Clicked', { partner: p.name, placement: 'marquee' })}
+        />
       </div>
       <ul className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 grid gap-3 md:grid-cols-3">
         {partners.map((p) => (
@@ -34,8 +37,25 @@ const Partners: React.FC = () => {
             key={p.name}
             className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:bg-accent/[0.06]"
           >
-            <a href={p.href} target="_blank" rel="noopener noreferrer" className="font-semibold text-white hover:text-accent">
-              {p.name}
+            <a
+              href={p.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track('Partner Link Clicked', { partner: p.name, placement: 'card' })}
+              className="group/logo block"
+            >
+              <span className="flex h-8 items-center">
+                <img
+                  src={p.src}
+                  alt=""
+                  width={p.width}
+                  height={p.height}
+                  loading="lazy"
+                  decoding="async"
+                  className="opacity-70 transition duration-300 group-hover/logo:opacity-100"
+                />
+              </span>
+              <span className="mt-3 block font-semibold text-white group-hover/logo:text-accent">{p.name}</span>
             </a>
             <p className="mt-1 text-sm text-white/60">{p.context}</p>
           </li>
