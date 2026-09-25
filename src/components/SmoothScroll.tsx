@@ -25,6 +25,10 @@ const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children }) => 
       if (el) {
         e.preventDefault();
         lenis.scrollTo(el as HTMLElement, { offset: -80 });
+        // preventDefault also stops the browser writing the hash, so a link
+        // copied after the tap would lose the section. Put it back; pushState
+        // (not location.hash) so the native jump doesn't fight the smooth one.
+        if (window.location.hash !== id) window.history.pushState(null, '', id);
       }
     };
 
