@@ -313,6 +313,9 @@ ${ctaBlock()}
 }
 
 // ─── Home ──────────────────────────────────────────────────────────────────
+// Deal tracks; keys and labels mirror TRACKS in src/data/transactions.ts.
+const TRACK_LABELS = { corporate: 'Corporate & private equity', venture: 'Venture-backed fintech' };
+
 function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news, ventureBackers }) {
   // Mirrors Hero.tsx's banner and NewsStory.tsx: the newest item only.
   const lead = news[0];
@@ -377,9 +380,8 @@ ${esc(j.description)}${j.exit ? `<br><em>${esc(j.exit)}</em>` : ''}
     )
     .join('');
 
-  const dealRows = transactions
-    .map(
-      (t) =>
+  // Grouped by track, matching the private-equity / venture-capital split above.
+  const dealRow = (t) =>
         `<tr><td>${esc(t.date)}</td><td>${esc(t.company)}</td><td>${esc(t.type)}</td><td>${esc(
           t.asset
         )}</td><td>$${t.value.toLocaleString()}M</td><td>${esc(t.entity)}</td><td>${
@@ -387,7 +389,15 @@ ${esc(j.description)}${j.exit ? `<br><em>${esc(j.exit)}</em>` : ''}
             ? `<a href="${esc(t.source.url)}" rel="noopener" title="${esc(t.source.title)}">${esc(t.source.publisher)}</a>`
             : 'First-hand'
         }</td></tr>`
-    )
+    ;
+  const dealGroups = Object.entries(TRACK_LABELS)
+    .map(([key, label]) => {
+      const rows = transactions.filter((t) => t.track === key);
+      const sum = rows.reduce((s, t) => s + t.value, 0);
+      return `<tbody><tr><th colspan="7" scope="rowgroup">${esc(label)} — ${rows.length} deals, $${sum.toLocaleString()}M</th></tr>${rows
+        .map(dealRow)
+        .join('')}</tbody>`;
+    })
     .join('');
 
   return page(
@@ -453,13 +463,15 @@ ${ventureBlocks}
 <p><a href="${esc(RESUME)}" download>Download the full resume (PDF)</a></p>
 
 <h2>Transactions — ${totals.count} deals, ${esc(totals.headline)}</h2>
-<p>Capital markets and corporate development work from the finance half of the career.
-Every figure below is a single named transaction; the total is their sum, not an estimate.
+<p>Capital markets and corporate development work from the finance half of the career, in two
+tracks: corporate and private-equity finance at The Home Depot and HD Supply, and venture-backed
+fintech at GreenSky and Momnt. Every figure below is a single named transaction; the total is
+their sum, not an estimate.
 Where a deal was publicly announced, the Source column links the filing or press release;
 "First-hand" rows were never announced at the deal level.</p>
 <table>
 <thead><tr><th>Date</th><th>Company</th><th>Type</th><th>Class</th><th>Value</th><th>Counterparty</th><th>Source</th></tr></thead>
-<tbody>${dealRows}</tbody>
+${dealGroups}
 <tfoot><tr><td colspan="4"><strong>Total</strong></td><td><strong>$${totals.totalM.toLocaleString()}M</strong></td><td colspan="2"></td></tr></tfoot>
 </table>
 
@@ -766,7 +778,7 @@ function main() {
           // report every deal as an error in Search Console.
           '@type': 'Thing',
           name: `${t.company} ${t.type} — $${t.value.toLocaleString()}M (${t.date})`,
-          description: `${t.asset} transaction: ${t.company} ${t.type.toLowerCase()} with ${t.entity}, $${t.value.toLocaleString()}M, ${t.date}.`,
+          description: `${TRACK_LABELS[t.track]} · ${t.asset} transaction: ${t.company} ${t.type} with ${t.entity}, $${t.value.toLocaleString()}M, ${t.date}.`,
           subjectOf: {
             '@type': 'CreativeWork',
             headline: t.source.title,

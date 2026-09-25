@@ -29,6 +29,13 @@ export type Transaction = {
   /** Counterparty. */
   entity: string;
   /**
+   * Which half of the finance career the deal belongs to, matching the
+   * private-equity / venture-capital split in the Partners section:
+   *   "corporate" — The Home Depot and PE-backed HD Supply
+   *   "venture"   — venture-backed fintech: GreenSky and Momnt
+   */
+  track: "corporate" | "venture";
+  /**
    * Public source for every figure in the row. Rows without one are first-hand
    * work that was never announced at the deal level: they stay in the table,
    * render without a link, and are left out of structured data and llms.txt.
@@ -43,6 +50,7 @@ export const transactions: Transaction[] = [
     company: "Momnt",
     asset: "Debt",
     type: "144(a) Securitization",
+    track: "venture",
     entity: "Saluda Grade",
     source: {
       url: "https://www.businesswire.com/news/home/20240109071454/en/Momnt-and-Saluda-Grade-Announce-Close-of-Inaugural-Securitization",
@@ -56,6 +64,7 @@ export const transactions: Transaction[] = [
     company: "Momnt",
     asset: "Equity",
     type: "Series A Extension",
+    track: "venture",
     entity: "TruStage Ventures",
     source: {
       url: "https://www.momnt.com/blog/momnt-announces-new-15-million-investment-continues-to-drive-fintech-innovation",
@@ -69,6 +78,7 @@ export const transactions: Transaction[] = [
     company: "GreenSky",
     asset: "Equity",
     type: "IPO",
+    track: "venture",
     entity: "Public Markets",
     source: {
       url: "https://www.sec.gov/Archives/edgar/data/0001712923/000093041318001935/c88906_ex99-1.htm",
@@ -82,6 +92,7 @@ export const transactions: Transaction[] = [
     company: "GreenSky",
     asset: "Equity",
     type: "Growth Equity",
+    track: "venture",
     entity: "PIMCO",
     source: {
       url: "https://www.ftpartners.com/transactions/greensky-pimco",
@@ -95,6 +106,7 @@ export const transactions: Transaction[] = [
     company: "HD Supply",
     asset: "Debt",
     type: "Senior Unsecured",
+    track: "corporate",
     entity: "Public Markets",
     source: {
       url: "https://globenewswire.com/news-release/2016/03/28/823369/0/en/HD-Supply-Inc-Announces-Pricing-of-Senior-Notes-Offering.html",
@@ -108,6 +120,7 @@ export const transactions: Transaction[] = [
     company: "HD Supply",
     asset: "Equity",
     type: "Divestiture",
+    track: "corporate",
     entity: "Anixter (Power Solutions)",
     source: {
       url: "https://www.inddist.com/home/news/13768593/anixter-to-buy-hd-supplys-power-unit-for-825-million",
@@ -121,6 +134,7 @@ export const transactions: Transaction[] = [
     company: "HD Supply",
     asset: "Equity",
     type: "Divestiture",
+    track: "corporate",
     entity: "The Home Depot (Crown Bolt)"
   },
   {
@@ -129,6 +143,7 @@ export const transactions: Transaction[] = [
     company: "HD Supply",
     asset: "Equity",
     type: "Secondary",
+    track: "corporate",
     entity: "Bain, Carlyle, Clayton Dubilier & Rice"
   },
   {
@@ -137,6 +152,7 @@ export const transactions: Transaction[] = [
     company: "Home Depot",
     asset: "Equity",
     type: "Share Repurchase",
+    track: "corporate",
     entity: "Goldman"
   },
   {
@@ -145,6 +161,7 @@ export const transactions: Transaction[] = [
     company: "Home Depot",
     asset: "Debt",
     type: "Line of Credit",
+    track: "corporate",
     entity: "Citi"
   },
   {
@@ -153,6 +170,7 @@ export const transactions: Transaction[] = [
     company: "Home Depot",
     asset: "Debt",
     type: "Senior Unsecured",
+    track: "corporate",
     entity: "Public Markets",
     source: {
       url: "https://ir.homedepot.com/news-releases/2011/03-28-2011",
@@ -187,6 +205,10 @@ export const transactionTotals = () => {
     },
     {}
   );
+  const byTrack = TRACKS.map((t) => {
+    const rows = transactions.filter((r) => r.track === t.key);
+    return { ...t, rows, count: rows.length, value: rows.reduce((sum, r) => sum + r.value, 0) };
+  });
   return {
     count: transactions.length,
     totalM,
@@ -197,5 +219,20 @@ export const transactionTotals = () => {
      */
     headline: `$${(Math.floor(totalM / 100) / 10).toFixed(1)}B+`,
     byAsset,
+    byTrack,
   };
 };
+
+/** Display order and copy for the two tracks; `key` matches Transaction.track. */
+export const TRACKS = [
+  {
+    key: 'corporate' as const,
+    label: 'Corporate & private equity',
+    blurb: 'Capital markets and corporate development at The Home Depot and PE-backed HD Supply.',
+  },
+  {
+    key: 'venture' as const,
+    label: 'Venture-backed fintech',
+    blurb: 'Growth equity, an IPO and securitization at GreenSky and Momnt.',
+  },
+];
