@@ -7,6 +7,7 @@ import Header from '../components/Header';
 import { getArticle } from '../data/articles';
 import { getClipForArticle } from '../data/clips';
 import VideoEmbed from '../components/VideoEmbed';
+import ArticleLogos from '../components/ArticleLogos';
 
 const SITE_URL = 'https://www.michael-kaminski.io';
 
@@ -91,6 +92,7 @@ const Article: React.FC = () => {
           <span className="inline-flex items-center gap-1"><Clock size={14} /> {article.readMinutes} min read</span>
         </div>
         <h1 className="display text-4xl text-white leading-tight mb-8">{article.title}</h1>
+        <ArticleLogos names={article.logos} slug={article.slug} linked className="-mt-4 mb-8" />
 
         {clip && (
           <div className="mb-10">
