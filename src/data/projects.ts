@@ -32,6 +32,17 @@ export interface ProjectArtifact {
   href: string;
 }
 
+/**
+ * The company a case study was built for, when it is public. Leave it off for
+ * anonymized work: the regulated-lender study must never name its employer.
+ */
+export interface ProjectCompany {
+  name: string;
+  href: string;
+  /** Square mark under /images/logos, 64px (2x of its 32px box). */
+  logo: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -60,6 +71,7 @@ export interface Project {
   stack: string[];
   image?: string;
   imageAlt?: string;
+  company?: ProjectCompany;
   /** Author-controlled long-form HTML. Same contract as Article.body. */
   body: string;
 }
@@ -301,6 +313,7 @@ endpoint.</p>`,
     date: '2026-09-18',
     tier: 'case-study',
     domain: 'Operations · agent-in-the-loop',
+    company: { name: 'Transparent Maintenance', href: 'https://www.transparentmaintenance.com', logo: '/images/logos/transparent-maintenance.webp' },
     role:
       'I designed the operating model (a task is done once, a process repeats and spawns tasks, a role owns processes), the hub-not-mesh architecture, the agent desk and its hand-over rule, and the attribution design. Thirty decision records are mine; the code was built with agents against them.',
     problem: `
@@ -384,6 +397,7 @@ moves column carries that rule into the table. Same data, zero clients won since
     date: '2026-08-23',
     tier: 'case-study',
     domain: 'Knowledge graphs · agent-facing infrastructure',
+    company: { name: 'The Genome of Games', href: 'https://genome-of-games.vercel.app', logo: '/images/logos/genome-of-games.webp' },
     role:
       'I designed and built the whole pipeline: the source ontology, the build, all four output surfaces, and the MCP tool design. The decision worth copying — having the MCP server import a build artifact rather than query the site — is the one I would defend hardest.',
     problem: `

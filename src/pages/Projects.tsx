@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 import { projectsByDate, type Project } from '../data/projects';
 import { sites } from '../data/sites';
 import { products } from '../data/products';
+import CompanyMark from '../components/CompanyMark';
 
 const SITE_URL = 'https://www.michael-kaminski.io';
 
@@ -36,6 +37,12 @@ const CaseStudyCard: React.FC<{ project: Project; index: number }> = ({ project,
         {project.date}
       </time>
     </div>
+
+    {project.company && (
+      <div className="mb-3">
+        <CompanyMark company={project.company} slug={project.slug} placement="card" />
+      </div>
+    )}
 
     <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
       <Link to={`/projects/${project.slug}`} className="hover:text-accent">

@@ -5,6 +5,7 @@ import Seo from '../components/Seo';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { getProject } from '../data/projects';
+import CompanyMark from '../components/CompanyMark';
 
 const SITE_URL = 'https://www.michael-kaminski.io';
 
@@ -80,6 +81,11 @@ const CaseStudy: React.FC = () => {
                 {project.date}
               </time>
             </div>
+            {project.company && (
+              <div className="mb-4">
+                <CompanyMark company={project.company} slug={project.slug} placement="header" />
+              </div>
+            )}
             <h1 className="mb-4 text-4xl font-bold leading-tight text-white sm:text-5xl">
               {project.title}
             </h1>
