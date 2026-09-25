@@ -342,8 +342,8 @@ const Hero: React.FC = () => {
               name: 'Stellantis Financial Services',
               src: '/images/logos/stellantis-fs.webp',
               href: 'https://www.stellantis-fs.com/',
-              width: 178,
-              height: 37,
+              width: 147,
+              height: 46,
             },
             {
               name: 'GreenSky',

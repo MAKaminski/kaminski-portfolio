@@ -1,11 +1,57 @@
 import React, { useState } from 'react';
-import { jobTimeline } from '../data/experience';
+import { jobTimeline, type Job } from '../data/experience';
 import { ChevronDown, GraduationCap } from 'lucide-react';
 import { track } from '../utils/track';
 import { useSectionView } from '../hooks/useSectionView';
 
 // Most recent roles shown up front; the rest of the timeline is one click away.
 const ROLES_SHOWN = 4;
+
+/**
+ * Initials for roles without a mark, from the name before any "/":
+ * "Property Walk" -> "PW", "ModularEquity / MEK Capital" -> "ME".
+ */
+const initials = (company: string) => {
+  const name = company.split('/')[0].trim();
+  const caps = name.match(/[A-Z]/g) || [];
+  return (caps.length >= 2 ? caps : name.split(/\s+/).map((w) => w[0].toUpperCase())).slice(0, 2).join('');
+};
+
+/** The employer's logo, above the title on phones and in a fixed 120px column from sm up (initials when there is none), linked out when it has a site. */
+const EmployerMark: React.FC<{ job: Job }> = ({ job }) => {
+  const mark = job.logo ? (
+    <img
+      src={job.logo.src}
+      alt=""
+      width={job.logo.width}
+      height={job.logo.height}
+      loading="lazy"
+      decoding="async"
+      className="h-auto max-h-8 max-w-full opacity-70 transition duration-300 group-hover/mark:opacity-100"
+    />
+  ) : (
+    <span className="flex h-8 w-8 items-center justify-center rounded-md border border-white/15 text-xs font-bold text-white/60 transition group-hover/mark:border-accent/60 group-hover/mark:text-white">
+      {initials(job.company)}
+    </span>
+  );
+  const box = 'group/mark flex h-8 max-w-[120px] flex-shrink-0 items-center sm:w-[120px] sm:justify-end';
+  return job.link ? (
+    <a
+      href={job.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${job.company} website`}
+      onClick={() => track('Employer Link Clicked', { company: job.company, placement: 'logo' })}
+      className={box}
+    >
+      {mark}
+    </a>
+  ) : (
+    <span className={box} aria-hidden="true">
+      {mark}
+    </span>
+  );
+};
 
 const Experience: React.FC = () => {
   const ref = useSectionView<HTMLElement>('experience');
@@ -71,25 +117,31 @@ const Experience: React.FC = () => {
 
         <div className="grid gap-8 lg:grid-cols-5">
           {/* Timeline */}
-          <div className="lg:col-span-3">
+          <div className="min-w-0 lg:col-span-3">
             <ol className="rilla-card divide-y divide-white/10">
               {roles.map((job) => (
                 <li key={`${job.company}-${job.period}`} className="flex gap-4 p-5 transition-colors duration-300 hover:bg-white/[0.03]">
                   <div className="w-24 flex-shrink-0 text-sm font-medium text-white/50">{job.period}</div>
-                  <div>
-                    <h3 className="font-semibold text-white">{job.title}</h3>
-                    {job.link ? (
-                      <a
-                        href={job.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm font-medium text-accent underline-offset-2 hover:underline"
-                      >
-                        {job.company}
-                      </a>
-                    ) : (
-                      <p className="text-sm font-medium text-accent">{job.company}</p>
-                    )}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                      <div className="min-w-0">
+                        <h3 className="font-semibold text-white">{job.title}</h3>
+                        {job.link ? (
+                          <a
+                            href={job.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => track('Employer Link Clicked', { company: job.company, placement: 'name' })}
+                            className="text-sm font-medium text-accent underline-offset-2 hover:underline"
+                          >
+                            {job.company}
+                          </a>
+                        ) : (
+                          <p className="text-sm font-medium text-accent">{job.company}</p>
+                        )}
+                      </div>
+                      <EmployerMark job={job} />
+                    </div>
                     <p className="mt-1 text-sm text-white/60">{job.description}</p>
                   </div>
                 </li>
