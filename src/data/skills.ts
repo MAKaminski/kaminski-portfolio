@@ -105,7 +105,7 @@ export const specializedAreas: SpecializedArea[] = [
   },
   {
     title: "Transactions & Corporate Development",
-    items: ["Acquisitions & tuck-ins", "M&A advisory", "Buy-and-build roll-ups", "Divestitures & carve-outs ($1.8B program)", "IPO readiness (S-1)", "Series B & growth equity raises", "144(a) debt raises ($400M)", "LBO modeling & sponsor returns", "DCF, comps & precedent transactions", "Synergy modeling & integration planning", "Transition service agreements (TSAs)", "Data-room & diligence management", "Post-merger systems integration", "PE exit readiness", "Term-sheet negotiation", "Global markets", "Equity & debt capital markets"],
+    items: ["Acquisitions & tuck-ins", "M&A advisory", "Buy-and-build roll-ups", "Divestitures & carve-outs ($1.8B program)", "IPO readiness (S-1)", "Venture & growth equity raises", "144(a) securitization ($125M)", "LBO modeling & sponsor returns", "DCF, comps & precedent transactions", "Synergy modeling & integration planning", "Transition service agreements (TSAs)", "Data-room & diligence management", "Post-merger systems integration", "PE exit readiness", "Term-sheet negotiation", "Global markets", "Equity & debt capital markets"],
   },
   {
     title: "Credit, Risk & Collections",

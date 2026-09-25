@@ -53,7 +53,7 @@ const Strategy: React.FC = () => {
     <div className="min-h-screen bg-ink-900 text-white">
       <Seo
         title="Fintech Strategy & M&A Advisor in Atlanta | Michael Kaminski"
-        description="Fintech strategy, corporate development and M&A advisory from an Atlanta operator who has led $11.1B+ in transactions across IPOs, divestitures and share repurchases — and can execute the finance and the technology behind the plan."
+        description={`Fintech strategy, corporate development and M&A advisory from an Atlanta operator who has led ${DEAL_TOTAL} in transactions across IPOs, divestitures and share repurchases — and can execute the finance and the technology behind the plan.`}
         canonicalPath="/strategy"
         breadcrumbName="Fintech Strategy & M&A"
       />

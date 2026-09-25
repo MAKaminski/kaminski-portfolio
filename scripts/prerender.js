@@ -382,7 +382,11 @@ ${esc(j.description)}${j.exit ? `<br><em>${esc(j.exit)}</em>` : ''}
       (t) =>
         `<tr><td>${esc(t.date)}</td><td>${esc(t.company)}</td><td>${esc(t.type)}</td><td>${esc(
           t.asset
-        )}</td><td>$${t.value.toLocaleString()}M</td><td>${esc(t.entity)}</td></tr>`
+        )}</td><td>$${t.value.toLocaleString()}M</td><td>${esc(t.entity)}</td><td>${
+          t.source
+            ? `<a href="${esc(t.source.url)}" rel="noopener" title="${esc(t.source.title)}">${esc(t.source.publisher)}</a>`
+            : 'First-hand'
+        }</td></tr>`
     )
     .join('');
 
@@ -450,11 +454,13 @@ ${ventureBlocks}
 
 <h2>Transactions — ${totals.count} deals, ${esc(totals.headline)}</h2>
 <p>Capital markets and corporate development work from the finance half of the career.
-Every figure below is a single named transaction; the total is their sum, not an estimate.</p>
+Every figure below is a single named transaction; the total is their sum, not an estimate.
+Where a deal was publicly announced, the Source column links the filing or press release;
+"First-hand" rows were never announced at the deal level.</p>
 <table>
-<thead><tr><th>Date</th><th>Company</th><th>Type</th><th>Class</th><th>Value</th><th>Counterparty</th></tr></thead>
+<thead><tr><th>Date</th><th>Company</th><th>Type</th><th>Class</th><th>Value</th><th>Counterparty</th><th>Source</th></tr></thead>
 <tbody>${dealRows}</tbody>
-<tfoot><tr><td colspan="4"><strong>Total</strong></td><td><strong>$${totals.totalM.toLocaleString()}M</strong></td><td></td></tr></tfoot>
+<tfoot><tr><td colspan="4"><strong>Total</strong></td><td><strong>$${totals.totalM.toLocaleString()}M</strong></td><td colspan="2"></td></tr></tfoot>
 </table>
 
 <h2>Writing</h2>
@@ -740,6 +746,37 @@ function main() {
     // an aggregate would invent exactly the kind of metric this pass removed.
   }));
 
+  // Publicly sourced deals only, each citing the page that documents it, so a
+  // search engine or answer engine can check the figure rather than take the
+  // portfolio's word for it. First-hand rows stay out of structured data.
+  const dealLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': `${ORIGIN}/#transactions`,
+    name: 'Transactions Michael Kaminski worked on (publicly sourced)',
+    url: `${ORIGIN}/#transactions`,
+    about: { '@id': `${ORIGIN}/#person` },
+    itemListElement: transactions
+      .filter((t) => t.source)
+      .map((t, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          // Thing, not Event: Google validates Event for location and would
+          // report every deal as an error in Search Console.
+          '@type': 'Thing',
+          name: `${t.company} ${t.type} — $${t.value.toLocaleString()}M (${t.date})`,
+          description: `${t.asset} transaction: ${t.company} ${t.type.toLowerCase()} with ${t.entity}, $${t.value.toLocaleString()}M, ${t.date}.`,
+          subjectOf: {
+            '@type': 'CreativeWork',
+            headline: t.source.title,
+            url: t.source.url,
+            publisher: { '@type': 'Organization', name: t.source.publisher },
+          },
+        },
+      })),
+  };
+
   // ── Home ──
   safely('/', () =>
     write(
@@ -750,7 +787,7 @@ function main() {
           'Michael Kaminski builds AI agents that run in production. Took one from prototype through security, legal, and compliance review at a regulated lender.',
         type: 'profile',
         crumbs: [{ name: 'Home', path: '/' }],
-        jsonLd: reviewLd,
+        jsonLd: [...reviewLd, dealLd],
       },
       homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news, ventureBackers })
     )

@@ -48,6 +48,29 @@ Kubernetes clusters.
 - The Home Depot — career origin (2011–2014).
 - Superior Contracting & Maintenance — founder, still operating; roughly $20M revenue/yr.
 
+## Transactions (publicly sourced)
+
+Eleven named transactions totalling $10,922M ($10.9B+) are listed at
+https://www.michael-kaminski.io/#transactions. The seven below were publicly announced; each
+links to the filing or release that documents the figure. The other four ($5,747M: an HD Supply
+secondary and Crown Bolt sale, a Home Depot share repurchase and credit line) are first-hand
+work that was never announced at the deal level.
+
+- Jan 2024 — Momnt, $125M 144(a) securitization with Saluda Grade (debt).
+  Source: https://www.businesswire.com/news/home/20240109071454/en/Momnt-and-Saluda-Grade-Announce-Close-of-Inaugural-Securitization
+- Sep 2023 — Momnt, $15M Series A extension led by TruStage Ventures (equity).
+  Source: https://www.momnt.com/blog/momnt-announces-new-15-million-investment-continues-to-drive-fintech-innovation
+- May 2018 — GreenSky, $1,010M IPO (equity).
+  Source: https://www.sec.gov/Archives/edgar/data/0001712923/000093041318001935/c88906_ex99-1.htm
+- Dec 2017 — GreenSky, $200M growth equity from PIMCO (equity).
+  Source: https://www.ftpartners.com/transactions/greensky-pimco
+- Apr 2016 — HD Supply, $1,000M senior unsecured notes (debt).
+  Source: https://globenewswire.com/news-release/2016/03/28/823369/0/en/HD-Supply-Inc-Announces-Pricing-of-Senior-Notes-Offering.html
+- Oct 2015 — HD Supply, $825M sale of Power Solutions to Anixter (divestiture).
+  Source: https://www.inddist.com/home/news/13768593/anixter-to-buy-hd-supplys-power-unit-for-825-million
+- Mar 2011 — The Home Depot, $2,000M senior unsecured notes (debt).
+  Source: https://ir.homedepot.com/news-releases/2011/03-28-2011
+
 ## Education
 
 - MBA, Georgia State University (2011).
