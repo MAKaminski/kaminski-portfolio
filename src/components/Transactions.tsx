@@ -55,7 +55,8 @@ const Transactions: React.FC = () => {
             Track <span className="accent">record</span>
           </h2>
           <p className="mt-3 text-lg text-white/60 max-w-2xl">
-            {totals.count} named transactions totalling ${totals.totalM.toLocaleString()}M across equity and debt.{' '}
+            {totals.count} named transactions totalling ${totals.totalM.toLocaleString()}M, split by track: corporate and
+            private-equity finance, then venture-backed fintech.{' '}
             {sourced} link to the public filing or announcement.
           </p>
         </div>
@@ -75,14 +76,20 @@ const Transactions: React.FC = () => {
         </div>
 
         {/* Derived from the table, never typed by hand (see transactionTotals). */}
-        <div className="mt-4 grid grid-cols-2 gap-4">
-          {Object.entries(totals.byAsset).map(([type, summary]) => (
-            <div key={type} className="rilla-card p-4">
-              <p className="text-sm text-white/60">{type}</p>
-              <p className="text-xl font-bold text-accent">${summary.value.toLocaleString()}M</p>
-              <p className="text-xs text-white/50">{summary.count} transactions</p>
-            </div>
-          ))}
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          {totals.byTrack.map((t) => {
+            const split = (asset: string) => t.rows.filter((r) => r.asset === asset).reduce((sum, r) => sum + r.value, 0);
+            return (
+              <div key={t.key} className="rilla-card p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">{t.label}</p>
+                <p className="mt-2 text-2xl font-bold text-accent">${t.value.toLocaleString()}M</p>
+                <p className="text-xs text-white/50">
+                  {t.count} transactions · equity ${split('Equity').toLocaleString()}M · debt ${split('Debt').toLocaleString()}M
+                </p>
+                <p className="mt-2 text-sm text-white/65">{t.blurb}</p>
+              </div>
+            );
+          })}
         </div>
 
         <button
@@ -115,53 +122,64 @@ const Transactions: React.FC = () => {
                     <th className="px-4 py-3 text-left font-semibold">Source</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {transactions.map((t, index) => (
-                    <tr key={index} className="border-t border-white/10">
-                      <td className="px-4 py-3 font-medium text-white whitespace-nowrap">{t.date}</td>
-                      <td className="px-4 py-3 font-bold text-accent">${t.value.toLocaleString()}</td>
-                      <td className="px-4 py-3 text-white/70">{t.company}</td>
-                      <td className="px-4 py-3">
-                        <span
-                          className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            t.asset === 'Equity'
-                              ? 'border border-emerald-400/30 bg-emerald-400/10 text-emerald-300'
-                              : 'border border-sky-400/30 bg-sky-400/10 text-sky-300'
-                          }`}
-                        >
-                          {t.asset}
+                {totals.byTrack.map((group) => (
+                  <tbody key={group.key}>
+                    <tr className="border-t border-white/10 bg-white/[0.03]">
+                      <th colSpan={7} scope="rowgroup" className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-[0.15em] text-white/70">
+                        {group.label}
+                        <span className="mt-1 block normal-case tracking-normal text-accent sm:ml-3 sm:mt-0 sm:inline">
+                          {group.count} deals · ${group.value.toLocaleString()}M
                         </span>
-                      </td>
-                      <td className="px-4 py-3 text-white/70">{t.type}</td>
-                      <td className="px-4 py-3 text-white/70">{t.entity}</td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        {t.source ? (
-                          <a
-                            href={t.source.url}
-                            target="_blank"
-                            rel="noopener"
-                            title={t.source.title}
-                            onClick={() =>
-                              track('Transaction Source Clicked', {
-                                company: t.company,
-                                type: t.type,
-                                publisher: t.source?.publisher ?? '',
-                              })
-                            }
-                            className="inline-flex items-center gap-1 text-accent hover:underline underline-offset-4"
-                          >
-                            {t.source.publisher}
-                            <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
-                          </a>
-                        ) : (
-                          <span className="text-white/40" title="Not announced at the deal level">
-                            First-hand
-                          </span>
-                        )}
-                      </td>
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
+                    {group.rows.map((t) => (
+                      <tr key={`${t.date}-${t.company}-${t.type}`} className="border-t border-white/10">
+                        <td className="px-4 py-3 font-medium text-white whitespace-nowrap">{t.date}</td>
+                        <td className="px-4 py-3 font-bold text-accent">${t.value.toLocaleString()}</td>
+                        <td className="px-4 py-3 text-white/70">{t.company}</td>
+                        <td className="px-4 py-3">
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              t.asset === 'Equity'
+                                ? 'border border-emerald-400/30 bg-emerald-400/10 text-emerald-300'
+                                : 'border border-sky-400/30 bg-sky-400/10 text-sky-300'
+                            }`}
+                          >
+                            {t.asset}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-white/70">{t.type}</td>
+                        <td className="px-4 py-3 text-white/70">{t.entity}</td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          {t.source ? (
+                            <a
+                              href={t.source.url}
+                              target="_blank"
+                              rel="noopener"
+                              title={t.source.title}
+                              onClick={() =>
+                                track('Transaction Source Clicked', {
+                                  company: t.company,
+                                  type: t.type,
+                                  track: t.track,
+                                  publisher: t.source?.publisher ?? '',
+                                })
+                              }
+                              className="inline-flex items-center gap-1 text-accent hover:underline underline-offset-4"
+                            >
+                              {t.source.publisher}
+                              <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                            </a>
+                          ) : (
+                            <span className="text-white/40" title="Not announced at the deal level">
+                              First-hand
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                ))}
               </table>
             </div>
           </motion.div>

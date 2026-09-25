@@ -51,10 +51,26 @@ Kubernetes clusters.
 ## Transactions (publicly sourced)
 
 Eleven named transactions totalling $10,922M ($10.9B+) are listed at
-https://www.michael-kaminski.io/#transactions. The seven below were publicly announced; each
-links to the filing or release that documents the figure. The other four ($5,747M: an HD Supply
-secondary and Crown Bolt sale, a Home Depot share repurchase and credit line) are first-hand
+https://www.michael-kaminski.io/#transactions, in two tracks. Seven were publicly announced and
+link to the filing or release that documents the figure; the other four ($5,747M) are first-hand
 work that was never announced at the deal level.
+
+### Corporate & private equity — 7 deals, $9,572M
+
+The Home Depot and PE-backed HD Supply (Bain, Carlyle, Clayton Dubilier & Rice). Unsourced:
+an HD Supply secondary ($957M) and Crown Bolt sale ($90M), a Home Depot share repurchase
+($4,000M) and credit line ($700M).
+
+- Apr 2016 — HD Supply, $1,000M senior unsecured notes (debt).
+  Source: https://globenewswire.com/news-release/2016/03/28/823369/0/en/HD-Supply-Inc-Announces-Pricing-of-Senior-Notes-Offering.html
+- Oct 2015 — HD Supply, $825M sale of Power Solutions to Anixter (divestiture).
+  Source: https://www.inddist.com/home/news/13768593/anixter-to-buy-hd-supplys-power-unit-for-825-million
+- Mar 2011 — The Home Depot, $2,000M senior unsecured notes (debt).
+  Source: https://ir.homedepot.com/news-releases/2011/03-28-2011
+
+### Venture-backed fintech — 4 deals, $1,350M
+
+GreenSky (2016–2018, through its IPO) and Momnt (2023–2025). All four are sourced.
 
 - Jan 2024 — Momnt, $125M 144(a) securitization with Saluda Grade (debt).
   Source: https://www.businesswire.com/news/home/20240109071454/en/Momnt-and-Saluda-Grade-Announce-Close-of-Inaugural-Securitization
@@ -64,12 +80,6 @@ work that was never announced at the deal level.
   Source: https://www.sec.gov/Archives/edgar/data/0001712923/000093041318001935/c88906_ex99-1.htm
 - Dec 2017 — GreenSky, $200M growth equity from PIMCO (equity).
   Source: https://www.ftpartners.com/transactions/greensky-pimco
-- Apr 2016 — HD Supply, $1,000M senior unsecured notes (debt).
-  Source: https://globenewswire.com/news-release/2016/03/28/823369/0/en/HD-Supply-Inc-Announces-Pricing-of-Senior-Notes-Offering.html
-- Oct 2015 — HD Supply, $825M sale of Power Solutions to Anixter (divestiture).
-  Source: https://www.inddist.com/home/news/13768593/anixter-to-buy-hd-supplys-power-unit-for-825-million
-- Mar 2011 — The Home Depot, $2,000M senior unsecured notes (debt).
-  Source: https://ir.homedepot.com/news-releases/2011/03-28-2011
 
 ## Education
 
