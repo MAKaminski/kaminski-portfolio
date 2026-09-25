@@ -13,7 +13,8 @@
  *
  * Every row is sourced from a public announcement, listed in `source`. Do not
  * add a firm here without one; a wrong investor name on a portfolio is worse
- * than a short list. `featured` puts a firm first with its longer `context`.
+ * than a short list. Each firm also scrolls in the Venture capital logo strip,
+ * linking out to `href`.
  */
 export interface VentureBacker {
   name: string;
@@ -24,7 +25,11 @@ export interface VentureBacker {
   context: string;
   /** Public source for the claim. */
   source: string;
-  featured?: boolean;
+  /** White-on-transparent mark under /images/logos (ships at 2x). */
+  src: string;
+  /** Rendered size in CSS px; required so the scrolling strip never reflows. */
+  width: number;
+  height: number;
 }
 
 export const ventureBackers: VentureBacker[] = [
@@ -33,9 +38,11 @@ export const ventureBackers: VentureBacker[] = [
     href: "https://www.saludagrade.com/",
     company: "Momnt",
     context:
-      "Led Momnt's Series A (2021) and followed on in 2023. Bought Momnt-originated loans for the inaugural ~$125M KBRA-rated home-improvement securitization (Jan 2024) and, through a joint venture, closed an up-to-$200M Macquarie warehouse facility.",
+      "Series A investor (2021) with a follow-on in 2023; bought Momnt-originated loans for the inaugural ~$125M securitization (Jan 2024).",
     source: "https://www.momnt.com/blog/momnt-and-saluda-grade-announce-close-of-inaugural-securitization",
-    featured: true,
+    src: "/images/logos/saluda-grade.webp",
+    width: 122,
+    height: 36,
   },
   {
     name: "TruStage Ventures",
@@ -43,6 +50,9 @@ export const ventureBackers: VentureBacker[] = [
     company: "Momnt",
     context: "Led Momnt's $15M round (Sep 2023); invested earlier as CMFG Ventures in the Series A.",
     source: "https://www.momnt.com/blog/momnt-announces-new-15-million-investment-continues-to-drive-fintech-innovation",
+    src: "/images/logos/trustage-ventures.webp",
+    width: 124,
+    height: 26,
   },
   {
     name: "Rockefeller Asset Management",
@@ -50,13 +60,19 @@ export const ventureBackers: VentureBacker[] = [
     company: "Momnt",
     context: "New investor through a fund within the firm in Momnt's $15M round (Sep 2023).",
     source: "https://www.momnt.com/blog/momnt-announces-new-15-million-investment-continues-to-drive-fintech-innovation",
+    src: "/images/logos/rockefeller.webp",
+    width: 223,
+    height: 32,
   },
   {
     name: "Yamaha Motor Ventures",
-    href: "https://www.yamahamotorventures.com/",
+    href: "https://www.yamahamotor.vc/",
     company: "Momnt",
     context: "Existing investor participating in Momnt's $15M round (Sep 2023).",
     source: "https://www.momnt.com/blog/momnt-announces-new-15-million-investment-continues-to-drive-fintech-innovation",
+    src: "/images/logos/yamaha-motor-ventures.webp",
+    width: 170,
+    height: 40,
   },
   {
     name: "Fintech Ventures Fund",
@@ -64,6 +80,9 @@ export const ventureBackers: VentureBacker[] = [
     company: "Momnt",
     context: "Series A follow-on investor (2021).",
     source: "https://www.momnt.com/blog/momnt-closes-7-million-series-a-funding-round-led-by-saluda-grade",
+    src: "/images/logos/fintech-ventures-fund.webp",
+    width: 105,
+    height: 42,
   },
   {
     name: "ICBA",
@@ -71,6 +90,9 @@ export const ventureBackers: VentureBacker[] = [
     company: "Momnt",
     context: "Independent Community Bankers of America; Series A follow-on investor (2021).",
     source: "https://www.momnt.com/blog/momnt-closes-7-million-series-a-funding-round-led-by-saluda-grade",
+    src: "/images/logos/icba.webp",
+    width: 94,
+    height: 24,
   },
   {
     name: "PIMCO",
@@ -78,6 +100,9 @@ export const ventureBackers: VentureBacker[] = [
     company: "GreenSky",
     context: "$200M equity investment (Dec 2017) at a ~$4.5B valuation, ahead of the 2018 IPO.",
     source: "https://www.ftpartners.com/transactions/greensky-pimco",
+    src: "/images/logos/pimco.webp",
+    width: 118,
+    height: 22,
   },
   {
     name: "Fifth Third Bancorp",
@@ -85,6 +110,9 @@ export const ventureBackers: VentureBacker[] = [
     company: "GreenSky",
     context: "$50M investment and a $2B lending program (2016) at a $3.6B valuation.",
     source: "https://www.ftpartners.com/news/greensky-fifth-third-bank",
+    src: "/images/logos/fifth-third.webp",
+    width: 180,
+    height: 24,
   },
   {
     name: "TPG",
@@ -92,6 +120,9 @@ export const ventureBackers: VentureBacker[] = [
     company: "GreenSky",
     context: "Earlier-round growth investor; on the cap table when I joined in 2016.",
     source: "https://en.wikipedia.org/wiki/GreenSky",
+    src: "/images/logos/tpg.webp",
+    width: 77,
+    height: 32,
   },
   {
     name: "ICONIQ Capital",
@@ -99,6 +130,9 @@ export const ventureBackers: VentureBacker[] = [
     company: "GreenSky",
     context: "Earlier-round growth investor; on the cap table when I joined in 2016.",
     source: "https://en.wikipedia.org/wiki/GreenSky",
+    src: "/images/logos/iconiq.webp",
+    width: 101,
+    height: 24,
   },
   {
     name: "DST Global",
@@ -106,6 +140,9 @@ export const ventureBackers: VentureBacker[] = [
     company: "GreenSky",
     context: "Earlier-round growth investor; on the cap table when I joined in 2016.",
     source: "https://en.wikipedia.org/wiki/GreenSky",
+    src: "/images/logos/dst-global.webp",
+    width: 60,
+    height: 36,
   },
   {
     name: "Wellington Management",
@@ -113,6 +150,9 @@ export const ventureBackers: VentureBacker[] = [
     company: "GreenSky",
     context: "Earlier-round growth investor; on the cap table when I joined in 2016.",
     source: "https://en.wikipedia.org/wiki/GreenSky",
+    src: "/images/logos/wellington.webp",
+    width: 164,
+    height: 34,
   },
   {
     name: "QED Investors",
@@ -120,6 +160,9 @@ export const ventureBackers: VentureBacker[] = [
     company: "GreenSky",
     context: "Early venture investor; on the cap table when I joined in 2016.",
     source: "https://en.wikipedia.org/wiki/GreenSky",
+    src: "/images/logos/qed.webp",
+    width: 70,
+    height: 36,
   },
 ];
 
