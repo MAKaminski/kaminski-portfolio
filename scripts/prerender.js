@@ -313,7 +313,21 @@ ${ctaBlock()}
 }
 
 // ─── Home ──────────────────────────────────────────────────────────────────
-function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners }) {
+function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news }) {
+  // Mirrors Hero.tsx's banner and NewsStory.tsx: the newest item only.
+  const lead = news[0];
+  const newsBlock = lead
+    ? `
+<p><a href="#${esc(lead.id)}"><strong>${esc(lead.tag)}:</strong> ${esc(lead.banner)} (${esc(lead.date)})</a></p>`
+    : '';
+  const newsSection = lead
+    ? `
+<section id="${esc(lead.id)}">
+<h2>${esc(lead.headline)}</h2>
+<p><time datetime="${esc(lead.date)}">${esc(lead.date)}</time> — ${esc(lead.dek)}</p>
+<ul>${lead.points.map((p) => `<li><strong>${esc(p.title)}.</strong> ${esc(p.body)}</li>`).join('')}</ul>
+</section>`
+    : '';
   const partnerRows = partners
     .map((p) => `<li><a href="${esc(p.href)}" rel="noopener">${esc(p.name)}</a> — ${esc(p.context)}</li>`)
     .join('');
@@ -365,10 +379,12 @@ ${esc(j.description)}${j.exit ? `<br><em>${esc(j.exit)}</em>` : ''}
   return page(
     '/',
     `
+${newsBlock}
 <h1>Michael Kaminski — I build AI agents that run in production</h1>
 ${img(HERO_PORTRAIT, 'Michael Kaminski', 440, 520, true)}
 <p>Agent infrastructure, MCP servers, and eval harnesses inside a regulated lender.
 Python and TypeScript. Atlanta.</p>
+${newsSection}
 
 <p><strong>What I'm looking for:</strong> senior product roles at the agent layer —
 Technical Product Manager, Senior Product Owner, or PM for an agent platform — at teams
@@ -652,6 +668,7 @@ function main() {
   const skills = loadData('skills.ts', 'export const skillCategories', 'export const specializedAreas', { required: true });
   const areas = loadData('skills.ts', 'export const specializedAreas', 'export const skillCount', { required: true });
   const partners = loadData('partners.ts', 'export const partners', 'export const partnerCount', { required: true });
+  const news = loadData('news.ts', 'export const news', 'export const latestNews', { required: true });
   const projects = loadData('projects.ts', 'export const projects', 'export const getProject').sort(
     (a, b) =>
       Number(b.tier === 'flagship') - Number(a.tier === 'flagship') || b.date.localeCompare(a.date)
@@ -719,7 +736,7 @@ function main() {
         crumbs: [{ name: 'Home', path: '/' }],
         jsonLd: reviewLd,
       },
-      homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners })
+      homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news })
     )
   );
 
