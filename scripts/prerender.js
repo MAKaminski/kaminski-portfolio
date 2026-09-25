@@ -313,7 +313,7 @@ ${ctaBlock()}
 }
 
 // ─── Home ──────────────────────────────────────────────────────────────────
-function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news }) {
+function homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news, ventureBackers }) {
   // Mirrors Hero.tsx's banner and NewsStory.tsx: the newest item only.
   const lead = news[0];
   const newsBlock = lead
@@ -330,6 +330,16 @@ function homeMarkup({ articles, referrals, transactions, jobs, projects, totals,
     : '';
   const partnerRows = partners
     .map((p) => `<li><a href="${esc(p.href)}" rel="noopener">${esc(p.name)}</a> — ${esc(p.context)}</li>`)
+    .join('');
+  // Mirrors the Venture capital block in Partners.tsx, grouped by company.
+  const ventureBlocks = ['Momnt', 'GreenSky']
+    .map((company) => {
+      const rows = ventureBackers
+        .filter((v) => v.company === company)
+        .map((v) => `<li><a href="${esc(v.href)}" rel="noopener">${esc(v.name)}</a> — ${esc(v.context)}</li>`)
+        .join('');
+      return rows ? `<h3>${esc(company)}</h3><ul>${rows}</ul>` : '';
+    })
     .join('');
   // Both tiers are emitted: the collapsed `more` tail is still on the page for a crawler.
   const skillRows = skills
@@ -372,7 +382,11 @@ ${esc(j.description)}${j.exit ? `<br><em>${esc(j.exit)}</em>` : ''}
       (t) =>
         `<tr><td>${esc(t.date)}</td><td>${esc(t.company)}</td><td>${esc(t.type)}</td><td>${esc(
           t.asset
-        )}</td><td>$${t.value.toLocaleString()}M</td><td>${esc(t.entity)}</td></tr>`
+        )}</td><td>$${t.value.toLocaleString()}M</td><td>${esc(t.entity)}</td><td>${
+          t.source
+            ? `<a href="${esc(t.source.url)}" rel="noopener" title="${esc(t.source.title)}">${esc(t.source.publisher)}</a>`
+            : 'First-hand'
+        }</td></tr>`
     )
     .join('');
 
@@ -429,17 +443,24 @@ ${projectCards}
 value-creation plans built for the sponsors below.</p>
 <ul>${partnerRows}</ul>
 
+<h2 id="venture-capital">Venture capital</h2>
+<p>Investors on the cap table during Michael's tenure at the two venture-backed fintechs: GreenSky
+(2016-2018, through its IPO) and Momnt (2023-2025, Series A through securitization).</p>
+${ventureBlocks}
+
 <h2>Experience</h2>
 <ul>${jobRows}</ul>
 <p><a href="${esc(RESUME)}" download>Download the full resume (PDF)</a></p>
 
 <h2>Transactions — ${totals.count} deals, ${esc(totals.headline)}</h2>
 <p>Capital markets and corporate development work from the finance half of the career.
-Every figure below is a single named transaction; the total is their sum, not an estimate.</p>
+Every figure below is a single named transaction; the total is their sum, not an estimate.
+Where a deal was publicly announced, the Source column links the filing or press release;
+"First-hand" rows were never announced at the deal level.</p>
 <table>
-<thead><tr><th>Date</th><th>Company</th><th>Type</th><th>Class</th><th>Value</th><th>Counterparty</th></tr></thead>
+<thead><tr><th>Date</th><th>Company</th><th>Type</th><th>Class</th><th>Value</th><th>Counterparty</th><th>Source</th></tr></thead>
 <tbody>${dealRows}</tbody>
-<tfoot><tr><td colspan="4"><strong>Total</strong></td><td><strong>$${totals.totalM.toLocaleString()}M</strong></td><td></td></tr></tfoot>
+<tfoot><tr><td colspan="4"><strong>Total</strong></td><td><strong>$${totals.totalM.toLocaleString()}M</strong></td><td colspan="2"></td></tr></tfoot>
 </table>
 
 <h2>Writing</h2>
@@ -668,6 +689,7 @@ function main() {
   const skills = loadData('skills.ts', 'export const skillCategories', 'export const specializedAreas', { required: true });
   const areas = loadData('skills.ts', 'export const specializedAreas', 'export const skillCount', { required: true });
   const partners = loadData('partners.ts', 'export const partners', 'export const partnerCount', { required: true });
+  const ventureBackers = loadData('ventureInvestors.ts', 'export const ventureBackers', 'export const ventureBackerCount', { required: true });
   const news = loadData('news.ts', 'export const news', 'export const latestNews', { required: true });
   const projects = loadData('projects.ts', 'export const projects', 'export const getProject').sort(
     (a, b) =>
@@ -724,6 +746,37 @@ function main() {
     // an aggregate would invent exactly the kind of metric this pass removed.
   }));
 
+  // Publicly sourced deals only, each citing the page that documents it, so a
+  // search engine or answer engine can check the figure rather than take the
+  // portfolio's word for it. First-hand rows stay out of structured data.
+  const dealLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': `${ORIGIN}/#transactions`,
+    name: 'Transactions Michael Kaminski worked on (publicly sourced)',
+    url: `${ORIGIN}/#transactions`,
+    about: { '@id': `${ORIGIN}/#person` },
+    itemListElement: transactions
+      .filter((t) => t.source)
+      .map((t, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          // Thing, not Event: Google validates Event for location and would
+          // report every deal as an error in Search Console.
+          '@type': 'Thing',
+          name: `${t.company} ${t.type} — $${t.value.toLocaleString()}M (${t.date})`,
+          description: `${t.asset} transaction: ${t.company} ${t.type.toLowerCase()} with ${t.entity}, $${t.value.toLocaleString()}M, ${t.date}.`,
+          subjectOf: {
+            '@type': 'CreativeWork',
+            headline: t.source.title,
+            url: t.source.url,
+            publisher: { '@type': 'Organization', name: t.source.publisher },
+          },
+        },
+      })),
+  };
+
   // ── Home ──
   safely('/', () =>
     write(
@@ -734,9 +787,9 @@ function main() {
           'Michael Kaminski builds AI agents that run in production. Took one from prototype through security, legal, and compliance review at a regulated lender.',
         type: 'profile',
         crumbs: [{ name: 'Home', path: '/' }],
-        jsonLd: reviewLd,
+        jsonLd: [...reviewLd, dealLd],
       },
-      homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news })
+      homeMarkup({ articles, referrals, transactions, jobs, projects, totals, about, skills, areas, partners, news, ventureBackers })
     )
   );
 

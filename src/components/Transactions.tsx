@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Rocket, Star, Target, TrendingUp } from 'lucide-react';
+import { ChevronDown, ExternalLink, Rocket, Star, Target, TrendingUp } from 'lucide-react';
 import { transactions, transactionTotals } from '../data/transactions';
 import { track } from '../utils/track';
 import { useSectionView } from '../hooks/useSectionView';
@@ -40,6 +40,7 @@ const Transactions: React.FC = () => {
   const [showDeals, setShowDeals] = useState(false);
   const ref = useSectionView<HTMLElement>('track_record');
   const totals = transactionTotals();
+  const sourced = transactions.filter((t) => t.source).length;
 
   const toggleDeals = () => {
     if (!showDeals) track('Section Expanded', { section: 'track_record', item: 'deal_table' });
@@ -54,7 +55,8 @@ const Transactions: React.FC = () => {
             Track <span className="accent">record</span>
           </h2>
           <p className="mt-3 text-lg text-white/60 max-w-2xl">
-            {totals.count} named transactions totalling ${totals.totalM.toLocaleString()}M across equity and debt.
+            {totals.count} named transactions totalling ${totals.totalM.toLocaleString()}M across equity and debt.{' '}
+            {sourced} link to the public filing or announcement.
           </p>
         </div>
 
@@ -110,6 +112,7 @@ const Transactions: React.FC = () => {
                     <th className="px-4 py-3 text-left font-semibold">Asset</th>
                     <th className="px-4 py-3 text-left font-semibold">Type</th>
                     <th className="px-4 py-3 text-left font-semibold">Entity</th>
+                    <th className="px-4 py-3 text-left font-semibold">Source</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -131,6 +134,31 @@ const Transactions: React.FC = () => {
                       </td>
                       <td className="px-4 py-3 text-white/70">{t.type}</td>
                       <td className="px-4 py-3 text-white/70">{t.entity}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {t.source ? (
+                          <a
+                            href={t.source.url}
+                            target="_blank"
+                            rel="noopener"
+                            title={t.source.title}
+                            onClick={() =>
+                              track('Transaction Source Clicked', {
+                                company: t.company,
+                                type: t.type,
+                                publisher: t.source?.publisher ?? '',
+                              })
+                            }
+                            className="inline-flex items-center gap-1 text-accent hover:underline underline-offset-4"
+                          >
+                            {t.source.publisher}
+                            <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                          </a>
+                        ) : (
+                          <span className="text-white/40" title="Not announced at the deal level">
+                            First-hand
+                          </span>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
