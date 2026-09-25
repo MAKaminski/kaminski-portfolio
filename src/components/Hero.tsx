@@ -7,6 +7,7 @@ import { track } from '../utils/track';
 import { setVisitorProperties } from '../utils/posthog';
 import { VISITOR_PATHS, VisitorPath } from '../data/visitorPaths';
 import { useSectionView } from '../hooks/useSectionView';
+import { latestNews, formatNewsDate } from '../data/news';
 import Marquee from './Marquee';
 import { PROFILES } from '../data/profiles';
 import CountUp from './CountUp';
@@ -110,6 +111,30 @@ const Hero: React.FC = () => {
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           {/* Left — the statement */}
           <div className="lg:col-span-7">
+            {/* What's new: the first thing above the name, linking to the story
+                section directly under the hero (NewsStory.tsx). */}
+            <motion.a
+              href={`#${latestNews.id}`}
+              onClick={() => track('News Banner Clicked', { item: latestNews.id })}
+              className="group mb-6 inline-flex max-w-full items-center gap-3 rounded-full border border-accent/40 bg-accent/[0.08] py-1.5 pl-1.5 pr-4 text-sm text-white/85 transition hover:border-accent hover:bg-accent/[0.14] hover:text-white"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: RILLA_EASE }}
+            >
+              <span className="relative inline-flex shrink-0 items-center gap-1.5 rounded-full bg-accent px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-ink-900">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink-900/60" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-ink-900" />
+                </span>
+                {latestNews.tag}
+              </span>
+              <span className="min-w-0 lg:whitespace-nowrap">
+                {latestNews.banner}
+                <span className="ml-2 whitespace-nowrap text-white/50">{formatNewsDate(latestNews.date)}</span>
+              </span>
+              <ArrowUpRight className="w-4 h-4 shrink-0 text-accent transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </motion.a>
+
             <motion.p
               className="mb-5 flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-white/60 uppercase"
               initial={{ opacity: 0, y: 12 }}

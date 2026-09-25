@@ -13,6 +13,7 @@ import Experience from './components/Experience';
 import Skills from './components/Skills';
 import Transactions from './components/Transactions';
 import Partners from './components/Partners';
+import NewsStory from './components/NewsStory';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ReferralCarousel from './components/ReferralCarousel';
@@ -140,6 +141,7 @@ function App() {
                           section below reports Home Section Viewed, so the
                           scroll-depth funnel reads top to bottom in this order. */}
                       <Hero />
+                      <NewsStory />
                       <Transactions />
                       <Partners />
                       <Experience />
