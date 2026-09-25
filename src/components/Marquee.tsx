@@ -20,10 +20,12 @@ export interface MarqueeLogo {
 interface MarqueeProps {
   items: MarqueeLogo[];
   className?: string;
+  /** Called when a mark is clicked, before the link opens (analytics). */
+  onItemClick?: (item: MarqueeLogo) => void;
 }
 
 /** Infinite marquee whose track skews with scroll velocity. Pauses on hover. */
-const Marquee: React.FC<MarqueeProps> = ({ items, className }) => {
+const Marquee: React.FC<MarqueeProps> = ({ items, className, onItemClick }) => {
   const { scrollY } = useScroll();
   const velocity = useVelocity(scrollY);
   const smooth = useSpring(velocity, { stiffness: 200, damping: 50, mass: 0.2 });
@@ -45,6 +47,7 @@ const Marquee: React.FC<MarqueeProps> = ({ items, className }) => {
                   // The duplicated half of the track is decorative, so keep it off the tab order.
                   tabIndex={duplicate ? -1 : undefined}
                   title={item.name}
+                  onClick={onItemClick ? () => onItemClick(item) : undefined}
                   className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900"
                 >
                   <img

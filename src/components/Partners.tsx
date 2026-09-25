@@ -44,7 +44,7 @@ const Partners: React.FC = () => {
 
       {/* Venture capital: investors in the two venture-backed companies, during
           Michael's tenure only (sourced per firm in data/ventureInvestors.ts). */}
-      <div id="venture-capital" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 scroll-mt-20">
+      <div id="venture-capital" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-2 scroll-mt-20">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">Venture capital</p>
         <h3 className="display mt-2 text-2xl md:text-3xl text-white">
           Built inside <span className="accent">venture-backed</span> fintechs
@@ -53,26 +53,18 @@ const Partners: React.FC = () => {
           The investors on the cap table while I was there: late-stage growth equity at GreenSky through
           its IPO, and Series A through securitization at Momnt.
         </p>
-
-        {ventureBackers
-          .filter((v) => v.featured)
-          .map((v) => (
-            <div key={v.name} className="mt-6 rounded-2xl border border-accent/40 bg-accent/[0.06] p-5">
-              <p className="text-xs font-semibold uppercase tracking-widest text-accent">{v.company} · lead investor</p>
-              <a
-                href={v.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => track('Investor Link Clicked', { investor: v.name, company: v.company })}
-                className="mt-1 inline-block text-xl font-bold text-white hover:text-accent"
-              >
-                {v.name}
-              </a>
-              <p className="mt-2 max-w-3xl text-sm text-white/70">{v.context}</p>
-            </div>
-          ))}
-
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
+      </div>
+      <div className="py-6">
+        <Marquee
+          items={ventureBackers}
+          onItemClick={(v) => {
+            const backer = ventureBackers.find((b) => b.name === v.name);
+            track('Investor Link Clicked', { investor: v.name, company: backer?.company ?? '', placement: 'marquee' });
+          }}
+        />
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div className="grid gap-4 md:grid-cols-2">
           {ventureCompanies.map((c) => (
             <div key={c.name} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
               <p className="font-semibold text-white">
@@ -81,14 +73,14 @@ const Partners: React.FC = () => {
               <p className="text-sm text-white/55">{c.note}</p>
               <ul className="mt-3 space-y-2">
                 {ventureBackers
-                  .filter((v) => v.company === c.name && !v.featured)
+                  .filter((v) => v.company === c.name)
                   .map((v) => (
                     <li key={v.name} className="text-sm">
                       <a
                         href={v.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onClick={() => track('Investor Link Clicked', { investor: v.name, company: v.company })}
+                        onClick={() => track('Investor Link Clicked', { investor: v.name, company: v.company, placement: 'list' })}
                         className="font-semibold text-white hover:text-accent"
                       >
                         {v.name}
