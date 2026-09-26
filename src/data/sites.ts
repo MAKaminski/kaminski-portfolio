@@ -16,6 +16,12 @@ export type Site = {
    * of a broken image. Add the .webp later and the card picks it up.
    */
   image?: string;
+  /**
+   * The site's own icon (from its favicon / apple-touch-icon), 64px under
+   * /images/logos/sites. Optional: sites that ship no icon, or only a
+   * framework default (Next.js, Vite), show initials instead.
+   */
+  icon?: string;
   category: string;
   description: string;
   tags: string[];
@@ -27,6 +33,7 @@ export const sites: Site[] = [
   {
     name: 'Transparent Permits',
     url: 'https://transparent-permits.vercel.app',
+    icon: '/images/logos/sites/transparent-permits.webp',
     image: '/images/sites/transparent-permits.webp',
     category: 'Construction · Contractor of Record',
     description:
@@ -45,6 +52,7 @@ export const sites: Site[] = [
   {
     name: 'Lace Luxx',
     url: 'https://www.lace-luxx.com',
+    icon: '/images/logos/sites/lace-luxx.webp',
     image: '/images/sites/lace-luxx.webp',
     category: 'E-commerce · Live Shopping',
     description:
@@ -72,6 +80,7 @@ export const sites: Site[] = [
   {
     name: 'DealPacket',
     url: 'https://dealpacket.vercel.app',
+    icon: '/images/logos/sites/dealpacket.webp',
     image: '/images/sites/dealpacket.webp',
     category: 'PropTech · MCP',
     description:
@@ -81,6 +90,7 @@ export const sites: Site[] = [
   {
     name: 'The Genome of Games',
     url: 'https://genome-of-games.vercel.app',
+    icon: '/images/logos/sites/the-genome-of-games.webp',
     image: '/images/sites/genome-of-games.webp',
     category: 'Research · Data Viz',
     description:
@@ -117,6 +127,7 @@ export const sites: Site[] = [
   {
     name: 'OurAI',
     url: 'https://our-ai-web.vercel.app',
+    icon: '/images/logos/sites/ourai.webp',
     image: '/images/sites/our-ai-web.webp',
     category: 'AI · SaaS',
     description:
@@ -189,6 +200,7 @@ export const sites: Site[] = [
   {
     name: 'LaceLuxx Financials',
     url: 'https://laceluxx-financials.vercel.app',
+    icon: '/images/logos/sites/lace-luxx.webp',
     image: '/images/sites/laceluxx-financials.webp',
     category: 'Fintech · Reporting',
     description:
@@ -216,6 +228,7 @@ export const sites: Site[] = [
   {
     name: 'Sprunki vs Monsters',
     url: 'https://sprunki-vs-monster.vercel.app',
+    icon: '/images/logos/sites/sprunki-vs-monsters.webp',
     image: '/images/sites/sprunki-vs-monster.webp',
     category: 'Game',
     description:
