@@ -11,6 +11,8 @@ export type Product = {
   name: string;
   repoUrl: string;
   image?: string;
+  /** The product's own app icon, when its repo ships one. Cards without it show initials. */
+  icon?: string;
   category: string;
   description: string;
   tags: string[];
@@ -40,6 +42,7 @@ export const products: Product[] = [
     name: 'MacMonitor',
     repoUrl: 'https://github.com/MAKaminski/MacMonitor',
     image: '/images/products/macmonitor.webp',
+    icon: '/images/logos/products/macmonitor.webp',
     category: 'macOS · System Monitor',
     description:
       'A fork of the Apple Silicon menu-bar system monitor, extended with a resizable Desktop HUD — live CPU, memory, network, GPU, battery, and power-rail metrics, a launcher tile grid, an embedded terminal, and tabs for finances, calendar, iMessage, and a multi-agent Claude assistant.',
