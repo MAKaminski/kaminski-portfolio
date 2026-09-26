@@ -7,12 +7,14 @@ import { track } from '../utils/track';
  * card is already a link, so the marks are plain images there; on the article
  * page each one links out to its site.
  */
-const ArticleLogos: React.FC<{ names?: string[]; slug: string; linked?: boolean; className?: string }> = ({
-  names,
-  slug,
-  linked = false,
-  className = '',
-}) => {
+const ArticleLogos: React.FC<{
+  names?: string[];
+  slug: string;
+  linked?: boolean;
+  className?: string;
+  /** Analytics event for a click; papers reuse this component under their own name. */
+  event?: string;
+}> = ({ names, slug, linked = false, className = '', event = 'Article Logo Clicked' }) => {
   const items = (names || []).filter((n) => articleLogos[n]);
   if (!items.length) return null;
   return (
@@ -38,7 +40,7 @@ const ArticleLogos: React.FC<{ names?: string[]; slug: string; linked?: boolean;
                 href={logo.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => track('Article Logo Clicked', { logo: name, slug })}
+                onClick={() => track(event, { logo: name, slug })}
                 className="group inline-flex items-center gap-2 text-xs font-medium text-white/60 hover:text-accent"
               >
                 {img}
