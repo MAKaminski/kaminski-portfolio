@@ -4,6 +4,7 @@ import { Clock } from 'lucide-react';
 import Seo from '../components/Seo';
 import Header from '../components/Header';
 import { articles } from '../data/articles';
+import ArticleLogos from '../components/ArticleLogos';
 
 const Writing: React.FC = () => {
   return (
@@ -46,6 +47,7 @@ const Writing: React.FC = () => {
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">{a.title}</h3>
               <p className="text-white/60">{a.description}</p>
+              <ArticleLogos names={a.logos} slug={a.slug} className="mt-4" />
               <span className="inline-block mt-4 text-accent font-semibold">Read →</span>
             </Link>
           ))}
