@@ -34,6 +34,11 @@ export interface Paper {
   /** Where the underlying work lives: repos, live URLs, essays. */
   sources: { label: string; href: string }[];
   tags: string[];
+  /**
+   * Companies and tools the paper covers, by name from src/data/articleLogos.ts.
+   * Rendered as linked marks on the card.
+   */
+  logos?: string[];
 }
 
 // Long-form write-ups with the arithmetic shown. Each PDF is the artifact of
@@ -76,6 +81,7 @@ export const papers: Paper[] = [
       { label: 'Case study', href: '/projects/trade-site-generator' },
     ],
     tags: ['Astro', 'Cloudflare Workers', 'D1', 'Generators', 'SEO'],
+    logos: ['Cloudflare'],
   },
   {
     slug: 'one-database-many-connectors',
@@ -114,6 +120,7 @@ export const papers: Paper[] = [
       { label: 'Field note: guard jobs are free', href: '/writing/guard-jobs-are-free' },
     ],
     tags: ['Supabase', 'Vercel', 'Agents', 'Operations', 'Attribution'],
+    logos: ['Transparent Maintenance', 'Supabase', 'Vercel'],
   },
   {
     slug: 'the-demand-instrument',
@@ -152,6 +159,7 @@ export const papers: Paper[] = [
       { label: 'The Demand Test', href: 'https://ten-experiments.vercel.app' },
     ],
     tags: ['Next.js', 'PostHog', 'Supabase', 'Stripe', 'Validation'],
+    logos: ['Next.js', 'PostHog', 'Supabase', 'Stripe'],
   },
 ];
 

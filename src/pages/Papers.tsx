@@ -6,6 +6,7 @@ import Seo from '../components/Seo';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { papers, type Paper } from '../data/papers';
+import ArticleLogos from '../components/ArticleLogos';
 
 const SITE_URL = 'https://www.michael-kaminski.io';
 
@@ -67,6 +68,7 @@ const PaperCard: React.FC<{ paper: Paper; index: number }> = ({ paper, index }) 
         </a>
       </h2>
       <p className="mb-4 text-sm font-medium text-accent/80">{paper.subtitle}</p>
+      <ArticleLogos names={paper.logos} slug={paper.slug} linked event="Paper Logo Clicked" className="mb-5" />
       <p className="mb-5 text-sm leading-relaxed text-white/70">{paper.abstract}</p>
 
       <dl className="mb-6 space-y-3">

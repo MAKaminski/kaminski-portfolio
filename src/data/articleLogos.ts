@@ -1,11 +1,11 @@
 import { techLogos } from './techLogos';
 
 /**
- * Logos an article can show (Article.logos), each linked to the company or
+ * Logos an article or paper can show (Article.logos, Paper.logos), each linked to the company or
  * project behind it. Tool marks reuse the self-hosted set in techLogos.ts;
  * company marks reuse the white wordmarks under /images/logos.
  *
- * Only add a name here when an article is actually about it. Never add the
+ * Only add a name here when an article or paper is actually about it. Never add the
  * regulated-lender employer (CLAUDE.md rule 7).
  */
 export interface ArticleLogo {
@@ -29,6 +29,11 @@ export const articleLogos: Record<string, ArticleLogo> = {
   ElevenLabs: tool('ElevenLabs', 'https://elevenlabs.io'),
   Vercel: tool('Vercel', 'https://vercel.com'),
   React: tool('React', 'https://react.dev'),
+  Cloudflare: tool('Cloudflare', 'https://www.cloudflare.com'),
+  Supabase: tool('Supabase', 'https://supabase.com'),
+  'Next.js': tool('Next.js', 'https://nextjs.org'),
+  PostHog: tool('PostHog', 'https://posthog.com'),
+  Stripe: tool('Stripe', 'https://stripe.com'),
   GreenSky: { src: '/images/logos/greensky.webp', href: 'https://www.greensky.com/', shape: 'wordmark' },
   'Transparent Maintenance': {
     src: '/images/logos/transparent-maintenance.webp',
