@@ -1,11 +1,11 @@
 import { techLogos } from './techLogos';
 
 /**
- * Logos an article or paper can show (Article.logos, Paper.logos), each linked to the company or
+ * Logos an article, paper or clip can show (Article.logos, Paper.logos, Clip.logos), each linked to the company or
  * project behind it. Tool marks reuse the self-hosted set in techLogos.ts;
  * company marks reuse the white wordmarks under /images/logos.
  *
- * Only add a name here when an article or paper is actually about it. Never add the
+ * Only add a name here when an article, paper or clip is actually about it. Never add the
  * regulated-lender employer (CLAUDE.md rule 7).
  */
 export interface ArticleLogo {
@@ -34,6 +34,12 @@ export const articleLogos: Record<string, ArticleLogo> = {
   'Next.js': tool('Next.js', 'https://nextjs.org'),
   PostHog: tool('PostHog', 'https://posthog.com'),
   Stripe: tool('Stripe', 'https://stripe.com'),
+  // Schwab's own touch icon; thinkorswim is where the pipeline's thinkScript study runs.
+  'Schwab thinkorswim': {
+    src: '/images/logos/schwab.webp',
+    href: 'https://www.schwab.com/trading/thinkorswim',
+    shape: 'icon',
+  },
   GreenSky: { src: '/images/logos/greensky.webp', href: 'https://www.greensky.com/', shape: 'wordmark' },
   'Transparent Maintenance': {
     src: '/images/logos/transparent-maintenance.webp',
