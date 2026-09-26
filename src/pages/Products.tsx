@@ -11,6 +11,35 @@ import { track } from '../utils/track';
 
 const repoName = (url: string) => url.replace(/^https?:\/\/github\.com\//, '');
 
+const initials = (name: string) => {
+  const words = name.split(/[\s_-]+/).filter(Boolean);
+  if (words.length > 1) return (words[0][0] + words[1][0]).toUpperCase();
+  const caps = words[0].match(/[A-Z]/g) || [];
+  return (caps.length >= 2 ? caps.slice(0, 2).join('') : words[0].slice(0, 2)).toUpperCase();
+};
+
+// The repo's own app icon where one exists; most of these tools ship none, so
+// they get initials rather than a borrowed or generic mark.
+const ProductMark: React.FC<{ product: Product }> = ({ product }) =>
+  product.icon ? (
+    <img
+      src={product.icon}
+      alt=""
+      width={28}
+      height={28}
+      loading="lazy"
+      decoding="async"
+      className="h-7 w-7 flex-shrink-0 rounded-md"
+    />
+  ) : (
+    <span
+      aria-hidden="true"
+      className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md border border-white/15 bg-white/[0.04] text-[10px] font-bold text-white/60"
+    >
+      {initials(product.name)}
+    </span>
+  );
+
 const ProductCard: React.FC<{ product: Product; index: number }> = ({ product, index }) => {
   const ref = useCardImpression('Product Card Viewed', { name: product.name, repo: repoName(product.repoUrl) });
   const onClick = () => track('Product Card Clicked', { name: product.name, repo: repoName(product.repoUrl) });
@@ -64,9 +93,10 @@ const ProductCard: React.FC<{ product: Product; index: number }> = ({ product, i
           target="_blank"
           rel="noopener noreferrer"
           onClick={onClick}
-          className="text-lg font-bold text-white transition-colors duration-200 hover:text-accent"
+          className="flex min-w-0 items-center gap-2.5 text-lg font-bold text-white transition-colors duration-200 hover:text-accent"
         >
-          {product.name}
+          <ProductMark product={product} />
+          <span className="truncate">{product.name}</span>
         </a>
         <a
           href={product.repoUrl}
