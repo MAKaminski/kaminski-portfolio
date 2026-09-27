@@ -55,3 +55,16 @@ export const articleLogos: Record<string, ArticleLogo> = {
     shape: 'icon',
   },
 };
+
+// Stack entries on a case study are written the way the work names them; these
+// resolve the variants to the one registry mark they share.
+const aliases: Record<string, string> = {
+  'Model Context Protocol': 'MCP',
+  'Cloudflare Workers': 'Cloudflare',
+  'Vercel Functions': 'Vercel',
+  'Vercel AI Gateway': 'Vercel',
+  thinkScript: 'Schwab thinkorswim',
+};
+
+/** The registry mark for a name or one of its aliases, if there is one. */
+export const logoFor = (name: string): ArticleLogo | undefined => articleLogos[aliases[name] ?? name];
