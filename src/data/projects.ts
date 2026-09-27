@@ -72,6 +72,8 @@ export interface Project {
   image?: string;
   imageAlt?: string;
   company?: ProjectCompany;
+  /** Stack marks for the /projects card, by name from src/data/articleLogos.ts. */
+  logos?: string[];
   /** Author-controlled long-form HTML. Same contract as Article.body. */
   body: string;
 }
@@ -177,6 +179,7 @@ and Regulation B still defines what "specific" means.</p>`,
       },
     ],
     stack: ['Python', 'TypeScript', 'Model Context Protocol', 'PostgreSQL', 'Eval harness'],
+    logos: ['Python', 'TypeScript', 'MCP', 'PostgreSQL'],
     image: '/images/essays/fig1-retention-floor.png',
     imageAlt:
       'Chart of the trace retention floor: a 30-day default log expiring well before the 120-day adverse-action dispute window closes.',
@@ -279,6 +282,7 @@ site once it is measured against a competitor.</p>`,
       { kind: 'essay', label: 'Field note: the statute rewrote the product', href: '/writing/the-statute-rewrote-the-product' },
     ],
     stack: ['Astro', 'TypeScript', 'Cloudflare Workers', 'D1', 'Turnstile', 'Vitest', 'Playwright'],
+    logos: ['TypeScript', 'Cloudflare'],
     image: '/images/papers/fig-time-budget.png',
     imageAlt: 'Bar chart of the five-minute contract by step, measured steps in dark grey and estimates in gold.',
     body: `
@@ -368,6 +372,7 @@ another tool. They talk to the database.</p>`,
       { kind: 'repo', label: 'TM Voice (the calling agent)', href: 'https://github.com/MAKaminski/tm-voice' },
     ],
     stack: ['Supabase', 'PostgreSQL', 'Vercel Functions', 'TypeScript', 'Microsoft Graph', 'Discord', 'Vercel AI Gateway'],
+    logos: ['Supabase', 'PostgreSQL', 'Vercel', 'TypeScript'],
     image: '/images/papers/fig-identity.png',
     imageAlt: 'Bar chart: 0 percent of jobs carry a lead source, 72 percent of customers carry a phone, 13 percent carry an email.',
     body: `
@@ -457,6 +462,7 @@ more than one kind of consumer.</p>`,
       },
     ],
     stack: ['Node.js', 'Model Context Protocol', 'Static site generation', 'Canvas'],
+    logos: ['Node.js', 'MCP'],
     image: '/images/projects/genome-four-surfaces.svg',
     imageAlt:
       'One build writes four surfaces: six hand-edited JSON files become 1,245 static pages for crawlers, an interactive graph for humans, a 129,037-byte search index, and an 8-tool MCP server for agents — in 0.39 seconds with zero dependencies.',
@@ -532,6 +538,7 @@ none of it is reconstructable after the fact.</p>`,
       },
     ],
     stack: ['Python', 'thinkScript', 'Option-chain data', 'CSV'],
+    logos: ['Python', 'Schwab thinkorswim'],
     image: '/videos/levels-that-move-when-nothing-trades-poster.jpg',
     imageAlt:
       'Poster frame from the field clip: the QQQ gamma flip walking upward across consecutive writes while spot price stays fixed.',

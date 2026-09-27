@@ -1,11 +1,12 @@
 import { techLogos } from './techLogos';
 
 /**
- * Logos an article, paper or clip can show (Article.logos, Paper.logos, Clip.logos), each linked to the company or
+ * Logos an article, paper, clip or case study can show (Article.logos, Paper.logos,
+ * Clip.logos, Project.logos), each linked to the company or
  * project behind it. Tool marks reuse the self-hosted set in techLogos.ts;
  * company marks reuse the white wordmarks under /images/logos.
  *
- * Only add a name here when an article, paper or clip is actually about it. Never add the
+ * Only add a name here when something that cites it is actually about it. Never add the
  * regulated-lender employer (CLAUDE.md rule 7).
  */
 export interface ArticleLogo {
@@ -25,6 +26,8 @@ export const articleLogos: Record<string, ArticleLogo> = {
   GitHub: tool('GitHub', 'https://github.com'),
   Bash: tool('Bash', 'https://www.gnu.org/software/bash/'),
   Python: tool('Python', 'https://www.python.org'),
+  TypeScript: tool('TypeScript', 'https://www.typescriptlang.org'),
+  PostgreSQL: tool('PostgreSQL', 'https://www.postgresql.org'),
   'Node.js': tool('Node.js', 'https://nodejs.org'),
   ElevenLabs: tool('ElevenLabs', 'https://elevenlabs.io'),
   Vercel: tool('Vercel', 'https://vercel.com'),
