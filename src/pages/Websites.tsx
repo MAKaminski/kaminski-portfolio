@@ -7,36 +7,8 @@ import Footer from '../components/Footer';
 import { sites, type Site } from '../data/sites';
 import { StatsProvider, StatsStrip, SiteCardStats, hostKey, useCardImpression } from '../components/SiteStats';
 import { track } from '../utils/track';
+import NameMark from '../components/NameMark';
 
-
-/** Initials for sites with no icon of their own: "Demand Desk" -> "DD", "OurAI" -> "OA". */
-const initials = (name: string) => {
-  const words = name.replace(/^The\s+/i, '').split(/[\s-]+/).filter(Boolean);
-  if (words.length > 1) return (words[0][0] + words[1][0]).toUpperCase();
-  const caps = words[0].match(/[A-Z]/g) || [];
-  return (caps.length >= 2 ? caps.slice(0, 2).join('') : words[0].slice(0, 2)).toUpperCase();
-};
-
-/** The site's own icon, or its initials when it ships none. */
-const SiteMark: React.FC<{ site: Site }> = ({ site }) =>
-  site.icon ? (
-    <img
-      src={site.icon}
-      alt=""
-      width={28}
-      height={28}
-      loading="lazy"
-      decoding="async"
-      className="h-7 w-7 flex-shrink-0 rounded-md"
-    />
-  ) : (
-    <span
-      aria-hidden="true"
-      className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md border border-white/15 bg-white/[0.04] text-[10px] font-bold text-white/60"
-    >
-      {initials(site.name)}
-    </span>
-  );
 
 const hostOf = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
@@ -99,7 +71,7 @@ const SiteCard: React.FC<{ site: Site; index: number }> = ({ site, index }) => {
           onClick={onClick}
           className="inline-flex min-w-0 items-center gap-2.5 text-lg font-bold text-white transition-colors duration-200 hover:text-accent"
         >
-          <SiteMark site={site} />
+          <NameMark name={site.name} icon={site.icon} />
           <span className="truncate">{site.name}</span>
         </a>
         <a

@@ -9,6 +9,8 @@ import { projectsByDate, type Project } from '../data/projects';
 import { sites } from '../data/sites';
 import { products } from '../data/products';
 import CompanyMark from '../components/CompanyMark';
+import ArticleLogos from '../components/ArticleLogos';
+import NameMark from '../components/NameMark';
 
 const SITE_URL = 'https://www.michael-kaminski.io';
 
@@ -56,6 +58,14 @@ const CaseStudyCard: React.FC<{ project: Project; index: number }> = ({ project,
       <span className="font-semibold text-white/80">My role: </span>
       {project.role}
     </p>
+
+    <ArticleLogos
+      names={project.logos}
+      slug={project.slug}
+      linked
+      event="Case Study Logo Clicked"
+      className="mb-5"
+    />
 
     <ul className="mb-5 space-y-3">
       {project.outcome.map((o) => (
@@ -157,8 +167,15 @@ const Projects: React.FC = () => {
                   className="rounded-xl border border-white/10 bg-white/[0.02] p-4 transition-colors hover:border-accent/50"
                 >
                   <h3 className="mb-1 font-bold text-white">
-                    <a href={s.url} target="_blank" rel="noopener noreferrer" className="hover:text-accent">
-                      {s.name} <ExternalLink size={13} className="inline" />
+                    <a
+                      href={s.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex min-w-0 items-center gap-2 hover:text-accent"
+                    >
+                      <NameMark name={s.name} icon={s.icon} size="sm" />
+                      <span className="truncate">{s.name}</span>
+                      <ExternalLink size={13} className="flex-shrink-0" />
                     </a>
                   </h3>
                   <p className="mb-2 text-[11px] uppercase tracking-wide text-accent">{s.category}</p>
@@ -184,8 +201,15 @@ const Projects: React.FC = () => {
                   className="rounded-xl border border-white/10 bg-white/[0.02] p-4 transition-colors hover:border-accent/50"
                 >
                   <h3 className="mb-1 font-bold text-white">
-                    <a href={p.repoUrl} target="_blank" rel="noopener noreferrer" className="hover:text-accent">
-                      {p.name} <ExternalLink size={13} className="inline" />
+                    <a
+                      href={p.repoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex min-w-0 items-center gap-2 hover:text-accent"
+                    >
+                      <NameMark name={p.name} icon={p.icon} size="sm" />
+                      <span className="truncate">{p.name}</span>
+                      <ExternalLink size={13} className="flex-shrink-0" />
                     </a>
                   </h3>
                   <p className="mb-2 text-[11px] uppercase tracking-wide text-accent">{p.category}</p>
