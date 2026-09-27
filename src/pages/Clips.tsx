@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import VideoEmbed from '../components/VideoEmbed';
 import { clips } from '../data/clips';
 import { getArticle } from '../data/articles';
+import ArticleLogos from '../components/ArticleLogos';
 
 const SITE_URL = 'https://www.michael-kaminski.io';
 
@@ -64,7 +65,8 @@ const Clips: React.FC = () => {
 
                   <div>
                     <h2 className="text-2xl font-bold text-white mb-2">{c.title}</h2>
-                    <p className="text-white/60 mb-6">{c.description}</p>
+                    <p className="text-white/60 mb-4">{c.description}</p>
+                    <ArticleLogos names={c.logos} slug={c.slug} linked event="Clip Logo Clicked" className="mb-6" />
 
                     <div
                       className="article-body text-white/70"

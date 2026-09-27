@@ -19,6 +19,8 @@ export interface Clip {
   transcript: string;
   /** Why the clip exists: the finding it compresses. 2-3 short paragraphs of HTML. */
   context: string;
+  /** Companies and tools the clip covers, by name from src/data/articleLogos.ts. */
+  logos?: string[];
 }
 
 export const clips: Clip[] = [
@@ -34,6 +36,7 @@ export const clips: Clip[] = [
     width: 720,
     height: 1280,
     relatedArticleSlug: 'statistical-gating-for-agent-instruction-changes',
+    logos: ['Claude'],
     transcript:
       "I gated my agent's instructions behind a statistical test. Then I ran the math on my own gate. It's a coin flip.",
     context: `
@@ -54,6 +57,7 @@ through it. That is the finding as a single image.</p>`,
       'A dealer-gamma pipeline walked the QQQ gamma flip 3.9 points and dropped the put wall ten dollars across eight consecutive writes with spot pinned at 717.12. Nothing traded. An overwritten file has no history to argue with — one append-only CSV is what caught it.',
     src: '/videos/levels-that-move-when-nothing-trades.mp4',
     poster: '/videos/levels-that-move-when-nothing-trades-poster.jpg',
+    logos: ['Python', 'Schwab thinkorswim'],
     durationSec: 10,
     uploadDate: '2026-08-17',
     width: 720,
