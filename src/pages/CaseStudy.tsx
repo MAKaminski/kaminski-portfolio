@@ -6,6 +6,9 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { getProject } from '../data/projects';
 import CompanyMark from '../components/CompanyMark';
+import ArticleLogos from '../components/ArticleLogos';
+import { logoFor } from '../data/articleLogos';
+import { track } from '../utils/track';
 
 const SITE_URL = 'https://www.michael-kaminski.io';
 
@@ -89,7 +92,14 @@ const CaseStudy: React.FC = () => {
             <h1 className="mb-4 text-4xl font-bold leading-tight text-white sm:text-5xl">
               {project.title}
             </h1>
-            <p className="mb-8 text-lg text-white/70">{project.summary}</p>
+            <p className="mb-6 text-lg text-white/70">{project.summary}</p>
+            <ArticleLogos
+              names={project.logos}
+              slug={project.slug}
+              linked
+              event="Case Study Logo Clicked"
+              className="mb-8"
+            />
 
             {/* Lead artifact. The audit measured images_count: 0 on every case
                 study page and scored Projects accordingly — the work was all
@@ -164,14 +174,26 @@ const CaseStudy: React.FC = () => {
 
           <Section title="Stack">
             <p className="flex flex-wrap gap-2">
-              {project.stack.map((s) => (
-                <span
-                  key={s}
-                  className="rounded-full border border-white/15 px-3 py-1 text-sm text-white/70"
-                >
-                  {s}
-                </span>
-              ))}
+              {project.stack.map((s) => {
+                const logo = logoFor(s);
+                return logo ? (
+                  <a
+                    key={s}
+                    href={logo.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track('Case Study Logo Clicked', { logo: s, slug: project.slug })}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 text-sm text-white/70 transition-colors hover:border-accent/60 hover:text-accent"
+                  >
+                    <img src={logo.src} alt="" width={16} height={16} loading="lazy" decoding="async" className="h-4 w-auto" />
+                    {s}
+                  </a>
+                ) : (
+                  <span key={s} className="rounded-full border border-white/15 px-3 py-1 text-sm text-white/70">
+                    {s}
+                  </span>
+                );
+              })}
             </p>
           </Section>
 
