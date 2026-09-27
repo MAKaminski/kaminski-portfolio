@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, ExternalLink, Rocket, Star, Target, TrendingUp } from 'lucide-react';
 import { transactions, transactionTotals } from '../data/transactions';
+import { orgLogos, needsLabel, type OrgLogo } from '../data/orgLogos';
 import { track } from '../utils/track';
 import { useSectionView } from '../hooks/useSectionView';
 
@@ -10,25 +11,73 @@ import { useSectionView } from '../hooks/useSectionView';
 const HIGHLIGHTS = [
   {
     title: 'Scaled Superior 0→1→10',
+    company: 'Superior Contracting & Maintenance',
     description: 'Startup to enterprise: strategic frameworks and operating cadence across every function.',
     icon: Rocket,
   },
   {
     title: 'Secondary + 3 divestitures at HD Supply',
+    company: 'HD Supply',
     description: 'Over $1.8B of divestitures: planning, execution, and post-close integration.',
     icon: TrendingUp,
   },
   {
     title: 'IPO at GreenSky',
+    company: 'GreenSky',
     description: 'S-1 preparation and execution through delivery and market analysis.',
     icon: Star,
   },
   {
     title: 'Go-to-market 0→1 at Fyxed',
+    company: 'Fyxed',
     description: 'Built the GTM from zero: market presence and first customers.',
     icon: Target,
   },
 ];
+
+/**
+ * An organisation's own mark at a fixed height, linked to its site. Marks come
+ * from experience.ts, partners.ts and ventureInvestors.ts via orgLogos.ts.
+ */
+const OrgMark: React.FC<{ logo: OrgLogo; height: number; placement: string }> = ({ logo, height, placement }) => (
+  <a
+    href={logo.href}
+    target="_blank"
+    rel="noopener"
+    title={logo.name}
+    onClick={() => track('Transaction Logo Clicked', { company: logo.name, placement })}
+    className="inline-flex flex-shrink-0 opacity-80 transition-opacity hover:opacity-100"
+  >
+    <img
+      src={logo.src}
+      alt={logo.name}
+      width={Math.round((logo.width * height) / logo.height)}
+      height={height}
+      loading="lazy"
+      decoding="async"
+      style={{ height }}
+      className="w-auto"
+    />
+  </a>
+);
+
+/**
+ * Marks for a company or counterparty cell, else the plain name. Each img alt
+ * carries its firm's name; the text is printed too where the mark alone would not
+ * read as it (see needsLabel).
+ */
+const OrgCell: React.FC<{ name: string; placement: string }> = ({ name, placement }) => {
+  const logos = orgLogos(name);
+  if (!logos.length) return <>{name}</>;
+  return (
+    <span className="inline-flex flex-wrap items-center gap-x-3 gap-y-1">
+      {logos.map((l) => (
+        <OrgMark key={l.name} logo={l} height={16} placement={placement} />
+      ))}
+      {needsLabel(name) && <span>{name}</span>}
+    </span>
+  );
+};
 
 /**
  * Track record: highlights, the deal totals by instrument, and the full deal
@@ -67,7 +116,12 @@ const Transactions: React.FC = () => {
               <div className="h-fit rounded-lg border border-accent/25 bg-accent/10 p-2.5">
                 <h.icon className="w-5 h-5 text-accent" />
               </div>
-              <div>
+              <div className="min-w-0">
+                {orgLogos(h.company).map((l) => (
+                  <div key={l.name} className="mb-2">
+                    <OrgMark logo={l} height={20} placement="highlight" />
+                  </div>
+                ))}
                 <h3 className="font-bold text-white">{h.title}</h3>
                 <p className="mt-1 text-sm text-white/65">{h.description}</p>
               </div>
@@ -136,7 +190,9 @@ const Transactions: React.FC = () => {
                       <tr key={`${t.date}-${t.company}-${t.type}`} className="border-t border-white/10">
                         <td className="px-4 py-3 font-medium text-white whitespace-nowrap">{t.date}</td>
                         <td className="px-4 py-3 font-bold text-accent">${t.value.toLocaleString()}</td>
-                        <td className="px-4 py-3 text-white/70">{t.company}</td>
+                        <td className="px-4 py-3 text-white/70 whitespace-nowrap">
+                          <OrgCell name={t.company} placement="table_company" />
+                        </td>
                         <td className="px-4 py-3">
                           <span
                             className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -149,7 +205,9 @@ const Transactions: React.FC = () => {
                           </span>
                         </td>
                         <td className="px-4 py-3 text-white/70">{t.type}</td>
-                        <td className="px-4 py-3 text-white/70">{t.entity}</td>
+                        <td className="px-4 py-3 text-white/70">
+                          <OrgCell name={t.entity} placement="table_entity" />
+                        </td>
                         <td className="px-4 py-3 whitespace-nowrap">
                           {t.source ? (
                             <a
