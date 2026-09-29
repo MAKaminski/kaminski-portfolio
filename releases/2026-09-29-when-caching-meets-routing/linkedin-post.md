@@ -1,12 +1,14 @@
 # LinkedIn post — When Caching Meets Routing (white paper 04)
 
-**Attach:** `when-caching-meets-routing.mp4` (this folder). 1080×1350 (4:5), H.264 High, 30 fps, 47 s, 2.0 MB, silent by design. Every point is on screen because LinkedIn autoplays muted.
+**Attach:** `when-caching-meets-routing.mp4` (this folder). 1080×1350 (4:5), H.264 High + AAC, 30 fps, 69.8 s, 4.4 MB. It has narration and a light music bed, mastered to −16 LUFS integrated, true peak −1.4 dBFS. The music sits about 10 dB under the voice and ducks further while he speaks. Every point is also on screen, so it still works when LinkedIn autoplays it muted.
 
 **Thumbnail:** `frame-4.png` (the baseline result bars). `frame-1.png` (title card) is the fallback.
 
-**Pillar:** Signal. **Link:** the PDF, in the post body, as asked.
+**Pillar:** Signal. **Link:** the PDF, in the post body.
 
-Rebuild the video with `python3 scripts/make-paper-video.py`. It reads `research/when-caching-meets-routing/results.json`, the same file the paper's numbers come from.
+**Credit lines:** the last two lines of the post are required and must be kept. The music is CC BY 4.0, which requires attribution, and the narration is disclosed as an AI voice so no one takes it for yours.
+
+Rebuild with `python3 scripts/make-paper-video.py`. Scene lengths come from the voiceover clips in `audio/`, and the numbers come from `research/when-caching-meets-routing/results.json`.
 
 ---
 
@@ -40,6 +42,8 @@ If you route between models in production, do you route per turn or per conversa
 
 #LLM #VoiceAI
 
+Narration: AI voice (ElevenLabs). Music: Digital Lemonade - Kevin MacLeod (incompetech.com), CC BY 4.0
+
 ---
 
 ## Video alt text
@@ -70,7 +74,27 @@ Every number in the post and the video, and where it lives. Paper = `research/wh
 | 70.0% | Whole conversation on Haiku vs Opus | `\allHaiku` |
 | 6 pages | PDF length | `pdfinfo` |
 
+## Voiceover script
+
+Voice: ElevenLabs library voice "Rick – Conversational AI" (`aUJKIGFNQrEc4LgAMxMR`), model `eleven_multilingual_v2`. It's a warm, conversational middle-aged American male voice, chosen over announcer-style voices. It is not a clone of anyone's voice. The ElevenLabs flow "When Caching Meets Routing — LinkedIn voiceover" holds the takes. Pauses were trimmed to about 0.35 s and tempo lifted 1.08× with pitch preserved.
+
+| Scene | Line | Clip |
+|---|---|---|
+| 1 Title | When caching meets routing. A new paper on what model routing really saves. | `audio/vo1.mp3` |
+| 2 Claim | Routing easy turns to a cheaper model is reported to cut LLM cost by thirty-five to ninety-eight percent. That's measured on single questions, at list prices. A voice agent is neither. | `audio/vo2.mp3` |
+| 3 Why | Every turn re-sends the whole conversation. Caching makes that cheap, but only on the model that wrote the cache. Switch models turn by turn, and you keep paying to write it again. | `audio/vo3.mp3` |
+| 4 Result | Routing Opus to Haiku saves fifty-one percent at list prices. With caching, it's nine. And routing Opus to Sonnet actually costs fifteen percent more. | `audio/vo4.mp3` |
+| 5 Scenarios | Across six hundred scenarios, the list-price math predicts forty-seven percent. The simulation says six and a half. And sixteen percent of them lose money. | `audio/vo5.mp3` |
+| 6 Rules | So: cache first. Compare effective prices, not list prices. And route per conversation, not per turn. | `audio/vo6.mp3` |
+| 7 CTA | The paper, and the model behind it, are at michael-kaminski.io slash papers. | `audio/vo7.mp3` |
+
+Spoken figures are rounded from the on-screen ones: 51.3 → fifty-one, 9.2 → nine, 15.5 → fifteen, 46.7 → forty-seven, 6.5 → six and a half, 16.2 → sixteen.
+
+Music bed: `audio/bed-digital-lemonade.mp3`, a 100 s window starting 12 s into the track (never looped), mastered two-pass to −16 LUFS / −1.5 dBTP, 48 kHz. Licence confirmed on incompetech.com on 2026-09-29: Creative Commons Attribution 4.0.
+
 ## Before posting
 
 - The post names no employer, per the site rule for body copy.
-- If this goes out through the LinkedIn engine, run `post-audio-bed` for the music bed and container check, and `racechart.py shipped` afterwards. The engine's cadence gate (≥14 days since the last shipped video) wasn't checked, because the engine lives on your machine.
+- Listen once end to end. I verified levels, sync and timing by measurement, but I can't hear it. Check that "L L M" and "michael-kaminski dot I O" come out naturally.
+- If this goes out through the LinkedIn engine, the audio already meets `post-audio-bed`'s contract. Run its `verify` step, then `racechart.py shipped` afterwards. The engine's cadence gate (≥14 days since the last shipped video) wasn't checked, because the engine lives on your machine.
+- The video is 69.8 s, above the house target of about 55 s because narration needs natural pacing. It's still well inside `verify`'s 90 s warning.

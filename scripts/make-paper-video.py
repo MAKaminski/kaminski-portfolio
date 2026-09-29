@@ -10,7 +10,7 @@ Run: python3 scripts/make-paper-video.py [out.mp4]
 Needs matplotlib, numpy and an ffmpeg binary (FFMPEG, imageio-ffmpeg, or PATH).
 Fonts: Anton and Space Grotesk (the site's pair) if FONT_DIR has them, else DejaVu.
 """
-import json, os, pathlib, shutil, subprocess, sys
+import json, os, pathlib, re, shutil, subprocess, sys
 
 import numpy as np
 import matplotlib
@@ -144,7 +144,7 @@ def s_claim(t, a):
     q = prog(t, 3.0, 3.8)
     text(72, 470, 'Measured on single-turn benchmarks,', 34, MUTED, a * q)
     text(72, 420, 'priced at list rates.', 34, MUTED, a * q)
-    q2 = prog(t, 4.0, 4.8)
+    q2 = prog(t, 4.9, 5.4)   # on 'A voice agent is neither.'
     text(72, 300, 'A voice agent is neither.', 46, INK, a * q2, weight='bold')
 
 
@@ -213,27 +213,27 @@ def s_bars(t, a):
     kicker(1160, 'THE RESULT, AT BASELINE', a)
     text(72, 1085, '12 turns · 6,000-token cached prompt · 20% hard turns', 24, MUTED, a * prog(t, 0.1, 0.7))
     zero, sc = 420, 7.0    # x of 0%, px per point
-    rows = [
-        (900, 'Opus 5.5 → Haiku 4.5, per turn', N['h_naive'], N['h_cache'], 0.4),
-        (560, 'Opus 5.5 → Sonnet 5.5, per turn', N['s_naive'], N['s_cache'], 3.2),
+    rows = [  # (y, label, list-price, cache-aware, row appears, cache bar starts): on the narration's phrases
+        (900, 'Opus 5.5 → Haiku 4.5, per turn', N['h_naive'], N['h_cache'], 0.4, 3.5),
+        (560, 'Opus 5.5 → Sonnet 5.5, per turn', N['s_naive'], N['s_cache'], 5.1, 6.1),
     ]
-    for y, lab, nv, cv, t0 in rows:
+    for y, lab, nv, cv, t0, tc in rows:
         text(72, y + 70, lab, 30, INK, a * prog(t, t0, t0 + 0.5), weight='bold')
-        pn, pc = prog(t, t0 + 0.4, t0 + 1.3), prog(t, t0 + 1.3, t0 + 2.4)
+        pn, pc = prog(t, t0 + 0.4, t0 + 1.3), prog(t, tc, tc + 1.1)
         # naive
         text(72, y + 8, 'List prices', 24, MUTED, a * prog(t, t0 + 0.3, t0 + 0.8), maxw=zero - 72 - 120)
-        ax.add_patch(Rectangle((zero, y - 4), 100 * nv * sc * pn, 44, color='#5a5a5a', alpha=a))
+        ax.add_patch(Rectangle((zero, y - 4), 100 * nv * sc * pn, 44, color='#5a5a5a', alpha=a, lw=0))
         text(zero + 100 * nv * sc * pn + 14, y + 8, pct(nv * pn) + ' saved', 26, INK, a * pn)
         # cache-aware
         yc = y - 80
-        text(72, yc + 8, 'With caching', 24, INK, a * prog(t, t0 + 1.2, t0 + 1.6), maxw=zero - 72 - 120)
+        text(72, yc + 8, 'With caching', 24, INK, a * prog(t, tc - 0.1, tc + 0.3), maxw=zero - 72 - 120)
         wv = 100 * cv * sc * pc
         col = WARN if cv < 0 else ACCENT
-        ax.add_patch(Rectangle((zero if wv >= 0 else zero + wv, yc - 4), abs(wv), 44, color=col, alpha=a))
+        ax.add_patch(Rectangle((zero if wv >= 0 else zero + wv, yc - 4), abs(wv), 44, color=col, alpha=a, lw=0))
         lbl = pct(cv * pc) + (' saved' if cv >= 0 else ': costs more')
         text((zero + wv + 14) if wv >= 0 else zero + 14, yc + 8, lbl, 26, col, a * pc, weight='bold')
         ax.plot([zero, zero], [yc - 20, y + 56], color=DIM, lw=2, alpha=a * prog(t, t0, t0 + 0.5))
-    q = prog(t, 6.2, 7.0)
+    q = prog(t, 7.4, 8.1)
     text(72, 300, f'Sonnet 5.5 reads its cache at the same $0.20/MTok', 28, INK, a * q)
     text(72, 258, f'as Opus 5.5, so the re-writes cost more than the', 28, INK, a * q)
     text(72, 216, f'cheaper output saves.', 28, INK, a * q)
@@ -285,7 +285,8 @@ def s_rules(t, a):
          f"A whole conversation on Haiku 4.5 costs {pct(N['all_haiku'])} less.", 'Per-turn switching gives most of it back.'),
     ]
     for i, (num, head, l1, l2) in enumerate(rules):
-        q = prog(t, 0.3 + 1.1 * i, 1.0 + 1.1 * i)
+        s0 = (0.3, 1.5, 3.6)[i]   # on 'cache first', 'compare effective prices', 'route per conversation'
+        q = prog(t, s0, s0 + 0.7)
         y = 870 - 250 * i
         card(72, y - 70 + 20 * (1 - q), W - 144, 210, a * q)
         text(112, y + 70, num, 64, ACCENT, a * q, HEAD, va='center')
@@ -311,20 +312,43 @@ def s_cta(t, a):
     text(112, 190, 'Michael Kaminski', 26, INK, a * prog(t, 2.0, 2.7), weight='bold')
 
 
-SCENES = [(0.0, 4.5, s_title), (4.5, 10.5, s_claim), (10.5, 20.5, s_mech), (20.5, 29.5, s_bars),
-          (29.5, 36.0, s_curve), (36.0, 42.0, s_rules), (42.0, 47.0, s_cta)]
+# Base (silent-cut) length of each scene. With narration, a scene stretches to fit its
+# voiceover clip and its animation is slowed by the same factor, so reveals stay in step.
+SCENE_BASE = [(4.5, s_title), (6.0, s_claim), (10.0, s_mech), (9.0, s_bars), (6.5, s_curve), (6.0, s_rules), (5.0, s_cta)]
 FADE_IN, FADE_OUT = 0.45, 0.35
-DURATION = SCENES[-1][1]
+AUDIO = OUT.parent / 'audio'
+VO = [AUDIO / f'vo{i + 1}.mp3' for i in range(len(SCENE_BASE))]
+NARRATED = all(v.exists() for v in VO)
+VO_LEAD, VO_TAIL, END_TAIL = 0.4, 0.55, 1.5   # seconds of picture before/after each clip
+
+
+def media_seconds(path):
+    """Duration of an audio file via ffmpeg's own probe (no ffprobe needed)."""
+    out = subprocess.run([ffmpeg_exe(), '-hide_banner', '-i', str(path)], capture_output=True, text=True).stderr
+    h, m, sec = re.search(r'Duration: (\d+):(\d+):([\d.]+)', out).groups()
+    return int(h) * 3600 + int(m) * 60 + float(sec)
+
+
+def build_scenes():
+    scenes, t = [], 0.0
+    for i, (base, fn) in enumerate(SCENE_BASE):
+        dur = base
+        if NARRATED:
+            tail = END_TAIL if i == len(SCENE_BASE) - 1 else VO_TAIL
+            dur = max(base, VO_LEAD + media_seconds(VO[i]) + tail)
+        scenes.append((t, t + dur, fn, base / dur))
+        t += dur
+    return scenes
 
 
 def draw(t):
     reset()
-    for i, (a0, a1, fn) in enumerate(SCENES):
+    for i, (a0, a1, fn, stretch) in enumerate(SCENES):
         if a0 <= t < a1 or (i == len(SCENES) - 1 and t >= a1 - 1e-9):
             lt = t - a0
             alpha = min(clamp(lt / FADE_IN) if i else 1.0,
                         clamp((a1 - t) / FADE_OUT) if i < len(SCENES) - 1 else 1.0)
-            fn(lt, alpha)
+            fn(lt * stretch, alpha)
             if 0 < i < len(SCENES) - 1:
                 footer(alpha)
             break
@@ -340,12 +364,54 @@ def ffmpeg_exe():
         return shutil.which('ffmpeg') or sys.exit('ffmpeg not found: set FFMPEG or pip install imageio-ffmpeg')
 
 
+SCENES = build_scenes()
+DURATION = SCENES[-1][1]
+
+
+def mix_audio(path):
+    """Voiceover placed at each scene start + VO_LEAD, music bed ducked under it, mastered to -16 LUFS."""
+    ff = ffmpeg_exe()
+    bed = AUDIO / 'bed-digital-lemonade.mp3'
+    if media_seconds(bed) < DURATION:
+        sys.exit(f'bed is {media_seconds(bed):.1f} s, video is {DURATION:.1f} s: never loop a bed')
+    ins = ['-i', str(bed)]
+    for v in VO:
+        ins += ['-i', str(v)]
+    parts = []
+    for i, (a0, _, _, _) in enumerate(SCENES):
+        ms = int(round((a0 + VO_LEAD) * 1000))
+        parts.append(f'[{i + 1}]aresample=48000,aformat=channel_layouts=stereo,adelay={ms}|{ms}[v{i}]')
+    vo_labels = ''.join(f'[v{i}]' for i in range(len(SCENES)))
+    graph = ';'.join(parts + [
+        f'{vo_labels}amix=inputs={len(SCENES)}:normalize=0,apad,atrim=0:{DURATION:.3f},asplit=2[vo][key]',
+        # bed: -17 dB under the mastered level, then ducked a further ~8 dB while the voice speaks
+        f'[0]aresample=48000,atrim=0:{DURATION:.3f},volume=-17dB,afade=t=in:d=1.2,'
+        f'afade=t=out:st={DURATION - 2.5:.3f}:d=2.5[bed]',
+        '[bed][key]sidechaincompress=threshold=0.02:ratio=4:attack=30:release=500:makeup=1[duck]',
+        '[duck][vo]amix=inputs=2:normalize=0[mix]',
+    ])
+    raw = path.with_suffix('.raw.wav')
+    subprocess.run([ff, '-y', '-loglevel', 'error', *ins, '-filter_complex', graph, '-map', '[mix]',
+                    '-ar', '48000', str(raw)], check=True)
+    # Two-pass loudnorm to the house master: -16 LUFS integrated, -1.5 dBTP.
+    probe = subprocess.run([ff, '-hide_banner', '-i', str(raw), '-af',
+                            'loudnorm=I=-16:TP=-1.5:LRA=11:print_format=json', '-f', 'null', '-'],
+                           capture_output=True, text=True).stderr
+    m = json.loads(probe[probe.rindex('{'):probe.rindex('}') + 1])
+    subprocess.run([ff, '-y', '-loglevel', 'error', '-i', str(raw), '-af',
+                    f"loudnorm=I=-16:TP=-1.5:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
+                    f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:"
+                    'linear=true', '-ar', '48000', str(path)], check=True)
+    raw.unlink()
+
+
 def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     frames = int(round(DURATION * FPS))
+    silent = OUT.with_name(OUT.stem + '_silent.mp4') if NARRATED else OUT
     cmd = [ffmpeg_exe(), '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgba', '-s', f'{W}x{H}',
            '-r', str(FPS), '-i', '-', '-c:v', 'libx264', '-preset', 'slow', '-crf', '20', '-pix_fmt', 'yuv420p',
-           '-profile:v', 'high', '-movflags', '+faststart', str(OUT)]
+           '-profile:v', 'high', '-movflags', '+faststart', str(silent)]
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     for f in range(frames):
         draw(f / FPS)
@@ -355,10 +421,20 @@ def main():
     if proc.wait():
         sys.exit('ffmpeg failed')
     # A poster frame per scene, for review and as the LinkedIn thumbnail candidate.
-    for i, (a0, a1, _) in enumerate(SCENES):
+    for i, (a0, a1, _, _) in enumerate(SCENES):
         draw(a1 - FADE_OUT - 0.05 if i < len(SCENES) - 1 else a1 - 0.01)
         fig.savefig(OUT.with_name(f'frame-{i + 1}.png'), dpi=100, facecolor=BG)
-    print(f'{OUT}: {frames} frames, {DURATION:.0f} s, {OUT.stat().st_size / 1e6:.1f} MB; fonts {HEAD} / {BODY}')
+    if NARRATED:
+        mix = OUT.with_name(OUT.stem + '_mix.wav')
+        mix_audio(mix)
+        # The picture is copied, never re-encoded; only the audio is encoded (AAC).
+        subprocess.run([ffmpeg_exe(), '-y', '-loglevel', 'error', '-i', str(silent), '-i', str(mix), '-map', '0:v',
+                        '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart',
+                        str(OUT)], check=True)
+        mix.unlink()
+        silent.unlink()
+    print(f'{OUT}: {frames} frames, {DURATION:.1f} s, {OUT.stat().st_size / 1e6:.1f} MB; '
+          f"narrated={NARRATED}; scenes {[round(b - a, 2) for a, b, _, _ in SCENES]}")
 
 
 if __name__ == '__main__':
