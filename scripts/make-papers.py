@@ -5,9 +5,16 @@ with matplotlib. The PDF is printed by headless Chromium so the typography is th
 same engine the site renders in. Every number in a figure is hardcoded from the
 source it cites, so a figure cannot drift from the prose.
 
+LaTeX papers are different: their source of record is research/<slug>/, where
+model.py regenerates results.json and the figures, macros.py writes every number
+in the text into numbers.tex, and pdflatex prints the PDF. The source is also
+shipped next to the PDF as <slug>-source.zip so the reader can rerun it.
+
 Run: CHROME_PATH=/path/to/chrome python3 scripts/make-papers.py [slug ...]
+LaTeX papers need pdflatex (TeX Live: latex-recommended, latex-extra, cm-super)
+plus numpy, scipy and matplotlib.
 """
-import json, os, pathlib, subprocess, sys, re, shutil, tempfile
+import json, os, pathlib, subprocess, sys, re, shutil, tempfile, zipfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / 'scripts' / 'papers'
@@ -185,6 +192,47 @@ def fig_shared():
     return save(fig, 'fig-shared.png')
 
 
+# ── Paper 4: when caching meets routing (LaTeX, research/when-caching-meets-routing) ──
+def fig_routing_feature():
+    """Home-page feature chart: the list-price estimate vs the cache-aware simulation.
+
+    Dark, to sit on the site background. Reads results.json, so it cannot drift from the paper.
+    Two layouts: panels side by side for wide screens, stacked for phones.
+    """
+    return [_routing_feature('fig-routing-savings.png', (9, 3.4), (1, 2)),
+            _routing_feature('fig-routing-savings-mobile.png', (4.6, 6.4), (2, 1))]
+
+
+def _routing_feature(name, figsize, grid):
+    import numpy as np
+    r = json.loads((ROOT / 'research' / 'when-caching-meets-routing' / 'results.json').read_text())
+    fig, axes = plt.subplots(*grid, figsize=figsize, sharey=True)
+    fig.patch.set_facecolor('#060606')
+    for ax, (key, label) in zip(axes, [('Opus 5.5|Haiku 4.5', 'Opus 5.5 → Haiku 4.5'),
+                                      ('Opus 5.5|Sonnet 5.5', 'Opus 5.5 → Sonnet 5.5')]):
+        c = r['curves'][key]
+        pi = np.array(c['pi']) * 100
+        ax.set_facecolor('#060606')
+        ax.plot(pi, np.array(c['naive']) * 100, color='#9a9a9a', ls='--', lw=1.6, label='Estimate: list-price model')
+        ax.plot(pi, np.array(c['cache']) * 100, color='#fff500', lw=2.4, marker='o', ms=3.5, label='Simulated: cache-aware')
+        ax.axhline(0, color='#555555', lw=0.8)
+        ax.axvline(20, color='#333333', lw=0.8, ls=':')
+        ax.set_title(label, loc='left', fontsize=11, color='#f4f4f5')
+        ax.set_xlabel('hard-turn share, %', color='#9a9a9a')
+        ax.tick_params(colors='#9a9a9a')
+        for sp in ax.spines.values():
+            sp.set_color('#333333')
+        ax.grid(axis='y', color='#1f1f1f', lw=0.8)
+    for ax in (axes if grid[0] > 1 else axes[:1]):
+        ax.set_ylabel('savings vs. frontier-only, %', color='#9a9a9a')
+    axes[0].legend(frameon=False, fontsize=8.5, labelcolor='#d4d4d8', loc='center right')
+    fig.tight_layout()
+    p = IMG_OUT / name
+    fig.savefig(p, facecolor='#060606', dpi=160)
+    plt.close(fig)
+    return p
+
+
 # ── Social cards (1200x630) ───────────────────────────────────────────────────
 def card(slug, kicker, title, sub):
     fig = plt.figure(figsize=(12, 6.3), dpi=100)
@@ -289,10 +337,56 @@ PAPERS = {
     ),
 }
 
+LATEX_PAPERS = {
+    'when-caching-meets-routing': dict(
+        kicker='White paper 04',
+        title='When Caching Meets Routing',
+        sub='A cache-aware cost model for selective frontier-model routing in multi-turn voice agents.',
+        figs=[fig_routing_feature],
+    ),
+}
+
+# Shipped in <slug>-source.zip: everything needed to rerun the paper, nothing built.
+LATEX_SOURCE = ['README.md', 'paper.tex', 'numbers.tex', 'model.py', 'macros.py', 'results.json']
+
+
+def build_latex(slug, kicker, title, sub):
+    src = ROOT / 'research' / slug
+    run = lambda *cmd, **kw: subprocess.run(cmd, cwd=src, check=True, capture_output=True, timeout=600, **kw)
+    run(sys.executable, 'model.py')     # results.json + figures/*.pdf
+    run(sys.executable, 'macros.py')    # numbers.tex
+    with tempfile.TemporaryDirectory() as tmp:
+        for _ in range(2):               # second pass resolves references
+            run('pdflatex', '-interaction=nonstopmode', '-halt-on-error', f'-output-directory={tmp}', 'paper.tex')
+        out = PDF_OUT / f'{slug}.pdf'
+        shutil.copy(pathlib.Path(tmp) / 'paper.pdf', out)
+    # Fixed timestamps so an unchanged source produces an unchanged zip.
+    zpath = PDF_OUT / f'{slug}-source.zip'
+    names = LATEX_SOURCE + sorted(str(f.relative_to(src)) for f in (src / 'figures').glob('*.pdf'))
+    with zipfile.ZipFile(zpath, 'w', zipfile.ZIP_DEFLATED) as z:
+        for n in names:
+            info = zipfile.ZipInfo(f'{slug}/{n}', date_time=(2026, 1, 1, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            z.writestr(info, (src / n).read_bytes())
+    # pdflatex compresses page objects into object streams, which count_pages cannot see.
+    info = subprocess.run(['pdfinfo', str(out)], capture_output=True, text=True).stdout if shutil.which('pdfinfo') else ''
+    m = re.search(r'^Pages:\s+(\d+)', info, re.M)
+    pages = int(m.group(1)) if m else count_pages(out)
+    card(slug, kicker, title, sub)
+    print(f'{slug}: {out.stat().st_size // 1024} KB, {pages} pages; source {zpath.stat().st_size // 1024} KB')
+    return pages
+
+
 if __name__ == '__main__':
-    want = sys.argv[1:] or list(PAPERS)
+    want = sys.argv[1:] or list(PAPERS) + list(LATEX_PAPERS)
     results = {}
     for slug in want:
+        if slug in LATEX_PAPERS:
+            p = LATEX_PAPERS[slug]
+            results[slug] = build_latex(slug, p['kicker'], p['title'], p['sub'])
+            for f in p['figs']:
+                f()
+            continue
         p = PAPERS[slug]
         for f in p['figs']:
             f()

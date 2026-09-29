@@ -119,6 +119,7 @@ full-time. Atlanta.
 
 Long-form write-ups with the arithmetic shown, at https://www.michael-kaminski.io/papers
 
+- When Caching Meets Routing (2026-09-28): a cache-aware cost model for routing multi-turn voice agents between frontier and smaller models; per-turn routing savings fall from 51.3% at list prices to 9.2% once prompt caching is modeled, and routing to a model with the same cache-read price raises cost. Model and LaTeX source included. https://www.michael-kaminski.io/docs/papers/when-caching-meets-routing.pdf
 - Sites That Differ by Data, Not Code (2026-09-23): a generator for trade-business websites; a measured 46.5 s deploy path; a fabrication rule enforced in the schema. https://www.michael-kaminski.io/docs/papers/sites-that-differ-by-data-not-code.pdf
 - One Database, Many Connectors (2026-09-22): the operating system for a six-person services company; hub-not-mesh; an agent desk that hands work over instead of parking it; attribution by identity. https://www.michael-kaminski.io/docs/papers/one-database-many-connectors.pdf
 - The Demand Instrument (2026-09-21): nine ideas on one template with pass/fail bars set before the traffic; the funnel plumbing most templates get wrong. https://www.michael-kaminski.io/docs/papers/the-demand-instrument.pdf

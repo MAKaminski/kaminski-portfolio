@@ -45,6 +45,46 @@ export interface Paper {
 // record; the essays on /writing are the short version.
 export const papers: Paper[] = [
   {
+    slug: 'when-caching-meets-routing',
+    title: 'When Caching Meets Routing',
+    subtitle: 'A cache-aware cost model for selective frontier-model routing in multi-turn voice agents',
+    date: '2026-09-28',
+    pages: 6,
+    abstract:
+      'Per-turn routing from Opus 5.5 to Haiku 4.5 saves 51.3% at list prices but 9.2% once prompt caching is modeled. Routing to Sonnet 5.5 raises cost 15.5%.',
+    pdf: '/docs/papers/when-caching-meets-routing.pdf',
+    image: '/images/papers/og-when-caching-meets-routing.png',
+    findings: [
+      {
+        metric: '51.3% → 9.2%: per-turn routing savings once caching is modeled',
+        detail:
+          'Opus 5.5 to Haiku 4.5 at baseline: 12 turns, a 6,000-token cached prefix, 20% hard turns. Caching alone had already cut frontier-only cost 78.8%, from $0.3865 to $0.0819 per conversation.',
+      },
+      {
+        metric: '−15.5%: routing to Sonnet 5.5 raises cost',
+        detail:
+          'Sonnet 5.5 reads its cache at the same $0.20/MTok as Opus 5.5, so the cache re-writes routing forces outweigh the cheaper output. The list-price model predicts 33.8% savings.',
+      },
+      {
+        metric: '40.2 points: how far the list-price model overstates savings',
+        detail:
+          'Median across 600 Monte Carlo scenarios: 46.7% predicted, 6.5% simulated (90% interval −3.4% to 18.3%). Routing loses money in 16.2% of scenarios.',
+      },
+      {
+        metric: '70.0% cheaper when the whole conversation runs on Haiku 4.5',
+        detail:
+          'Route at the granularity of the cache, not the turn. With 18.4% of baseline conversations free of hard turns, a perfect conversation-level classifier caps savings near 12.9%.',
+      },
+    ],
+    sources: [
+      { label: 'Model + LaTeX source (zip)', href: '/docs/papers/when-caching-meets-routing-source.zip' },
+      { label: 'Field note: prompt cache floors are per-model', href: '/writing/prompt-cache-floors-are-per-model' },
+      { label: 'Anthropic pricing', href: 'https://platform.claude.com/docs/en/about-claude/pricing' },
+    ],
+    tags: ['LLM routing', 'Prompt caching', 'Voice agents', 'Cost model', 'Monte Carlo'],
+    logos: ['Claude', 'Anthropic API', 'Python'],
+  },
+  {
     slug: 'sites-that-differ-by-data-not-code',
     title: 'Sites That Differ by Data, Not Code',
     subtitle: 'A five-minute contract for trade-business websites, and the gates that make it honest',

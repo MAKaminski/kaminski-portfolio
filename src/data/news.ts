@@ -23,9 +23,47 @@ export interface NewsItem {
   headline: string;
   dek: string;
   points: { title: string; body: string }[];
+  /** Optional chart or cover shown beside the story. Linked to the first link. */
+  image?: { src: string; alt: string; width: number; height: number; mobileSrc?: string };
+  /** Optional calls to action under the points; the first is the primary button. */
+  links?: { label: string; href: string }[];
 }
 
 export const news: NewsItem[] = [
+  {
+    id: "cache-aware-routing",
+    date: "2026-09-28",
+    tag: "New",
+    banner: "Paper: prompt caching erases most LLM routing savings",
+    headline: "When caching meets routing",
+    dek: "Routing easy turns to a cheaper model is reported to cut LLM cost 35 to 98%. Those numbers come from single-turn benchmarks priced at list rates. In a multi-turn voice agent with prompt caching, per-turn routing from Opus 5.5 to Haiku 4.5 saves 9.2%, not 51.3%.",
+    points: [
+      {
+        title: "Cache first, route second",
+        body: "Caching alone cut frontier-only cost 78.8%, from $0.3865 to $0.0819 per conversation. Any routing case should be measured against that, not list prices.",
+      },
+      {
+        title: "A cheaper model can cost more",
+        body: "Sonnet 5.5 reads its cache at the same $0.20/MTok as Opus 5.5, so routing to it raises cost 15.5% once the forced cache re-writes are counted.",
+      },
+      {
+        title: "Route at the granularity of the cache",
+        body: "Caches are per model. A whole conversation on Haiku 4.5 costs 70.0% less; per-turn switching pays to re-write the transcript every time it comes back.",
+      },
+    ],
+    image: {
+      src: "/images/papers/fig-routing-savings.png",
+      mobileSrc: "/images/papers/fig-routing-savings-mobile.png",
+      alt: "Two panels of savings versus hard-turn share. The list-price estimate sits between 26% and 61% for Haiku 4.5 and 16% and 40% for Sonnet 5.5; the cache-aware simulation runs from 18% down to -5% for Haiku and stays below zero for Sonnet.",
+      width: 1440,
+      height: 544,
+    },
+    links: [
+      { label: "Read the paper (PDF, 6 pages)", href: "/docs/papers/when-caching-meets-routing.pdf" },
+      { label: "Download the model", href: "/docs/papers/when-caching-meets-routing-source.zip" },
+      { label: "All papers", href: "/papers" },
+    ],
+  },
   {
     id: "jev",
     date: "2026-09-15",

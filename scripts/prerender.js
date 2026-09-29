@@ -328,7 +328,9 @@ function homeMarkup({ articles, referrals, transactions, jobs, projects, totals,
 <section id="${esc(lead.id)}">
 <h2>${esc(lead.headline)}</h2>
 <p><time datetime="${esc(lead.date)}">${esc(lead.date)}</time> — ${esc(lead.dek)}</p>
+${lead.image ? img(lead.image.src, lead.image.alt, lead.image.width, lead.image.height) : ''}
 <ul>${lead.points.map((p) => `<li><strong>${esc(p.title)}.</strong> ${esc(p.body)}</li>`).join('')}</ul>
+${lead.links && lead.links.length ? `<p>${lead.links.map((l) => `<a href="${esc(l.href)}">${esc(l.label)}</a>`).join(' · ')}</p>` : ''}
 </section>`
     : '';
   const partnerRows = partners
