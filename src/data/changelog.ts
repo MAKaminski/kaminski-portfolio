@@ -53,6 +53,15 @@ export const KIND_LABELS: Record<ChangeKind, string> = {
  */
 const shipped: ChangeEntry[] = [
   {
+    date: '2026-09-29',
+    kind: 'launch',
+    title: 'Mak Says — a quote-journal apparel store with no inventory',
+    summary:
+      'A print-on-demand storefront for lines from a family quote journal. All 29 quotes are one data file rendered to print-ready PNGs in four placement formats (front, leg, badge, embroidery), and 37 products went live in one day on a free Printful Quick Store: $0 a month, and nothing is printed until someone buys it.',
+    links: [{ label: 'maksays.printful.me', href: 'https://maksays.printful.me' }],
+    tags: ['Print on Demand', 'E-commerce', 'Generative Design'],
+  },
+  {
     date: '2026-09-23',
     kind: 'feature',
     title: 'Added the Papers section — long-form write-ups as PDFs',

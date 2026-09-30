@@ -60,6 +60,15 @@ export const sites: Site[] = [
     tags: ['Next.js', 'E-commerce', 'Whatnot'],
   },
   {
+    name: 'Mak Says',
+    url: 'https://maksays.printful.me',
+    image: '/images/sites/mak-says.webp',
+    category: 'E-commerce · Print on Demand',
+    description:
+      'Apparel built from a family quote journal: eight pages, 29 real quotes, and at least one product per quote across tees, crewnecks, hoodies, sweatpants, shorts and totes. Every design is generated from one data file into print-ready files, then printed and shipped to order by Printful, so the store carries no inventory and costs $0 a month to run.',
+    tags: ['Print on Demand', 'E-commerce', 'Generative Design'],
+  },
+  {
     name: 'The Demand Test',
     url: 'https://ten-experiments.vercel.app',
     image: '/images/sites/ten-experiments.webp',
