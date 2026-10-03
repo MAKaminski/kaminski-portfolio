@@ -118,3 +118,13 @@ export const captureEvent = (name: string, properties?: Record<string, unknown>)
   if (client) client.capture(name, properties);
   else void load().then((p) => p?.capture(name, properties));
 };
+
+/**
+ * Reports an error that an error boundary caught. React does not rethrow those to
+ * window.onerror in production, so exception autocapture never sees them.
+ */
+export const captureException = (error: unknown, properties?: Record<string, unknown>) => {
+  if (!POSTHOG_KEY) return;
+  if (client) client.captureException(error, properties);
+  else void load().then((p) => p?.captureException(error, properties));
+};
