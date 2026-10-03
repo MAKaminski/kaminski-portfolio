@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState } from 'react';
+import React, { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { transactionTotals } from '../data/transactions';
 import { Download, Clock, ArrowUpRight, Linkedin, Github, MessagesSquare } from 'lucide-react';
@@ -16,11 +16,7 @@ import Magnetic from './Magnetic';
 import Tilt from './Tilt';
 import ResumeLink from './ResumeLink';
 import ResumeEmailCapture from './ResumeEmailCapture';
-// The twin (framer-motion panel + voice loop + audio APIs) is ~25 KB of source that
-// nobody needs until they click. Its own Suspense boundary matters: without one the
-// first render would suspend up to App's RouteFallback and paint "Loading" instead
-// of the hero.
-const DigitalTwin = lazy(() => import('./DigitalTwin'));
+import DigitalTwinLoader from './DigitalTwinLoader';
 
 const RILLA_EASE = [0.445, 0.05, 0.55, 0.95] as const;
 
@@ -391,11 +387,7 @@ const Hero: React.FC = () => {
         />
       </div>
 
-      {twinOpen && (
-        <Suspense fallback={null}>
-          <DigitalTwin open={twinOpen} onClose={() => setTwinOpen(false)} />
-        </Suspense>
-      )}
+      {twinOpen && <DigitalTwinLoader onClose={() => setTwinOpen(false)} />}
     </section>
   );
 };
