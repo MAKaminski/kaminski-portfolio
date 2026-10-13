@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 410" width="100%" role="img" aria-labelledby="s2t s2d">
+<title id="s2t">Same relationships, different machine</title>
+<desc id="s2d">Annual revenue. EasyLinks' best year with one person running it was about 1.7 million dollars. Superior at its peak ran above 1 million dollars a month, a run-rate of more than 12 million dollars a year, about seven times the best solo year. At that point Superior had 50 employees, hundreds of contractors across 8 states, 2 business lines, and 600 to 700 thousand dollars of working capital.</desc>
+<rect width="920" height="410" fill="#060606"/>
+<text x="16" y="34" fill="#f4f4f5" font-size="20" font-weight="700" font-family="'Space Grotesk',Inter,system-ui,sans-serif">Same relationships, different machine</text>
+<text x="16" y="56" fill="rgba(244,244,245,0.55)" font-size="14" font-family="'Space Grotesk',Inter,system-ui,sans-serif">Annual revenue: EasyLinks&#8217; best solo year vs. Superior&#8217;s peak run-rate</text>
+
+<!-- Row 1: EasyLinks -->
+<text x="234" y="116" fill="#f4f4f5" font-size="16" font-weight="700" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">EasyLinks</text>
+<text x="234" y="135" fill="rgba(244,244,245,0.55)" font-size="13" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">best year, one person</text>
+<rect x="250" y="98" width="85" height="42" rx="3" fill="rgba(244,244,245,0.45)"/>
+<text x="347" y="125" fill="#f4f4f5" font-size="17" font-weight="700" font-family="'Space Grotesk',Inter,system-ui,sans-serif">$1.7M</text>
+
+<!-- Row 2: Superior -->
+<text x="234" y="184" fill="#f4f4f5" font-size="16" font-weight="700" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">Superior</text>
+<text x="234" y="203" fill="rgba(244,244,245,0.55)" font-size="13" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">peak run-rate</text>
+<rect x="250" y="166" width="600" height="42" rx="3" fill="#fff500"/>
+<text x="836" y="193" fill="#060606" font-size="17" font-weight="700" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">$12M+</text>
+<text x="250" y="236" fill="rgba(244,244,245,0.6)" font-size="13" font-family="'Space Grotesk',Inter,system-ui,sans-serif">$1M+ a month &#215; 12 = $12M+ a year &#8776; 7&#215; the best solo year ($12M &#247; $1.7M = 7.1)</text>
+
+<line x1="16" y1="262" x2="904" y2="262" stroke="rgba(244,244,245,0.1)"/>
+
+<!-- Stat tiles -->
+<g font-family="'Space Grotesk',Inter,system-ui,sans-serif">
+<rect x="16" y="282" width="212" height="104" rx="6" fill="rgba(244,244,245,0.04)" stroke="rgba(244,244,245,0.1)"/>
+<text x="32" y="326" fill="#fff500" font-size="30" font-weight="700">50</text>
+<text x="32" y="352" fill="#f4f4f5" font-size="14">employees</text>
+<text x="32" y="371" fill="rgba(244,244,245,0.55)" font-size="12">from a company of one</text>
+
+<rect x="238" y="282" width="212" height="104" rx="6" fill="rgba(244,244,245,0.04)" stroke="rgba(244,244,245,0.1)"/>
+<text x="254" y="326" fill="#fff500" font-size="30" font-weight="700">100s</text>
+<text x="254" y="352" fill="#f4f4f5" font-size="14">of contractors</text>
+<text x="254" y="371" fill="rgba(244,244,245,0.55)" font-size="12">across 8 states</text>
+
+<rect x="460" y="282" width="212" height="104" rx="6" fill="rgba(244,244,245,0.04)" stroke="rgba(244,244,245,0.1)"/>
+<text x="476" y="326" fill="#fff500" font-size="30" font-weight="700">2</text>
+<text x="476" y="352" fill="#f4f4f5" font-size="14">business lines</text>
+<text x="476" y="371" fill="rgba(244,244,245,0.55)" font-size="12">hundreds of relationships</text>
+
+<rect x="682" y="282" width="222" height="104" rx="6" fill="rgba(244,244,245,0.04)" stroke="rgba(244,244,245,0.1)"/>
+<text x="698" y="326" fill="#fff500" font-size="30" font-weight="700">$600&#8211;700K</text>
+<text x="698" y="352" fill="#f4f4f5" font-size="14">working capital</text>
+<text x="698" y="371" fill="rgba(244,244,245,0.55)" font-size="12">contractors get paid first</text>
+</g>
+</svg>

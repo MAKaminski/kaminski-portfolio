@@ -44,6 +44,11 @@ export const articleLogos: Record<string, ArticleLogo> = {
     shape: 'icon',
   },
   GreenSky: { src: '/images/logos/greensky.webp', href: 'https://www.greensky.com/', shape: 'wordmark' },
+  'Superior Contracting & Maintenance': {
+    src: '/images/logos/superior.webp',
+    href: 'https://www.superior-maintenance.com',
+    shape: 'wordmark',
+  },
   'Transparent Maintenance': {
     src: '/images/logos/transparent-maintenance.webp',
     href: 'https://www.transparentmaintenance.com',

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 390" width="100%" role="img" aria-labelledby="s3t s3d">
+<title id="s3t">The part nobody sees: the back office that let operators operate</title>
+<desc id="s3d">Diagram. On top, the operators and field teams: hundreds of contractors across eight states and two business lines. Underneath and holding them up, three teams I built: a product team for the software the field runs on, an accounting team for the close, cash and contractor pay, and an administrative back end for onboarding, contracts and paperwork. All three sit on one ERP and one set of books.</desc>
+<defs>
+<marker id="s3a" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#fff500"/></marker>
+</defs>
+<rect width="920" height="390" fill="#060606"/>
+<text x="16" y="34" fill="#f4f4f5" font-size="20" font-weight="700" font-family="'Space Grotesk',Inter,system-ui,sans-serif">The part nobody sees</text>
+<text x="16" y="56" fill="rgba(244,244,245,0.55)" font-size="14" font-family="'Space Grotesk',Inter,system-ui,sans-serif">What I built so the operators could operate</text>
+
+<g font-family="'Space Grotesk',Inter,system-ui,sans-serif">
+<!-- Operators -->
+<rect x="16" y="78" width="888" height="70" rx="6" fill="none" stroke="#fff500" stroke-width="2"/>
+<text x="460" y="108" fill="#f4f4f5" font-size="18" font-weight="700" text-anchor="middle">Operators &amp; field teams</text>
+<text x="460" y="131" fill="rgba(244,244,245,0.7)" font-size="14" text-anchor="middle">hundreds of contractors &#183; 8 states &#183; 2 business lines &#183; the clients</text>
+
+<!-- Arrows up -->
+<line x1="161" y1="200" x2="161" y2="156" stroke="#fff500" stroke-width="2" marker-end="url(#s3a)"/>
+<line x1="460" y1="200" x2="460" y2="156" stroke="#fff500" stroke-width="2" marker-end="url(#s3a)"/>
+<line x1="759" y1="200" x2="759" y2="156" stroke="#fff500" stroke-width="2" marker-end="url(#s3a)"/>
+
+<!-- Teams -->
+<rect x="16" y="204" width="290" height="88" rx="6" fill="rgba(244,244,245,0.06)" stroke="rgba(244,244,245,0.2)"/>
+<text x="161" y="240" fill="#f4f4f5" font-size="17" font-weight="700" text-anchor="middle">Product team</text>
+<text x="161" y="264" fill="rgba(244,244,245,0.6)" font-size="13" text-anchor="middle">the software the field runs on</text>
+
+<rect x="315" y="204" width="290" height="88" rx="6" fill="rgba(244,244,245,0.06)" stroke="rgba(244,244,245,0.2)"/>
+<text x="460" y="240" fill="#f4f4f5" font-size="17" font-weight="700" text-anchor="middle">Accounting team</text>
+<text x="460" y="264" fill="rgba(244,244,245,0.6)" font-size="13" text-anchor="middle">the close, the cash, contractor pay</text>
+
+<rect x="614" y="204" width="290" height="88" rx="6" fill="rgba(244,244,245,0.06)" stroke="rgba(244,244,245,0.2)"/>
+<text x="759" y="240" fill="#f4f4f5" font-size="17" font-weight="700" text-anchor="middle">Administrative back end</text>
+<text x="759" y="264" fill="rgba(244,244,245,0.6)" font-size="13" text-anchor="middle">onboarding, contracts, the paperwork</text>
+
+<!-- Foundation -->
+<rect x="16" y="306" width="888" height="50" rx="6" fill="rgba(244,244,245,0.12)"/>
+<text x="460" y="337" fill="#f4f4f5" font-size="15" font-weight="600" text-anchor="middle">One ERP, one set of books (NetSuite)</text>
+</g>
+<text x="16" y="380" fill="rgba(255,107,107,0.85)" font-size="13" font-family="'Space Grotesk',Inter,system-ui,sans-serif">Note the last box. I built a department for the paperwork. My own wasn&#8217;t in it.</text>
+</svg>

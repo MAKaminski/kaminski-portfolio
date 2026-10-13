@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 424" width="100%" role="img" aria-labelledby="s1t s1d">
+<title id="s1t">From a plumber's office to eight states: EasyLinks to Superior, 2007 to 2023</title>
+<desc id="s1d">Timeline. 2007: my brother founds EasyLinks and runs it alone for about ten years, with a best year of about 1.7 million dollars in revenue. For years I keep his books on the side and pay contractors from my front door. Around 2013 to 2014 the Superior name is reserved and left unused. In 2018 I join full time, all revenue moves into Superior, and I am offered 30 percent equity on a handshake. From 2018 to 2023 Superior grows to 50 employees, 8 states and more than 1 million dollars a month. In 2023 I step back, ask for the equity, and leave for fintech.</desc>
+<defs>
+<linearGradient id="s1books" x1="0" x2="1" y1="0" y2="0">
+<stop offset="0" stop-color="#ff6b6b" stop-opacity="0"/>
+<stop offset="0.35" stop-color="#ff6b6b" stop-opacity="0.22"/>
+<stop offset="1" stop-color="#ff6b6b" stop-opacity="0.32"/>
+</linearGradient>
+</defs>
+<rect width="920" height="424" fill="#060606"/>
+<text x="16" y="34" fill="#f4f4f5" font-size="20" font-weight="700" font-family="'Space Grotesk',Inter,system-ui,sans-serif">From a plumber&#8217;s office to eight states</text>
+<text x="16" y="56" fill="rgba(244,244,245,0.55)" font-size="14" font-family="'Space Grotesk',Inter,system-ui,sans-serif">EasyLinks (2007) to Superior Contracting &amp; Maintenance (2018&#8211;2023)</text>
+
+<g transform="translate(0,-56)">
+<!-- Off-the-books years: start is fuzzy on purpose -->
+<rect x="154" y="148" width="424" height="32" rx="4" fill="url(#s1books)" stroke="#ff6b6b" stroke-opacity="0.55" stroke-dasharray="5 4"/>
+<text x="566" y="169" fill="#f4f4f5" font-size="13" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">Me, unofficially: his books, and checks at my front door</text>
+
+<!-- Company bands -->
+<rect x="60" y="198" width="518" height="62" rx="4" fill="rgba(244,244,245,0.10)" stroke="rgba(244,244,245,0.28)"/>
+<text x="76" y="224" fill="#f4f4f5" font-size="17" font-weight="700" font-family="'Space Grotesk',Inter,system-ui,sans-serif">EasyLinks</text>
+<text x="76" y="246" fill="rgba(244,244,245,0.7)" font-size="14" font-family="'Space Grotesk',Inter,system-ui,sans-serif">my brother, solo, ~10 years &#183; best year $1.7M</text>
+<rect x="578" y="198" width="282" height="62" rx="4" fill="#fff500"/>
+<text x="594" y="224" fill="#060606" font-size="17" font-weight="700" font-family="'Space Grotesk',Inter,system-ui,sans-serif">Superior</text>
+<text x="594" y="246" fill="#060606" font-size="14" font-family="'Space Grotesk',Inter,system-ui,sans-serif">50 people &#183; 8 states &#183; $1M+/month</text>
+
+<!-- Axis -->
+<line x1="60" y1="290" x2="860" y2="290" stroke="rgba(244,244,245,0.35)" stroke-width="1.5"/>
+<g fill="rgba(244,244,245,0.45)" font-size="12" text-anchor="middle" font-family="'Space Grotesk',Inter,system-ui,sans-serif">
+<line x1="201.2" y1="286" x2="201.2" y2="294" stroke="rgba(244,244,245,0.35)"/><text x="201.2" y="280">2010</text>
+<line x1="342.4" y1="286" x2="342.4" y2="294" stroke="rgba(244,244,245,0.35)"/><text x="342.4" y="280">2013</text>
+<line x1="483.5" y1="286" x2="483.5" y2="294" stroke="rgba(244,244,245,0.35)"/><text x="483.5" y="280">2016</text>
+<line x1="671.8" y1="286" x2="671.8" y2="294" stroke="rgba(244,244,245,0.35)"/><text x="671.8" y="280">2020</text>
+</g>
+
+<!-- 2007 -->
+<line x1="60" y1="290" x2="60" y2="320" stroke="#f4f4f5" stroke-width="1.5"/>
+<circle cx="60" cy="290" r="5" fill="#f4f4f5"/>
+<text x="60" y="340" fill="#f4f4f5" font-size="15" font-weight="700" font-family="'Space Grotesk',Inter,system-ui,sans-serif">2007</text>
+<text x="60" y="360" fill="#f4f4f5" font-size="14" font-family="'Space Grotesk',Inter,system-ui,sans-serif">EasyLinks founded</text>
+<text x="60" y="379" fill="rgba(244,244,245,0.55)" font-size="13" font-family="'Space Grotesk',Inter,system-ui,sans-serif">by a plumber&#8217;s office assistant</text>
+
+<!-- 2013-14 -->
+<line x1="365.9" y1="290" x2="365.9" y2="320" stroke="rgba(244,244,245,0.7)" stroke-width="1.5" stroke-dasharray="3 3"/>
+<circle cx="365.9" cy="290" r="5" fill="#060606" stroke="#f4f4f5" stroke-width="1.5"/>
+<text x="365.9" y="340" fill="#f4f4f5" font-size="15" font-weight="700" text-anchor="middle" font-family="'Space Grotesk',Inter,system-ui,sans-serif">2013&#8211;14</text>
+<text x="365.9" y="360" fill="#f4f4f5" font-size="14" text-anchor="middle" font-family="'Space Grotesk',Inter,system-ui,sans-serif">&#8220;Superior&#8221; name reserved</text>
+<text x="365.9" y="379" fill="rgba(244,244,245,0.55)" font-size="13" text-anchor="middle" font-family="'Space Grotesk',Inter,system-ui,sans-serif">and left on the shelf</text>
+
+<!-- 2018 -->
+<line x1="577.7" y1="290" x2="577.7" y2="392" stroke="#fff500" stroke-width="1.5"/>
+<circle cx="577.7" cy="290" r="6" fill="#fff500"/>
+<text x="577.7" y="412" fill="#fff500" font-size="15" font-weight="700" text-anchor="middle" font-family="'Space Grotesk',Inter,system-ui,sans-serif">2018</text>
+<text x="577.7" y="432" fill="#f4f4f5" font-size="14" text-anchor="middle" font-family="'Space Grotesk',Inter,system-ui,sans-serif">I join; all revenue moves into Superior</text>
+<text x="577.7" y="451" fill="rgba(244,244,245,0.55)" font-size="13" text-anchor="middle" font-family="'Space Grotesk',Inter,system-ui,sans-serif">30% equity offered in year one, on a handshake</text>
+
+<!-- 2023 -->
+<line x1="836.5" y1="290" x2="836.5" y2="320" stroke="#ff6b6b" stroke-width="1.5"/>
+<circle cx="836.5" cy="290" r="6" fill="#ff6b6b"/>
+<text x="904" y="340" fill="#ff6b6b" font-size="15" font-weight="700" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">2023</text>
+<text x="904" y="360" fill="#f4f4f5" font-size="14" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">I step back and ask for the equity</text>
+<text x="904" y="379" fill="rgba(244,244,245,0.55)" font-size="13" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">then leave for fintech</text>
+</g>
+</svg>

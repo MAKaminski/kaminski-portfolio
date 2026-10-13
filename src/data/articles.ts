@@ -24,6 +24,111 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'superior-the-company-we-built-and-the-paperwork-i-never-did',
+    title: 'Superior: The Company We Built, and the Paperwork I Never Did',
+    description:
+      "Superior Contracting & Maintenance started in 2007 with my brother working as an office assistant for a plumber. By the time I stepped back in 2023, it ran on 50 employees, hundreds of contractors across eight states, and more than $1 million a month in revenue. This is the candid version of how we built it: the contractors I paid from my front door, the 30% I was offered on a handshake, the CEO equity plan I wrote for someone else, and the one document I never wrote for myself.",
+    date: '2026-10-13',
+    readMinutes: 7,
+    series: 'Where We Came From',
+    logos: ['Superior Contracting & Maintenance'],
+    body: `
+<p>Superior Contracting &amp; Maintenance did not start with a business plan. It started in 2007 with my brother working as an office assistant for a plumber, and noticing that the hard part of the job was not the plumbing.</p>
+
+<p>The hard part was the relationships: the property owner who needed someone today, the tradesman who could be there tomorrow, and the person in the middle who made both of them trust the arrangement. My brother was very good at being that person. So he went out on his own, and he called the company EasyLinks.</p>
+
+<p>This is the candid version of how EasyLinks became Superior, what we built, and why I left. I have never written the whole thing down. As you will see, that is a theme.</p>
+
+<figure>
+<img src="/images/essays/superior-fig1-timeline.svg" alt="Timeline from 2007 to 2023. 2007: my brother founds EasyLinks and runs it alone for about ten years, best year about 1.7 million dollars. For years before 2018 I keep his books and pay contractors from my front door. 2013 to 2014: the Superior name is reserved and left unused. 2018: I join, all revenue moves into Superior, and I am offered 30 percent equity on a handshake. 2018 to 2023: Superior grows to 50 people, 8 states and more than 1 million dollars a month. 2023: I step back, ask for the equity, and leave for fintech." loading="lazy" decoding="async" />
+<figcaption>Sixteen years, two names, one set of relationships at the core.</figcaption>
+</figure>
+
+<h2>Ten years, one person</h2>
+
+<p>For about ten years, EasyLinks was my brother. He ran it by himself. He worked with private equity groups that owned property and needed it maintained, and he learned the operations the way you only learn them when there is nobody else to hand them to. His best year, alone, was about <strong>$1.7 million in revenue</strong>.</p>
+
+<p>I was around the whole time, just not on any org chart. I did his accounting for years. Contractors literally came to my house, and I wrote them checks at my front door. I handled the low-level business needs that a one-person company never has time for. None of it had a title. It was what you do for family.</p>
+
+<p>Somewhere around 2013 or 2014, we reserved a name: Superior Contracting &amp; Maintenance. Then we sat on it. For years it was a name on a state filing and nothing else.</p>
+
+<h2>2018: the name gets a company</h2>
+
+<p>In 2018 I left GreenSky and joined full time. That is when Superior became real. We began running all of the revenue through it, and the relationships my brother had spent a decade earning became Superior's book of business.</p>
+
+<p>Within the first year, I was offered a <strong>30% equity slice</strong> for growing it. I want to be direct about this, because it is the hinge of the whole story: that offer is the reason I stayed. Not the salary, not the title. The 30%.</p>
+
+<p>And because it was family, I never worried about the paperwork. I thought it would all work out. I had spent years being the person who made sure other people's paper was in order, and I did not do my own.</p>
+
+<h2>What we built</h2>
+
+<p>Over the next six years we built a company. At its peak, Superior had <strong>50 employees and hundreds of contractors across eight states</strong>, two business lines, hundreds of client relationships, and <strong>more than $1 million a month in revenue</strong>.</p>
+
+<figure>
+<img src="/images/essays/superior-fig2-scale.svg" alt="Bar chart of annual revenue. EasyLinks' best year with one person: about 1.7 million dollars. Superior's peak run-rate: more than 12 million dollars a year, from more than 1 million a month, about seven times the best solo year. Stat tiles: 50 employees, hundreds of contractors across 8 states, 2 business lines, 600 to 700 thousand dollars of working capital." loading="lazy" decoding="async" />
+<figcaption>The math: $1M a month × 12 is a $12M run-rate. $12M ÷ $1.7M is about 7× the best year one person could do alone.</figcaption>
+</figure>
+
+<p>Seven times is not the result of working seven times harder. One person, however good, tops out where his calendar does. To get past that you need a machine, and the machine was my job. My title was CFO, but the work was everything behind the field: I built out a product team, an accounting team, and all of the administrative back end, so that operators could operate.</p>
+
+<figure>
+<img src="/images/essays/superior-fig3-back-office.svg" alt="Diagram. On top, operators and field teams: hundreds of contractors, 8 states, 2 business lines, the clients. Holding them up, three teams: a product team for the software the field runs on, an accounting team for the close, the cash and contractor pay, and an administrative back end for onboarding, contracts and paperwork. All three sit on one ERP and one set of books, NetSuite." loading="lazy" decoding="async" />
+<figcaption>Nobody hires a contractor because of the back office. Nobody keeps one without it.</figcaption>
+</figure>
+
+<p>The working capital tells the story better than the revenue does. In this business you pay the contractor before the client pays you. At our size that meant carrying somewhere between <strong>$600,000 and $700,000 of working capital</strong> at any time, just to keep the work moving. The checks I used to write at my front door had become a treasury function.</p>
+
+<h2>Installing a CEO</h2>
+
+<p>The last big piece was leadership that did not depend on me or my brother. We brought in <strong>Chris Albano</strong>, a director from Home Depot, to run the company. He was an excellent fit for the role.</p>
+
+<p>I designed his compensation plan myself: a path to <strong>up to 20% of the company</strong> for hitting earnout goals, with the goals and the math written down, so that he would know exactly what he was building toward.</p>
+
+<p>I would like to say I noticed the irony at the time. I did not.</p>
+
+<table>
+  <thead>
+    <tr><th>The promise</th><th>What was agreed</th><th>What was written down</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>My equity</td><td>30% for growing the company (year one, 2018)</td><td>Nothing</td></tr>
+    <tr><td>Dividend on free cash flow</td><td>Agreed in year one, on free cash flow or net profit</td><td>Nothing</td></tr>
+    <tr><td>The CEO's equity</td><td>Up to 20% on earnout goals</td><td>A full compensation plan. I wrote it.</td></tr>
+  </tbody>
+</table>
+
+<h2>Stepping back</h2>
+
+<p>By 2023 the company was doing well. We were growing. But the work had shifted from building the machine to running it, and I had been heads-down at a hundred hours a week for six years. I needed a break.</p>
+
+<p>The plan was simple: take a vacation for a while, get my head together, and come back at it. And since we now had a CEO with a written plan to earn equity, it seemed like the right moment to do the other thing we had agreed to in year one: formally split the equity, and start paying out a dividend on our free cash flow.</p>
+
+<p>When I asked, I was told that the only way to get money from the company was to work there for a salary.</p>
+
+<p>I was in shock. I started the vacation anyway. My paychecks stopped. And somewhere in those weeks I realized I was not coming back.</p>
+
+<h2>What came next</h2>
+
+<p>I went back into fintech, with people I knew from GreenSky. They were focused on hypergrowth, and they would let me take on hard problems that were worth a lot to solve. That has been the thread ever since.</p>
+
+<h2>What I would tell anyone building with family</h2>
+
+<ul>
+<li><strong>Write it down before it matters.</strong> The time to paper an equity promise is when everyone is happy and the number is small. Later, the number is large and everyone remembers the conversation a little differently.</li>
+<li><strong>The document protects the relationship, not just the deal.</strong> I skipped the paperwork because it felt like distrust. It is the opposite. It is what lets two people who love each other disagree about money without disagreeing about each other.</li>
+<li><strong>Separate ownership from employment, in writing.</strong> Owners are paid in distributions. Employees are paid in wages. If nothing says which one you are, the answer is whatever the person holding the bank login says it is.</li>
+<li><strong>Give yourself the same care you give the hire.</strong> I wrote a precise, fair equity plan for a new hire. I never wrote one for myself. Whatever you would insist on for a stranger, insist on for you.</li>
+</ul>
+
+<h2>Why this is here</h2>
+
+<p>I do not write this to settle anything. My brother built something real out of nothing more than a knack for relationships, and I am proud of what we built on top of it together. Fifty people had jobs there. Hundreds of contractors had steady work. Clients in eight states got their properties looked after.</p>
+
+<p>Superior is where I learned most of what I now do for a living: that operators need a back office to operate, that working capital is a product, and that the paperwork is never the boring part. It is where we came from, and it is a core part of who we are. I just wish I had written it down sooner.</p>
+`,
+  },
+
+  {
     slug: 'the-banner-is-not-a-lock',
     title: 'The Banner Is Not a Lock: A Shadow Session Wrote the Row It Was Told Not To',
     description:
