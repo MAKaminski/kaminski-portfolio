@@ -33,20 +33,20 @@ export const articles: Article[] = [
     series: 'Where We Came From',
     logos: ['Superior Contracting & Maintenance', 'Momnt'],
     body: `
-<p><a href="https://www.superior-maintenance.com" target="_blank" rel="noopener">Superior Contracting &amp; Maintenance</a> did not start with a business plan. It started in 2007 with my brother, <strong>Erik Kaminski</strong>, working as an office assistant for a plumber, and noticing that the hard part of the job was not the plumbing.</p>
+<p><a href="https://www.superior-maintenance.com" target="_blank" rel="noopener">Superior Contracting &amp; Maintenance</a> did not start with a business plan. It started in 2007 with my brother, <a href="https://www.linkedin.com/in/erik-kaminski-63978822b/" target="_blank" rel="noopener"><strong>Erik Kaminski</strong></a>, working as an office assistant for a plumber, and noticing that the hard part of the job was not the plumbing.</p>
 
-<p>The hard part was the relationships: the property owner who needed someone today, the tradesman who could be there tomorrow, and the person in the middle who made both of them trust the arrangement. Erik was very good at being that person. So he went out on his own, and he called the company EasyLinks.</p>
+<p>The hard part was the relationships: the property owner who needed someone today, the tradesman who could be there tomorrow, and the person in the middle who made both of them trust the arrangement. <a href="https://www.linkedin.com/in/erik-kaminski-63978822b/" target="_blank" rel="noopener">Erik</a> was very good at being that person. So he went out on his own, and he called the company EZLinks.</p>
 
-<p>This is the candid version of how EasyLinks became Superior, what we built, and why I left. I have never written the whole thing down. As you will see, that is a theme.</p>
+<p>This is the candid version of how EZLinks became Superior, what we built, and why I left. I have never written the whole thing down. As you will see, that is a theme.</p>
 
 <figure>
-<img src="/images/essays/superior-fig1-timeline.svg" alt="Timeline from 2007 to 2023. 2007: my brother founds EasyLinks and runs it alone for about ten years, best year about 1.7 million dollars. For years before 2018 I keep his books and pay contractors from my front door. 2013 to 2014: the Superior name is reserved and left unused. 2018: I join, all revenue moves into Superior, and I am offered 30 percent equity on a handshake. 2018 to 2023: Superior grows to 50 people, 8 states and more than 1 million dollars a month. 2023: I step back, ask for the equity, and leave for fintech at Momnt." loading="lazy" decoding="async" />
+<img src="/images/essays/superior-fig1-timeline.svg" alt="Timeline from 2007 to 2023. 2007: my brother founds EZLinks and runs it alone for about ten years, best year about 1.7 million dollars. For years before 2018 I keep his books and pay contractors from my front door. 2013 to 2014: the Superior name is reserved and left unused. 2018: I join, all revenue moves into Superior, and I am offered 30 percent equity on a handshake. 2018 to 2023: Superior grows to 50 people, 8 states and more than 1 million dollars a month. 2023: I step back, ask for the equity, and leave for fintech at Momnt." loading="lazy" decoding="async" />
 <figcaption>Sixteen years, two names, one set of relationships at the core.</figcaption>
 </figure>
 
 <h2>Ten years, one person</h2>
 
-<p>For about ten years, EasyLinks was Erik. He ran it by himself. He worked with private equity groups that owned property and needed it maintained, and he learned the operations the way you only learn them when there is nobody else to hand them to. His best year, alone, was about <strong>$1.7 million in revenue</strong>.</p>
+<p>For about ten years, EZLinks was <a href="https://www.linkedin.com/in/erik-kaminski-63978822b/" target="_blank" rel="noopener">Erik</a>. He ran it by himself. He worked with private equity groups that owned property and needed it maintained, and he learned the operations the way you only learn them when there is nobody else to hand them to. His best year, alone, was about <strong>$1.7 million in revenue</strong>.</p>
 
 <p>I was around the whole time, just not on any org chart. I did his accounting for years. Contractors literally came to my house, and I wrote them checks at my front door. I handled the low-level business needs that a one-person company never has time for. None of it had a title. It was what you do for family.</p>
 
@@ -54,7 +54,7 @@ export const articles: Article[] = [
 
 <h2>2018: the name gets a company</h2>
 
-<p>In 2018 I left GreenSky and joined full time. That is when Superior became real. We began running all of the revenue through it, and the relationships Erik had spent a decade earning became Superior's book of business.</p>
+<p>In 2018 I left GreenSky and joined full time. That is when Superior became real. We began running all of the revenue through it, and the relationships <a href="https://www.linkedin.com/in/erik-kaminski-63978822b/" target="_blank" rel="noopener">Erik</a> had spent a decade earning became Superior's book of business.</p>
 
 <p>Within the first year, I was offered a <strong>30% equity slice</strong> for growing it. I want to be direct about this, because it is the hinge of the whole story: that offer is the reason I stayed. Not the salary, not the title. The 30%.</p>
 
@@ -65,7 +65,7 @@ export const articles: Article[] = [
 <p>Over the next six years we built a company. At its peak, Superior had <strong>50 employees and hundreds of contractors across eight states</strong>, two business lines, hundreds of client relationships, and <strong>more than $1 million a month in revenue</strong>.</p>
 
 <figure>
-<img src="/images/essays/superior-fig2-scale.svg" alt="Bar chart of annual revenue. EasyLinks' best year with one person: about 1.7 million dollars. Superior's peak run-rate: more than 12 million dollars a year, from more than 1 million a month, about seven times the best solo year. Stat tiles: 50 employees, hundreds of contractors across 8 states, 2 business lines, 600 to 700 thousand dollars of working capital." loading="lazy" decoding="async" />
+<img src="/images/essays/superior-fig2-scale.svg" alt="Bar chart of annual revenue. EZLinks' best year with one person: about 1.7 million dollars. Superior's peak run-rate: more than 12 million dollars a year, from more than 1 million a month, about seven times the best solo year. Stat tiles: 50 employees, hundreds of contractors across 8 states, 2 business lines, 600 to 700 thousand dollars of working capital." loading="lazy" decoding="async" />
 <figcaption>The math: $1M a month × 12 is a $12M run-rate. $12M ÷ $1.7M is about 7× the best year one person could do alone.</figcaption>
 </figure>
 
@@ -80,7 +80,7 @@ export const articles: Article[] = [
 
 <h2>Installing a CEO</h2>
 
-<p>The last big piece was leadership that did not depend on me or Erik. We brought in <strong>Chris Albano</strong>, a director from Home Depot, to run the company. He was an excellent fit for the role.</p>
+<p>The last big piece was leadership that did not depend on me or <a href="https://www.linkedin.com/in/erik-kaminski-63978822b/" target="_blank" rel="noopener">Erik</a>. We brought in <a href="https://www.linkedin.com/in/chris-albano-4305753/" target="_blank" rel="noopener"><strong>Chris Albano</strong></a>, a director from Home Depot, to run the company. He was an excellent fit for the role.</p>
 
 <p>I designed his compensation plan myself: a path to <strong>up to 20% of the company</strong> for hitting earnout goals, with the goals and the math written down, so that he would know exactly what he was building toward.</p>
 
@@ -111,7 +111,7 @@ export const articles: Article[] = [
 
 <p>I went back into fintech at <a href="https://www.momnt.com/" target="_blank" rel="noopener">Momnt</a>, with a leadership team that included people I knew from GreenSky. They were focused on hypergrowth, and they would let me take on hard problems that were worth a lot to solve.</p>
 
-<p>The people I supported there were <strong>Barclay Keith</strong>, the CEO; <strong>Lena McDearmid</strong>, the COO; <strong>Brian Lanehart</strong>, the CTO; and their local savant, <a href="https://www.linkedin.com/in/richard-mcnamara-8aa36410/" target="_blank" rel="noopener"><strong>Richard McNamara</strong></a>, who ran credit as Chief Credit Officer and served as CFO. That has been the thread ever since.</p>
+<p>The people I supported there were <a href="https://www.linkedin.com/in/barclaykeith/" target="_blank" rel="noopener"><strong>Barclay Keith</strong></a>, the CEO; <a href="https://www.linkedin.com/in/lenamcdearmid/" target="_blank" rel="noopener"><strong>Lena McDearmid</strong></a>, the COO; <a href="https://www.linkedin.com/in/brianlanehart/" target="_blank" rel="noopener"><strong>Brian Lanehart</strong></a>, the CTO; and their local savant, <a href="https://www.linkedin.com/in/richard-mcnamara-8aa36410/" target="_blank" rel="noopener"><strong>Richard McNamara</strong></a>, who ran credit as Chief Credit Officer and served as CFO. That has been the thread ever since.</p>
 
 <h2>What I would tell anyone building with family</h2>
 
@@ -124,7 +124,7 @@ export const articles: Article[] = [
 
 <h2>Why this is here</h2>
 
-<p>I do not write this to settle anything. Erik built something real out of nothing more than a knack for relationships, and I am proud of what we built on top of it together. Fifty people had jobs there. Hundreds of contractors had steady work. Clients in eight states got their properties looked after.</p>
+<p>I do not write this to settle anything. <a href="https://www.linkedin.com/in/erik-kaminski-63978822b/" target="_blank" rel="noopener">Erik</a> built something real out of nothing more than a knack for relationships, and I am proud of what we built on top of it together. Fifty people had jobs there. Hundreds of contractors had steady work. Clients in eight states got their properties looked after.</p>
 
 <p>Superior is where I learned most of what I now do for a living: that operators need a back office to operate, that working capital is a product, and that the paperwork is never the boring part. It is where we came from, and it is a core part of who we are. I just wish I had written it down sooner.</p>
 `,

@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 410" width="100%" role="img" aria-labelledby="s2t s2d">
 <title id="s2t">Same relationships, different machine</title>
-<desc id="s2d">Annual revenue. EasyLinks' best year with one person running it was about 1.7 million dollars. Superior at its peak ran above 1 million dollars a month, a run-rate of more than 12 million dollars a year, about seven times the best solo year. At that point Superior had 50 employees, hundreds of contractors across 8 states, 2 business lines, and 600 to 700 thousand dollars of working capital.</desc>
+<desc id="s2d">Annual revenue. EZLinks' best year with one person running it was about 1.7 million dollars. Superior at its peak ran above 1 million dollars a month, a run-rate of more than 12 million dollars a year, about seven times the best solo year. At that point Superior had 50 employees, hundreds of contractors across 8 states, 2 business lines, and 600 to 700 thousand dollars of working capital.</desc>
 <rect width="920" height="410" fill="#060606"/>
 <text x="16" y="34" fill="#f4f4f5" font-size="20" font-weight="700" font-family="'Space Grotesk',Inter,system-ui,sans-serif">Same relationships, different machine</text>
-<text x="16" y="56" fill="rgba(244,244,245,0.55)" font-size="14" font-family="'Space Grotesk',Inter,system-ui,sans-serif">Annual revenue: EasyLinks&#8217; best solo year vs. Superior&#8217;s peak run-rate</text>
+<text x="16" y="56" fill="rgba(244,244,245,0.55)" font-size="14" font-family="'Space Grotesk',Inter,system-ui,sans-serif">Annual revenue: EZLinks&#8217; best solo year vs. Superior&#8217;s peak run-rate</text>
 
-<!-- Row 1: EasyLinks -->
-<text x="234" y="116" fill="#f4f4f5" font-size="16" font-weight="700" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">EasyLinks</text>
+<!-- Row 1: EZLinks -->
+<text x="234" y="116" fill="#f4f4f5" font-size="16" font-weight="700" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">EZLinks</text>
 <text x="234" y="135" fill="rgba(244,244,245,0.55)" font-size="13" text-anchor="end" font-family="'Space Grotesk',Inter,system-ui,sans-serif">best year, one person</text>
 <rect x="250" y="98" width="85" height="42" rx="3" fill="rgba(244,244,245,0.45)"/>
 <text x="347" y="125" fill="#f4f4f5" font-size="17" font-weight="700" font-family="'Space Grotesk',Inter,system-ui,sans-serif">$1.7M</text>
