@@ -35,18 +35,18 @@ export const articles: Article[] = [
     body: `
 <p><a href="https://www.superior-maintenance.com" target="_blank" rel="noopener">Superior Contracting &amp; Maintenance</a> did not start with a business plan. It started in 2007 with my brother, <strong>Erik Kaminski</strong>, working as an office assistant for a plumber, and noticing that the hard part of the job was not the plumbing.</p>
 
-<p>The hard part was the relationships: the property owner who needed someone today, the tradesman who could be there tomorrow, and the person in the middle who made both of them trust the arrangement. Erik was very good at being that person. So he went out on his own, and he called the company EasyLinks.</p>
+<p>The hard part was the relationships: the property owner who needed someone today, the tradesman who could be there tomorrow, and the person in the middle who made both of them trust the arrangement. Erik was very good at being that person. So he went out on his own, and he called the company EZLinks.</p>
 
-<p>This is the candid version of how EasyLinks became Superior, what we built, and why I left. I have never written the whole thing down. As you will see, that is a theme.</p>
+<p>This is the candid version of how EZLinks became Superior, what we built, and why I left. I have never written the whole thing down. As you will see, that is a theme.</p>
 
 <figure>
-<img src="/images/essays/superior-fig1-timeline.svg" alt="Timeline from 2007 to 2023. 2007: my brother founds EasyLinks and runs it alone for about ten years, best year about 1.7 million dollars. For years before 2018 I keep his books and pay contractors from my front door. 2013 to 2014: the Superior name is reserved and left unused. 2018: I join, all revenue moves into Superior, and I am offered 30 percent equity on a handshake. 2018 to 2023: Superior grows to 50 people, 8 states and more than 1 million dollars a month. 2023: I step back, ask for the equity, and leave for fintech at Momnt." loading="lazy" decoding="async" />
+<img src="/images/essays/superior-fig1-timeline.svg" alt="Timeline from 2007 to 2023. 2007: my brother founds EZLinks and runs it alone for about ten years, best year about 1.7 million dollars. For years before 2018 I keep his books and pay contractors from my front door. 2013 to 2014: the Superior name is reserved and left unused. 2018: I join, all revenue moves into Superior, and I am offered 30 percent equity on a handshake. 2018 to 2023: Superior grows to 50 people, 8 states and more than 1 million dollars a month. 2023: I step back, ask for the equity, and leave for fintech at Momnt." loading="lazy" decoding="async" />
 <figcaption>Sixteen years, two names, one set of relationships at the core.</figcaption>
 </figure>
 
 <h2>Ten years, one person</h2>
 
-<p>For about ten years, EasyLinks was Erik. He ran it by himself. He worked with private equity groups that owned property and needed it maintained, and he learned the operations the way you only learn them when there is nobody else to hand them to. His best year, alone, was about <strong>$1.7 million in revenue</strong>.</p>
+<p>For about ten years, EZLinks was Erik. He ran it by himself. He worked with private equity groups that owned property and needed it maintained, and he learned the operations the way you only learn them when there is nobody else to hand them to. His best year, alone, was about <strong>$1.7 million in revenue</strong>.</p>
 
 <p>I was around the whole time, just not on any org chart. I did his accounting for years. Contractors literally came to my house, and I wrote them checks at my front door. I handled the low-level business needs that a one-person company never has time for. None of it had a title. It was what you do for family.</p>
 
@@ -65,7 +65,7 @@ export const articles: Article[] = [
 <p>Over the next six years we built a company. At its peak, Superior had <strong>50 employees and hundreds of contractors across eight states</strong>, two business lines, hundreds of client relationships, and <strong>more than $1 million a month in revenue</strong>.</p>
 
 <figure>
-<img src="/images/essays/superior-fig2-scale.svg" alt="Bar chart of annual revenue. EasyLinks' best year with one person: about 1.7 million dollars. Superior's peak run-rate: more than 12 million dollars a year, from more than 1 million a month, about seven times the best solo year. Stat tiles: 50 employees, hundreds of contractors across 8 states, 2 business lines, 600 to 700 thousand dollars of working capital." loading="lazy" decoding="async" />
+<img src="/images/essays/superior-fig2-scale.svg" alt="Bar chart of annual revenue. EZLinks' best year with one person: about 1.7 million dollars. Superior's peak run-rate: more than 12 million dollars a year, from more than 1 million a month, about seven times the best solo year. Stat tiles: 50 employees, hundreds of contractors across 8 states, 2 business lines, 600 to 700 thousand dollars of working capital." loading="lazy" decoding="async" />
 <figcaption>The math: $1M a month × 12 is a $12M run-rate. $12M ÷ $1.7M is about 7× the best year one person could do alone.</figcaption>
 </figure>
 
