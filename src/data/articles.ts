@@ -31,7 +31,7 @@ export const articles: Article[] = [
     date: '2026-10-13',
     readMinutes: 7,
     series: 'Where We Came From',
-    logos: ['Superior Contracting & Maintenance'],
+    logos: ['Superior Contracting & Maintenance', 'Momnt'],
     body: `
 <p><a href="https://www.superior-maintenance.com" target="_blank" rel="noopener">Superior Contracting &amp; Maintenance</a> did not start with a business plan. It started in 2007 with my brother, <strong>Erik Kaminski</strong>, working as an office assistant for a plumber, and noticing that the hard part of the job was not the plumbing.</p>
 
@@ -40,7 +40,7 @@ export const articles: Article[] = [
 <p>This is the candid version of how EasyLinks became Superior, what we built, and why I left. I have never written the whole thing down. As you will see, that is a theme.</p>
 
 <figure>
-<img src="/images/essays/superior-fig1-timeline.svg" alt="Timeline from 2007 to 2023. 2007: my brother founds EasyLinks and runs it alone for about ten years, best year about 1.7 million dollars. For years before 2018 I keep his books and pay contractors from my front door. 2013 to 2014: the Superior name is reserved and left unused. 2018: I join, all revenue moves into Superior, and I am offered 30 percent equity on a handshake. 2018 to 2023: Superior grows to 50 people, 8 states and more than 1 million dollars a month. 2023: I step back, ask for the equity, and leave for fintech." loading="lazy" decoding="async" />
+<img src="/images/essays/superior-fig1-timeline.svg" alt="Timeline from 2007 to 2023. 2007: my brother founds EasyLinks and runs it alone for about ten years, best year about 1.7 million dollars. For years before 2018 I keep his books and pay contractors from my front door. 2013 to 2014: the Superior name is reserved and left unused. 2018: I join, all revenue moves into Superior, and I am offered 30 percent equity on a handshake. 2018 to 2023: Superior grows to 50 people, 8 states and more than 1 million dollars a month. 2023: I step back, ask for the equity, and leave for fintech at Momnt." loading="lazy" decoding="async" />
 <figcaption>Sixteen years, two names, one set of relationships at the core.</figcaption>
 </figure>
 
@@ -109,7 +109,9 @@ export const articles: Article[] = [
 
 <h2>What came next</h2>
 
-<p>I went back into fintech, with people I knew from GreenSky. They were focused on hypergrowth, and they would let me take on hard problems that were worth a lot to solve. That has been the thread ever since.</p>
+<p>I went back into fintech at <a href="https://www.momnt.com/" target="_blank" rel="noopener">Momnt</a>, with a leadership team that included people I knew from GreenSky. They were focused on hypergrowth, and they would let me take on hard problems that were worth a lot to solve.</p>
+
+<p>The people I supported there were <strong>Barclay Keith</strong>, the CEO; <strong>Lena McDearmid</strong>, the COO; <strong>Brian Lanehart</strong>, the CTO; and their local savant, <a href="https://www.linkedin.com/in/richard-mcnamara-8aa36410/" target="_blank" rel="noopener"><strong>Richard McNamara</strong></a>, who ran credit as Chief Credit Officer and served as CFO. That has been the thread ever since.</p>
 
 <h2>What I would tell anyone building with family</h2>
 
