@@ -24,6 +24,112 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'provenance-in-the-primary-key',
+    title: 'Provenance in the Primary Key: 54 Facts In, 49 Stored, and a Dedupe That Has Never Fired',
+    description:
+      "My Analysis Engine's fact base promises to deduplicate and keep the most confident copy. Its identity hash includes the collector and the file location, so two reports of the same fact can never collide. Measured 2026-10-18: 54 observations emitted, 49 stored, 41 distinct facts, 7 stored more than once, Stripe three times, and zero comparisons where the more confident copy won. Nothing broke because the graph builder re-merges by key one layer down, with insertion order instead of confidence. Two honest fixes, each costing provenance or reconciliation, and 45 days in which I built neither.",
+    date: '2026-10-18',
+    readMinutes: 7,
+    logos: ['Python'],
+    series: 'Field Notes',
+    body: `
+<p>Line 82 of my Analysis Engine's fact base says it deduplicates and keeps the most confident copy. On today's run the repo collector emitted 54 observations, the store kept 49, and the branch that keeps the more confident copy executed zero times. Stripe is in the store three times.</p>
+
+<p>The conclusion first: <strong>identity and provenance answer different questions, and the answer to the second must never be part of the first.</strong> Identity asks whether two observations are the same fact. Provenance asks who reported it and where.</p>
+
+<p>I hashed the collector and the file location into the identity, and from that moment two reports of one thing could never be the same fact. The reconciliation the docstring promises is not buggy. It is unreachable.</p>
+
+<p>This is the third decorative control I have found in my own systems this year. The <a href="/writing/statistical-gating-for-agent-instruction-changes">first</a> was a significance test with a window too short to detect anything. The <a href="/writing/measure-reach-on-the-log-scale">second</a> was a power calculation on the wrong scale. This one is a primary key that was designed to guarantee uniqueness and guarantees the opposite.</p>
+
+<h2>The engine, in one paragraph</h2>
+
+<p>The Analysis Engine is a Python 3 tool I wrote to read an unfamiliar system and produce an architecture, a flow map, an ERD, a capacity model and a ranked roadmap. Four collectors feed it: repo, cloud, database and probe. Each one emits <code>Observation</code> objects, each observation carries an <code>Evidence</code> record, and nothing else crosses the boundary into the analyzers.</p>
+
+<p>Everything below was measured on 2026-10-18 against the engine's invented fixture, <code>acme-lending</code>. No client, no employer, no real account.</p>
+
+<h2>The identity hash carries the audit trail</h2>
+
+<p>An observation's id is <code>sha1(kind, key, collector, evidence.locator)</code>, truncated to twelve characters. I put the collector and the locator in on purpose. The engine makes claims about other people's systems, and I wanted every claim traceable to the scan that produced it and the line it was read from.</p>
+
+<p>That decision has a consequence I did not run to the end. Two collectors that see the same component produce two different ids. One collector that sees the same component in two files produces two different ids. The store's <code>add()</code> compares confidence only when ids collide, so the comparison is reserved for the one case that carries no information: the same scanner reporting the same line twice.</p>
+
+<p>The code says the design out loud. The docstring on line 82 reads <em>Append-only fact base. Deduplicates, keeps the most confident copy.</em> The id on line 73 makes the second sentence impossible for any pair of observations worth reconciling.</p>
+
+<h2>What the store did today</h2>
+
+<table>
+  <thead>
+    <tr><th>Measured 2026-10-18, repo collector on acme-lending</th><th>Count</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Observations emitted</td><td>54</td></tr>
+    <tr><td>Observations stored</td><td>49</td></tr>
+    <tr><td>Distinct (kind, key) facts</td><td>41</td></tr>
+    <tr><td>Facts stored more than once</td><td>7</td></tr>
+    <tr><td>Excess rows</td><td>8</td></tr>
+    <tr><td>Component rows, for 10 distinct components</td><td>18</td></tr>
+    <tr><td>Id collisions that reached the confidence comparison</td><td>5</td></tr>
+    <tr><td>Comparisons where the newer copy won</td><td>0</td></tr>
+  </tbody>
+</table>
+
+<p>The five collisions were all <code>config</code> rows for HTTP routes, each the same line of <code>services/api/main.py</code> reported twice by the same scan at the same confidence, 0.85 against 0.85. The comparison is strict greater-than, so the existing copy stayed all five times. That is the entire history of the deduplicator doing its job: it dropped five exact duplicates of itself.</p>
+
+<p>The seven real duplicates never got near it. Stripe appears at 0.75 from <code>web/package.json</code>, at 0.75 from <code>services/api/requirements.txt</code>, and at 0.60 from <code>services/api/main.py:6</code>. Three ids, three rows, zero comparisons. Plaid, PostHog, the Anthropic API, the API service, the decision worker and the primary database each appear twice.</p>
+
+<h2>Lookups return the wrong copy in two of seven cases</h2>
+
+<p><code>find(kind, key)</code> walks the store in insertion order and returns the first match. For PostHog it returns the 0.60 observation from <code>web/app.tsx:2</code>, not the 0.75 one from <code>web/package.json</code>. For the Anthropic API it returns 0.60 from <code>worker.py:3</code> over 0.75 from <code>requirements.txt</code>. In the other five pairs the first copy happens to be the best one, or tied with it.</p>
+
+<p>So the rule the store actually applies is "whichever file the scanner walked first." The rule it was designed to apply is "whichever report is most confident." On this fixture the two rules disagree 2 times in 7, and nothing downstream notices, for a reason that took me longer to see than the bug did.</p>
+
+<h2>Nothing broke because the graph fixed it one layer down</h2>
+
+<p>The analyzer builds a <code>SystemGraph</code> from the component observations, and <code>add_component()</code> merges by key: the first copy becomes the node, later copies fill in any attribute the node is missing, and their evidence locators are appended to a list. Then <code>_canonicalise()</code> folds provider resources into the logical names they describe, so <code>aws-ecs-service-api</code> becomes part of <code>api</code> and <code>primary-database</code> becomes <code>aws-db-instance-primary</code>. Eighteen component rows become eight real nodes plus a synthetic <code>users</code> actor, and the report reads clean.</p>
+
+<p>That is the reconciliation the store was supposed to do, rebuilt where it was not supposed to live, with a different rule. The graph uses insertion order and fill-the-blanks. The store promised confidence. The two rules happen to pick the same winner today: in the two pairs whose values differ, <code>api</code> and <code>decision-worker</code>, the Kubernetes manifest at 0.90 was also walked before <code>requirements.txt</code> at 0.85.</p>
+
+<p>The loss is still real. The manifest says the API's tech is a Kubernetes Deployment; <code>requirements.txt</code> says it is FastAPI. First-wins kept the Deployment, and the word FastAPI appears in the raw evidence file and in none of the six rendered reports. The confidence scores I attached to every observation had no vote in that, and the first time the walk order and the confidence disagree, the graph will keep the weaker copy without a message.</p>
+
+<p>In a tool whose output is a capacity model, the next value this happens to is a replica count or a service time. The error will not announce itself. It will be a plausible number.</p>
+
+<h2>The case the design exists for has never run</h2>
+
+<p>Cross-collector conflict is the reason the confidence field exists, and it has never occurred in this store. Cloud, database and probe are all <code>enabled: false</code> in the fixture's <code>target.json</code>. All 49 rows today carry <code>collector=repo</code>.</p>
+
+<p>Three of the four collectors emit components and all four emit metrics, so the collision is designed in and waiting. It has simply never been exercised, and the smoke test, the only test in the repository, contains no assertion about duplicates, confidence or <code>find()</code>.</p>
+
+<p>I had an acceptance test for the store in my head. I never wrote it down, and the thing that would have failed it was switched off in the only configuration I ever ran.</p>
+
+<h2>The fix costs provenance or reconciliation</h2>
+
+<p>There are two honest repairs, and each gives up one of the two things the current hash tries to hold at once.</p>
+
+<p><strong>Option A: identity is (kind, key).</strong> Drop the collector and locator from the hash. Today's 49 rows become 41. Six of the seven duplicate pairs resolve on confidence; the primary database, at 0.70 against 0.70, still resolves on order.</p>
+
+<p>The cost is that the losing copy's evidence is gone. The audit trail I built the hash to protect is the thing this option deletes, unless I also move evidence to a list on the surviving row, at which point I have rebuilt the graph's merge inside the store.</p>
+
+<p><strong>Option B: identity stays, lookup changes.</strong> Keep every row. Add an index on (kind, key). Make <code>find()</code> return the highest-confidence copy, and add a <code>conflicts()</code> method that lists every pair whose copies disagree on a value.</p>
+
+<p>The cost is that the store stops being a deduplicator and becomes a disagreement log, 49 rows stay 49, and a human has to read the log for it to mean anything.</p>
+
+<p>I prefer B. The point of four collectors is that they disagree, and a tool that quietly picks a winner has thrown away the most useful thing it collected. A conflict between a declared replica count in Terraform and an observed one from the cloud API is a finding, not a dedupe failure.</p>
+
+<h2>What it has cost so far</h2>
+
+<p>I diagnosed this on 2026-09-03 and wrote that I was building option B. Today is 2026-10-18. The modification time on <code>core.py</code> is 2026-08-28. Forty-five days, zero lines changed.</p>
+
+<p>The reason is the paragraph about the graph. A defect that produces correct output has no priority, and the merge one layer down made the output correct on the only fixture I run. Patching a symptom downstream of its cause is the cheapest way to make a bug permanent.</p>
+
+<p>I know that rule. I still did it, because I did not patch it on purpose: the graph's merge was written for a different reason, and it happened to cover for the store.</p>
+
+<p>The specific rule I am taking from this: <strong>hash what makes two facts the same, and nothing else.</strong> Who reported a fact, and from where, belongs next to the fact, repeated as many times as it was reported. The moment provenance enters the key, every source becomes its own universe, and reconciliation across sources becomes a word in a docstring.</p>
+
+<p>If your agent pipeline merges observations from more than one collector, run one count before you trust the merge: rows in the store against distinct (kind, key). Mine were 49 and 41. If the first number is larger, the deduplicator is not deduplicating, the key is the first place to look, and some layer below it is already deciding for you.</p>
+`,
+  },
+
+  {
     slug: 'superior-the-company-we-built-and-the-paperwork-i-never-did',
     title: 'Superior: The Company We Built, and the Paperwork I Never Did',
     description:
