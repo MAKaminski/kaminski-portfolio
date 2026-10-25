@@ -24,6 +24,105 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'the-monitor-that-could-not-see-itself',
+    title: '4,401 Failures, Zero Alerts: The Monitor That Could Not See Itself',
+    description:
+      "My gamma-walls pipeline is scheduled 33 times a day. launchd has fired it 4,401 times since 2026-06-11, every run failed on its first line with the same seven words, and I found out on 2026-10-25, 135 days later, because the chart it feeds never stopped drawing the levels from the night I built it. The only alert I wired fires when price crosses a level, so a frozen level produced confident, stale alerts instead of silence. Measured this run: 4,480 slots scheduled, 4,401 failures logged, 0 successful scheduled runs, exit code 126, and a study file dated 2026-06-12 00:53 still telling the chart where the gamma flip is. Two fixes priced, the rule that would have caught it on day one, and the admission that I filmed a video about this pipeline's output 65 days into the outage.",
+    date: '2026-10-25',
+    readMinutes: 7,
+    logos: ['Python', 'Schwab thinkorswim', 'thinkScript'],
+    series: 'Field Notes',
+    body: `
+<p>My gamma-walls pipeline is scheduled 33 times a day. launchd has fired it 4,401 times since 2026-06-11. Every one of those runs failed on its first line, with the same seven words, and I found out today, 135 days later, because the chart it feeds never stopped drawing levels.</p>
+
+<p>The conclusion first: <strong>a monitor that reports only through its output cannot report its own absence.</strong> The alert I wired fires when price crosses a level. Nothing fires when the level stops being computed, so the last level ever computed simply becomes permanent.</p>
+
+<p>This is the fourth decorative control I have found in my own systems this year, and the cheapest to have prevented.</p>
+
+<p>The <a href="/writing/statistical-gating-for-agent-instruction-changes">first</a> was a significance test that could not detect the effect it tested for. The <a href="/writing/measure-reach-on-the-log-scale">second</a> was a power calculation on the wrong scale. The <a href="/writing/provenance-in-the-primary-key">third</a> was a deduplicator whose key guaranteed nothing could collide. This one is a scheduler that has fired every fifteen minutes for four and a half months and has never run.</p>
+
+<h2>The pipeline, in one paragraph</h2>
+
+<p><code>schwab_gamma_walls.py</code> is a 610-line Python 3 script. It pulls the option chain for a ticker from the Schwab Trader API, sums dealer gamma by strike, and produces three levels: the call wall, the put wall, and the gamma flip. It then writes a thinkScript study for thinkorswim with those levels as inputs and an <code>Alert()</code> on each, appends a row to a per-symbol history CSV, and renders an HTML dashboard.</p>
+
+<p>A 23-line bash wrapper sources the credentials, picks the virtualenv's python, and runs the script. A launchd agent, <code>com.modularequity.gammawalls</code>, calls the wrapper on 33 calendar slots from 08:00 to 16:00, fifteen minutes apart, seven days a week; the wrapper is what exits early on weekends. Everything below was measured on 2026-10-25 from files on the machine that runs it.</p>
+
+<h2>Every run failed on the first line</h2>
+
+<p>The launchd log is 4,401 lines and 466,506 bytes. Every line is identical: <code>/bin/bash: ~/Documents/.../run_gamma_walls.sh: Operation not permitted</code>. One hundred and six bytes, 4,401 times, no timestamps, no variation.</p>
+
+<p>The exit code launchd records is 126, bash's code for a command it was handed and could not execute. bash never opened the wrapper. The wrapper never sourced the credentials, never chose a python, never reached the line that runs the script. The script's own log, <code>gamma_walls.log</code>, which the wrapper appends to on every run, does not exist on disk.</p>
+
+<p>The cause is where I put it. The wrapper lives under <code>~/Documents</code>, which macOS treats as a protected folder. A command I run from Terminal inherits Terminal's permission to read that folder; the same command launched by launchd inherits nothing. The manual test and the scheduled job were the same command run by different principals, and only one of them was allowed to read the file.</p>
+
+<p>That is the reading that fits the error, the path, and the exit code, and I have not found a second one.</p>
+
+<h2>The arithmetic of the silence</h2>
+
+<table>
+  <thead>
+    <tr><th>Measured 2026-10-25</th><th>Value</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Log file created</td><td>2026-06-11 23:50:42</td></tr>
+    <tr><td>Last artifact written (manual test run)</td><td>2026-06-12 00:53</td></tr>
+    <tr><td>Most recent failure logged</td><td>2026-10-25 14:00:03</td></tr>
+    <tr><td>Calendar slots scheduled in the window</td><td>4,480 (135 days x 33, plus 25 today)</td></tr>
+    <tr><td>Failures logged</td><td>4,401 (98.2%; the rest were slots the laptop slept through)</td></tr>
+    <tr><td>Successful scheduled runs</td><td>0</td></tr>
+    <tr><td>launchd run count since last login, last exit code</td><td>634, 126</td></tr>
+    <tr><td>Rows in QQQ_gamma_history.csv</td><td>8, all between 00:22 and 00:53 on 2026-06-12</td></tr>
+    <tr><td>Weekday slots that would have done work</td><td>3,168 (96 weekdays x 33)</td></tr>
+  </tbody>
+</table>
+
+<p>The eight rows in the history file are a half-hour test session the night I built it. The spot column reads 717.12 in every row because the market was closed. That file was the subject of a 100-second video I scripted and captured on 2026-08-16, about how the gamma flip walked 3.9 points on zero trades.</p>
+
+<p>I read those eight rows as evidence of estimator drift, and they are. They were also the complete production history of the pipeline, 65 days into its outage. I did not notice, because I was reading the file for what it said and not for when it stopped.</p>
+
+<h2>The chart kept drawing June</h2>
+
+<p>The thinkScript study was written at 00:53 on 2026-06-12 with three inputs: call wall 720, put wall 700, gamma flip 722.2. On a working pipeline that file is overwritten every fifteen minutes and those values are never older than the last run. On this pipeline they are 135 days old, and the chart has no way to show the difference. A level is a line, and a stale line looks exactly like a fresh one.</p>
+
+<p>The three <code>Alert()</code> calls fire on close crossing those levels. Since late July QQQ has traded as high as 762.86 and as low as 661.14, and it closed Friday at 704.88, so price has crossed the frozen flip at least twice and the frozen put wall at least twice. Every one of those alerts was computed from a chain that no longer exists, and every one of them looked like the system working.</p>
+
+<p>That is the inversion worth naming. The pipeline's only alerting path is triggered by its output. When the output freezes, the alerting path keeps running on the frozen output, so the failure mode is confident, stale alerts rather than silence.</p>
+
+<p>The system does not look dead. It looks decisive.</p>
+
+<h2>Two of the three layers knew</h2>
+
+<p>launchd knew. <code>launchctl print</code> on the job reports <code>runs = 634</code> and <code>last exit code = 126</code> right now, in plain text, on demand. Nobody runs <code>launchctl print</code> on a job that seems fine.</p>
+
+<p>The log knew. A 466 KB file of one repeated line is about as loud as a text file gets. But a log that grows is indistinguishable, from the outside, from a log that grows because things are working, and I pointed stdout and stderr at the same path, so the healthy log and the failing log would have been the same file. I never opened it, because nothing told me to.</p>
+
+<p>The chart did not know, and the chart is the only one of the three I look at. I built the monitoring for the market and none for the monitor.</p>
+
+<h2>Two fixes, and what each one costs</h2>
+
+<p><strong>Fix 1: move the pipeline out of the protected folder, or launch it from a principal that is allowed in.</strong> Copying the project to a path macOS does not guard and re-pointing the plist is ten minutes. The cost is that the folder protection was doing exactly what it exists to do, and routing around it is a decision about where a credentials file lives, not a side effect of wanting a schedule to work.</p>
+
+<p><strong>Fix 2: a liveness check that is not the output.</strong> A second scheduled job at 16:15 on weekdays that reads the modification time of <code>QQQ_gamma_history.csv</code> and sends a message if the file is older than today. About fifteen lines. It would have fired at 16:15 on 2026-06-12, the first market day, and this essay would be one line in a commit message.</p>
+
+<p>The cost of fix 2 is that it is another scheduled job on the same machine with the same failure modes. If it lives in the same folder it dies the same way on the same night, and the log fills with two repeated lines instead of one. The check has to be simpler than the thing it checks, and it has to live somewhere the thing it checks cannot take it down. A liveness check that shares a fate with its subject is a second copy of the subject.</p>
+
+<p>I am doing both. Neither is done as I write this, and 4,401 is still climbing by one every fifteen minutes.</p>
+
+<h2>What this costs an agent pipeline</h2>
+
+<p>Nothing in this failure is specific to options or to macOS. Every scheduled agent I run has the same four parts: a timer, a wrapper, a script, and an artifact somebody looks at. The artifact gets the attention. The timer and the wrapper are the parts that fail quietly, and they fail before any line of the script, which means the script's own error handling, however careful, never gets a vote.</p>
+
+<p>This pipeline has ten <code>except</code> clauses and three explicit exit messages, and none of them has ever executed.</p>
+
+<p>The rule I am taking from this: <strong>every scheduled job needs one signal that says "I ran," carried on a channel its output does not share, checked by something that does not depend on the job.</strong> A heartbeat file in another folder. A "last updated" row that the dashboard reads and shows in red when it is stale. A message when the row is missing.</p>
+
+<p>The signal is boring, and it is worth more than every alert the job can raise, because the alerts only speak while the job is alive.</p>
+
+<p>If you have a scheduled pipeline whose output you look at, run one check before you trust it: the modification time of the newest artifact against the schedule. Mine said 2026-06-12 on 2026-10-25. The chart said everything was fine, and the chart was the only thing I had asked.</p>
+`,
+  },
+
+  {
     slug: 'provenance-in-the-primary-key',
     title: 'Provenance in the Primary Key: 54 Facts In, 49 Stored, and a Dedupe That Has Never Fired',
     description:
