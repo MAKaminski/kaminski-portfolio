@@ -24,6 +24,101 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'thinking-is-a-role-not-a-default',
+    title: '3,736 Tokens for Five Words: Thinking Is a Role, Not a Default',
+    description:
+      'I asked a 35B mixture-of-experts model running on my desk, qwen3.6:35b-a3b under Ollama on an M5 Pro, to answer a question in five words. Thinking off: 122 ms. Thinking on: 36.1 seconds and 3,736 tokens, for five words. Measured 2026-11-01: 267x to 296x on wall time, about 500x on tokens, the same 105 tok/s decode in both modes, 876 tok/s prefill, one serialized stream however many requests you send. Why the fleet I built on 2026-10-30 names thinking as a separate role with its own timeout and retry budget instead of a default, what that costs (a 40-line validator that cannot catch a well-formed wrong answer, 29 GB resident), and the admission that fleet.db has zero runs, so every number here is the engine on a stand.',
+    date: '2026-11-01',
+    readMinutes: 6,
+    logos: ['Python', 'Anthropic API'],
+    series: 'Field Notes',
+    body: `
+<p>I asked a 35-billion-parameter model running on my desk to answer a question in five words. With thinking off it took 122 milliseconds. With thinking on, the same model, same prompt, same machine, took 36.1 seconds and generated 3,736 tokens to arrive at five words.</p>
+
+<p>The conclusion first: <strong>on a local model, reasoning mode is a 300x latency multiplier, and it belongs in a role a planner has to choose on purpose, never in a default.</strong></p>
+
+<p>I built a small agent fleet on 2026-10-30 with exactly that rule in its config. Everything below was measured on 2026-11-01 on the machine that runs it.</p>
+
+<h2>The fleet, in one paragraph</h2>
+
+<p><code>fleet</code> is 1,332 lines of Python across eleven files, standard library only, plus a 200-line test file with 17 tests. Claude plans a goal into tasks, a local Ollama model executes them, SQLite carries the run across days with lease-based claims, and a built-in dashboard reads the same handlers as the CLI and the MCP server.</p>
+
+<p>Callers never name a model. They name one of five roles in <code>fleet.toml</code>: <code>worker-bulk</code>, <code>worker-think</code>, <code>escalate</code>, <code>integrator</code>, <code>planner</code>. The first two are the same local model, <code>qwen3.6:35b-a3b</code> under Ollama 0.40.7 on an M5 Pro with 64 GB. The only difference between them is one line: <code>think = false</code> versus <code>think = true</code>.</p>
+
+<p>That one line is the subject of this essay.</p>
+
+<h2>Six words, 3,736 tokens</h2>
+
+<p>The prompt was <em>"Answer in exactly five words: what does a dispatcher do?"</em>, sent to Ollama's <code>/api/chat</code> with <code>stream: false</code>, model already resident, two runs in each mode. A first cold call with thinking off took 1,470 ms, almost all of it prompt evaluation while the runner woke up; I discard it and report the warm runs.</p>
+
+<table>
+  <thead>
+    <tr><th>Measured 2026-11-01</th><th>think = false</th><th>think = true</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Total time, run 1</td><td>122 ms</td><td>36,093 ms</td></tr>
+    <tr><td>Total time, run 2</td><td>114 ms</td><td>30,426 ms</td></tr>
+    <tr><td>Output tokens, run 1</td><td>6</td><td>3,736</td></tr>
+    <tr><td>Output tokens, run 2</td><td>7</td><td>3,227</td></tr>
+    <tr><td>Characters of hidden reasoning</td><td>0</td><td>13,576 and 12,141</td></tr>
+    <tr><td>Answer, run 1</td><td>"They coordinate communication between teams."</td><td>"Directs field units via communication."</td></tr>
+    <tr><td>Answer, run 2</td><td>"Coordinates and directs operational resources effectively."</td><td>"Coordinates resources and assigns personnel"</td></tr>
+    <tr><td>Decode rate during the long generation</td><td>n/a (too short to measure)</td><td>103.6 and 106.1 tok/s</td></tr>
+  </tbody>
+</table>
+
+<p>The ratio is 267x to 296x on wall time and roughly 500x on tokens. The decode rate is the same in both modes, about 105 tokens a second. The model is doing five hundred times more work to reach an answer of the same length.</p>
+
+<p>On quality: thinking on produced five words both times. Thinking off produced five words once and six the other time. On this prompt, that one extra word is the entire difference 3,736 tokens bought.</p>
+
+<h2>What 30 seconds does to a day</h2>
+
+<p>The fleet's working unit is a bulk task of about 8,000 tokens in and 1,000 out: a brief shared by every task in the run, the task itself, and a JSON answer. Two more measurements price that unit.</p>
+
+<p>Prefill: a 10,520-token prompt took 12.0 seconds, which is 876 tokens a second. Decode: 105 tokens a second, from the long runs above. So one bulk task costs 8,000 / 876 + 1,000 / 105 = 9.1 + 9.5 = 18.7 seconds, and one stream clears 86,400 / 18.7 = about 4,600 tasks a day.</p>
+
+<p>Add the thinking budget the model spent on a trivial question, 3,227 to 3,736 tokens, and the same task takes 49 to 54 seconds. The day drops to 1,590 to 1,750 tasks. On a question that actually needs multi-step reasoning the budget is larger, so that is a floor on the cost, not an estimate of it.</p>
+
+<p>Roughly: thinking on by default would hand back two thirds of the machine.</p>
+
+<h2>One stream, however many you send</h2>
+
+<p>The number of streams matters because the thinking cost is paid serially. I sent one request for about 65 tokens of output and it returned in 0.83 to 1.15 seconds. I then sent four at once.</p>
+
+<p>The four came back at 0.94, 1.96, 3.15, and 3.95 seconds. Their decode times sum to 3,751 ms and the wall clock read 3,950 ms. Ollama's MLX runner on this machine serves one stream and queues the rest, which is why <code>fleet.toml</code> sets <code>local_concurrency = 1</code> and <code>OLLAMA_NUM_PARALLEL=1</code> in the launchd environment. Extra slots would only have hidden the queue.</p>
+
+<p>So a 30-second thinking call is not a slow task. It is 30 seconds during which nothing else on the local tier can run.</p>
+
+<h2>Role, not model, and not default</h2>
+
+<p>The rule the fleet encodes is that a caller asks for a role and the config decides what a role means. The planner's system prompt says it in one line: use <code>worker-bulk</code> by default, <code>worker-think</code> only for multi-step reasoning, <code>integrator</code> only for a final merge. Every task carries a role name, and the dispatcher looks the role up at call time, so swapping a model, or turning thinking on for a class of work, is an edit to one file that the running worker picks up without a restart.</p>
+
+<p>The two local roles also differ in budget. <code>worker-bulk</code> gets a 120-second timeout and two retries. <code>worker-think</code> gets 300 seconds and one retry, because a second 30-second think on a task that just failed one is a worse bet than escalating.</p>
+
+<p>Escalation is the other half of the design. After the retries, the dispatcher walks the role's <code>fallback</code> one tier up, to a <code>claude-haiku</code> role over the Anthropic API, and marks the result <code>escalated = 1</code> so the dashboard can show what the local tier could not do. At the rates in the config, $1 per million in and $5 per million out, a bulk-shaped escalation costs about $0.013. A planned run costs about $0.275, paid once, to Opus.</p>
+
+<p>Thinking off by default and a paid tier above it is the whole bet: let the free model take the first swing at everything, cheaply, and pay for the second swing only on the tasks that earned it.</p>
+
+<h2>What it costs</h2>
+
+<p>Three things, and the third is the one that matters.</p>
+
+<p>First, thinking off means a bulk task that quietly needed reasoning gets a confident shallow answer. The only gate behind the worker is a 40-line validator that checks a JSON-schema subset: type, required, properties, items, enum, string length. It catches a malformed answer. It cannot catch a well-formed wrong one, and a wrong one that validates never escalates. The planner's judgment about which tasks need <code>worker-think</code> is doing work that nothing downstream verifies.</p>
+
+<p>Second, the memory. The model is 23 GB on disk and 29 GB resident at a 32K context when I ran <code>ollama ps</code> today, up from 27 GB earlier in the same session as the context cache grew. Keeping it resident forever (<code>OLLAMA_KEEP_ALIVE=-1</code>) is what makes the 122 ms possible, and it is 29 GB of a 64 GB machine that nothing else gets.</p>
+
+<p>Third: <code>fleet.db</code> has zero runs, zero tasks, zero results, zero events. It was last written at 16:14 on 2026-10-30, the afternoon the schema was created, and nothing has been dispatched through it since. Every number in this essay is a measurement of the engine on a stand. The architecture doc's line about "$1,702 a month avoided" is 4,364 local tasks a day times a Haiku-equivalent price, which is capacity arithmetic for work that has not happened, and <a href="/writing/the-monitor-that-could-not-see-itself">last week</a> I wrote 1,500 words about the difference between a system that runs and a system that would.</p>
+
+<p>The measured numbers stand. The dollar number does not, until a run does.</p>
+
+<h2>The rule</h2>
+
+<p><strong>Treat reasoning mode on a local model as a separate, more expensive tier with its own name, timeout, and retry budget, and make the planner spend it deliberately.</strong> Measure the think-on and think-off latency on a trivial prompt before you set the default. If the ratio is in the hundreds, as it was here, the default is off, and "on" is a role.</p>
+
+<p>If you are routing between a local model and an API tier and your config has a single thinking flag for the whole worker, I would like to see your think-on-versus-off numbers on the same prompt. Mine are above, and I would trade.</p>
+`,
+  },
+  {
     slug: 'the-monitor-that-could-not-see-itself',
     title: '4,401 Failures, Zero Alerts: The Monitor That Could Not See Itself',
     description:
