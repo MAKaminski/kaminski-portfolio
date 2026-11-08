@@ -24,6 +24,101 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'rank-agents-on-the-wilson-lower-bound',
+    title: '126 Pull Requests, All Merged, Trust Score 0.55: Rank Agents on the Wilson Lower Bound',
+    description:
+      'Between 2026-10-21 and 2026-10-27 the Worker-Dev agent in FORGE, the operating system I have been building since 2026-10-20, opened 126 pull requests and every one merged: 14 by the agent itself under auto-merge, 112 by me. Its trust score is still the Wilson 95% lower bound of built over attributable runs, 0.552 on 10 of 12 as of 2026-10-21, against an autonomy floor of 0.85. Why the bound and not the rate (1 of 1 scores 0.21, 38 of 40 scores 0.835), what the floor costs in runs (22 at 100%, about 50 at 95%, 196 at 90%, never at 85% or below), the four 2026-10-27 runs that burned eight rounds each on a sandbox without git and why they leave the denominator only with a human-typed reason, and the costs admitted: the floor is a dashboard while the merge conditions do the work, a path allowlist let a sha256 token-auth module auto-merge on 2026-10-23, and the database behind the views was not running when I wrote this.',
+    date: '2026-11-08',
+    readMinutes: 7,
+    logos: ['Claude Code', 'GitHub', 'Python'],
+    series: 'Field Notes',
+    body: `
+<p>Between 2026-10-21 and 2026-10-27 an agent I built opened 126 pull requests against its own repository. Every one of them merged. The system that runs it still scores that agent at 0.55 against a trust floor of 0.85, and it is right to.</p>
+
+<p>The conclusion first: <strong>rank an agent on the Wilson 95% lower bound of its attributable success rate, never on the rate itself, and decide by name which failures are the environment's before you count a single run.</strong> Everything else in autonomy policy follows from those two choices.</p>
+
+<p>The system is FORGE, a single-owner operating system I have been building since 2026-10-20: work items, people, money and code on one Postgres graph under Supabase, with agents doing the work. Worker-Dev is the agent that turns a work item into a branch. Its track record is a SQL view, and the view is the subject of this essay.</p>
+
+<h2>The score is a lower bound, not a rate</h2>
+
+<p><code>semantic.model_precision</code> is one view in migration 0014. For each model, it counts the finished Worker-Dev runs that are attributable to the model, counts how many of those built a branch that passed <code>pnpm check</code> and the scope check, divides, and then reports the Wilson 95% lower bound of that fraction with z = 1.96.</p>
+
+<p>The formula is three lines of SQL, and by migration 0025 it is one function, <code>semantic.wilson_lb(k, n)</code>, shared by the model ranking, the agent scorecards and the autonomy gate. That is deliberate. If the number that ranks models and the number that grants autonomy came from two formulas, they would disagree the first time it mattered.</p>
+
+<p>Why the bound and not the rate: a model with one build in one run has a rate of 100% and a lower bound of 0.21. A model with 38 builds in 40 runs has a rate of 95% and a lower bound of 0.835. Sorted by rate, the rookie wins. Sorted by the bound, it ranks where it should, below a model you have actually watched work.</p>
+
+<h2>What 0.85 costs in runs</h2>
+
+<p>The autonomy ladder gives an agent level L1, advancing its own artifact without approval, when its lower bound reaches 0.85. The arithmetic behind that floor is less forgiving than it looks. I recomputed it this week.</p>
+
+<table>
+  <thead>
+    <tr><th>Observed success rate</th><th>Runs needed before the 95% lower bound clears 0.85</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>100%</td><td>22</td></tr>
+    <tr><td>98%</td><td>29</td></tr>
+    <tr><td>95%</td><td>49 to 50</td></tr>
+    <tr><td>92%</td><td>100</td></tr>
+    <tr><td>90%</td><td>196</td></tr>
+    <tr><td>88%</td><td>545</td></tr>
+    <tr><td>86%</td><td>4,899</td></tr>
+    <tr><td>85% or below</td><td>never</td></tr>
+  </tbody>
+</table>
+
+<p>Worked for the row the design doc records: at 95% and n = 50, (0.95 + 1.96² / 100 − 1.96 · √(0.95 · 0.05 / 50 + 1.96² / 10,000)) / (1 + 1.96² / 50) = (0.9884 − 0.0716) / 1.0768 = 0.851.</p>
+
+<p>Read the bottom rows twice. A floor of 0.85 on the lower bound is not "be right 85% of the time." It is "be right about 95% of the time, and prove it fifty times." An agent that fails one run in seven never earns L1, however many runs it logs. The bound converges to the rate, and the rate is under the floor.</p>
+
+<p>That is the property I wanted. A trust floor that a mediocre agent can grind past by volume is not a floor.</p>
+
+<h2>Where Worker-Dev stood, and what I did about it</h2>
+
+<p>On 2026-10-21 Worker-Dev running on Claude had built 10 of 12 attributable runs. Rate 0.833. Lower bound (0.9934 − 0.2647) / 1.3201 = 0.552. By the ladder it was an L0 agent: suggest only.</p>
+
+<p>I wanted work items to close themselves anyway, so I overrode the floor for merging and wrote the override down as ADR 0011. The override comes with a list of conditions that every pull request has to clear on every five-minute poll, and the poller merges at most one PR per poll.</p>
+
+<p>CI's <code>check</code> run on the exact head commit must be green. A Red Team review run, on a model other than the one that wrote the code, must have passed, and the head it reviewed must equal the PR's current head; a push after review voids it. The head must not be behind <code>main</code>. The diff must be 200 lines or fewer. Every changed path must match an allowlist, and a second list of paths is excluded whatever the allowlist says.</p>
+
+<p>Here is what that produced, from the GitHub record on 2026-11-08. The Worker-Dev GitHub App authored 126 pull requests between 2026-10-21 13:02 UTC and 2026-10-27 21:02 UTC: 26, 23, 40, 0, 22, 6 and 9 per day. All 126 merged. Median diff 149 lines; 92 were at or under the 200-line cap and 34 were over it.</p>
+
+<p>Fourteen of the 126 were merged by the App itself under those conditions. The other 112 I merged by hand. The fourteen ranged from 36 to 195 lines. Not one over 200 got through, which is the cap working.</p>
+
+<h2>The denominator is the whole argument</h2>
+
+<p>"Attributable" is doing more work in that view than the Wilson formula is. Five kinds of ended run never enter the denominator: a run stopped by the kill switch, a run cut off by an agents-service restart, a sandbox that failed to spawn, a subscription usage limit, and a run a human marked <code>excluded_from_precision</code> with a written reason through <code>pnpm forge exclude-run</code>. Everything else counts against the model.</p>
+
+<p>The list exists because of what happens without it. On 2026-10-27, after an 18:57 restart, every Worker-Dev run started hitting its 8-round iteration cap. FE-57 twice, MW-139 twice. Each run spent all eight rounds "fixing" a failing test it could not see the cause of.</p>
+
+<p>The cause was not the model. A test merged in PR #155 shelled out to <code>git</code>. CI has git; the run sandbox does not. So <code>pnpm check</code> failed on <code>main</code> inside every sandbox, before the agent had changed a line. Reproduced on commit 623cec6e in a fresh sandbox: 1 failed, 484 passed, that one test.</p>
+
+<p>Four runs, zero builds, a perfectly good model. To size the damage, put four unearned failures on top of the 2026-10-21 record: 10 of 12 becomes 10 of 16, and the lower bound drops from 0.552 to 0.386. The view has no clause for "the sandbox lacks git." The only way those four leave the denominator is a human running <code>exclude-run</code> with the reason typed out, and the reason is stored on the run node where the next person can read it.</p>
+
+<p>That is the rule I would carry anywhere: the environment's failures are excluded by name, one clause per cause, and a human writes down why. An exclusion list you can grow silently is a precision score you can inflate silently.</p>
+
+<h2>What this costs</h2>
+
+<p>First, the override means the floor is not doing the work. The merge conditions are. If I removed them and left the 0.85, nothing would merge; if I removed the 0.85 and left them, today's behavior would not change. I should be honest that the trust score is currently a dashboard, and the containment is the policy.</p>
+
+<p>Second, the allowlist let through something I would have read. On 2026-10-23 at 15:17 UTC the App merged PR #79, which added <code>lib/public-api/auth.ts</code> and its test: sha256 token hashing for the public API.</p>
+
+<p>The always-excluded list in <code>agents/_lib/automerge.py</code> names <code>app/api/core/**</code>, <code>lib/core-api/**</code>, <code>lib/agent-auth.ts</code>, <code>lib/session.ts</code>, <code>lib/db.ts</code>, <code>proxy.ts</code>, the decision and plan docs, and the config files. It does not name <code>lib/public-api/**</code>. The PR was 135 lines, CI was green, and a different model had reviewed it, so by the written rules it was a correct merge. By my rules it was a gap in the written rules, and the fix is one more path in that list.</p>
+
+<p>Third, "built" means a branch passed <code>pnpm check</code>. It does not mean the code was right, or that the work item was done. The planning doc that started this had an earlier Worker-Dev run on a local Qwen3.6 model go 34 minutes and 118,714 output tokens with nothing written; that counts as a failure. A run that writes the wrong thing cleanly counts as a build. The score measures what the gate measures.</p>
+
+<p>Fourth, n = 14. Fourteen auto-merges at 14 of 14 is a lower bound of 0.78, which is below the floor those merges were supposed to be governed by. The sample that would justify the override has not been collected yet, and it cannot be collected without the override.</p>
+
+<p>Last, a disclosure about this essay. The Supabase instance that holds these views was not running on the machine when I wrote it, and I did not start it. The 10-of-12 figure is from the ADR dated 2026-10-21; the pull-request counts are from GitHub as of 2026-11-08; the Wilson numbers I recomputed. I do not know today's precision row, and I would rather say so than quote a stale one as current.</p>
+
+<h2>The rule</h2>
+
+<p><strong>Score an agent on the Wilson 95% lower bound of built over attributable runs, use one function for ranking and for autonomy, and write the exclusion list as named clauses with a human-typed reason for anything not on it.</strong> Then read the table above before you pick the floor. Whatever number you choose, it is a ceiling on the failure rate you will tolerate forever, and it is a run count you have to earn before anything is trusted.</p>
+
+<p>If you are gating agent autonomy on a success rate today, I would like to see your n. If it is under 22, the bound says you do not know yet, and I would trade notes on what you are excluding from the denominator.</p>
+`,
+  },
+  {
     slug: 'thinking-is-a-role-not-a-default',
     title: '3,736 Tokens for Five Words: Thinking Is a Role, Not a Default',
     description:
