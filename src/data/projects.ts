@@ -299,9 +299,9 @@ above the guide's high end without a written reason, and computes every threshol
 read becomes a validation error, not a wrong tax form.</p>
 
 <h2>Install</h2>
-<p>Claude Desktop: download the .mcpb from the latest release and double-click it. Claude Code:
-<code>claude mcp add goodwill -- npx -y goodwill-mcp server start</code>. Drop the receipt and
-item photos in a folder and say "log my drop-off."</p>`,
+<p>Claude Desktop: download the .mcpb from the latest release and double-click it. Claude Code or
+any other MCP client: clone the repository and follow the README. Drop the receipt and item photos
+in a folder and say "log my drop-off."</p>`,
   },
 
   {
