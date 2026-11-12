@@ -53,6 +53,18 @@ export const KIND_LABELS: Record<ChangeKind, string> = {
  */
 const shipped: ChangeEntry[] = [
   {
+    date: '2026-11-11',
+    kind: 'tool',
+    title: 'goodwill-mcp — log a donation from a receipt photo, get Form 8283 rows at year end',
+    summary:
+      'An open-source MCP server for Claude. Photos in a folder, "log my drop-off" in chat: the model reads the receipt and items, deterministic rules price them from the published Goodwill guide and roll the year into Form 8283 Section A rows with $500 and $5,000 flags. Four tools, one SQLite file, 13 end-to-end tests, a one-click bundle for Claude Desktop. Not affiliated with Goodwill.',
+    links: [
+      { label: 'Case study', href: '/projects/goodwill-mcp' },
+      { label: 'MAKaminski/goodwill-mcp', href: 'https://github.com/MAKaminski/goodwill-mcp' },
+    ],
+    tags: ['TypeScript', 'MCP', 'SQLite', 'Claude'],
+  },
+  {
     date: '2026-09-23',
     kind: 'feature',
     title: 'Added the Papers section — long-form write-ups as PDFs',

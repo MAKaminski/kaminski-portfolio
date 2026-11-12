@@ -221,6 +221,90 @@ The design decisions are mine to discuss; the deployment specifics are not.</em>
   },
 
   {
+    slug: 'goodwill-mcp',
+    title: 'goodwill-mcp — Log a Donation From a Receipt Photo, Get Form 8283 Rows at Year End',
+    summary:
+      'An open-source MCP server: Claude reads the receipt and item photos, deterministic rules price the items and roll the year into Form 8283 Section A rows.',
+    date: '2026-11-11',
+    tier: 'case-study',
+    domain: 'Personal finance · MCP tools',
+    role:
+      'I set the scope (four tools, no model calls in the server), the tax rules the code enforces, and the line between what the model reads and what code decides. The server, tests and release pipeline were built with Claude Code against that contract in one session.',
+    problem: `
+<p>Noncash donations are where a lot of people leave deductions on the table or claim them badly.
+The charity's receipt carries no dollar value, so the donor sets fair market value, keeps the
+paper trail and, once the year's noncash total passes $500, files Form 8283. The free tool many
+people used for this was retired, and the habit that replaced it is a shoebox of receipts.</p>
+<p>The $500 figure is also widely misread as a per-receipt cap. On Form 8283 it only decides
+whether three columns are required, and similar items are grouped for the whole year, so capping
+each receipt gives up deduction without saving any paperwork. The line that does bite is $5,000
+per group of similar items, where a qualified appraisal becomes mandatory.</p>`,
+    constraints: [
+      'The server makes no model calls. Claude reads the photos; pricing, thresholds and Form 8283 grouping are pure functions.',
+      'It reports fair market value donated, never tax saved: noncash gifts only help itemizers.',
+      'Items below good used condition are left out, because the IRS disallows them.',
+      'Everything stays on the user\'s machine: one SQLite file and a folder of receipt photos.',
+      'Not affiliated with Goodwill Industries; prices come from the ranges Goodwill publishes, with the source in the file.',
+    ],
+    whatShipped: [
+      'Four MCP tools from one registry: intake_open, donation_create, donation_update, donation_report. The same commands run on a CLI with --json.',
+      'A SQLite ledger with eight linked tables, a receipt-photo archive keyed by SHA-256 and an append-only revision history.',
+      'Form 8283 Section A rows grouped by similar items, $500 and $5,000 flags with a $4,000 early warning, and paste-ready text for a charity\'s donor portal.',
+      'A one-click .mcpb bundle for Claude Desktop, a tag-driven release workflow to npm, and CI on Linux and macOS.',
+    ],
+    outcome: [
+      {
+        metric: '13 of 13 end-to-end tests passing, including the MCP server over stdio',
+        detail:
+          'The suite drives the real CLI and server: HEIC rejection, condition rules, duplicate receipts, the guide ceiling, Form 8283 grouping, the appraisal warning and voiding.',
+        source: 'https://github.com/MAKaminski/goodwill-mcp/blob/main/test/cli.test.mjs',
+        sourceLabel: 'Test suite',
+      },
+      {
+        metric: '$0 server cost; about $0.044 per logged donation in model tokens (estimate)',
+        detail:
+          'Three photos at roughly 1,600 tokens each plus 2,200 of prompt, two model calls, priced at Sonnet rates with the second call cached. The server itself runs no model.',
+        source: 'https://github.com/MAKaminski/goodwill-mcp/blob/main/docs/PROPOSAL.md',
+        sourceLabel: 'Proposal, cost section',
+      },
+      {
+        metric: 'One Form 8283 line for a whole year of clothing',
+        detail:
+          'Two donations, 462 items, three kinds of clothing roll into a single Section A row with date contributed "Various" and method "Thrift shop value".',
+        source: 'https://github.com/MAKaminski/goodwill-mcp#what-it-looks-like',
+        sourceLabel: 'README sample output',
+      },
+    ],
+    outcomePending:
+      'Downloads and installs are not reported yet: v0.1.0 shipped on 2026-11-11.',
+    artifacts: [
+      { kind: 'repo', label: 'MAKaminski/goodwill-mcp', href: 'https://github.com/MAKaminski/goodwill-mcp' },
+      { kind: 'live', label: 'Download v0.1.0 for Claude Desktop', href: 'https://github.com/MAKaminski/goodwill-mcp/releases/latest' },
+      { kind: 'doc', label: 'Architecture: sequence, layers, ERD', href: 'https://github.com/MAKaminski/goodwill-mcp/blob/main/ARCHITECTURE.md' },
+    ],
+    stack: ['TypeScript', 'Node.js', 'MCP SDK', 'SQLite', 'Zod', 'GitHub Actions'],
+    logos: ['TypeScript', 'Claude'],
+    body: `
+<h2>By the numbers</h2>
+<p>Tools: 4. CLI commands: 6. Tables: 8. Price-guide categories: 49. End-to-end tests: 13.
+Server cost per donation: $0. Model cost per donation: about $0.044 on Sonnet (estimate).
+Form 8283 trigger: noncash total over $500 for the year. Appraisal trigger: one group of similar
+items over $5,000 for the year.</p>
+
+<h2>Where the model stops and code starts</h2>
+<p>Claude is good at reading a crumpled receipt and counting blouses in a photo. It should not be
+the thing that decides whether a line crosses $5,000. So the split is hard: the host model fills a
+typed draft, and the server validates every field, prices from a versioned guide, refuses a value
+above the guide's high end without a written reason, and computes every threshold. A wrong model
+read becomes a validation error, not a wrong tax form.</p>
+
+<h2>Install</h2>
+<p>Claude Desktop: download the .mcpb from the latest release and double-click it. Claude Code or
+any other MCP client: clone the repository and follow the README. Drop the receipt and item photos
+in a folder and say "log my drop-off."</p>`,
+  },
+
+  {
     slug: 'trade-site-generator',
     title: 'Sites That Differ by Data, Not Code — a Generator for Trade-Business Websites',
     summary:
