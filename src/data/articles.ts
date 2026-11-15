@@ -24,6 +24,96 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: 'where-to-cut-an-agent-in-half',
+    title: 'Zero Model Calls, One Flag Worth $4,500: Where to Cut an Agent in Half',
+    description:
+      'goodwill-mcp, the open-source MCP server I shipped on 2026-11-11, reads donation receipts with the host model and prices, thresholds and Form 8283 rows with code: 854 lines of TypeScript, 0 model calls, a 59-line rules file, 49 guide categories. Re-measured 2026-11-15 from a fresh clone: donation_create 17 ms then 2 ms and 1 ms over stdio against a 50 ms budget, CLI start 149 ms against 300 ms, 13 of 13 tests in 3.6 s. The honest part: validation checks shape, not truth. 45 blouses and 450 blouses are both valid drafts ($315 vs $3,150), and the basis flag the prompt defaults to mid moves the same 450 blouses from $900 to $3,150 to $5,400, across the $5,000 appraisal line. The eval for the model half (20 sets, 90% category accuracy, FMV within 10%) is in the proposal and not in the repo; the npm package is still a 404. Cut the agent where probability ends, then test the side that can be wrong.',
+    date: '2026-11-15',
+    readMinutes: 7,
+    logos: ['TypeScript', 'MCP', 'Claude'],
+    series: 'Field Notes',
+    body: `
+<p>On 2026-11-11 I shipped an MCP server that reads thrift-store donation receipts, prices every item, and writes Form 8283 rows. It makes zero model calls. The same 450 blouses come out at $900, $3,150 or $5,400 depending on one three-letter flag the model is told to default.</p>
+
+<p>The conclusion first: <strong>cut an agent in half at the line where probability ends, put every dollar of arithmetic on the deterministic side, and then admit that a validator checks the shape of the model's answer, not its truth.</strong> The cut is the easy part. Knowing what it does not buy you is the part that keeps you out of trouble.</p>
+
+<p>The project is <a href="https://github.com/MAKaminski/goodwill-mcp">goodwill-mcp</a>, open source, MIT, v0.1.0. Claude reads the receipt and item photos. The server validates the draft, prices from a published guide, stores one SQLite file on your machine and produces the year-end rows. I wrote the contract; the code, tests and release pipeline were built with Claude Code against it in one session. Every number below was re-measured on 2026-11-15 from a fresh clone.</p>
+
+<h2>The cut: 854 lines of TypeScript, no model inside</h2>
+
+<p>The server is 854 lines across nine TypeScript files. A grep for <code>anthropic</code>, <code>openai</code> or <code>fetch(</code> across <code>src/</code> returns 0 hits. The model that reads the photos is the host's model, the one already running the chat. The server never pays for a token and never waits on one.</p>
+
+<p>The tax rules live in one 59-line file, <code>rules.ts</code>, with four threshold constants and five small pure functions. Form 8283 is required when the year's noncash total is over $500. A qualified appraisal is required when one group of similar items is over $5,000 in a year, with a warning at $4,000. A single donation of $250 or more needs the charity's written acknowledgment. Items below good used condition are excluded.</p>
+
+<p>Those four thresholds are the whole reason the split exists. A model should never be the thing deciding whether a line crossed $5,000. A constant should.</p>
+
+<p>The price guide is data, not code: 49 clothing categories from the ranges Goodwill Industries International publishes for items commonly sold in its stores, 18 women's, 16 children's, 15 men's. Women's blouses are $2 to $12. Women's jeans are $4 to $21. Men's coats are $7 to $40. Another charity is one more JSON file.</p>
+
+<h2>What the split costs in latency: almost nothing</h2>
+
+<p>The proposal set budgets before the code existed, so this is the first time I have checked them. Over the MCP stdio path, <code>donation_create</code> took 17 ms on the first call, which includes opening the database and running migrations, then 2 ms and 1 ms. <code>donation_report</code> took 2 ms. The budget was 50 ms at p95.</p>
+
+<p>From the command line, which pays Node's startup each time, <code>--help</code> ran in a median of 149 ms over seven runs, against a 300 ms budget. A full <code>donation create</code> on a fresh database was a median 182 ms. The 13-test suite, which drives the real CLI and the real server over stdio, passed 13 of 13 in 3.6 seconds.</p>
+
+<p>Set that against the model half. The proposal estimates 18 seconds end to end for one logged donation on Sonnet, with three photos at roughly 1,600 tokens each plus 2,200 tokens of prompt and schema. The deterministic half is a rounding error on the probabilistic half, by a factor of about a thousand.</p>
+
+<h2>What validation actually catches</h2>
+
+<p>The host model fills a typed draft and the server checks it with Zod. Here is the honest inventory of what that check can refuse, straight from the code.</p>
+
+<table>
+  <thead>
+    <tr><th>Model error</th><th>What the server does</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Category key that is not in the guide</td><td><code>NO_RATE_MATCH</code>: saved at $0 and flagged</td></tr>
+    <tr><td>Unit value above the guide's high end</td><td><code>VALUE_OVER_GUIDE</code>: refused unless an <code>override_reason</code> is written</td></tr>
+    <tr><td>Condition fair or poor</td><td><code>BELOW_GOOD_CONDITION</code>: item excluded, noted</td></tr>
+    <tr><td>Same receipt twice (SHA-256 of the photo, or receipt number)</td><td><code>DUPLICATE_RECEIPT</code>: returns the existing donation, changes nothing</td></tr>
+    <tr><td>Date not <code>YYYY-MM-DD</code>, quantity not a positive integer</td><td>Schema rejection, exit 1</td></tr>
+    <tr><td>Quantity 45 when the photo shows 450</td><td>Accepted. $315 logged instead of $3,150.</td></tr>
+    <tr><td>Date 2026-11-07 when the receipt says 2026-01-07</td><td>Accepted.</td></tr>
+  </tbody>
+</table>
+
+<p>I ran the 45-versus-450 row this week to be sure, and the date row follows from the schema, which checks the format and nothing else. Forty-five blouses and 450 blouses are both valid drafts. The validator cannot know how many blouses were in the photo, because knowing that is the model's entire job. A shape check cannot be a truth check, and the split does not change that.</p>
+
+<p>The prompt knows this. It tells the model: count only what you can see, and if a count is an estimate, say so and ask before logging. That is the right instruction. It is also the probabilistic half supervising itself.</p>
+
+<h2>The flag worth $4,500</h2>
+
+<p>Every guide entry is a range, and <code>donation_create</code> takes a <code>basis</code> of <code>low</code>, <code>mid</code> or <code>high</code> to pick a point in it. The median guide entry has a high end 5.25 times its low end. The widest is 12 times. The narrowest is 2 times.</p>
+
+<p>Take the test suite's own donation, 450 women's blouses in good condition. At <code>low</code> the year logs $900: Form 8283 required, nothing else. At <code>mid</code> it logs $3,150. At <code>high</code> it logs $5,400, and the server correctly reports that clothing is over $5,000 for the year, so a qualified appraisal and Section B are required.</p>
+
+<p>Same photos, same count, same rules. One parameter moved the result $4,500 and across the only line in this domain that creates real work. The rules did exactly what they should. The choice of input was the whole outcome.</p>
+
+<p>The prompt defaults it: use <code>mid</code> unless told otherwise. So the deterministic half is airtight on a choice that the probabilistic half makes by default, from an instruction I wrote. That is the split drawn honestly: the rules own the arithmetic, and the inputs to the arithmetic still come from somewhere.</p>
+
+<h2>The missing half of the measurement</h2>
+
+<p>The proposal specifies an eval for the model half: 20 synthetic receipt-and-photo sets with golden JSON, store and date exact at 100%, category accuracy at 90% or better, total fair market value within plus or minus 10%. The architecture diagram has an <code>eval run</code> command and a <code>fixtures/</code> directory.</p>
+
+<p>Neither exists in the repository. <code>src/commands/</code> holds three files, intake, donation and valuation. There is no <code>fixtures/</code> folder. The 13 tests that pass all exercise the deterministic side with hand-written drafts, which is why they pass in 3.6 seconds and why they prove nothing about the side that costs 18 seconds and makes the mistakes.</p>
+
+<p>So the honest status on 2026-11-15 is: the half that cannot be wrong is tested to the budget, and the half that can be wrong has a budget and no test. I have measured zero of the model's error rate. The eval is the next commit, and it should have been in the first one.</p>
+
+<h2>What else is not done</h2>
+
+<p>The npm package is not published; <code>npm view goodwill-mcp</code> returned 404 this morning, four days after the release; the README says as much and points at the source install, which works. The one-click <code>.mcpb</code> bundle for Claude Desktop is on the GitHub release. The proposal's cost line, about $0.044 per logged donation on Sonnet, is the proposal's own rate card and an estimate, not a bill I have read.</p>
+
+<p>And the guide is one organization's 2023 ranges for clothing only. Household goods, furniture and electronics are on the roadmap, which means a donation of a lamp today is priced at $0 with a <code>NO_RATE_MATCH</code> flag, or at whatever <code>unit_value</code> the model proposes, with the server able to refuse only if a guide entry exists to refuse against. For a category with no entry, there is nothing to refuse against.</p>
+
+<h2>The rule I would carry to the next one</h2>
+
+<p>Put the arithmetic, the thresholds and the audit trail on the side that cannot hallucinate, and make that side free to run. That part took one session and it is the part the tests cover.</p>
+
+<p>Then list, in a table, every model error the deterministic side cannot see, and build the eval for exactly those rows before you call the thing done. I did the first half and published. The second half is a file that does not exist yet, and until it does, the zero in "zero model calls" is a cost figure, not a correctness claim.</p>
+
+<p>If you have drawn this line in a system of your own and found a cleaner place to put the eval, I would trade notes.</p>
+`,
+  },
+  {
     slug: 'rank-agents-on-the-wilson-lower-bound',
     title: '126 Pull Requests, All Merged, Trust Score 0.55: Rank Agents on the Wilson Lower Bound',
     description:
