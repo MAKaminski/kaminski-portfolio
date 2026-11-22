@@ -1,0 +1,186 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico" sizes="48x48"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><link rel="icon" type="image/png" sizes="192x192" href="/logo192.png"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#060606"/><title>182.5 CU-Hours to Poll, Zero for the Timer: A 10-Second Undo Window That Lets the Database Sleep | Michael Kaminski</title><meta name="title" content="182.5 CU-Hours to Poll, Zero for the Timer: A 10-Second Undo Window That Lets the Database Sleep | Michael Kaminski"><meta name="description" content="svelte-accounting-agent, the bookkeeping agent I pushed to GitHub on 2026-11-21 (24 commits, 2026-11-19 to 11-21), gives the reviewer ten seconds to undo any approval before it writes the ledger. Built as a one-second poll, that window costs 730 h x 0.25 CU = 182.5 CU-hours a month on Neon's Free plan, 1.8x the 100 CU-hour allowance, because the poll keeps a scale-to-zero database awake through the idle hours. Built as one setTimeout per company, armed on every write for the earliest pending_until and re-armed after each commit, it costs nothing: the commit fires inside the five minutes Neon stays awake after the approve anyway, and the repo's estimate for the whole app is about 25 CU-hours, 15 of them the optional hourly ledger pull. The deadline lives in the Postgres row, so a lost timer is a late commit, never a lost one: a boot sweep commits everything overdue, and a pg_try_advisory_lock on a dedicated connection makes one machine the leader while a follower retries every 30 s. Re-run 2026-11-22 from a fresh clone: 16 of 16 write-path and learning tests in 20.9 s, two of them the window itself. Costs admitted: the setTimeout path and the lock election have no test of their own; an approval handled by the follower during a deploy overlap can stretch the window to about 40 s; and the number the design bets on, the first query after Neon scales to zero, is still TBD in the envelope table."><meta name="author" content="Michael Kaminski"><meta name="robots" content="index, follow, max-image-preview:large"><meta property="og:type" content="article"><meta property="profile:first_name" content="Michael"><meta property="profile:last_name" content="Kaminski"><meta property="og:url" content="https://www.michael-kaminski.io/writing/undo-window-that-lets-the-database-sleep"><meta property="og:title" content="182.5 CU-Hours to Poll, Zero for the Timer: A 10-Second Undo Window That Lets the Database Sleep | Michael Kaminski"><meta property="og:description" content="svelte-accounting-agent, the bookkeeping agent I pushed to GitHub on 2026-11-21 (24 commits, 2026-11-19 to 11-21), gives the reviewer ten seconds to undo any approval before it writes the ledger. Built as a one-second poll, that window costs 730 h x 0.25 CU = 182.5 CU-hours a month on Neon's Free plan, 1.8x the 100 CU-hour allowance, because the poll keeps a scale-to-zero database awake through the idle hours. Built as one setTimeout per company, armed on every write for the earliest pending_until and re-armed after each commit, it costs nothing: the commit fires inside the five minutes Neon stays awake after the approve anyway, and the repo's estimate for the whole app is about 25 CU-hours, 15 of them the optional hourly ledger pull. The deadline lives in the Postgres row, so a lost timer is a late commit, never a lost one: a boot sweep commits everything overdue, and a pg_try_advisory_lock on a dedicated connection makes one machine the leader while a follower retries every 30 s. Re-run 2026-11-22 from a fresh clone: 16 of 16 write-path and learning tests in 20.9 s, two of them the window itself. Costs admitted: the setTimeout path and the lock election have no test of their own; an approval handled by the follower during a deploy overlap can stretch the window to about 40 s; and the number the design bets on, the first query after Neon scales to zero, is still TBD in the envelope table."><meta property="og:image" content="https://www.michael-kaminski.io/og-image.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:site_name" content="Michael Kaminski"><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://www.michael-kaminski.io/writing/undo-window-that-lets-the-database-sleep"><meta property="twitter:title" content="182.5 CU-Hours to Poll, Zero for the Timer: A 10-Second Undo Window That Lets the Database Sleep | Michael Kaminski"><meta property="twitter:description" content="svelte-accounting-agent, the bookkeeping agent I pushed to GitHub on 2026-11-21 (24 commits, 2026-11-19 to 11-21), gives the reviewer ten seconds to undo any approval before it writes the ledger. Built as a one-second poll, that window costs 730 h x 0.25 CU = 182.5 CU-hours a month on Neon's Free plan, 1.8x the 100 CU-hour allowance, because the poll keeps a scale-to-zero database awake through the idle hours. Built as one setTimeout per company, armed on every write for the earliest pending_until and re-armed after each commit, it costs nothing: the commit fires inside the five minutes Neon stays awake after the approve anyway, and the repo's estimate for the whole app is about 25 CU-hours, 15 of them the optional hourly ledger pull. The deadline lives in the Postgres row, so a lost timer is a late commit, never a lost one: a boot sweep commits everything overdue, and a pg_try_advisory_lock on a dedicated connection makes one machine the leader while a follower retries every 30 s. Re-run 2026-11-22 from a fresh clone: 16 of 16 write-path and learning tests in 20.9 s, two of them the window itself. Costs admitted: the setTimeout path and the lock election have no test of their own; an approval handled by the follower during a deploy overlap can stretch the window to about 40 s; and the number the design bets on, the first query after Neon scales to zero, is still TBD in the envelope table."><meta property="twitter:image" content="https://www.michael-kaminski.io/og-image.jpg"><meta name="geo.region" content="US-GA"><meta name="geo.placename" content="Atlanta"><meta name="geo.position" content="33.7490;-84.3880"><meta name="ICBM" content="33.7490, -84.3880"><script type="application/ld+json">{
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://www.michael-kaminski.io/#person",
+      "name": "Michael Kaminski",
+      "givenName": "Michael",
+      "familyName": "Kaminski",
+      "url": "https://www.michael-kaminski.io/",
+      "image": "https://www.michael-kaminski.io/og-image.jpg",
+      "email": "mailto:MKaminski1337@gmail.com",
+      "telephone": "+1-404-838-8613",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Hiring and project enquiries",
+        "email": "mailto:MKaminski1337@gmail.com",
+        "telephone": "+1-404-838-8613",
+        "url": "https://calendly.com/kaminski1337/15min",
+        "availableLanguage": "English"
+      },
+      "seeks": {
+        "@type": "Demand",
+        "name": "Senior product roles at the agent layer — Technical Product Manager, Senior Product Owner, or PM for an agent platform. Fractional and full-time."
+      },
+      "potentialAction": {
+        "@type": "ScheduleAction",
+        "name": "Book a Call",
+        "target": "https://calendly.com/kaminski1337/15min"
+      },
+      "jobTitle": "Senior Product Owner — Collections & Servicing (AI Agent Platform Lead)",
+      "description": "Technical product manager working at the agent layer. Took an AI agent capability from prototype through security, legal, and compliance review to production inside a regulated lender. Builds custom MCP servers, multi-agent pipelines, and eval harnesses in Python and TypeScript.",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Stellantis Financial Services US",
+        "url": "https://www.stellantisfinancialservices.com/"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Atlanta",
+        "addressRegion": "GA",
+        "addressCountry": "US"
+      },
+      "alumniOf": [
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Georgia State University",
+          "url": "https://www.gsu.edu/",
+          "description": "MBA, 2011"
+        },
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "DeVry University",
+          "url": "https://www.devry.edu/",
+          "description": "B.S. Computer Science, 2008"
+        }
+      ],
+      "knowsAbout": [
+        "Jev (TypeSafe classifier model)",
+        "AI agents",
+        "Agentic workflow design",
+        "Model Context Protocol (MCP)",
+        "Multi-agent orchestration",
+        "Claude Agent SDK",
+        "Eval harness design",
+        "Retrieval-augmented generation",
+        "Large language models",
+        "Python",
+        "TypeScript",
+        "Terraform",
+        "Kubernetes",
+        "PostgreSQL",
+        "Regulated lending technology",
+        "Payments infrastructure",
+        "Product management"
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/michaelxaxkaminski",
+        "https://github.com/MAKaminski",
+        "https://dev.to/makaminski1337",
+        "https://x.com/EBITDA_Engineer"
+      ]
+    }</script><link rel="apple-touch-icon" href="/logo192.png"/><link rel="manifest" href="/manifest.json"/><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" media="print" onload='this.media="all"'><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap"></noscript><script defer="defer" src="/static/js/main.9846af76.js"></script><link href="/static/css/main.843cbdf5.css" rel="stylesheet"><link rel="canonical" href="https://www.michael-kaminski.io/writing/undo-window-that-lets-the-database-sleep"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.michael-kaminski.io/"},{"@type":"ListItem","position":2,"name":"Writing","item":"https://www.michael-kaminski.io/writing"},{"@type":"ListItem","position":3,"name":"182.5 CU-Hours to Poll, Zero for the Timer: A 10-Second Undo Window That Lets the Database Sleep","item":"https://www.michael-kaminski.io/writing/undo-window-that-lets-the-database-sleep"}]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","isPartOf":{"@type":"Blog","@id":"https://www.michael-kaminski.io/writing#blog"},"headline":"182.5 CU-Hours to Poll, Zero for the Timer: A 10-Second Undo Window That Lets the Database Sleep","description":"svelte-accounting-agent, the bookkeeping agent I pushed to GitHub on 2026-11-21 (24 commits, 2026-11-19 to 11-21), gives the reviewer ten seconds to undo any approval before it writes the ledger. Built as a one-second poll, that window costs 730 h x 0.25 CU = 182.5 CU-hours a month on Neon's Free plan, 1.8x the 100 CU-hour allowance, because the poll keeps a scale-to-zero database awake through the idle hours. Built as one setTimeout per company, armed on every write for the earliest pending_until and re-armed after each commit, it costs nothing: the commit fires inside the five minutes Neon stays awake after the approve anyway, and the repo's estimate for the whole app is about 25 CU-hours, 15 of them the optional hourly ledger pull. The deadline lives in the Postgres row, so a lost timer is a late commit, never a lost one: a boot sweep commits everything overdue, and a pg_try_advisory_lock on a dedicated connection makes one machine the leader while a follower retries every 30 s. Re-run 2026-11-22 from a fresh clone: 16 of 16 write-path and learning tests in 20.9 s, two of them the window itself. Costs admitted: the setTimeout path and the lock election have no test of their own; an approval handled by the follower during a deploy overlap can stretch the window to about 40 s; and the number the design bets on, the first query after Neon scales to zero, is still TBD in the envelope table.","datePublished":"2026-11-22","dateModified":"2026-11-22","author":{"@id":"https://www.michael-kaminski.io/#person"},"publisher":{"@id":"https://www.michael-kaminski.io/#person"},"mainEntityOfPage":"https://www.michael-kaminski.io/writing/undo-window-that-lets-the-database-sleep","url":"https://www.michael-kaminski.io/writing/undo-window-that-lets-the-database-sleep","image":"https://www.michael-kaminski.io/og-image.jpg","inLanguage":"en"}</script></head><body><div id="root">
+<main style="max-width:52rem;margin:0 auto;padding:4rem 1.25rem;color:#e9e9e9;background:#060606;font-family:system-ui,sans-serif;line-height:1.6">
+<nav aria-label="Primary"><ul><li><a href="/">Home</a></li><li><a href="/projects">Projects</a></li><li><a href="/websites">Websites</a></li><li><a href="/products">Products</a></li><li><strong>Writing</strong></li><li><a href="/papers">Papers</a></li><li><a href="/clips">Field clips</a></li><li><a href="/changelog">Changelog</a></li></ul></nav>
+
+<article>
+<h1>182.5 CU-Hours to Poll, Zero for the Timer: A 10-Second Undo Window That Lets the Database Sleep</h1>
+<p><time datetime="2026-11-22">2026-11-22</time> · 8 min read · by Michael Kaminski</p>
+<p><em>svelte-accounting-agent, the bookkeeping agent I pushed to GitHub on 2026-11-21 (24 commits, 2026-11-19 to 11-21), gives the reviewer ten seconds to undo any approval before it writes the ledger. Built as a one-second poll, that window costs 730 h x 0.25 CU = 182.5 CU-hours a month on Neon's Free plan, 1.8x the 100 CU-hour allowance, because the poll keeps a scale-to-zero database awake through the idle hours. Built as one setTimeout per company, armed on every write for the earliest pending_until and re-armed after each commit, it costs nothing: the commit fires inside the five minutes Neon stays awake after the approve anyway, and the repo's estimate for the whole app is about 25 CU-hours, 15 of them the optional hourly ledger pull. The deadline lives in the Postgres row, so a lost timer is a late commit, never a lost one: a boot sweep commits everything overdue, and a pg_try_advisory_lock on a dedicated connection makes one machine the leader while a follower retries every 30 s. Re-run 2026-11-22 from a fresh clone: 16 of 16 write-path and learning tests in 20.9 s, two of them the window itself. Costs admitted: the setTimeout path and the lock election have no test of their own; an approval handled by the follower during a deploy overlap can stretch the window to about 40 s; and the number the design bets on, the first query after Neon scales to zero, is still TBD in the envelope table.</em></p>
+
+
+<p>A bookkeeping agent I pushed to GitHub on 2026-11-21 gives the reviewer ten seconds to undo any approval before it writes the ledger. The obvious way to build that is a loop that asks the database every second whether anything is due. On Neon's Free plan that loop costs 182.5 CU-hours a month against a 100 CU-hour allowance. The agent uses timers instead and the undo window costs nothing.</p>
+
+<p>The conclusion first: <strong>a deferred action should be a timer armed at write time, not a poll, because the poll is paid for by the idle hours and the timer is paid for by the busy ones.</strong> On a database that bills by compute-hour and sleeps when nobody talks to it, that difference is the whole budget.</p>
+
+<p>The project is <a href="https://github.com/MAKaminski/svelte-accounting-agent">svelte-accounting-agent</a>, public, 24 commits between 2026-11-19 and 2026-11-21. It codes bank and card transactions to QuickBooks accounts for a small resale business of mine, shows its reasoning, and never writes the books without a recorded human approval. SvelteKit, Postgres on Neon, Claude through the API, one Fly machine. Every number below is from the repository as cloned on 2026-11-22 at <code>f802a27</code>, or from a test run I did the same day.</p>
+
+<h2>The arithmetic: 182.5 CU-hours versus 100</h2>
+
+<p>Neon's Free plan gives each project 100 CU-hours of compute a month and scales a compute to zero after five minutes of inactivity. The five-minute timeout cannot be disabled on Free. The smallest compute is 0.25 CU. Those are Neon's published terms as of a documentation page last updated 2026-11-18.</p>
+
+<p>A month is about 730 hours. A scheduler that queries the database once a second never lets it sleep, so it burns 730 × 0.25 = 182.5 CU-hours. That is 1.8 times the entire allowance before the app has served a single request.</p>
+
+<p>The same app with no polling sends zero queries while idle. Neon sleeps. The compute it uses is whatever the reviewer's own actions cost, plus any scheduled jobs. The repository's estimate for the optional hourly ledger pull is 24 × 30 wake-ups of five minutes each, 60 hours × 0.25 CU = 15 CU-hours, plus roughly 10 CU-hours of real usage, about 25 CU-hours. A quarter of the cap instead of nearly double it.</p>
+
+<p>Nothing about the undo window changed between those two numbers. Only the way the app waits.</p>
+
+<h2>What the undo window is</h2>
+
+<p>Approve has two modes. <code>approve</code> now writes the ledger immediately. <code>approve --later</code> stamps the entry with <code>pending_until</code>, the current time plus <code>UNDO_WINDOW_MS</code>, which defaults to 10,000. The entry moves to <code>approved</code> and nothing external happens yet.</p>
+
+<p>Undo inside the window flips it back to <code>recommended</code>, clears <code>pending_until</code>, and records an <code>undone</code> decision. Undo after the window returns HTTP 409 <code>undo_window_closed</code>, with the state in the message, because by then the write to the ledger has started and a second system now owns the entry.</p>
+
+<p>The deadline lives in the database row, not in memory. That is the detail the rest of this depends on. Any process that can read <code>pending_until</code> can finish the job, which is what makes the timer safe to lose.</p>
+
+<p>There was a cheaper-looking design: approve immediately, and on undo call the ledger's "put it back in review" endpoint. The decision log rejects it on 2026-11-19 because undoing after mark-ready races the ledger's own sync to QuickBooks. A deferred commit is the only version where undo never has to unwrite anything.</p>
+
+<h2>One timer per company, re-armed on every write</h2>
+
+<p>The scheduler is 69 lines. The core of it is <code>armCommitTimer</code>: select the minimum <code>pending_until</code> among this company's <code>approved</code> and <code>coded</code> entries, and set one <code>setTimeout</code> for that moment plus 50 milliseconds of slack.</p>
+
+<p>If a timer already exists and fires no later than the new deadline, do nothing. If the new deadline is earlier, clear the old timer and arm the new one. If nothing is pending, clear the timer and remove it from the map.</p>
+
+<p>It is called from three places: after every API write in the request handler, because an approve or undo may have opened or closed a window; after each commit run, because the commit may have left later entries behind; and once per company at boot. When the timer fires, it runs <code>commitDue</code> inside that company's row-level-security context, which selects everything whose <code>pending_until</code> has passed and commits it, then re-arms.</p>
+
+<p>That is the entire mechanism. A company with no pending approvals has no timer, and the process makes no query on its behalf. Ten seconds after the last approve, the map is empty again.</p>
+
+<p>The timers are <code>unref</code>'d, so they never keep the Node process alive during a shutdown. The deadline is in Postgres, so a shutdown loses nothing but the alarm clock.</p>
+
+<h2>Why the undo window costs zero compute</h2>
+
+<p>Neon stays awake for five minutes after the last query. A reviewer approving an entry is a query, so the compute is awake when the window opens. The commit fires ten seconds later, well inside the five minutes the compute would have stayed up anyway. The window adds no wake-ups and extends no sessions.</p>
+
+<p>A one-second poll inverts that. The poll keeps the compute awake during the 23 hours a day when nobody is reviewing anything, to detect deadlines that only ever exist in the ten seconds after someone clicks. The cost is proportional to idleness. The timer's cost is proportional to use. For a tool a small business touches for a few minutes a day, that is the difference between 182.5 and about 25.</p>
+
+<h2>Recovery and the second machine</h2>
+
+<p>Two things can make a timer disappear: the process restarts, or a second copy of the process is running during a deploy. Both are handled, and one of them has a cost I want to name.</p>
+
+<p>At boot, the scheduler runs <code>commitDue</code> for every company and re-arms. Anything whose window expired while the process was down is committed on the first sweep. A deadline is never lost, only delayed by however long the process was off.</p>
+
+<p>Only one machine may run jobs. Each process tries <code>pg_try_advisory_lock</code> with a fixed key on a dedicated reserved connection and holds it for its lifetime. The holder is the leader; a follower retries every 30 seconds. When the old machine exits during a deploy, Postgres frees the lock and the new one takes it on its next attempt, then runs the boot sweep.</p>
+
+<p>This is also one reason the app uses Neon's direct endpoint instead of the pooled one: a session-level lock and the per-request session settings that row-level security depends on both die under transaction pooling.</p>
+
+<p>The cost: <code>armCommitTimer</code> is a no-op on a follower. During a deploy overlap, an approval handled by the follower arms nothing. It is caught by the new leader's boot sweep, which can be up to 30 seconds after the old leader exits. So in the worst case a ten-second undo window becomes a forty-second one, during deploys only. I accepted that over a second table of distributed timers.</p>
+
+<h2>What the tests prove, and what they do not</h2>
+
+<p>I ran the write-path and learning suites on 2026-11-22 from a fresh clone: 16 tests, 16 passed, 20.9 seconds on Node 22.23.5 against an in-process Postgres. Two of them are the window.</p>
+
+<p>"Approve later plus undo inside the window: no ledger write" approves with <code>--later</code>, runs <code>commitDue</code>, asserts zero writes to the ledger fixture, undoes, and asserts zero writes again. "Approve later: commits once the window passes" sets the window to 0 milliseconds, waits 5, runs <code>commitDue</code>, and asserts exactly two writes in order: update the entry, mark it ready.</p>
+
+<p>Both tests call <code>commitDue</code> directly. The scheduler short-circuits under the test runner, so the <code>setTimeout</code> path, the re-arming, and the advisory-lock election are not covered by a test. They are covered by the boot sweep, which makes any timer bug a delay rather than a loss. That is the kind of safety net you should have before you trust an alarm clock, and it is also an admission that the alarm clock itself is untested.</p>
+
+<p>The numbers in the repository's operating envelope were measured on 2026-11-21 on a local production build: 3 milliseconds from click to the row leaving the queue, <code>GET /api/entries</code> at 13.0 / 19.7 / 23.5 milliseconds p50 / p95 / p99, 551 milliseconds from process start to a healthy response.</p>
+
+<p>The hosted rows, including the one that matters most for this essay, the first query after Neon has scaled to zero, are still marked TBD. Neon's own documentation does not give a cold-start figure. The repository estimates 300 to 500 milliseconds and has not measured it.</p>
+
+<h2>The cost of letting the database sleep</h2>
+
+<p>Scale-to-zero is a trade, and the reviewer pays the other side of it. The first action after five idle minutes waits for the compute to wake. If the estimate holds, the queue page that renders in 180 milliseconds locally will take half a second on the first load of the morning. If the estimate is wrong, the first number I will see from production is how wrong.</p>
+
+<p>The second cost is that the whole design rests on one process holding one lock. There is no queue, no second worker, no retry service. For one machine and a handful of companies that is correct. At the point where commits must survive a region outage, the timer map becomes a job table and this essay's arithmetic changes, because a job table has to be polled by someone.</p>
+
+<p>The third is that the hourly pull, when it is on, is now the bill. Fifteen of the estimated 25 CU-hours are the ledger sync waking the database 720 times a month. The undo window is free; the thing that keeps the queue fresh is not.</p>
+
+<h2>The rule I would carry to the next one</h2>
+
+<p>When a system bills by the hour it is awake, write down what wakes it. A deferred action has exactly one moment it needs to run, and that moment is known at write time. Arm a timer for it, keep the deadline in the database so the timer is disposable, and sweep on boot so a lost timer is a late commit and never a lost one.</p>
+
+<p>Then measure the one number the design is betting on. Mine is the wake-up after idle, and it is still a TBD in the table.</p>
+
+<p>If you have run a deferred-commit window on a scale-to-zero database and have the cold-start number, I would trade notes.</p>
+
+</article>
+<p><a href="/writing">All writing</a> · <a href="/projects">Projects</a> · <a href="/">Michael Kaminski</a></p>
+<hr>
+<p class="cta"><a href="https://calendly.com/kaminski1337/15min">Book a Call</a> ·
+<a href="/resume.pdf" download>Download Resume</a> ·
+<a href="mailto:MKaminski1337@gmail.com">MKaminski1337@gmail.com</a> ·
+<a href="tel:+14048388613">(404) 838-8613</a> ·
+<a href="https://www.linkedin.com/in/michaelxaxkaminski">LinkedIn</a> ·
+<a href="https://github.com/MAKaminski">GitHub</a> ·
+<a href="https://dev.to/makaminski1337">DEV</a> ·
+<a href="https://x.com/EBITDA_Engineer">X</a></p>
+</main></div><noscript><h2>Michael Kaminski — I build AI agents that run in production</h2><p>Agent infrastructure, MCP servers, and eval harnesses inside a regulated lender. Python and TypeScript. Atlanta.</p><p>Michael Kaminski is a technical product manager working at the agent layer. He took an AI agent capability from prototype through security, legal, and compliance review to production inside a regulated lender, and builds custom Model Context Protocol (MCP) servers, multi-agent pipelines, and eval harnesses in Python and TypeScript.</p><p>He is Senior Product Owner, Collections &amp; Servicing at Stellantis Financial Services US, where the agent work sits inside that role. Earlier: Momnt (tech lead, credit analysis and accounting engine), GreenSky, HD Supply, KPMG, and The Home Depot. He also runs Modular Equity and founded Superior Contracting &amp; Maintenance.</p><ul><li>Email: MKaminski1337@gmail.com</li><li>LinkedIn: https://www.linkedin.com/in/michaelxaxkaminski</li><li>GitHub: https://github.com/MAKaminski</li><li>DEV: https://dev.to/makaminski1337</li></ul><p>Please enable JavaScript to view the full interactive portfolio.</p></noscript></body></html>
