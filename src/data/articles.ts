@@ -33,11 +33,21 @@ export const articles: Article[] = [
     logos: ['TypeScript', 'PostgreSQL', 'Claude'],
     series: 'Field Notes',
     body: `
-<p>A bookkeeping agent I pushed to GitHub on 2026-11-21 gives the reviewer ten seconds to undo any approval before it writes the ledger. The obvious way to build that is a loop that asks the database every second whether anything is due. On Neon's Free plan that loop costs 182.5 CU-hours a month against a 100 CU-hour allowance. The agent uses timers instead and the undo window costs nothing.</p>
+<aside class="tldr">
+<p class="tldr-label">In 30 seconds</p>
+<ul>
+<li><strong>What:</strong> <a href="https://github.com/MAKaminski/svelte-accounting-agent">svelte-accounting-agent</a> holds every approval for 10 seconds so the reviewer can undo it before the ledger is written.</li>
+<li><strong>The math:</strong> waiting with a 1-second poll costs 730 h &times; 0.25 CU = 182.5 CU-hours a month on a database that allows 100. Waiting with a timer costs nothing.</li>
+<li><strong>How:</strong> one timer per company, armed at write time for the earliest deadline. The deadline lives in the row, so a lost timer is a late commit, never a lost one.</li>
+<li><strong>The cost:</strong> the timer path has no test of its own, a deploy can stretch the window to about 40 seconds, and the cold-start number is still unmeasured.</li>
+</ul>
+</aside>
+
+<p>A bookkeeping agent I pushed to GitHub on 2026-11-21 gives the reviewer ten seconds to undo any approval before it writes the ledger. The obvious way to build that is a loop that asks the database every second whether anything is due. On <a href="https://neon.com/docs/introduction/free-tier">Neon's Free plan</a> that loop costs 182.5 CU-hours a month against a 100 CU-hour allowance. The agent uses timers instead and the undo window costs nothing.</p>
 
 <p>The conclusion first: <strong>a deferred action should be a timer armed at write time, not a poll, because the poll is paid for by the idle hours and the timer is paid for by the busy ones.</strong> On a database that bills by compute-hour and sleeps when nobody talks to it, that difference is the whole budget.</p>
 
-<p>The project is <a href="https://github.com/MAKaminski/svelte-accounting-agent">svelte-accounting-agent</a>, public, 24 commits between 2026-11-19 and 2026-11-21. It codes bank and card transactions to QuickBooks accounts for a small resale business of mine, shows its reasoning, and never writes the books without a recorded human approval. SvelteKit, Postgres on Neon, Claude through the API, one Fly machine. Every number below is from the repository as cloned on 2026-11-22 at <code>f802a27</code>, or from a test run I did the same day.</p>
+<p>The project is <a href="https://github.com/MAKaminski/svelte-accounting-agent">svelte-accounting-agent</a>, public, 24 commits between 2026-11-19 and 2026-11-21. It codes bank and card transactions to QuickBooks accounts for a small resale business of mine, shows its reasoning, and never writes the books without a <a href="/writing/human-approval-gates-for-irreversible-agent-actions">recorded human approval</a>. <a href="https://svelte.dev/docs/kit/introduction">SvelteKit</a>, Postgres on Neon through <a href="https://orm.drizzle.team/">Drizzle</a>, Claude through the API, one <a href="https://fly.io/docs/machines/">Fly machine</a>. Every number below is from the repository as cloned on 2026-11-22 at <code>f802a27</code>, or from a test run I did the same day.</p>
 
 <h2>The arithmetic: 182.5 CU-hours versus 100</h2>
 
@@ -46,6 +56,11 @@ export const articles: Article[] = [
 <p>A month is about 730 hours. A scheduler that queries the database once a second never lets it sleep, so it burns 730 × 0.25 = 182.5 CU-hours. That is 1.8 times the entire allowance before the app has served a single request.</p>
 
 <p>The same app with no polling sends zero queries while idle. Neon sleeps. The compute it uses is whatever the reviewer's own actions cost, plus any scheduled jobs. The repository's estimate for the optional hourly ledger pull is 24 × 30 wake-ups of five minutes each, 60 hours × 0.25 CU = 15 CU-hours, plus roughly 10 CU-hours of real usage, about 25 CU-hours. A quarter of the cap instead of nearly double it.</p>
+
+<figure>
+<img src="/images/essays/undo-fig1-cu-hours.svg" alt="Bar chart of CU-hours per month. A one-second poll uses 182.5. Timers use about 25: 15 for the hourly pull and about 10 for real usage. The Free plan allowance is 100." loading="lazy" decoding="async" />
+<figcaption>The poll is over the allowance before the first request. The timer version spends most of its budget on the optional hourly pull, not the undo window.</figcaption>
+</figure>
 
 <p>Nothing about the undo window changed between those two numbers. Only the way the app waits.</p>
 
@@ -61,7 +76,7 @@ export const articles: Article[] = [
 
 <h2>One timer per company, re-armed on every write</h2>
 
-<p>The scheduler is 69 lines. The core of it is <code>armCommitTimer</code>: select the minimum <code>pending_until</code> among this company's <code>approved</code> and <code>coded</code> entries, and set one <code>setTimeout</code> for that moment plus 50 milliseconds of slack.</p>
+<p>The scheduler is 69 lines. The core of it is <code>armCommitTimer</code>: select the minimum <code>pending_until</code> among this company's <code>approved</code> and <code>coded</code> entries, and set one <a href="https://nodejs.org/api/timers.html"><code>setTimeout</code></a> for that moment plus 50 milliseconds of slack.</p>
 
 <p>If a timer already exists and fires no later than the new deadline, do nothing. If the new deadline is earlier, clear the old timer and arm the new one. If nothing is pending, clear the timer and remove it from the map.</p>
 
@@ -75,6 +90,11 @@ export const articles: Article[] = [
 
 <p>Neon stays awake for five minutes after the last query. A reviewer approving an entry is a query, so the compute is awake when the window opens. The commit fires ten seconds later, well inside the five minutes the compute would have stayed up anyway. The window adds no wake-ups and extends no sessions.</p>
 
+<figure>
+<img src="/images/essays/undo-fig2-awake-window.svg" alt="Timeline. The approve at zero seconds wakes the compute. The commit fires at ten seconds. The compute stays awake until five minutes after the last query either way, then sleeps." loading="lazy" decoding="async" />
+<figcaption>The ten seconds sit inside five minutes the compute was going to stay awake for anyway.</figcaption>
+</figure>
+
 <p>A one-second poll inverts that. The poll keeps the compute awake during the 23 hours a day when nobody is reviewing anything, to detect deadlines that only ever exist in the ten seconds after someone clicks. The cost is proportional to idleness. The timer's cost is proportional to use. For a tool a small business touches for a few minutes a day, that is the difference between 182.5 and about 25.</p>
 
 <h2>Recovery and the second machine</h2>
@@ -83,7 +103,7 @@ export const articles: Article[] = [
 
 <p>At boot, the scheduler runs <code>commitDue</code> for every company and re-arms. Anything whose window expired while the process was down is committed on the first sweep. A deadline is never lost, only delayed by however long the process was off.</p>
 
-<p>Only one machine may run jobs. Each process tries <code>pg_try_advisory_lock</code> with a fixed key on a dedicated reserved connection and holds it for its lifetime. The holder is the leader; a follower retries every 30 seconds. When the old machine exits during a deploy, Postgres frees the lock and the new one takes it on its next attempt, then runs the boot sweep.</p>
+<p>Only one machine may run jobs. Each process tries <a href="https://www.postgresql.org/docs/current/explicit-locking.html"><code>pg_try_advisory_lock</code></a> with a fixed key on a dedicated reserved connection and holds it for its lifetime. The holder is the leader; a follower retries every 30 seconds. When the old machine exits during a deploy, Postgres frees the lock and the new one takes it on its next attempt, then runs the boot sweep.</p>
 
 <p>This is also one reason the app uses Neon's direct endpoint instead of the pooled one: a session-level lock and the per-request session settings that row-level security depends on both die under transaction pooling.</p>
 
@@ -91,7 +111,7 @@ export const articles: Article[] = [
 
 <h2>What the tests prove, and what they do not</h2>
 
-<p>I ran the write-path and learning suites on 2026-11-22 from a fresh clone: 16 tests, 16 passed, 20.9 seconds on Node 22.23.5 against an in-process Postgres. Two of them are the window.</p>
+<p>I ran the write-path and learning suites on 2026-11-22 from a fresh clone: 16 tests, 16 passed, 20.9 seconds under <a href="https://vitest.dev/">Vitest</a> on Node 22.23.5 against an in-process Postgres (<a href="https://pglite.dev/">PGlite</a>). Two of them are the window.</p>
 
 <p>"Approve later plus undo inside the window: no ledger write" approves with <code>--later</code>, runs <code>commitDue</code>, asserts zero writes to the ledger fixture, undoes, and asserts zero writes again. "Approve later: commits once the window passes" sets the window to 0 milliseconds, waits 5, runs <code>commitDue</code>, and asserts exactly two writes in order: update the entry, mark it ready.</p>
 
@@ -116,6 +136,8 @@ export const articles: Article[] = [
 <p>Then measure the one number the design is betting on. Mine is the wake-up after idle, and it is still a TBD in the table.</p>
 
 <p>If you have run a deferred-commit window on a scale-to-zero database and have the cold-start number, I would trade notes.</p>
+
+<p><strong>Related:</strong> <a href="/writing/human-approval-gates-for-irreversible-agent-actions">Human approval gates for irreversible agent actions</a> is the principle this window implements, and <a href="/writing/where-to-cut-an-agent-in-half">Where to cut an agent in half</a> is the same rules-around-judgment split in an MCP server.</p>
 `,
   },
   {
@@ -128,11 +150,21 @@ export const articles: Article[] = [
     logos: ['TypeScript', 'MCP', 'Claude'],
     series: 'Field Notes',
     body: `
-<p>On 2026-11-11 I shipped an MCP server that reads thrift-store donation receipts, prices every item, and writes Form 8283 rows. It makes zero model calls. The same 450 blouses come out at $900, $3,150 or $5,400 depending on one three-letter flag the model is told to default.</p>
+<aside class="tldr">
+<p class="tldr-label">In 30 seconds</p>
+<ul>
+<li><strong>What:</strong> <a href="https://github.com/MAKaminski/goodwill-mcp">goodwill-mcp</a>, an open-source MCP server that turns donation receipts into Form 8283 rows. 854 lines of TypeScript, zero model calls inside it.</li>
+<li><strong>The split:</strong> the host model reads the photos; code owns every price, threshold and total. Measured: 2 ms warm against a 50 ms budget.</li>
+<li><strong>The catch:</strong> validation checks shape, not truth. One defaulted flag moves the same 450 blouses from $900 to $5,400, across the $5,000 appraisal line.</li>
+<li><strong>Still missing:</strong> the eval for the model half. It is specified and not built.</li>
+</ul>
+</aside>
+
+<p>On 2026-11-11 I shipped an <a href="https://modelcontextprotocol.io/">MCP</a> server that reads thrift-store donation receipts, prices every item, and writes <a href="https://www.irs.gov/forms-pubs/about-form-8283">Form 8283</a> rows. It makes zero model calls. The same 450 blouses come out at $900, $3,150 or $5,400 depending on one three-letter flag the model is told to default.</p>
 
 <p>The conclusion first: <strong>cut an agent in half at the line where probability ends, put every dollar of arithmetic on the deterministic side, and then admit that a validator checks the shape of the model's answer, not its truth.</strong> The cut is the easy part. Knowing what it does not buy you is the part that keeps you out of trouble.</p>
 
-<p>The project is <a href="https://github.com/MAKaminski/goodwill-mcp">goodwill-mcp</a>, open source, MIT, v0.1.0. Claude reads the receipt and item photos. The server validates the draft, prices from a published guide, stores one SQLite file on your machine and produces the year-end rows. I wrote the contract; the code, tests and release pipeline were built with Claude Code against it in one session. Every number below was re-measured on 2026-11-15 from a fresh clone.</p>
+<p>The project is <a href="https://github.com/MAKaminski/goodwill-mcp">goodwill-mcp</a>, open source, MIT, v0.1.0. Claude reads the receipt and item photos. The server validates the draft, prices from a published guide, stores one <a href="https://sqlite.org/">SQLite</a> file on your machine and produces the year-end rows. I wrote the contract; the code, tests and release pipeline were built with <a href="https://claude.com/product/claude-code">Claude Code</a> against it in one session. Every number below was re-measured on 2026-11-15 from a fresh clone.</p>
 
 <h2>The cut: 854 lines of TypeScript, no model inside</h2>
 
@@ -150,11 +182,16 @@ export const articles: Article[] = [
 
 <p>From the command line, which pays Node's startup each time, <code>--help</code> ran in a median of 149 ms over seven runs, against a 300 ms budget. A full <code>donation create</code> on a fresh database was a median 182 ms. The 13-test suite, which drives the real CLI and the real server over stdio, passed 13 of 13 in 3.6 seconds.</p>
 
+<figure>
+<img src="/images/essays/goodwill-fig2-budgets.svg" alt="Bar chart of measured latency as a share of budget. donation_create first call 17 milliseconds of a 50 millisecond budget, warm call 2 of 50, CLI help 149 of 300." loading="lazy" decoding="async" />
+<figcaption>Every measured path lands at half its budget or less. The model half, at an estimated 18 seconds, would not fit on this chart.</figcaption>
+</figure>
+
 <p>Set that against the model half. The proposal estimates 18 seconds end to end for one logged donation on Sonnet, with three photos at roughly 1,600 tokens each plus 2,200 tokens of prompt and schema. The deterministic half is a rounding error on the probabilistic half, by a factor of about a thousand.</p>
 
 <h2>What validation actually catches</h2>
 
-<p>The host model fills a typed draft and the server checks it with Zod. Here is the honest inventory of what that check can refuse, straight from the code.</p>
+<p>The host model fills a typed draft and the server checks it with <a href="https://zod.dev/">Zod</a>. Here is the honest inventory of what that check can refuse, straight from the code.</p>
 
 <table>
   <thead>
@@ -181,6 +218,11 @@ export const articles: Article[] = [
 
 <p>Take the test suite's own donation, 450 women's blouses in good condition. At <code>low</code> the year logs $900: Form 8283 required, nothing else. At <code>mid</code> it logs $3,150. At <code>high</code> it logs $5,400, and the server correctly reports that clothing is over $5,000 for the year, so a qualified appraisal and Section B are required.</p>
 
+<figure>
+<img src="/images/essays/goodwill-fig1-basis.svg" alt="Bar chart. 450 blouses log at 900 dollars on the low basis, 3,150 on mid and 5,400 on high. The 5,000 dollar appraisal line sits between mid and high." loading="lazy" decoding="async" />
+<figcaption>Same photos, same count, same rules. The only thing that changed is the flag the prompt defaults to mid.</figcaption>
+</figure>
+
 <p>Same photos, same count, same rules. One parameter moved the result $4,500 and across the only line in this domain that creates real work. The rules did exactly what they should. The choice of input was the whole outcome.</p>
 
 <p>The prompt defaults it: use <code>mid</code> unless told otherwise. So the deterministic half is airtight on a choice that the probabilistic half makes by default, from an instruction I wrote. That is the split drawn honestly: the rules own the arithmetic, and the inputs to the arithmetic still come from somewhere.</p>
@@ -206,6 +248,8 @@ export const articles: Article[] = [
 <p>Then list, in a table, every model error the deterministic side cannot see, and build the eval for exactly those rows before you call the thing done. I did the first half and published. The second half is a file that does not exist yet, and until it does, the zero in "zero model calls" is a cost figure, not a correctness claim.</p>
 
 <p>If you have drawn this line in a system of your own and found a cleaner place to put the eval, I would trade notes.</p>
+
+<p><strong>Related:</strong> <a href="/writing/designing-tools-an-agent-can-actually-call">Designing tools an agent can actually call</a> covers the argument design this server depends on, and <a href="/writing/undo-window-that-lets-the-database-sleep">the undo-window essay</a> is the same rules-around-judgment pattern applied to a bookkeeping agent. The IRS's own guidance on valuing donated property is <a href="https://www.irs.gov/publications/p561">Publication 561</a>.</p>
 `,
   },
   {

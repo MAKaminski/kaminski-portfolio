@@ -8,6 +8,7 @@ import { getArticle } from '../data/articles';
 import { getClipForArticle } from '../data/clips';
 import VideoEmbed from '../components/VideoEmbed';
 import ArticleLogos from '../components/ArticleLogos';
+import { captureEvent } from '../utils/posthog';
 
 const SITE_URL = 'https://www.michael-kaminski.io';
 
@@ -105,7 +106,25 @@ const Article: React.FC = () => {
           </div>
         )}
 
-        <div className="article-body" dangerouslySetInnerHTML={{ __html: article.body }} />
+        <div
+          className="article-body"
+          onClick={(e) => {
+            // One delegated listener: which links inside an essay get clicked, and
+            // to where. Outbound = any host that is not this site.
+            const link = (e.target as HTMLElement).closest('a');
+            if (!link || !link.href) return;
+            let host = '';
+            try { host = new URL(link.href).hostname; } catch { return; }
+            const outbound = host !== window.location.hostname;
+            captureEvent(outbound ? 'outbound_link_clicked' : 'article_link_clicked', {
+              href: link.href,
+              host,
+              link_text: (link.textContent || '').slice(0, 80),
+              article: article.slug,
+            });
+          }}
+          dangerouslySetInnerHTML={{ __html: article.body }}
+        />
 
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row gap-4">
           <a

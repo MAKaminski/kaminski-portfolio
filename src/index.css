@@ -114,6 +114,16 @@
   }
 
   /* Tables. The essays lead on arithmetic, so these carry real weight. */
+  .article-body aside.tldr {
+    @apply my-8 rounded-xl border border-white/10 bg-white/5 px-5 py-4;
+    border-left: 3px solid #fff500;
+  }
+  .article-body aside.tldr .tldr-label {
+    @apply mb-2 text-xs font-bold uppercase tracking-wide text-accent;
+  }
+  .article-body aside.tldr ul {
+    @apply mb-0;
+  }
   .article-body table {
     @apply w-full my-8 text-base;
     border-collapse: collapse;
