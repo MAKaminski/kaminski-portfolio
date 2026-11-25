@@ -59,7 +59,10 @@ def vbars(name, title, sub, desc, bars, ymax, ticks, lines, unit_fmt):
     for value, label, color in lines:
         g.append(f'<line x1="{L}" y1="{Y(value):.1f}" x2="{W-R}" y2="{Y(value):.1f}" stroke="{color}" '
                  f'stroke-width="2" stroke-dasharray="7 5"/>')
-        g.append(text(W - R - 4, Y(value) - 8, label, 13, color, 'end', '600'))
+        # label on an ink plate so a bar behind it never cuts through the words
+        lw = len(label) * 7.4 + 14
+        g.append(f'<rect x="{W-R-lw:.1f}" y="{Y(value)-25:.1f}" width="{lw:.1f}" height="20" fill="{INK}" fill-opacity="0.88" rx="3"/>')
+        g.append(text(W - R - 7, Y(value) - 10, label, 13, color, 'end', '600'))
     (OUT / name).write_text(wrap(title, sub, g, desc))
 
 
@@ -91,7 +94,7 @@ def timeline(name, title, sub, desc):
     g.append(f'<rect x="{X(0):.1f}" y="{y}" width="{X(310)-X(0):.1f}" height="46" fill="{BAR}" rx="3"/>')
     g.append(f'<rect x="{X(0):.1f}" y="{y}" width="{X(10)-X(0):.1f}" height="46" fill="{ACCENT}" rx="3"/>')
     g.append(f'<rect x="{X(310):.1f}" y="{y}" width="{X(tmax)-X(310):.1f}" height="46" fill="none" stroke="{GRID}" stroke-dasharray="5 4" rx="3"/>')
-    for t, lab in ((0, '0 s'), (10, '10 s'), (60, '1 min'), (120, '2 min'), (180, '3 min'), (240, '4 min'), (310, '5 min 10 s')):
+    for t, lab in ((10, '10 s'), (60, '1 min'), (120, '2 min'), (180, '3 min'), (240, '4 min'), (310, '5 min 10 s')):
         g.append(f'<line x1="{X(t):.1f}" y1="{y+46}" x2="{X(t):.1f}" y2="{y+56}" stroke="{MUTED}"/>')
         g.append(text(X(t), y + 74, lab, 12, MUTED, 'middle'))
     g.append(text(X(0), y - 44, 'Approve (a query: compute is awake)', 13, FG, weight='600'))
